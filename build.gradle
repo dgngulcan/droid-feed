@@ -1,0 +1,39 @@
+buildscript {
+
+    ext.kotlinVersion = '1.1.51'
+
+    repositories {
+        google()
+        jcenter()
+    }
+
+    dependencies {
+        classpath 'com.android.tools.build:gradle:3.0.0-rc2'
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlinVersion"
+        classpath "org.jetbrains.kotlin:kotlin-android-extensions:$kotlinVersion"
+    }
+
+}
+
+ext {
+    archLifecycleVersion = '1.0.0-alpha9-1'
+    supportLibVersion = '26.1.0'
+    ankoVersion = '0.10.1'
+    constraintLayoutVersion = '1.0.2'
+    glideVersion = '4.1.1'
+    retrofitVersion = '2.3.0'
+    okHttpVersion = '3.9.0'
+    kaptVersion = '2.3.2'
+    daggerVersion = '2.11'
+}
+
+allprojects {
+    repositories {
+        google()
+        jcenter()
+    }
+}
+
+task clean(type: Delete) {
+    delete rootProject.buildDir
+}
