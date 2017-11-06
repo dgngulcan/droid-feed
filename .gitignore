@@ -6,3 +6,4 @@
 /build
 /captures
 .externalNativeBuild
+api_key.properties

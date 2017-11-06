@@ -7,11 +7,11 @@
 
         <variable
             name="rssItem"
-            type="com.droidnews.data.model.RssItem" />
+            type="com.droidfeed.data.model.Article" />
 
         <variable
             name="clickListener"
-            type="com.droidnews.ui.module.news.NewsItemClickListener" />
+            type="com.droidfeed.ui.module.news.NewsItemClickListener" />
 
     </data>
 
@@ -21,23 +21,13 @@
         android:layout_margin="8dp"
         android:background="?selectableItemBackground"
         android:clickable="true"
-        android:onClick="@{()->clickListener.onItemClick(rssItem)}">
+        android:onClick="@{()->clickListener.onItemClick(imgArticle,rssItem)}">
 
         <android.support.constraint.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:padding="16dp"
-            tools:layout_editor_absoluteX="0dp"
-            tools:layout_editor_absoluteY="0dp">
+            android:padding="16dp">
 
-            <TextView
-                android:id="@+id/txtSource"
-                style="@style/NewsSourceTextStyle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                tools:text="Source" />
 
             <TextView
                 android:id="@+id/txtTitle"
@@ -46,9 +36,10 @@
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="16dp"
                 android:layout_marginTop="8dp"
-                app:layout_constraintEnd_toStartOf="@+id/imgNews"
+                android:text="@{rssItem.title}"
+                app:layout_constraintEnd_toStartOf="@+id/imgArticle"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/txtSource"
+                app:layout_constraintTop_toTopOf="parent"
                 app:layout_goneMarginEnd="16dp"
                 tools:text="This Is A Click Bait Title of A News" />
 
@@ -61,11 +52,23 @@
                 android:layout_marginTop="16dp"
                 android:ellipsize="end"
                 android:maxLines="3"
-                app:layout_constraintEnd_toStartOf="@+id/imgNews"
+                android:text="@{rssItem.description}"
+                app:layout_constraintEnd_toStartOf="@+id/imgArticle"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/txtTitle"
                 app:layout_goneMarginEnd="16dp"
                 tools:text="This is a description of a news item that is so important so we put it here where people can read before they click the card to read whole story about the event happened" />
+
+            <TextView
+                android:id="@+id/txtSource"
+                style="@style/NewsSourceTextStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:text="@{rssItem.channel.title}"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/txtDescription"
+                tools:text="Source" />
 
             <TextView
                 android:id="@+id/txtDate"
@@ -73,16 +76,17 @@
                 relativeDate="@{rssItem.pubDate}"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/txtDescription"
+                app:layout_constraintTop_toBottomOf="@+id/txtSource"
                 tools:text="3 hours ago" />
 
             <ImageView
-                android:id="@+id/imgNews"
-                android:layout_width="wrap_content"
+                android:id="@+id/imgArticle"
+                imageUrl="@{rssItem.image}"
+                android:layout_width="100dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="14dp"
+                android:maxHeight="150dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 tools:srcCompat="@mipmap/ic_launcher" />
@@ -96,11 +100,11 @@
                 android:adjustViewBounds="false"
                 android:contentDescription="@string/content_desc_share_button"
                 android:cropToPadding="false"
-                android:onClick="@{clickListener.onShareClick(rssItem)}"
+                android:onClick="@{()->clickListener.onShareClick(rssItem)}"
                 android:scaleType="centerInside"
+                android:src="@drawable/ic_share_black_24dp"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/txtDescription"
-                tools:src="@drawable/ic_share_black_24dp" />
+                app:layout_constraintTop_toBottomOf="@+id/txtDescription" />
 
             <ImageView
                 android:id="@+id/imgBookmark"
@@ -110,11 +114,11 @@
                 android:adjustViewBounds="false"
                 android:contentDescription="@string/content_desc_bookmark_button"
                 android:cropToPadding="false"
-                android:onClick="@{clickListener.onBookmarkClick(rssItem)}"
+                android:onClick="@{()->clickListener.onBookmarkClick(rssItem)}"
                 android:scaleType="centerInside"
+                android:src="@drawable/ic_bookmark_black_24dp"
                 app:layout_constraintEnd_toStartOf="@+id/imgShare"
-                app:layout_constraintTop_toTopOf="@+id/imgShare"
-                tools:src="@drawable/ic_bookmark_black_24dp" />
+                app:layout_constraintTop_toTopOf="@+id/imgShare" />
 
         </android.support.constraint.ConstraintLayout>
 
