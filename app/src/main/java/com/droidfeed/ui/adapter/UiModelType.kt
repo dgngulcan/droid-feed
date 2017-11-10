@@ -5,4 +5,4 @@ package com.droidfeed.ui.adapter
  *
  * Created by Dogan Gulcan on 11/2/17.
  */
-enum class UiModelType { RssFeed }
+enum class UiModelType { RssFeed, Licence }

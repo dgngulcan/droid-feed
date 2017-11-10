@@ -27,7 +27,7 @@ import com.droidfeed.util.glide.GlideApp
 class ArticleViewHolder(private val binding: ListItemNewsBinding) : RecyclerView.ViewHolder(binding.root) {
 
     fun bind(article: Article, onRssClickListener: ArticleClickListener) {
-        binding.clickListener = onRssClickListener
+        binding.aboutScreenClickListener = onRssClickListener
         binding.rssItem = article
 
         GlideApp.with(binding.root.context)

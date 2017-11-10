@@ -15,18 +15,19 @@ import com.droidfeed.ui.module.feed.ArticleClickListener
  * Created by Dogan Gulcan on 9/30/17.
  */
 data class ArticleUiModel(
-        val article: Article,
-        val onRssClickListener: ArticleClickListener
+        private val article: Article,
+        private val onRssClickListener: ArticleClickListener
 ) : BaseUiModel<ArticleViewHolder>() {
 
-    val dataBindingComponent: DateDataBindingComponent = DateDataBindingComponent()
+    private val dataBindingComponent: DateDataBindingComponent = DateDataBindingComponent()
 
     override fun getViewHolder(parent: ViewGroup): ArticleViewHolder {
-        return ArticleViewHolder(ListItemNewsBinding.inflate(
-                LayoutInflater.from(parent.context),
-                parent,
-                false,
-                dataBindingComponent))
+        return ArticleViewHolder(
+                ListItemNewsBinding.inflate(
+                        LayoutInflater.from(parent.context),
+                        parent,
+                        false,
+                        dataBindingComponent))
     }
 
     override fun bindViewHolder(viewHolder: ArticleViewHolder) {

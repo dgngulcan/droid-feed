@@ -1,6 +1,11 @@
 package com.droidfeed.ui.adapter.model
 
+import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
+import com.droidfeed.data.model.Licence
+import com.droidfeed.databinding.ListItemLicenceBinding
+import com.droidfeed.ui.adapter.UiModelType
 import com.droidfeed.ui.adapter.diff.Diffable
 import com.droidfeed.ui.adapter.viewholder.LicenceViewHolder
 import com.droidfeed.ui.common.BaseUiModel
@@ -8,22 +13,29 @@ import com.droidfeed.ui.common.BaseUiModel
 /**
  * Created by Dogan Gulcan on 11/9/17.
  */
-class LicenceUiModel() : BaseUiModel<LicenceViewHolder>() {
+class LicenceUiModel(
+        private val licence: Licence,
+        private val onClickListener: View.OnClickListener
+) : BaseUiModel<LicenceViewHolder>() {
 
-    override fun getViewHolder(parent: ViewGroup): {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    override fun getViewHolder(parent: ViewGroup): LicenceViewHolder {
+        return LicenceViewHolder(
+                ListItemLicenceBinding.inflate(
+                        LayoutInflater.from(parent.context),
+                        parent,
+                        false))
     }
 
     override fun bindViewHolder(viewHolder: LicenceViewHolder) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        viewHolder.bind(licence, onClickListener)
     }
 
     override fun getViewType(): Int {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        return UiModelType.Licence.ordinal
     }
 
     override fun getData(): Diffable {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        return licence
     }
 
 }
