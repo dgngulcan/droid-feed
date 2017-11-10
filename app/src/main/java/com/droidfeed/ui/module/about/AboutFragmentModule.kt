@@ -3,6 +3,7 @@ package com.droidfeed.ui.module.about
 import com.droidfeed.data.model.Licence
 import dagger.Module
 import dagger.Provides
+import javax.inject.Named
 import javax.inject.Singleton
 
 /**
@@ -13,6 +14,7 @@ class AboutFragmentModule {
 
     @Singleton
     @Provides
+    @Named("LicenceList")
     fun provideOpenSourceLibraryList(): List<Licence> {
         val licences = ArrayList<Licence>()
 

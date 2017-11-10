@@ -1,34 +1,36 @@
-package com.droidfeed.ui.module.news
+package com.droidfeed.ui.module.feed
 
 import android.arch.lifecycle.*
+import android.content.Intent
 import android.databinding.ObservableBoolean
-import android.view.View
 import com.droidfeed.data.Resource
 import com.droidfeed.data.Status
 import com.droidfeed.data.model.Article
 import com.droidfeed.data.repo.RssRepo
-import com.droidfeed.ui.adapter.model.RssListUiModel
+import com.droidfeed.ui.adapter.model.ArticleUiModel
 import com.nytclient.ui.common.BaseViewModel
 import com.nytclient.ui.common.SingleLiveEvent
 
+
 /**
- * [ViewModel] of [NewsFragment].
+ * [ViewModel] of [FeedFragment].
  *
  * Created by Dogan Gulcan on 9/22/17.
  */
 @Suppress("UNCHECKED_CAST")
-class NewsViewModel(val rssRepo: RssRepo) : BaseViewModel() {
+class FeedViewModel(private val rssRepo: RssRepo) : BaseViewModel() {
 
     var isLoadingNews = ObservableBoolean(false)
     var loadingFailedEvent = SingleLiveEvent<Boolean>()
-    var openRssClickEvent = SingleLiveEvent<Pair<Article, View>>()
+    var articleClickEvent = SingleLiveEvent<Article>()
+    var articleShareEvent = SingleLiveEvent<Intent>()
 
     private var rssUrls: List<String> = listOf(
             "https://android.jlelse.eu/feed")
 
     private var rssResponses = MediatorLiveData<Resource<List<Article>>>()
 
-    var rssUiModelData: LiveData<List<RssListUiModel>> =
+    var rssUiModelData: LiveData<List<ArticleUiModel>> =
             Transformations.switchMap(rssResponses, { response ->
 
                 loadingFailedEvent.setValue(false)
@@ -42,29 +44,39 @@ class NewsViewModel(val rssRepo: RssRepo) : BaseViewModel() {
                     }
                 }
 
-                val result = MutableLiveData<List<RssListUiModel>>()
+                val result = MutableLiveData<List<ArticleUiModel>>()
                 response.data.let {
                     result.value = (response as Resource<List<Article>>)
-                            .data?.map { RssListUiModel(it, newsClickCallback) }
+                            .data?.map { ArticleUiModel(it, newsClickCallback) }
                 }
 
                 result
             })
 
     private val newsClickCallback by lazy {
-        object : NewsItemClickListener {
-            override fun onItemClick(view: View, rssItem: Article) {
-                openRssClickEvent.setValue(Pair(rssItem, view))
+        object : ArticleClickListener {
+            override fun onItemClick(article: Article) {
+                if (canUserClick) articleClickEvent.setValue(article)
             }
 
-            override fun onShareClick(rssItem: Article) {
-                TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+            override fun onShareClick(article: Article) {
+                if (canUserClick) {
+                    articleShareEvent.setValue(createArticleShareIntent(article))
+                }
             }
 
-            override fun onBookmarkClick(rssItem: Article) {
+            override fun onBookmarkClick(article: Article) {
                 TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
             }
         }
+    }
+
+    private fun createArticleShareIntent(article: Article): Intent {
+        val sendIntent = Intent()
+        sendIntent.action = Intent.ACTION_SEND
+        sendIntent.putExtra(Intent.EXTRA_TEXT, "${article.title}\n\n${article.link}")
+        sendIntent.type = "text/plain"
+        return sendIntent
     }
 
     init {
@@ -102,7 +114,7 @@ class NewsViewModel(val rssRepo: RssRepo) : BaseViewModel() {
      */
     class Factory(private val newsRepo: RssRepo) : ViewModelProvider.NewInstanceFactory() {
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            return NewsViewModel(newsRepo) as T
+            return FeedViewModel(newsRepo) as T
         }
     }
 }

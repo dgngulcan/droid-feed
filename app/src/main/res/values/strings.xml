@@ -4,9 +4,11 @@
     <string name="title_home">Home</string>
     <string name="title_dashboard">Dashboard</string>
     <string name="title_notifications">Notifications</string>
-    <string name="title_news">News</string>
-    <string name="title_bookmarks">Bookmarks</string>
-    <string name="title_about">About</string>
+
+    <string name="nav_feed">Feed</string>
+    <string name="nav_bookmarks">Bookmarks</string>
+    <string name="nav_about">About</string>
+
     <string name="content_desc_bookmark_button">Bookmark Button</string>
     <string name="content_desc_share_button">Share Button</string>
     <string name="share">Share</string>
@@ -15,5 +17,15 @@
     <string name="contact">Contact</string>
     <string name="libraries">Libraries</string>
     <string name="dashed_text"> - %s</string>
+    <string name="error_invalid_article_url">Article URL is invalid</string>
+    <string name="send_with">Send with</string>
+    <string name="title_activity_main2">Main2Activity</string>
+
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="nav_header_title">Android Studio</string>
+    <string name="nav_header_subtitle">android.studio@android.com</string>
+    <string name="nav_header_desc">Navigation header</string>
+    <string name="action_settings">Settings</string>
 
 </resources>

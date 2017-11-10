@@ -2,6 +2,17 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <data>
+
+        <variable
+            name="viewModel"
+            type="com.droidfeed.ui.module.about.AboutViewModel" />
+
+        <variable
+            name="onClickListener"
+            type="com.droidfeed.ui.module.about.AboutFragmentClickListener" />
+    </data>
+
     <android.support.v4.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent">
@@ -17,7 +28,8 @@
                 android:layout_width="96dp"
                 android:layout_height="96dp"
                 android:layout_marginTop="24dp"
-                tools:src="@mipmap/ic_launcher" />
+                android:scaleType="centerInside"
+                android:src="@mipmap/ic_launcher" />
 
             <TextView
                 style="@style/TextAppearance.AppCompat.Title"
@@ -30,17 +42,8 @@
                 style="@style/TextAppearance.AppCompat.Caption"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                tools:text="v2.1.1" />
-
-            <!--<TextView-->
-            <!--android:id="@+id/btnUnsplash"-->
-            <!--style="@style/ButtonRowStyle"-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="56dp"-->
-            <!--android:layout_marginTop="16dp"-->
-            <!--android:clickable="true"-->
-            <!--android:drawablePadding="24dp"-->
-            <!--tools:text="@string/made_with_unsplash" />-->
+                android:text="@{viewModel.appVersion}"
+                tools:text="1.0.3" />
 
             <TextView
                 style="@style/GroupTitleStyle"
@@ -54,6 +57,7 @@
                 style="@style/ButtonRowStyle"
                 android:drawableLeft="@drawable/ic_star_black_24dp"
                 android:drawablePadding="24dp"
+                android:onClick="@{()->onClickListener.onRateAppClicked()}"
                 android:text="@string/rate_app" />
 
             <TextView
@@ -61,6 +65,7 @@
                 style="@style/ButtonRowStyle"
                 android:drawableLeft="@drawable/ic_email_black_24dp"
                 android:drawablePadding="24dp"
+                android:onClick="@{()->onClickListener.onContactClicked()}"
                 android:text="@string/contact" />
 
             <TextView
@@ -68,6 +73,7 @@
                 style="@style/ButtonRowStyle"
                 android:drawableLeft="@drawable/ic_share_black_24dp"
                 android:drawablePadding="24dp"
+                android:onClick="@{()->onClickListener.onShareClicked()}"
                 android:text="@string/share" />
 
             <TextView

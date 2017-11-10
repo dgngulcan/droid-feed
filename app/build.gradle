@@ -20,8 +20,6 @@ android {
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
-
-//        manifestPlaceholders = [FABRIC_API_KEY: apiKeyProperties['FabricApiKey']]
     }
 
     buildTypes {
@@ -79,8 +77,9 @@ dependencies {
     kapt "android.arch.persistence.room:compiler:$archLifecycleVersion"
 
     implementation "org.jetbrains.anko:anko-commons:$ankoVersion"
-    implementation "org.jetbrains.anko:anko-appcompat-v7:$ankoVersion"
+    implementation "org.jetbrains.anko:anko-design:$ankoVersion"
     implementation "org.jetbrains.anko:anko-coroutines:$ankoVersion"
+    implementation "org.jetbrains.anko:anko-appcompat-v7:$ankoVersion"
     implementation "org.jetbrains.anko:anko-recyclerview-v7:$ankoVersion"
 
     implementation "com.google.dagger:dagger:$daggerVersion"

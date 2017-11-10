@@ -4,11 +4,11 @@
 ext {
     kotlinVersion = '1.1.51'
     gradleBuildVersion = '3.0.0'
-    archLifecycleVersion = '1.0.0-rc1'
+    archLifecycleVersion = '1.0.0'
     supportLibVersion = '26.1.0'
     ankoVersion = '0.10.2'
     constraintLayoutVersion = '1.0.2'
-    glideVersion = '4.1.1'
+    glideVersion = '4.3.1'
     retrofitVersion = '2.3.0'
     okHttpVersion = '3.9.0'
     databindingCompilerVersion = '2.3.3'

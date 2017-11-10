@@ -1,4 +1,4 @@
-package com.droidfeed.ui
+package com.droidfeed.util.extention
 
 import android.widget.ImageView
 import com.bumptech.glide.Glide
