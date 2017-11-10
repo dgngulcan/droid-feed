@@ -3,7 +3,7 @@ package com.droidfeed.ui.binding
 import android.databinding.BindingAdapter
 import android.view.View
 import android.widget.ImageView
-import com.droidfeed.ui.loadUrl
+import com.droidfeed.util.extention.loadUrl
 
 /**
  * Created by Dogan Gulcan on 9/30/17.

@@ -1,4 +1,4 @@
-package com.droidfeed.ui.module.news
+package com.droidfeed.ui.module.feed
 
 import dagger.Module
 
@@ -6,4 +6,4 @@ import dagger.Module
  * Created by Dogan Gulcan on 9/22/17.
  */
 @Module()
-internal abstract class NewsFragmentModule
+internal abstract class FeedFragmentModule

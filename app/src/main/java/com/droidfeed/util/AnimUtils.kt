@@ -25,4 +25,5 @@ class AnimUtils @Inject constructor(appContext: App) {
         AnimationUtils.loadInterpolator(appContext, android.R.interpolator.linear_out_slow_in)
     }
 
+
 }

@@ -1,7 +1,9 @@
 package com.droidfeed.ui.module.main
 
+import android.support.v4.app.Fragment
 import com.droidfeed.R
-import com.droidfeed.ui.module.news.NewsFragment
+import com.droidfeed.ui.module.about.AboutFragment
+import com.droidfeed.ui.module.feed.FeedFragment
 import javax.inject.Inject
 
 /**
@@ -12,25 +14,32 @@ class MainNavController @Inject constructor(activity: MainActivity) {
     private val fragmentManager = activity.supportFragmentManager
     private val containerId = R.id.fragmentContainer
 
-    val newsFragment: NewsFragment by lazy {
-        NewsFragment()
+    private val feedFragment: FeedFragment by lazy {
+        FeedFragment()
     }
 
+    private val aboutFragment: AboutFragment by lazy {
+        AboutFragment()
+    }
+
+
     fun openNewsFragment() {
-        fragmentManager.beginTransaction()
-                .setCustomAnimations(android.R.animator.fade_in,
-                        android.R.animator.fade_out)
-                .replace(containerId, newsFragment)
-                .commitAllowingStateLoss()
+        changeFragment(feedFragment)
     }
 
     fun openBookmarksFragment() {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
     fun openAboutFragment() {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        changeFragment(aboutFragment)
     }
 
+    private fun changeFragment(fragment: Fragment) {
+        fragmentManager.beginTransaction()
+                .setCustomAnimations(android.R.animator.fade_in,
+                        android.R.animator.fade_out)
+                .replace(containerId, fragment)
+                .commitAllowingStateLoss()
+    }
 
 }

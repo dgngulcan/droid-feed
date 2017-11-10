@@ -1,52 +1,69 @@
 package com.droidfeed.ui.module.main
 
+import android.arch.lifecycle.ViewModelProviders
 import android.databinding.DataBindingUtil
 import android.os.Bundle
-import android.support.design.widget.BottomNavigationView
+import android.support.design.widget.NavigationView
+import android.support.v4.view.GravityCompat
+import android.support.v7.app.ActionBarDrawerToggle
+import android.view.View
 import com.droidfeed.R
 import com.droidfeed.databinding.ActivityMainBinding
 import com.nytclient.ui.common.BaseActivity
+import kotlinx.android.synthetic.main.activity_main.*
 import javax.inject.Inject
 
 class MainActivity : BaseActivity() {
 
     @Inject lateinit var navController: MainNavController
     private lateinit var binding: ActivityMainBinding
+    private lateinit var viewModel: MainViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
-        binding.bottomNavigationBar.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener)
 
-        // default tab
-        if (savedInstanceState == null) {
-            binding.bottomNavigationBar.selectedItemId = R.id.nav_news  /* default tab */
-        }
+        binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
+        viewModel = ViewModelProviders.of(this).get(MainViewModel::class.java)
 
         init()
+        initDrawer()
     }
 
     private fun init() {
-        setSupportActionBar(binding.toolbar)
+        setSupportActionBar(binding.appbar.toolbar)
         supportActionBar?.title = getString(R.string.app_name)
+
+        binding.drawerLayout.systemUiVisibility = (View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                or View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+                or View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION)
     }
 
-    private val mOnNavigationItemSelectedListener = BottomNavigationView.OnNavigationItemSelectedListener { item ->
+    private fun initDrawer() {
+        val toggle = ActionBarDrawerToggle(
+                this,
+                binding.drawerLayout,
+                binding.appbar.toolbar,
+                0,
+                0)
+
+        toggle.isDrawerSlideAnimationEnabled = false
+        drawer_layout.addDrawerListener(toggle)
+        toggle.syncState()
+
+        navView.setNavigationItemSelectedListener(navigationListener)
+        navView.setCheckedItem(R.id.nav_feed)
+        navController.openNewsFragment()
+    }
+
+    private val navigationListener = NavigationView.OnNavigationItemSelectedListener { item ->
         when (item.itemId) {
-            R.id.nav_news -> {
-                navController.openNewsFragment()
-                true
-            }
-            R.id.nav_bookmarks -> {
-                navController.openBookmarksFragment()
-                true
-            }
-            R.id.nav_about -> {
-                navController.openAboutFragment()
-                true
-            }
-            else -> false
+            R.id.nav_feed -> navController.openNewsFragment()
+            R.id.nav_bookmarks -> navController.openBookmarksFragment()
+            R.id.nav_about -> navController.openAboutFragment()
         }
+
+        drawer_layout.closeDrawer(GravityCompat.START)
+        true
     }
 
 }
