@@ -9,6 +9,7 @@ import com.droidfeed.ui.common.BaseUiModel
 import javax.inject.Inject
 
 
+@Suppress("UNCHECKED_CAST")
 /**
  * Generic [RecyclerView.Adapter] for [BaseUiModel]s.
  *
@@ -29,6 +30,10 @@ class UiModelAdapter @Inject constructor() : RecyclerView.Adapter<RecyclerView.V
 
     override fun getItemCount(): Int {
         return uiModels.size
+    }
+
+    override fun getItemViewType(position: Int): Int {
+        return uiModels[position].getViewType()
     }
 
     fun addUiModels(uiModels: Collection<BaseUiModel<out RecyclerView.ViewHolder>>?) {

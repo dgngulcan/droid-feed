@@ -12,7 +12,7 @@
             type="com.droidfeed.data.model.Article" />
 
         <variable
-            name="clickListener"
+            name="aboutScreenClickListener"
             type="com.droidfeed.ui.module.feed.ArticleClickListener" />
 
     </data>
@@ -23,7 +23,7 @@
         android:layout_margin="8dp"
         android:clickable="true"
         android:foreground="?android:attr/selectableItemBackground"
-        android:onClick="@{()->clickListener.onItemClick(rssItem)}">
+        android:onClick="@{()->aboutScreenClickListener.onItemClick(rssItem)}">
 
         <android.support.constraint.ConstraintLayout
             android:layout_width="match_parent"
@@ -108,7 +108,7 @@
                 android:background="?selectableItemBackground"
                 android:contentDescription="@string/content_desc_share_button"
                 android:cropToPadding="false"
-                android:onClick="@{()->clickListener.onShareClick(rssItem)}"
+                android:onClick="@{()->aboutScreenClickListener.onShareClick(rssItem)}"
                 android:scaleType="centerInside"
                 android:src="@drawable/ic_share_black_24dp"
                 app:layout_constraintBottom_toBottomOf="parent"
@@ -124,7 +124,7 @@
                 android:background="?android:attr/selectableItemBackground"
                 android:contentDescription="@string/content_desc_bookmark_button"
                 android:cropToPadding="false"
-                android:onClick="@{()->clickListener.onBookmarkClick(rssItem)}"
+                android:onClick="@{()->aboutScreenClickListener.onBookmarkClick(rssItem)}"
                 android:scaleType="centerInside"
                 android:src="@drawable/ic_bookmark_black_24dp"
                 app:layout_constraintEnd_toStartOf="@+id/imgShare"

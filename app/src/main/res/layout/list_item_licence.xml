@@ -10,7 +10,7 @@
 
         <variable
             name="onClickListener"
-            type="android.databinding.generated.callback.OnClickListener" />
+            type="android.view.View.OnClickListener" />
 
     </data>
 
@@ -20,7 +20,7 @@
         android:background="?attr/selectableItemBackground"
         android:clickable="true"
         android:minHeight="76dp"
-        android:onClick="@{()->onClickListener.OnClick()}"
+        android:onClick="@{view->onClickListener.onClick(view)}"
         android:orientation="vertical">
 
         <TextView
@@ -28,10 +28,10 @@
             style="@style/Base.TextAppearance.AppCompat.Body2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="4dp"
+            android:layout_marginBottom="@dimen/spacing_small"
             android:layout_marginLeft="@dimen/spacing_medium"
             android:layout_marginRight="@dimen/spacing_medium"
-            android:layout_marginTop="@dimen/spacing_medium"
+            android:layout_marginTop="@dimen/spacing_small"
             android:text="@{licence.name}"
             tools:text="Apachi licence 2" />
 
@@ -42,7 +42,7 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="@dimen/spacing_medium"
             android:layout_marginLeft="@dimen/spacing_medium"
-            android:layout_marginRight="16dp"
+            android:layout_marginRight="@dimen/spacing_medium"
             android:ellipsize="end"
             android:maxLines="2"
             android:text="@{licence.description}"
