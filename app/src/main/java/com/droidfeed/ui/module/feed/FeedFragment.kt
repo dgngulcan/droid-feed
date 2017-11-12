@@ -66,5 +66,9 @@ class FeedFragment : BaseFragment() {
             startActivity(Intent.createChooser(it, getText(R.string.send_with)))
         })
 
+        viewModel.loadingFailedEvent.observe(this, Observer {
+
+        })
+
     }
 }
