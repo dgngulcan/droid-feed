@@ -11,7 +11,7 @@ import javax.inject.Singleton
 class DateDataBindingComponent : DataBindingComponent {
 
     override fun getDateBindingAdapters(): DateBindingAdapters {
-        return DateBindingAdapters(DateTimeUtils())
+        return DateBindingAdapters()
 
     }
 

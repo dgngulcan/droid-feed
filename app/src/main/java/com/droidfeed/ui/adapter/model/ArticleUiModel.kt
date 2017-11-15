@@ -3,7 +3,7 @@ package com.droidfeed.ui.adapter.model
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import com.droidfeed.data.model.Article
-import com.droidfeed.databinding.ListItemNewsBinding
+import com.droidfeed.databinding.ListItemFeelSmallBinding
 import com.droidfeed.ui.adapter.UiModelType
 import com.droidfeed.ui.adapter.diff.Diffable
 import com.droidfeed.ui.adapter.viewholder.ArticleViewHolder
@@ -17,13 +17,21 @@ import com.droidfeed.ui.module.feed.ArticleClickListener
 data class ArticleUiModel(
         private val article: Article,
         private val onRssClickListener: ArticleClickListener
-) : BaseUiModel<ArticleViewHolder>() {
+) : BaseUiModel<ArticleViewHolder, Article>() {
+
+    val abc = Comparator<Article> { a, b ->
+        compareValuesBy(a, b, { it.pubDateTimestamp }, { it.title })
+    }
+
+    override fun getComparable(): Comparable<Article> {
+        return article
+    }
 
     private val dataBindingComponent: DateDataBindingComponent = DateDataBindingComponent()
 
     override fun getViewHolder(parent: ViewGroup): ArticleViewHolder {
         return ArticleViewHolder(
-                ListItemNewsBinding.inflate(
+                ListItemFeelSmallBinding.inflate(
                         LayoutInflater.from(parent.context),
                         parent,
                         false,

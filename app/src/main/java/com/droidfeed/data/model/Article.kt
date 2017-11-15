@@ -16,6 +16,9 @@ data class Article(
         @ColumnInfo(name = "pub_date")
         var pubDate: String = "",
 
+        @ColumnInfo(name = "pub_date_timestamp")
+        var pubDateTimestamp: Long = 0,
+
         @Embedded
         var channel: Channel = Channel(),
 
@@ -25,19 +28,26 @@ data class Article(
         @ColumnInfo(name = "author")
         var author: String = "",
 
-        @ColumnInfo(name = "description")
-        var description: String = "",
+        @Embedded
+        var content: Content = Content(),
 
-        @ColumnInfo(name = "image")
-        var image: String = "",
-
-        @ColumnInfo(name = "content")
-        var content: String = "",
+        @ColumnInfo(name = "content_raw")
+        var rawContent: String = "",
 
         @Ignore
         var hasFadedIn: Boolean = false
 
-) : Diffable {
+) : Diffable, Comparable<Article> {
+
+    @ColumnInfo(name = "contentImage")
+    var image: String = ""
+        get() {
+            return if (content.contentImage.isBlank()) channel.imageUrl else content.contentImage
+        }
+
+    override fun compareTo(other: Article): Int {
+        return compareValuesBy(this, other, { it.pubDateTimestamp })
+    }
 
     override fun isSame(item: Diffable): Boolean {
         return link.contentEquals((item as Article).link)

@@ -2,8 +2,8 @@ package com.droidfeed.data.api
 
 import android.arch.lifecycle.LiveData
 import android.arch.lifecycle.MutableLiveData
-import com.droidfeed.data.model.Article
 import com.droidfeed.data.RssXmlParser
+import com.droidfeed.data.model.Article
 import kotlinx.coroutines.experimental.android.UI
 import kotlinx.coroutines.experimental.async
 import okhttp3.*
@@ -18,7 +18,10 @@ import javax.inject.Singleton
  */
 @Suppress("UNCHECKED_CAST")
 @Singleton
-class RssLoader @Inject constructor(val okHttpClient: OkHttpClient) {
+class RssLoader @Inject constructor(
+        private val okHttpClient: OkHttpClient,
+        val rssXmlParser: RssXmlParser
+) {
 
     fun fetch(url: String): LiveData<ApiResponse<ArrayList<Article>>> {
 
@@ -30,7 +33,7 @@ class RssLoader @Inject constructor(val okHttpClient: OkHttpClient) {
         okHttpClient.newCall(request).enqueue(object : Callback {
             override fun onResponse(call: Call, response: Response) {
                 response.let {
-                    val articles = response.body()?.string()?.let { it1 -> RssXmlParser().parse(it1) }
+                    val articles = response.body()?.string()?.let { it1 -> rssXmlParser.parse(it1) }
                     async(UI) {
                         fetchResponse.value = ApiResponse(response, articles)
                     }

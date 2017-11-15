@@ -1,6 +1,7 @@
 package com.droidfeed.data.repo
 
 import android.arch.lifecycle.LiveData
+import android.arch.lifecycle.MediatorLiveData
 import com.droidfeed.App
 import com.droidfeed.data.NetworkBoundResource
 import com.droidfeed.data.Resource
@@ -15,7 +16,7 @@ import javax.inject.Inject
 import javax.inject.Singleton
 
 /**
- * News repository.
+ * Rss repository.
  *
  * Created by Dogan Gulcan on 9/22/17.
  */
@@ -25,7 +26,34 @@ class RssRepo @Inject constructor(val appContext: App,
                                   val rssFeedProvider: RssLoader,
                                   val rssDao: RssDao) {
 
-    fun getRssFeed(url: String): LiveData<Resource<List<Article>>> {
+    companion object {
+        private val MAX_CACHE_ITEM_COUNT = 100
+    }
+
+    private fun getRssSourceList(): List<String> {
+        return listOf(
+                "https://android.jlelse.eu/feed",
+                "https://proandroiddev.com/feed",
+                "https://medium.com/feed/google-developers",
+                "http://fragmentedpodcast.com/feed"
+        )
+    }
+
+    fun getAllRss(): MediatorLiveData<Resource<List<Article>>> {
+        val resources = MediatorLiveData<Resource<List<Article>>>()
+
+        getRssSourceList().map { getRssFeed(it) }
+                .forEach {
+                    resources.addSource(it,
+                            { response ->
+                                resources.value = response
+                            })
+                }
+
+        return resources
+    }
+
+    private fun getRssFeed(url: String): LiveData<Resource<List<Article>>> {
         return object : NetworkBoundResource<List<Article>, ArrayList<Article>>(appContext) {
 
             override fun loadFromDb(): LiveData<List<Article>> {
@@ -37,6 +65,9 @@ class RssRepo @Inject constructor(val appContext: App,
             }
 
             override fun saveCallResult(item: ArrayList<Article>) {
+                if (rssDao.getFeedItemCount() > MAX_CACHE_ITEM_COUNT) {
+//                    rssDao.flushRssCache()
+                }
                 rssDao.insertRss(item)
             }
 

@@ -8,6 +8,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.droidfeed.databinding.FragmentAboutBinding
+import com.droidfeed.ui.adapter.BaseUiModelAlias
 import com.droidfeed.ui.adapter.UiModelAdapter
 import com.nytclient.ui.common.BaseFragment
 import javax.inject.Inject
@@ -44,7 +45,7 @@ class AboutFragment : BaseFragment() {
 
     private fun initObservers() {
         viewModel.licenceUiModels.observe(this, Observer {
-            adapter.addUiModels(it)
+            adapter.addUiModels(it as Collection<BaseUiModelAlias>)
         })
 
         viewModel.rateAppEvent.observe(this, Observer {
