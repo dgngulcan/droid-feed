@@ -11,11 +11,9 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.load.engine.GlideException
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions.withCrossFade
 import com.bumptech.glide.request.RequestListener
-import com.bumptech.glide.request.RequestOptions
 import com.bumptech.glide.request.target.Target
-import com.droidfeed.R
 import com.droidfeed.data.model.Article
-import com.droidfeed.databinding.ListItemNewsBinding
+import com.droidfeed.databinding.ListItemFeelSmallBinding
 import com.droidfeed.ui.module.feed.ArticleClickListener
 import com.droidfeed.util.ObservableColorMatrix
 import com.droidfeed.util.glide.GlideApp
@@ -24,17 +22,20 @@ import com.droidfeed.util.glide.GlideApp
 /**
  * Created by Dogan Gulcan on 11/2/17.
  */
-class ArticleViewHolder(private val binding: ListItemNewsBinding) : RecyclerView.ViewHolder(binding.root) {
+class ArticleViewHolder(private val binding: ListItemFeelSmallBinding) : RecyclerView.ViewHolder(binding.root) {
 
     fun bind(article: Article, onRssClickListener: ArticleClickListener) {
         binding.aboutScreenClickListener = onRssClickListener
         binding.rssItem = article
+        binding.executePendingBindings()
 
         GlideApp.with(binding.root.context)
                 .load(article.image)
                 .listener(object : RequestListener<Drawable> {
                     override fun onResourceReady(resource: Drawable?, model: Any?, target: Target<Drawable>?, dataSource: DataSource?, isFirstResource: Boolean): Boolean {
                         if (!article.hasFadedIn) {
+//                            binding.imgArticle.toggleVisibility(true)
+
                             binding.imgArticle.setHasTransientState(true)
                             val cm = ObservableColorMatrix()
                             val saturation = ObjectAnimator.ofFloat(
@@ -57,14 +58,15 @@ class ArticleViewHolder(private val binding: ListItemNewsBinding) : RecyclerView
                     }
 
                     override fun onLoadFailed(e: GlideException?, model: Any?, target: Target<Drawable>?, isFirstResource: Boolean): Boolean {
+//                        binding.imgArticle.toggleVisibility(false)
                         return false
                     }
                 })
                 .diskCacheStrategy(DiskCacheStrategy.DATA)
                 .transition(withCrossFade())
                 .centerCrop()
-                .apply(RequestOptions()
-                        .error(binding.root.context.getDrawable(R.drawable.ic_broken_image_black_24dp)))
+//                .apply(RequestOptions()
+//                        .error(binding.root.context.getDrawable(R.drawable.ic_broken_image_black_24dp)))
                 .into(binding.imgArticle)
     }
 

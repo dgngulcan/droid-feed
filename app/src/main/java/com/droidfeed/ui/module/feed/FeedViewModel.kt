@@ -3,7 +3,6 @@ package com.droidfeed.ui.module.feed
 import android.arch.lifecycle.*
 import android.content.Intent
 import android.databinding.ObservableBoolean
-import com.droidfeed.data.Resource
 import com.droidfeed.data.Status
 import com.droidfeed.data.model.Article
 import com.droidfeed.data.repo.RssRepo
@@ -25,10 +24,7 @@ class FeedViewModel(private val rssRepo: RssRepo) : BaseViewModel() {
     var articleClickEvent = SingleLiveEvent<Article>()
     var articleShareEvent = SingleLiveEvent<Intent>()
 
-    private var rssUrls: List<String> = listOf(
-            "https://android.jlelse.eu/feed")
-
-    private var rssResponses = MediatorLiveData<Resource<List<Article>>>()
+    private var rssResponses = rssRepo.getAllRss()
 
     var rssUiModelData: LiveData<List<ArticleUiModel>> =
             Transformations.switchMap(rssResponses, { response ->
@@ -46,8 +42,10 @@ class FeedViewModel(private val rssRepo: RssRepo) : BaseViewModel() {
 
                 val result = MutableLiveData<List<ArticleUiModel>>()
                 response.data.let {
-                    result.value = (response as Resource<List<Article>>)
-                            .data?.map { ArticleUiModel(it, newsClickCallback) }
+
+                    val sortedList = it?.sortedWith(compareByDescending(Article::pubDateTimestamp))
+
+                    result.value = sortedList?.map { ArticleUiModel(it, newsClickCallback) }
                 }
 
                 result
@@ -77,36 +75,6 @@ class FeedViewModel(private val rssRepo: RssRepo) : BaseViewModel() {
         sendIntent.putExtra(Intent.EXTRA_TEXT, "${article.title}\n\n${article.link}")
         sendIntent.type = "text/plain"
         return sendIntent
-    }
-
-    init {
-        loadRssUrls()
-    }
-
-    private fun loadRssUrls() {
-
-        rssUrls.map { rssRepo.getRssFeed(it) }
-                .forEach {
-                    rssResponses.addSource(it,
-                            { response ->
-                                loadingFailedEvent.setValue(false)
-
-                                when (response?.status) {
-                                    Status.LOADING -> isLoadingNews.set(true)
-                                    Status.SUCCESS -> {
-                                        isLoadingNews.set(false)
-                                        rssResponses.removeSource(it)
-                                    }
-                                    Status.ERROR -> {
-                                        isLoadingNews.set(false)
-                                        rssResponses.removeSource(it)
-                                        loadingFailedEvent.setValue(true)
-                                    }
-                                }
-
-                                rssResponses.value = response
-                            })
-                }
     }
 
     /**

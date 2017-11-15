@@ -46,10 +46,6 @@ android {
         javaMaxHeapSize "4g"
     }
 }
-//
-//kapt {
-//    generateStubs = true
-//}
 
 kotlin {
     experimental {

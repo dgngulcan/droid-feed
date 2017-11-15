@@ -16,7 +16,11 @@ import com.droidfeed.ui.common.BaseUiModel
 class LicenceUiModel(
         private val licence: Licence,
         private val onClickListener: View.OnClickListener
-) : BaseUiModel<LicenceViewHolder>() {
+) : BaseUiModel<LicenceViewHolder, Licence>() {
+
+    override fun getComparable(): Comparable<Licence> {
+        return licence
+    }
 
     override fun getViewHolder(parent: ViewGroup): LicenceViewHolder {
         return LicenceViewHolder(

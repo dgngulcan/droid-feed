@@ -8,7 +8,12 @@ import com.droidfeed.ui.adapter.diff.Diffable
 data class Licence(var name: String,
                    var description: String,
                    var url: String
-) : Diffable {
+) : Diffable, Comparable<Licence> {
+
+    override fun compareTo(other: Licence): Int {
+        return 0
+    }
+
     override fun isSame(item: Diffable): Boolean {
         return url.contentEquals((item as Licence).url)
     }

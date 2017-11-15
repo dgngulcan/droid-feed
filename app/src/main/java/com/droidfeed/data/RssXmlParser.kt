@@ -3,19 +3,24 @@ package com.droidfeed.data
 import android.util.Xml
 import com.droidfeed.data.model.Article
 import com.droidfeed.data.model.Channel
+import com.droidfeed.data.model.Content
+import com.droidfeed.util.DateTimeUtils
 import com.droidfeed.util.DebugUtils
 import org.jsoup.Jsoup
 import org.xmlpull.v1.XmlPullParser
 import org.xmlpull.v1.XmlPullParserException
 import java.io.IOException
 import java.io.StringReader
+import javax.inject.Inject
+import javax.inject.Singleton
 
 
 /**
  *
  * Created by Dogan Gulcan on 10/27/17.
  */
-class RssXmlParser {
+@Singleton
+class RssXmlParser @Inject constructor(private var dateTimeUtils: DateTimeUtils) {
 
     @Throws(XmlPullParserException::class, IOException::class)
     fun parse(xml: String): ArrayList<Article> {
@@ -63,6 +68,7 @@ class RssXmlParser {
 
             when (parser.name) {
                 "item" -> articles.add(readArticle(parser, rssChannel))
+                "title" -> rssChannel.title = parser.nextText()
                 "image" -> rssChannel = parseChannelImage(parser)
                 else -> skip(parser)
             }
@@ -101,12 +107,15 @@ class RssXmlParser {
                 "title" -> article.title = parser.nextText()
                 "dc:creator" -> article.author = parser.nextText()
                 "link" -> article.link = parser.nextText()
-                "pubDate" -> article.pubDate = parser.nextText()
-                "content:encoded" -> {
-                    article.content = parser.nextText()
-                    article.description = Jsoup.parse(article.content).text().substring(0, 100)
-                    article.image = parseContentImage(article.content)
+                "pubDate" -> {
+                    article.pubDate = parser.nextText()
+                    article.pubDateTimestamp = dateTimeUtils.getTimeStampFromDate(article.pubDate) ?: 0
                 }
+                "content:encoded" -> {
+                    article.rawContent = parser.nextText()
+                    article.content = parseArticleContent(article.rawContent)
+                }
+
                 else -> skip(parser)
             }
         }
@@ -114,18 +123,18 @@ class RssXmlParser {
         return article
     }
 
-    private fun parseContentImage(content: String): String {
-        val doc = Jsoup.parse(content)
-        var pic = ""
+    private fun parseArticleContent(contentText: String): Content {
+        val doc = Jsoup.parse(contentText)
+        val content = Content()
 
         try {
-            //choose the first image found in the article
-            pic = doc.select("img").first().attr("abs:src")
+            content.contentImage = doc.select("img").first().attr("abs:src")
+
         } catch (e: NullPointerException) {
             DebugUtils.showStackTrace(e, "Rss article does not have an image")
         }
 
-        return pic
+        return content
     }
 
     private fun skip(parser: XmlPullParser) {

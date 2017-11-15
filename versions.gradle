@@ -2,7 +2,7 @@
  *  Maven repository build versions.
  */
 ext {
-    kotlinVersion = '1.1.51'
+    kotlinVersion = '1.1.60'
     gradleBuildVersion = '3.0.0'
     archLifecycleVersion = '1.0.0'
     supportLibVersion = '26.1.0'
@@ -14,6 +14,6 @@ ext {
     databindingCompilerVersion = '2.3.3'
     daggerVersion = '2.12'
     fabricGradleVersion = '1.24.4'
-    firebaseVersion = '11.4.2'
+    firebaseVersion = '11.6.0'
     playServicesVersion = '3.1.0'
 }

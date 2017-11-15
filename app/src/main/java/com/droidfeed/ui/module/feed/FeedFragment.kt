@@ -5,13 +5,14 @@ import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
 import android.content.Intent
 import android.os.Bundle
-import android.support.v7.widget.StaggeredGridLayoutManager
+import android.support.v7.widget.LinearLayoutManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.droidfeed.R
 import com.droidfeed.data.repo.RssRepo
 import com.droidfeed.databinding.FragmentNewsBinding
+import com.droidfeed.ui.adapter.BaseUiModelAlias
 import com.droidfeed.ui.adapter.UiModelAdapter
 import com.droidfeed.util.CustomTab
 import com.nytclient.ui.common.BaseFragment
@@ -48,14 +49,15 @@ class FeedFragment : BaseFragment() {
     }
 
     private fun init() {
-        val layoutManager = StaggeredGridLayoutManager(1, StaggeredGridLayoutManager.VERTICAL)
+//        val layoutManager = StaggeredGridLayoutManager(1, StaggeredGridLayoutManager.VERTICAL)
+        val layoutManager = LinearLayoutManager(activity)
         binding.newsRecyclerView.layoutManager = layoutManager
         binding.newsRecyclerView.adapter = adapter
     }
 
     private fun initObservables() {
         viewModel.rssUiModelData.observe(this, Observer {
-            adapter.addUiModels(it)
+            if (it != null) adapter.addUiModels(it as Collection<BaseUiModelAlias>)
         })
 
         viewModel.articleClickEvent.observe(this, Observer {

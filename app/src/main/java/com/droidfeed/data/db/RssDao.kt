@@ -19,11 +19,19 @@ interface RssDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insertRss(rssItem: List<Article>)
 
-
     /**
      * @return all RSS items in the database.
      */
     @Query("SELECT * FROM ${AppDatabase.RSS_TABLE_NAME}")
     fun getAllRss(): LiveData<List<Article>>
+
+    @Query("SELECT COUNT(*) from ${AppDatabase.RSS_TABLE_NAME}")
+    fun getFeedItemCount(): Int
+
+    @Query("DELETE FROM ${AppDatabase.RSS_TABLE_NAME}")
+    fun flushRssCache() {
+
+
+    }
 
 }

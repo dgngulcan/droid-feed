@@ -1,8 +1,7 @@
 package com.droidfeed.ui.adapter.diff
 
 import android.support.v7.util.DiffUtil
-import android.support.v7.widget.RecyclerView
-import com.droidfeed.ui.common.BaseUiModel
+import com.droidfeed.ui.adapter.BaseUiModelAlias
 
 /**
  * [DiffUtil.Callback] for UI models.
@@ -10,8 +9,8 @@ import com.droidfeed.ui.common.BaseUiModel
  * Created by Dogan Gulcan on 11/7/17.
  */
 class UiModelDiffCallback(
-        private val oldModels: List<BaseUiModel<out RecyclerView.ViewHolder>>,
-        private val newModels: List<BaseUiModel<out RecyclerView.ViewHolder>>
+        private val oldModels: List<BaseUiModelAlias>,
+        private val newModels: List<BaseUiModelAlias>
 ) : DiffUtil.Callback() {
 
     override fun areItemsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
