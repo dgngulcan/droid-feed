@@ -26,7 +26,6 @@ class ArticleLargeViewHolder(private val binding: ListItemFeedLargeBinding) : Re
     fun bind(article: Article, onRssClickListener: ArticleClickListener) {
         binding.aboutScreenClickListener = onRssClickListener
         binding.rssItem = article
-        binding.executePendingBindings()
 
         GlideApp.with(binding.root.context)
                 .load(article.image)

@@ -38,14 +38,22 @@ class UiModelAdapter @Inject constructor() : RecyclerView.Adapter<RecyclerView.V
     }
 
     override fun getItemViewType(position: Int): Int {
-        return uiModels[position].getViewType()
+        return if (itemCount > position) {
+            uiModels[position].getViewType()
+        } else {
+            0
+        }
     }
 
+    @Synchronized
     fun addUiModels(uiModels: Collection<BaseUiModelAlias>?) {
         if (uiModels != null && uiModels.isNotEmpty()) {
             async(UI) {
                 val abc = bg {
-                    val diffResult = getDiffResult(uiModels)
+                    val diffResult = DiffUtil.calculateDiff(
+                            UiModelDiffCallback(
+                                    this@UiModelAdapter.uiModels,
+                                    uiModels as List<BaseUiModelAlias>))
 
                     this@UiModelAdapter.uiModels.clear()
                     this@UiModelAdapter.uiModels.addAll(uiModels)
@@ -59,17 +67,10 @@ class UiModelAdapter @Inject constructor() : RecyclerView.Adapter<RecyclerView.V
         }
     }
 
-    private fun getDiffResult(uiModels: Collection<BaseUiModelAlias>): DiffUtil.DiffResult {
-        val diffCallback = UiModelDiffCallback(this.uiModels, uiModels as List<BaseUiModelAlias>)
-
-        return DiffUtil.calculateDiff(diffCallback)
-    }
-
     private fun updateViewTypes(uiModels: ArrayList<BaseUiModelAlias>) {
         uiModels.forEach {
             viewTypes.put(it.getViewType(), it)
         }
     }
-
 
 }
