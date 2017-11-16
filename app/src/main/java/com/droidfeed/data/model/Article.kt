@@ -2,6 +2,7 @@ package com.droidfeed.data.model
 
 import android.arch.persistence.room.*
 import com.droidfeed.data.db.AppDatabase
+import com.droidfeed.ui.adapter.UiModelType
 import com.droidfeed.ui.adapter.diff.Diffable
 
 /**
@@ -35,7 +36,10 @@ data class Article(
         var rawContent: String = "",
 
         @Ignore
-        var hasFadedIn: Boolean = false
+        var hasFadedIn: Boolean = false,
+
+        @Ignore
+        var layoutType: UiModelType = UiModelType.ArticleSmall
 
 ) : Diffable, Comparable<Article> {
 

@@ -6,6 +6,7 @@ import android.databinding.ObservableBoolean
 import com.droidfeed.data.Status
 import com.droidfeed.data.model.Article
 import com.droidfeed.data.repo.RssRepo
+import com.droidfeed.ui.adapter.UiModelType
 import com.droidfeed.ui.adapter.model.ArticleUiModel
 import com.nytclient.ui.common.BaseViewModel
 import com.nytclient.ui.common.SingleLiveEvent
@@ -17,7 +18,7 @@ import com.nytclient.ui.common.SingleLiveEvent
  * Created by Dogan Gulcan on 9/22/17.
  */
 @Suppress("UNCHECKED_CAST")
-class FeedViewModel(private val rssRepo: RssRepo) : BaseViewModel() {
+class FeedViewModel(rssRepo: RssRepo) : BaseViewModel() {
 
     var isLoadingNews = ObservableBoolean(false)
     var loadingFailedEvent = SingleLiveEvent<Boolean>()
@@ -41,12 +42,18 @@ class FeedViewModel(private val rssRepo: RssRepo) : BaseViewModel() {
                 }
 
                 val result = MutableLiveData<List<ArticleUiModel>>()
-                response.data.let {
 
-                    val sortedList = it?.sortedWith(compareByDescending(Article::pubDateTimestamp))
+                response.data?.let {
+                    val sortedList = it.sortedWith(compareByDescending(Article::pubDateTimestamp))
+                    var counter = 0
 
-                    result.value = sortedList?.map { ArticleUiModel(it, newsClickCallback) }
+                    result.value = sortedList.map { article ->
+                        article.layoutType = if (counter % 5 == 0 && article.image.isNotBlank()) UiModelType.ArticleLarge else UiModelType.ArticleSmall
+                        counter++
+                        ArticleUiModel(article, newsClickCallback)
+                    }
                 }
+
 
                 result
             })
