@@ -3,13 +3,14 @@ package com.droidfeed.ui.module.feed
 import android.app.Activity
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
-import android.content.Intent
 import android.os.Bundle
+import android.support.animation.DynamicAnimation
+import android.support.animation.SpringAnimation
 import android.support.v7.widget.LinearLayoutManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.droidfeed.R
+import android.widget.ScrollView
 import com.droidfeed.data.repo.RssRepo
 import com.droidfeed.databinding.FragmentNewsBinding
 import com.droidfeed.ui.adapter.BaseUiModelAlias
@@ -33,7 +34,7 @@ class FeedFragment : BaseFragment() {
 
     private val customTab: CustomTab by lazy { CustomTab(activity as Activity) }
 
-    override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         binding = FragmentNewsBinding.inflate(inflater, container, false)
         return binding.root
     }
@@ -45,13 +46,22 @@ class FeedFragment : BaseFragment() {
         viewModel = ViewModelProviders.of(this, factory).get(FeedViewModel::class.java)
 
         init()
+        initAnimations()
         initObservables()
+    }
+
+    private fun initAnimations() {
+
+        val anim1Y = SpringAnimation(binding.newsRecyclerView, DynamicAnimation.TRANSLATION_Y)
+        anim1Y.addUpdateListener { _, value, _ -> anim1Y.animateToFinalPosition(value) }
+
     }
 
     private fun init() {
 //        val layoutManager = StaggeredGridLayoutManager(1, StaggeredGridLayoutManager.VERTICAL)
         val layoutManager = LinearLayoutManager(activity)
         binding.newsRecyclerView.layoutManager = layoutManager
+        binding.newsRecyclerView.overScrollMode = ScrollView.OVER_SCROLL_NEVER
         binding.newsRecyclerView.adapter = adapter
     }
 
@@ -65,7 +75,7 @@ class FeedFragment : BaseFragment() {
         })
 
         viewModel.articleShareEvent.observe(this, Observer {
-            startActivity(Intent.createChooser(it, getText(R.string.send_with)))
+            startActivity(it)
         })
 
         viewModel.loadingFailedEvent.observe(this, Observer {

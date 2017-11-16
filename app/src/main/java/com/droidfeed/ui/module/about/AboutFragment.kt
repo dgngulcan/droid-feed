@@ -22,7 +22,7 @@ class AboutFragment : BaseFragment() {
     private lateinit var viewModel: AboutViewModel
     @Inject lateinit var adapter: UiModelAdapter
 
-    override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         binding = FragmentAboutBinding.inflate(inflater, container, false)
         return binding.root
     }
@@ -49,19 +49,19 @@ class AboutFragment : BaseFragment() {
         })
 
         viewModel.rateAppEvent.observe(this, Observer {
-            if (it?.resolveActivity(activity.packageManager) != null) {
+            if (it?.resolveActivity(activity?.packageManager) != null) {
                 startActivity(it)
             }
         })
 
         viewModel.contactDevEvent.observe(this, Observer {
-            if (it?.resolveActivity(activity.packageManager) != null) {
+            if (it?.resolveActivity(activity?.packageManager) != null) {
                 startActivity(it)
             }
         })
 
         viewModel.shareAppEvent.observe(this, Observer {
-            if (it?.resolveActivity(activity.packageManager) != null) {
+            if (it?.resolveActivity(activity?.packageManager) != null) {
                 startActivity(it)
             }
         })

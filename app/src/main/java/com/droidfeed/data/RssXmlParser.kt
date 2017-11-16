@@ -131,7 +131,7 @@ class RssXmlParser @Inject constructor(private var dateTimeUtils: DateTimeUtils)
             content.contentImage = doc.select("img").first().attr("abs:src")
 
         } catch (e: NullPointerException) {
-            DebugUtils.showStackTrace(e, "Rss article does not have an image")
+//            DebugUtils.showStackTrace(e, "Rss article does not have an image")
         }
 
         return content

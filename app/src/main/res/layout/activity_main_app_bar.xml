@@ -12,6 +12,7 @@
             android:id="@+id/app_bar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            app:layout_behavior="com.droidfeed.util.behavior.FixAppBarLayoutBehavior"
             android:theme="@style/AppTheme.AppBarOverlay">
 
             <android.support.v7.widget.Toolbar

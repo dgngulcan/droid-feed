@@ -18,13 +18,10 @@
     </data>
 
     <android.support.v7.widget.CardView
+        style="@style/CardStyle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="8dp"
-        android:clickable="true"
-        android:foreground="?android:attr/selectableItemBackground"
-        android:onClick="@{()->aboutScreenClickListener.onItemClick(rssItem)}"
-        app:cardCornerRadius="@dimen/card_corner_radius">
+        android:onClick="@{()->aboutScreenClickListener.onItemClick(rssItem)}">
 
         <android.support.constraint.ConstraintLayout
             android:layout_width="match_parent"
@@ -70,7 +67,8 @@
                 app:layout_constraintStart_toStartOf="@+id/txtTitle"
                 app:layout_goneMarginBottom="8dp"
                 tools:text="3 hours ago" />
-rel
+            rel
+
             <ImageView
                 android:id="@+id/imgArticle"
                 android:layout_width="88dp"
