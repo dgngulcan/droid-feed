@@ -15,9 +15,9 @@ import com.droidfeed.R
 /**
  * Loads given image url into the ImageView via Glide.
  */
-fun ImageView.loadUrl(url: String) {
+fun ImageView.loadImage(urlOrResource: Any) {
     Glide.with(context)
-            .load(url)
+            .load(urlOrResource)
             .apply(RequestOptions()
                     .error(context.getDrawable(R.drawable.ic_broken_image_black_24dp)))
             .into(this)

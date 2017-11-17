@@ -1,5 +1,6 @@
 package com.droidfeed.ui.module.main
 
+import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
 import android.databinding.DataBindingUtil
 import android.os.Bundle
@@ -9,24 +10,44 @@ import android.support.v7.app.ActionBarDrawerToggle
 import android.view.View
 import com.droidfeed.R
 import com.droidfeed.databinding.ActivityMainBinding
+import com.droidfeed.databinding.NavHeaderMainBinding
 import com.nytclient.ui.common.BaseActivity
 import kotlinx.android.synthetic.main.activity_main.*
 import javax.inject.Inject
+
 
 class MainActivity : BaseActivity() {
 
     @Inject lateinit var navController: MainNavController
     private lateinit var binding: ActivityMainBinding
     private lateinit var viewModel: MainViewModel
+    private lateinit var navHeaderBinding: NavHeaderMainBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
-        viewModel = ViewModelProviders.of(this).get(MainViewModel::class.java)
-
         init()
         initDrawer()
+    }
+
+    override fun initViewModel() {
+        viewModel = ViewModelProviders.of(this).get(MainViewModel::class.java)
+    }
+
+    override fun createBindings() {
+        binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
+        navHeaderBinding = NavHeaderMainBinding.inflate(
+                layoutInflater,
+                binding.navView,
+                false)
+
+        binding.navView.addHeaderView(navHeaderBinding.root)
+    }
+
+    override fun bindBindings() {
+        viewModel.navigationHeaderImage.observe(this, Observer {
+            navHeaderBinding.drawerImage = it
+        })
     }
 
     private fun init() {
@@ -55,6 +76,7 @@ class MainActivity : BaseActivity() {
         navController.openNewsFragment()
     }
 
+    // todo move to vm
     private val navigationListener = NavigationView.OnNavigationItemSelectedListener { item ->
         when (item.itemId) {
             R.id.nav_feed -> navController.openNewsFragment()
