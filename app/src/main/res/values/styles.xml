@@ -8,7 +8,7 @@
         <item name="colorAccent">@color/colorAccent</item>
 
         <!--<item name="android:navigationBarColor">@color/navBarColor</item>-->
-        <!--<item name="android:statusBarColor">@color/statusBarColor</item>-->
+        <item name="android:statusBarColor">@color/statusBarColor</item>
 
         <!--<item name="android:windowDrawsSystemBarBackgrounds">true</item>-->
         <item name="android:windowActionBarOverlay">true</item>

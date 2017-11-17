@@ -15,7 +15,7 @@ import javax.inject.Inject
  * Created by Dogan Gulcan on 9/12/17.
  */
 @SuppressLint("Registered")
-open class BaseActivity : AppCompatActivity(), HasSupportFragmentInjector {
+abstract class BaseActivity : AppCompatActivity(), HasSupportFragmentInjector {
 
     @Inject
     lateinit var fragmentInjector: DispatchingAndroidInjector<Fragment>
@@ -23,10 +23,17 @@ open class BaseActivity : AppCompatActivity(), HasSupportFragmentInjector {
     override fun onCreate(savedInstanceState: Bundle?) {
         AndroidInjection.inject(this)
         super.onCreate(savedInstanceState)
+
+        initViewModel()
+        createBindings()
+        bindBindings()
     }
+
+    abstract fun initViewModel()
+    abstract fun createBindings()
+    abstract fun bindBindings()
 
     override fun supportFragmentInjector(): AndroidInjector<Fragment> {
         return fragmentInjector
     }
-
 }
