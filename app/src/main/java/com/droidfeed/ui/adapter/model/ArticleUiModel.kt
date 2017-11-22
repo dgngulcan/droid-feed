@@ -24,42 +24,34 @@ data class ArticleUiModel(
 
     private val dataBindingComponent: DateDataBindingComponent = DateDataBindingComponent() // unnecessary
 
-    override fun getComparable(): Comparable<Article> {
-        return article
-    }
+    override fun getComparable(): Comparable<Article> = article
 
-    override fun getViewHolder(parent: ViewGroup): RecyclerView.ViewHolder {
-        return when (article.layoutType) {
-            UiModelType.ArticleSmall -> ArticleSmallViewHolder(
-                    ListItemFeelSmallBinding.inflate(
-                            LayoutInflater.from(parent.context),
-                            parent,
-                            false,
-                            dataBindingComponent))
+    override fun getViewHolder(parent: ViewGroup): RecyclerView.ViewHolder =
+            when (article.layoutType) {
+                UiModelType.ArticleSmall -> ArticleSmallViewHolder(
+                        ListItemFeelSmallBinding.inflate(
+                                LayoutInflater.from(parent.context),
+                                parent,
+                                false,
+                                dataBindingComponent))
 
-            else -> ArticleLargeViewHolder(
-                    ListItemFeedLargeBinding.inflate(
-                            LayoutInflater.from(parent.context),
-                            parent,
-                            false,
-                            dataBindingComponent))
+                else -> ArticleLargeViewHolder(
+                        ListItemFeedLargeBinding.inflate(
+                                LayoutInflater.from(parent.context),
+                                parent,
+                                false,
+                                dataBindingComponent))
 
-        }
-    }
+            }
 
     override fun bindViewHolder(viewHolder: RecyclerView.ViewHolder) {
         when (viewHolder) {
             is ArticleSmallViewHolder -> viewHolder.bind(article, onRssClickListener)
             is ArticleLargeViewHolder -> viewHolder.bind(article, onRssClickListener)
         }
-
     }
 
-    override fun getViewType(): Int {
-        return article.layoutType.ordinal
-    }
+    override fun getViewType(): Int = article.layoutType.ordinal
 
-    override fun getData(): Diffable {
-        return article
-    }
+    override fun getData(): Diffable = article
 }

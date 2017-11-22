@@ -3,6 +3,7 @@ package com.droidfeed.data.repo
 import android.arch.lifecycle.LiveData
 import android.arch.lifecycle.MediatorLiveData
 import com.droidfeed.App
+import com.droidfeed.data.LocalBoundResource
 import com.droidfeed.data.NetworkBoundResource
 import com.droidfeed.data.Resource
 import com.droidfeed.data.api.ApiResponse
@@ -11,6 +12,7 @@ import com.droidfeed.data.db.RssDao
 import com.droidfeed.data.model.Article
 import com.droidfeed.util.DateTimeUtils
 import com.droidfeed.util.DebugUtils
+import org.jetbrains.anko.coroutines.experimental.bg
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -56,19 +58,16 @@ class RssRepo @Inject constructor(val appContext: App,
     private fun getRssFeed(url: String): LiveData<Resource<List<Article>>> {
         return object : NetworkBoundResource<List<Article>, ArrayList<Article>>(appContext) {
 
-            override fun loadFromDb(): LiveData<List<Article>> {
-                return rssDao.getAllRss()
-            }
+            override fun loadFromDb(): LiveData<List<Article>> = rssDao.getAllRss()
 
-            override fun createCall(): LiveData<ApiResponse<ArrayList<Article>>> {
-                return rssFeedProvider.fetch(url)
-            }
+            override fun createCall(): LiveData<ApiResponse<ArrayList<Article>>> =
+                    rssFeedProvider.fetch(url)
 
             override fun saveCallResult(item: ArrayList<Article>) {
                 if (rssDao.getFeedItemCount() > MAX_CACHE_ITEM_COUNT) {
 //                    rssDao.flushRssCache()
                 }
-                rssDao.insertRss(item)
+                rssDao.insertArticles(item)
             }
 
             override fun shouldFetch(data: List<Article>?): Boolean {
@@ -100,11 +99,23 @@ class RssRepo @Inject constructor(val appContext: App,
                 DebugUtils.log("onFetchFailed")
             }
 
-            override fun processResponse(response: ApiResponse<ArrayList<Article>>): ArrayList<Article>? {
-                return response.body
-            }
+            override fun processResponse(response: ApiResponse<ArrayList<Article>>):
+                    ArrayList<Article>? = response.body
 
         }.asLiveData()
+    }
+
+    fun getBookmarkedArticles(): LiveData<Resource<List<Article>>> {
+        return object : LocalBoundResource<List<Article>>() {
+            override fun loadFromDb(): LiveData<List<Article>> = rssDao.getBookmarkedArticles()
+        }.asLiveData()
+
+    }
+
+    fun addBookmarkedArticle(article: Article) {
+        bg {
+            rssDao.insertArticle(article)
+        }
     }
 
 }

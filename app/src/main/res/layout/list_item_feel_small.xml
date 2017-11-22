@@ -67,7 +67,6 @@
                 app:layout_constraintStart_toStartOf="@+id/txtTitle"
                 app:layout_goneMarginBottom="8dp"
                 tools:text="3 hours ago" />
-            rel
 
             <ImageView
                 android:id="@+id/imgArticle"
@@ -110,9 +109,10 @@
                 android:cropToPadding="false"
                 android:onClick="@{()->aboutScreenClickListener.onBookmarkClick(rssItem)}"
                 android:scaleType="centerInside"
-                android:src="@drawable/ic_bookmark_black_24dp"
+                android:src="@{rssItem.bookmarkIcon}"
                 app:layout_constraintEnd_toStartOf="@+id/imgShare"
-                app:layout_constraintTop_toTopOf="@+id/imgShare" />
+                app:layout_constraintTop_toTopOf="@+id/imgShare"
+                tools:src="@drawable/ic_bookmark_black_24dp" />
 
         </android.support.constraint.ConstraintLayout>
 

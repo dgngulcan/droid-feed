@@ -12,7 +12,7 @@ ext {
     retrofitVersion = '2.3.0'
     okHttpVersion = '3.9.0'
     databindingCompilerVersion = '2.3.3'
-    daggerVersion = '2.12'
+    daggerVersion = '2.13'
     fabricGradleVersion = '1.24.4'
     firebaseVersion = '11.6.0'
     playServicesVersion = '3.1.0'
