@@ -1,6 +1,8 @@
 package com.droidfeed.data.model
 
 import android.arch.persistence.room.*
+import android.databinding.ObservableInt
+import com.droidfeed.R
 import com.droidfeed.data.db.AppDatabase
 import com.droidfeed.ui.adapter.UiModelType
 import com.droidfeed.ui.adapter.diff.Diffable
@@ -20,20 +22,20 @@ data class Article(
         @ColumnInfo(name = "pub_date_timestamp")
         var pubDateTimestamp: Long = 0,
 
-        @Embedded
-        var channel: Channel = Channel(),
-
         @ColumnInfo(name = "title")
         var title: String = "",
 
         @ColumnInfo(name = "author")
         var author: String = "",
 
-        @Embedded
-        var content: Content = Content(),
-
         @ColumnInfo(name = "content_raw")
         var rawContent: String = "",
+
+        @Embedded
+        var channel: Channel = Channel(),
+
+        @Embedded
+        var content: Content = Content(),
 
         @Ignore
         var hasFadedIn: Boolean = false,
@@ -43,22 +45,33 @@ data class Article(
 
 ) : Diffable, Comparable<Article> {
 
-    @ColumnInfo(name = "contentImage")
-    var image: String = ""
-        get() {
-            return if (content.contentImage.isBlank()) channel.imageUrl else content.contentImage
+    @ColumnInfo(name = "bookmarked")
+    var bookmarked: Int = 0
+        set(value) {
+            field = value
+
+            if (value == 1) {
+                bookmarkIcon.set(R.drawable.ic_bookmark_black_24dp)
+            } else {
+                bookmarkIcon.set(R.drawable.ic_bookmark_border_black_24dp)
+            }
         }
 
-    override fun compareTo(other: Article): Int {
-        return compareValuesBy(this, other, { it.pubDateTimestamp })
-    }
 
-    override fun isSame(item: Diffable): Boolean {
-        return link.contentEquals((item as Article).link)
-    }
+    @Ignore
+    var bookmarkIcon = ObservableInt(R.drawable.ic_bookmark_border_black_24dp)
 
-    override fun isContentSame(item: Diffable): Boolean {
-        return this.link.contentEquals((item as Article).link)
-    }
+    @ColumnInfo(name = "contentImage")
+    var image: String = ""
+        get() = if (content.contentImage.isBlank()) channel.imageUrl else content.contentImage
+
+    override fun compareTo(other: Article): Int =
+            compareValuesBy(this, other, { it.pubDateTimestamp })
+
+    override fun isSame(item: Diffable): Boolean =
+            link.contentEquals((item as Article).link)
+
+    override fun isContentSame(item: Diffable): Boolean =
+            this.link.contentEquals((item as Article).link)
 
 }

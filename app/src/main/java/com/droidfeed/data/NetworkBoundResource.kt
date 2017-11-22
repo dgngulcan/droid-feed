@@ -71,14 +71,11 @@ abstract class NetworkBoundResource<ResultType, RequestType>(val context: Contex
     protected open fun onFetchFailed() {}
 
     @Suppress("UNCHECKED_CAST")
-    fun asLiveData(): LiveData<Resource<ResultType>> {
-        return result as LiveData<Resource<ResultType>>
-    }
+    fun asLiveData(): LiveData<Resource<ResultType>> = result as LiveData<Resource<ResultType>>
 
     @WorkerThread
-    protected open fun processResponse(response: ApiResponse<RequestType>): RequestType? {
-        return response.body
-    }
+    protected open fun processResponse(response: ApiResponse<RequestType>): RequestType?
+            = response.body
 
     @WorkerThread
     protected abstract fun saveCallResult(item: RequestType)

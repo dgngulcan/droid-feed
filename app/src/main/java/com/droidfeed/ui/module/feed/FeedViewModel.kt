@@ -3,6 +3,7 @@ package com.droidfeed.ui.module.feed
 import android.arch.lifecycle.*
 import android.content.Intent
 import android.databinding.ObservableBoolean
+import com.droidfeed.data.Resource
 import com.droidfeed.data.Status
 import com.droidfeed.data.model.Article
 import com.droidfeed.data.repo.RssRepo
@@ -29,34 +30,43 @@ class FeedViewModel(rssRepo: RssRepo) : BaseViewModel() {
 
     var rssUiModelData: LiveData<List<ArticleUiModel>> =
             Transformations.switchMap(rssResponses, { response ->
-
-                loadingFailedEvent.setValue(false)
-
-                when (response.status) {
-                    Status.LOADING -> isLoadingNews.set(true)
-                    Status.SUCCESS -> isLoadingNews.set(false)
-                    Status.ERROR -> {
-                        isLoadingNews.set(false)
-                        loadingFailedEvent.setValue(true)
-                    }
-                }
-
-                val result = MutableLiveData<List<ArticleUiModel>>()
-
-                response.data?.let {
-                    val sortedList = it.sortedWith(compareByDescending(Article::pubDateTimestamp))
-                    var counter = 0
-
-                    result.value = sortedList.map { article ->
-                        article.layoutType = if (counter % 5 == 0 && article.image.isNotBlank()) UiModelType.ArticleLarge else UiModelType.ArticleSmall
-                        counter++
-                        ArticleUiModel(article, newsClickCallback)
-                    }
-                }
-
-
-                result
+                handleResponseStates(response)
+                handleResponseData(response)
             })
+
+    private fun handleResponseData(response: Resource<List<Article>>): MutableLiveData<List<ArticleUiModel>> {
+        val result = MutableLiveData<List<ArticleUiModel>>()
+
+        response.data?.let {
+            val sortedList = it.sortedWith(compareByDescending(Article::pubDateTimestamp))
+            var counter = 0
+
+            result.value = sortedList.map { article ->
+                article.layoutType = if (counter % 5 == 0 && article.image.isNotBlank()) {
+                    UiModelType.ArticleLarge
+                } else {
+                    UiModelType.ArticleSmall
+                }
+                counter++
+                ArticleUiModel(article, newsClickCallback)
+            }
+        }
+
+        return result
+    }
+
+    private fun handleResponseStates(response: Resource<List<Article>>) {
+        loadingFailedEvent.setValue(false)
+
+        when (response.status) {
+            Status.LOADING -> isLoadingNews.set(true)
+            Status.SUCCESS -> isLoadingNews.set(false)
+            Status.ERROR -> {
+                isLoadingNews.set(false)
+                loadingFailedEvent.setValue(true)
+            }
+        }
+    }
 
     private val newsClickCallback by lazy {
         object : ArticleClickListener {
@@ -65,13 +75,15 @@ class FeedViewModel(rssRepo: RssRepo) : BaseViewModel() {
             }
 
             override fun onShareClick(article: Article) {
-                if (canUserClick) {
-                    articleShareEvent.setValue(createArticleShareIntent(article))
-                }
+                if (canUserClick) articleShareEvent.setValue(createArticleShareIntent(article))
+
             }
 
             override fun onBookmarkClick(article: Article) {
-                TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+                if (canUserClick) {
+                    article.bookmarked = if (article.bookmarked == 1) 0 else 1
+                    rssRepo.addBookmarkedArticle(article)
+                }
             }
         }
     }
@@ -88,8 +100,6 @@ class FeedViewModel(rssRepo: RssRepo) : BaseViewModel() {
      * Factory class for [ViewModelProvider]. Used to pass values to constructor of the [ViewModel].
      */
     class Factory(private val newsRepo: RssRepo) : ViewModelProvider.NewInstanceFactory() {
-        override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            return FeedViewModel(newsRepo) as T
-        }
+        override fun <T : ViewModel> create(modelClass: Class<T>): T = FeedViewModel(newsRepo) as T
     }
 }

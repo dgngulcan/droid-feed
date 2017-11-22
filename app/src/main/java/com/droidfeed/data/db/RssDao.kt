@@ -13,17 +13,18 @@ import com.droidfeed.data.model.Article
 @Dao
 interface RssDao {
 
-    /**
-     * @Insert a list of RSS items to the database. Replaces if the item exists.
-     */
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insertRss(rssItem: List<Article>)
 
-    /**
-     * @return all RSS items in the database.
-     */
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    fun insertArticles(rssItem: List<Article>)
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    fun insertArticle(article: Article)
+
     @Query("SELECT * FROM ${AppDatabase.RSS_TABLE_NAME}")
     fun getAllRss(): LiveData<List<Article>>
+
+    @Query("SELECT * FROM ${AppDatabase.RSS_TABLE_NAME} WHERE bookmarked = 1")
+    fun getBookmarkedArticles(): LiveData<List<Article>>
 
     @Query("SELECT COUNT(*) from ${AppDatabase.RSS_TABLE_NAME}")
     fun getFeedItemCount(): Int
