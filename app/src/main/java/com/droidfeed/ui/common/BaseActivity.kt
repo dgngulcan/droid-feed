@@ -33,7 +33,5 @@ abstract class BaseActivity : AppCompatActivity(), HasSupportFragmentInjector {
     abstract fun createBindings()
     abstract fun bindBindings()
 
-    override fun supportFragmentInjector(): AndroidInjector<Fragment> {
-        return fragmentInjector
-    }
+    override fun supportFragmentInjector(): AndroidInjector<Fragment> = fragmentInjector
 }

@@ -19,14 +19,23 @@ import com.nytclient.ui.common.SingleLiveEvent
  * Created by Dogan Gulcan on 9/22/17.
  */
 @Suppress("UNCHECKED_CAST")
-class FeedViewModel(rssRepo: RssRepo) : BaseViewModel() {
+class FeedViewModel(private val rssRepo: RssRepo, feedType: FeedType) : BaseViewModel() {
 
-    var isLoadingNews = ObservableBoolean(false)
-    var loadingFailedEvent = SingleLiveEvent<Boolean>()
-    var articleClickEvent = SingleLiveEvent<Article>()
-    var articleShareEvent = SingleLiveEvent<Intent>()
+    val isLoading = ObservableBoolean(true)
+    val loadingFailedEvent = SingleLiveEvent<Boolean>()
+    val articleClickEvent = SingleLiveEvent<Article>()
+    val articleShareEvent = SingleLiveEvent<Intent>()
+
+    private val result = MutableLiveData<List<ArticleUiModel>>()
+    private val bookmarkResult = MutableLiveData<List<ArticleUiModel>>()
+
+//    private var rssResponses = when (feedType) {
+//        FeedType.ALL -> rssRepo.getAllRss()
+//        FeedType.BOOKMARKS -> rssRepo.getBookmarkedArticles()
+//    }
 
     private var rssResponses = rssRepo.getAllRss()
+    private var rssBookmarkResponses = rssRepo.getBookmarkedArticles()
 
     var rssUiModelData: LiveData<List<ArticleUiModel>> =
             Transformations.switchMap(rssResponses, { response ->
@@ -34,35 +43,60 @@ class FeedViewModel(rssRepo: RssRepo) : BaseViewModel() {
                 handleResponseData(response)
             })
 
+    var rssUiBookmarksModelData: LiveData<List<ArticleUiModel>> =
+            Transformations.switchMap(rssBookmarkResponses, { response ->
+                //                handleResponseStates(response)
+                handleBookmarkResponseData(response)
+            })
+
     private fun handleResponseData(response: Resource<List<Article>>): MutableLiveData<List<ArticleUiModel>> {
-        val result = MutableLiveData<List<ArticleUiModel>>()
 
         response.data?.let {
             val sortedList = it.sortedWith(compareByDescending(Article::pubDateTimestamp))
             var counter = 0
 
-            result.value = sortedList.map { article ->
+            result.postValue(sortedList.map { article ->
                 article.layoutType = if (counter % 5 == 0 && article.image.isNotBlank()) {
-                    UiModelType.ArticleLarge
+                    UiModelType.ARTICLE_LARGE
                 } else {
-                    UiModelType.ArticleSmall
+                    UiModelType.ARTICLE_SMALL
                 }
                 counter++
                 ArticleUiModel(article, newsClickCallback)
-            }
+            })
         }
 
         return result
+    }
+
+    private fun handleBookmarkResponseData(response: Resource<List<Article>>): MutableLiveData<List<ArticleUiModel>> {
+
+        response.data?.let {
+            val sortedList = it.sortedWith(compareByDescending(Article::pubDateTimestamp))
+            var counter = 0
+
+            bookmarkResult.postValue(sortedList.map { article ->
+                article.layoutType = if (counter % 5 == 0 && article.image.isNotBlank()) {
+                    UiModelType.ARTICLE_LARGE
+                } else {
+                    UiModelType.ARTICLE_SMALL
+                }
+                counter++
+                ArticleUiModel(article, newsClickCallback)
+            })
+        }
+
+        return bookmarkResult
     }
 
     private fun handleResponseStates(response: Resource<List<Article>>) {
         loadingFailedEvent.setValue(false)
 
         when (response.status) {
-            Status.LOADING -> isLoadingNews.set(true)
-            Status.SUCCESS -> isLoadingNews.set(false)
+            Status.LOADING -> isLoading.set(true)
+            Status.SUCCESS -> isLoading.set(false)
             Status.ERROR -> {
-                isLoadingNews.set(false)
+                isLoading.set(false)
                 loadingFailedEvent.setValue(true)
             }
         }
@@ -75,31 +109,34 @@ class FeedViewModel(rssRepo: RssRepo) : BaseViewModel() {
             }
 
             override fun onShareClick(article: Article) {
-                if (canUserClick) articleShareEvent.setValue(createArticleShareIntent(article))
-
+                if (canUserClick) articleShareEvent.setValue(article.getShareIntent())
             }
 
             override fun onBookmarkClick(article: Article) {
                 if (canUserClick) {
-                    article.bookmarked = if (article.bookmarked == 1) 0 else 1
-                    rssRepo.addBookmarkedArticle(article)
+                    toggleBookmark(article)
                 }
             }
         }
     }
 
-    private fun createArticleShareIntent(article: Article): Intent {
-        val sendIntent = Intent()
-        sendIntent.action = Intent.ACTION_SEND
-        sendIntent.putExtra(Intent.EXTRA_TEXT, "${article.title}\n\n${article.link}")
-        sendIntent.type = "text/plain"
-        return sendIntent
+    private fun toggleBookmark(article: Article) {
+        if (article.bookmarked == 1) {
+            article.bookmarked = 0
+        } else {
+            article.bookmarked = 1
+        }
+
+        article.title = "jamiryo"
+        rssRepo.updateArticle(article)
+//        rssRepo.deleteArticle(article)
     }
 
     /**
      * Factory class for [ViewModelProvider]. Used to pass values to constructor of the [ViewModel].
      */
-    class Factory(private val newsRepo: RssRepo) : ViewModelProvider.NewInstanceFactory() {
-        override fun <T : ViewModel> create(modelClass: Class<T>): T = FeedViewModel(newsRepo) as T
+    class Factory(private val newsRepo: RssRepo, private val feedType: FeedType) : ViewModelProvider.NewInstanceFactory() {
+        override fun <T : ViewModel> create(modelClass: Class<T>): T = FeedViewModel(newsRepo, feedType) as T
     }
+
 }

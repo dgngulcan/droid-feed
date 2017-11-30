@@ -23,7 +23,7 @@ class RssLoader @Inject constructor(
         val rssXmlParser: RssXmlParser
 ) {
 
-    fun fetch(url: String): LiveData<ApiResponse<ArrayList<Article>>> {
+    fun fetch(url: String): MutableLiveData<ApiResponse<ArrayList<Article>>> {
 
         val fetchResponse = MutableLiveData<ApiResponse<ArrayList<Article>?>>()
         val request = Request.Builder()
@@ -48,7 +48,7 @@ class RssLoader @Inject constructor(
 
         })
 
-        return fetchResponse as LiveData<ApiResponse<ArrayList<Article>>>
+        return fetchResponse as MutableLiveData<ApiResponse<ArrayList<Article>>>
     }
 
 }

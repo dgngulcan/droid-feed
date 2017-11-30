@@ -13,7 +13,6 @@ import com.droidfeed.data.model.Article
 import com.droidfeed.util.DateTimeUtils
 import com.droidfeed.util.DebugUtils
 import org.jetbrains.anko.coroutines.experimental.bg
-import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -23,13 +22,16 @@ import javax.inject.Singleton
  * Created by Dogan Gulcan on 9/22/17.
  */
 @Singleton
-class RssRepo @Inject constructor(val appContext: App,
-                                  val dateTimeUtils: DateTimeUtils,
-                                  val rssFeedProvider: RssLoader,
-                                  val rssDao: RssDao) {
+class RssRepo @Inject constructor(
+        val appContext: App,
+        val dateTimeUtils: DateTimeUtils,
+        val rssFeedProvider: RssLoader,
+        val rssDao: RssDao
+) {
 
     companion object {
         private val MAX_CACHE_ITEM_COUNT = 100
+        private val NETWORK_FETCH_DIMINISHING_IN_MILLIS = 100
     }
 
     private fun getRssSourceList(): List<String> {
@@ -37,6 +39,7 @@ class RssRepo @Inject constructor(val appContext: App,
                 "https://android.jlelse.eu/feed",
                 "https://proandroiddev.com/feed",
                 "https://medium.com/feed/google-developers",
+                "http://androidbackstage.blogspot.com/feeds/posts/default?alt=rss",
                 "http://fragmentedpodcast.com/feed"
         )
     }
@@ -83,7 +86,7 @@ class RssRepo @Inject constructor(val appContext: App,
                                     let {
                                         val currentMillis = System.currentTimeMillis()
                                         val timeDifference = currentMillis - it
-                                        TimeUnit.MILLISECONDS.toMinutes(timeDifference) > 2
+                                        timeDifference > NETWORK_FETCH_DIMINISHING_IN_MILLIS
                                                 || timeDifference < 0
                                     }
                         } != false
@@ -109,12 +112,22 @@ class RssRepo @Inject constructor(val appContext: App,
         return object : LocalBoundResource<List<Article>>() {
             override fun loadFromDb(): LiveData<List<Article>> = rssDao.getBookmarkedArticles()
         }.asLiveData()
+//
+//                    Transformations.map(rssDao.getAllRss(),
+//                            { it -> it.filter { it.bookmarked == 1 } })
+//        }.asLiveData()
 
     }
 
-    fun addBookmarkedArticle(article: Article) {
+    fun updateArticle(article: Article) {
         bg {
-            rssDao.insertArticle(article)
+            rssDao.updateArticle(article)
+        }
+    }
+
+    fun deleteArticle(article: Article) {
+        bg {
+            rssDao.deleteArticle(article)
         }
     }
 

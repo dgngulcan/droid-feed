@@ -1,6 +1,7 @@
 package com.droidfeed.data.model
 
 import android.arch.persistence.room.*
+import android.content.Intent
 import android.databinding.ObservableInt
 import com.droidfeed.R
 import com.droidfeed.data.db.AppDatabase
@@ -41,7 +42,7 @@ data class Article(
         var hasFadedIn: Boolean = false,
 
         @Ignore
-        var layoutType: UiModelType = UiModelType.ArticleSmall
+        var layoutType: UiModelType = UiModelType.ARTICLE_SMALL
 
 ) : Diffable, Comparable<Article> {
 
@@ -50,20 +51,28 @@ data class Article(
         set(value) {
             field = value
 
+            // can not use selectors because states cant be manipulated from xml
             if (value == 1) {
-                bookmarkIcon.set(R.drawable.ic_bookmark_black_24dp)
+                bookmarkObservable.set(R.drawable.avd_bookmark_positive)
             } else {
-                bookmarkIcon.set(R.drawable.ic_bookmark_border_black_24dp)
+                bookmarkObservable.set(R.drawable.avd_bookmark_negative)
             }
         }
 
-
     @Ignore
-    var bookmarkIcon = ObservableInt(R.drawable.ic_bookmark_border_black_24dp)
+    val bookmarkObservable = ObservableInt(R.drawable.avd_bookmark_negative)
 
     @ColumnInfo(name = "contentImage")
     var image: String = ""
         get() = if (content.contentImage.isBlank()) channel.imageUrl else content.contentImage
+
+    fun getShareIntent(): Intent {
+        val sendIntent = Intent()
+        sendIntent.action = Intent.ACTION_SEND
+        sendIntent.putExtra(Intent.EXTRA_TEXT, "$title\n\n$link")
+        sendIntent.type = "text/plain"
+        return sendIntent
+    }
 
     override fun compareTo(other: Article): Int =
             compareValuesBy(this, other, { it.pubDateTimestamp })

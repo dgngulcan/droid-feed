@@ -20,15 +20,13 @@ import com.droidfeed.ui.module.feed.ArticleClickListener
 data class ArticleUiModel(
         private val article: Article,
         private val onRssClickListener: ArticleClickListener
-) : BaseUiModel<RecyclerView.ViewHolder, Article>() {
+) : BaseUiModel<RecyclerView.ViewHolder>() {
 
     private val dataBindingComponent: DateDataBindingComponent = DateDataBindingComponent() // unnecessary
 
-    override fun getComparable(): Comparable<Article> = article
-
     override fun getViewHolder(parent: ViewGroup): RecyclerView.ViewHolder =
             when (article.layoutType) {
-                UiModelType.ArticleSmall -> ArticleSmallViewHolder(
+                UiModelType.ARTICLE_SMALL -> ArticleSmallViewHolder(
                         ListItemFeelSmallBinding.inflate(
                                 LayoutInflater.from(parent.context),
                                 parent,
