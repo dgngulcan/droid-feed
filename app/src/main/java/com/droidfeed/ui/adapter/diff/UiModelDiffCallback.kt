@@ -21,16 +21,11 @@ class UiModelDiffCallback(
         }
     }
 
-    override fun areContentsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
-        return oldModels[oldItemPosition].getData().isContentSame(newModels[newItemPosition].getData())
-    }
+    override fun areContentsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean =
+            oldModels[oldItemPosition].getData().isContentSame(newModels[newItemPosition].getData())
 
-    override fun getOldListSize(): Int {
-        return oldModels.size
-    }
+    override fun getOldListSize(): Int = oldModels.size
 
-    override fun getNewListSize(): Int {
-        return newModels.size
-    }
+    override fun getNewListSize(): Int = newModels.size
 
 }

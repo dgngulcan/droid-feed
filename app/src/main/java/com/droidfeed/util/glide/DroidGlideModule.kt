@@ -29,8 +29,6 @@ class DroidGlideModule : AppGlideModule() {
                         ).disallowHardwareConfig())
     }
 
-    override fun isManifestParsingEnabled(): Boolean {
-        return false
-    }
+    override fun isManifestParsingEnabled(): Boolean = false
 
 }

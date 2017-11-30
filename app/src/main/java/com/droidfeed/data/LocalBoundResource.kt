@@ -1,8 +1,7 @@
 package com.droidfeed.data
 
 import android.arch.lifecycle.LiveData
-import android.arch.lifecycle.MutableLiveData
-import android.arch.lifecycle.Transformations
+import android.arch.lifecycle.MediatorLiveData
 import android.support.annotation.MainThread
 
 /**
@@ -10,14 +9,16 @@ import android.support.annotation.MainThread
  */
 abstract class LocalBoundResource<ResultType> {
 
-    private val result = MutableLiveData<Resource<ResultType?>>()
+    //    private val result = MutableLiveData<Resource<ResultType?>>()
+    private val result = MediatorLiveData<Resource<ResultType?>>()
 
     init {
         result.value = Resource.loading(null)
 
         val dbSource = loadFromDb()
 
-        Transformations.map(dbSource, { newData ->
+        result.addSource(dbSource, { newData ->
+            result.removeSource(dbSource)
             result.value = Resource.success(newData)
         })
     }

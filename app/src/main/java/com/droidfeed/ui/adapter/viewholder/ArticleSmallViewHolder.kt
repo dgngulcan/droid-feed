@@ -9,7 +9,6 @@ import android.support.v7.widget.RecyclerView
 import com.bumptech.glide.load.DataSource
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.load.engine.GlideException
-import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions.withCrossFade
 import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.target.Target
 import com.droidfeed.data.model.Article
@@ -17,7 +16,6 @@ import com.droidfeed.databinding.ListItemFeelSmallBinding
 import com.droidfeed.ui.module.feed.ArticleClickListener
 import com.droidfeed.util.ObservableColorMatrix
 import com.droidfeed.util.glide.GlideApp
-
 
 /**
  * Created by Dogan Gulcan on 11/2/17.
@@ -34,7 +32,6 @@ class ArticleSmallViewHolder(private val binding: ListItemFeelSmallBinding) : Re
                 .listener(object : RequestListener<Drawable> {
                     override fun onResourceReady(resource: Drawable?, model: Any?, target: Target<Drawable>?, dataSource: DataSource?, isFirstResource: Boolean): Boolean {
                         if (!article.hasFadedIn) {
-//                            binding.imgArticle.toggleVisibility(true)
 
                             binding.imgArticle.setHasTransientState(true)
                             val cm = ObservableColorMatrix()
@@ -44,7 +41,6 @@ class ArticleSmallViewHolder(private val binding: ListItemFeelSmallBinding) : Re
                                 binding.imgArticle.colorFilter = ColorMatrixColorFilter(cm)
                             }
                             saturation.duration = 2000L
-//                            saturation.interpolator = AnimUtils.fastOutSlowInInterpolator(binding.root.context)
                             saturation.addListener(object : AnimatorListenerAdapter() {
                                 override fun onAnimationEnd(animation: Animator) {
                                     binding.imgArticle.clearColorFilter()
@@ -57,17 +53,14 @@ class ArticleSmallViewHolder(private val binding: ListItemFeelSmallBinding) : Re
                         return false
                     }
 
-                    override fun onLoadFailed(e: GlideException?, model: Any?, target: Target<Drawable>?, isFirstResource: Boolean): Boolean {
-//                        binding.imgArticle.toggleVisibility(false)
-                        return false
-                    }
+                    override fun onLoadFailed(e: GlideException?, model: Any?, target: Target<Drawable>?, isFirstResource: Boolean): Boolean =
+                            false
                 })
                 .diskCacheStrategy(DiskCacheStrategy.DATA)
-                .transition(withCrossFade())
                 .centerCrop()
-//                .apply(RequestOptions()
-//                        .error(binding.root.context.getDrawable(R.drawable.ic_broken_image_black_24dp)))
                 .into(binding.imgArticle)
     }
+
+
 
 }

@@ -4,6 +4,7 @@ import android.support.v4.app.Fragment
 import com.droidfeed.R
 import com.droidfeed.ui.module.about.AboutFragment
 import com.droidfeed.ui.module.feed.FeedFragment
+import com.droidfeed.ui.module.feed.FeedType
 import javax.inject.Inject
 
 /**
@@ -15,19 +16,22 @@ class MainNavController @Inject constructor(activity: MainActivity) {
     private val containerId = R.id.fragmentContainer
 
     private val feedFragment: FeedFragment by lazy {
-        FeedFragment()
+        FeedFragment.getInstance(FeedType.ALL)
+    }
+    private val bookmarkFragment: FeedFragment by lazy {
+        FeedFragment.getInstance(FeedType.BOOKMARKS)
     }
 
     private val aboutFragment: AboutFragment by lazy {
         AboutFragment()
     }
 
-
     fun openNewsFragment() {
         changeFragment(feedFragment)
     }
 
     fun openBookmarksFragment() {
+        changeFragment(bookmarkFragment)
     }
 
     fun openAboutFragment() {

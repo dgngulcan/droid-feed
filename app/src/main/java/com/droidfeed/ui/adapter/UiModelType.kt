@@ -5,4 +5,4 @@ package com.droidfeed.ui.adapter
  *
  * Created by Dogan Gulcan on 11/2/17.
  */
-enum class UiModelType { ArticleSmall, ArticleLarge, Licence }
+enum class UiModelType { ARTICLE_SMALL, ARTICLE_LARGE, LICENCE }

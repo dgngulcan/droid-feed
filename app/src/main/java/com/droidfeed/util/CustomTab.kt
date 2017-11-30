@@ -19,7 +19,7 @@ import org.jetbrains.anko.design.snackbar
  */
 class CustomTab constructor(val activity: Activity) {
 
-    fun showTab2(url: String) {
+    fun showTab(url: String) {
 
         if (URLUtil.isValidUrl(url)) {
 

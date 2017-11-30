@@ -4,13 +4,10 @@ import android.app.Activity
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
-import android.support.animation.DynamicAnimation
-import android.support.animation.SpringAnimation
 import android.support.v7.widget.LinearLayoutManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ScrollView
 import com.droidfeed.data.repo.RssRepo
 import com.droidfeed.databinding.FragmentNewsBinding
 import com.droidfeed.ui.adapter.BaseUiModelAlias
@@ -28,11 +25,23 @@ import javax.inject.Inject
 class FeedFragment : BaseFragment() {
 
     private lateinit var binding: FragmentNewsBinding
-    private lateinit var viewModel: FeedViewModel
-    @Inject lateinit var newsRepo: RssRepo
-    @Inject lateinit var adapter: UiModelAdapter
-
+    private var viewModel: FeedViewModel? = null
+    private val adapter: UiModelAdapter by lazy { UiModelAdapter() }
     private val customTab: CustomTab by lazy { CustomTab(activity as Activity) }
+
+    @Inject lateinit var newsRepo: RssRepo
+
+    companion object {
+        private val EXTRA_FEED_TYPE = "feed_type"
+
+        fun getInstance(feedType: FeedType): FeedFragment {
+            val feedFragment = FeedFragment()
+            val bundle = Bundle()
+            bundle.putString(EXTRA_FEED_TYPE, feedType.name)
+            feedFragment.arguments = bundle
+            return feedFragment
+        }
+    }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         binding = FragmentNewsBinding.inflate(inflater, container, false)
@@ -42,45 +51,70 @@ class FeedFragment : BaseFragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
-        val factory = FeedViewModel.Factory(newsRepo)
-        viewModel = ViewModelProviders.of(this, factory).get(FeedViewModel::class.java)
-
         init()
-        initAnimations()
-        initObservables()
+
+        if (viewModel == null) {
+            arguments?.let {
+                val factory = FeedViewModel.Factory(newsRepo,
+                        FeedType.valueOf(it.getString(EXTRA_FEED_TYPE)))
+
+                viewModel = activity?.let { it1 ->
+                    ViewModelProviders.of(it1, factory)
+                            .get(FeedViewModel::class.java)
+                }
+            }
+
+            initAnimations()
+            initDataObservables()
+        }
+
     }
 
     private fun initAnimations() {
-
-        val anim1Y = SpringAnimation(binding.newsRecyclerView, DynamicAnimation.TRANSLATION_Y)
-        anim1Y.addUpdateListener { _, value, _ -> anim1Y.animateToFinalPosition(value) }
-
+//        val anim1Y = SpringAnimation(binding.newsRecyclerView, DynamicAnimation.TRANSLATION_Y)
+//        anim1Y.addUpdateListener { _, value, _ -> anim1Y.animateToFinalPosition(value) }
     }
 
     private fun init() {
-//        val layoutManager = StaggeredGridLayoutManager(1, StaggeredGridLayoutManager.VERTICAL)
         val layoutManager = LinearLayoutManager(activity)
+        layoutManager.initialPrefetchItemCount = 3
         binding.newsRecyclerView.layoutManager = layoutManager
-        binding.newsRecyclerView.overScrollMode = ScrollView.OVER_SCROLL_NEVER
         binding.newsRecyclerView.adapter = adapter
     }
 
-    private fun initObservables() {
-        viewModel.rssUiModelData.observe(this, Observer {
-            if (it != null) adapter.addUiModels(it as Collection<BaseUiModelAlias>)
+    private fun initDataObservables() {
+        arguments?.let {
+            when (FeedType.valueOf(it.getString(EXTRA_FEED_TYPE))) {
+                FeedType.ALL -> {
+                    viewModel?.rssUiModelData?.observe(this, Observer {
+                        if (it != null) adapter.addUiModels(it as Collection<BaseUiModelAlias>)
+                    })
+                }
+                FeedType.BOOKMARKS -> {
+
+                    viewModel?.rssUiBookmarksModelData?.observe(this, Observer {
+                        if (it != null) adapter.addUiModels(it as Collection<BaseUiModelAlias>)
+                    })
+                }
+
+            }
+        }
+//        viewModel?.rssUiModelData?.observe(this, Observer {
+//            if (it != null) adapter.addUiModels(it as Collection<BaseUiModelAlias>)
+//        })
+
+        viewModel?.articleClickEvent?.observe(this, Observer {
+            it?.link?.let { it1 -> customTab.showTab(it1) }
         })
 
-        viewModel.articleClickEvent.observe(this, Observer {
-            it?.link?.let { it1 -> customTab.showTab2(it1) }
-        })
-
-        viewModel.articleShareEvent.observe(this, Observer {
+        viewModel?.articleShareEvent?.observe(this, Observer {
             startActivity(it)
         })
 
-        viewModel.loadingFailedEvent.observe(this, Observer {
+        viewModel?.loadingFailedEvent?.observe(this, Observer {
 
         })
 
     }
+
 }

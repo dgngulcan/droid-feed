@@ -12,7 +12,7 @@ import java.lang.reflect.Type
  *
  * Created by Dogan Gulcan on 11/2/17.
  */
-abstract class BaseUiModel<T : RecyclerView.ViewHolder, in K : Diffable> {
+abstract class BaseUiModel<T : RecyclerView.ViewHolder> {
 
     val type: Type = (javaClass.genericSuperclass as ParameterizedType)
             .actualTypeArguments[0]
@@ -24,7 +24,5 @@ abstract class BaseUiModel<T : RecyclerView.ViewHolder, in K : Diffable> {
     abstract fun getViewType(): Int
 
     abstract fun getData(): Diffable
-
-    abstract fun getComparable(): Comparable<K>
 
 }

@@ -13,7 +13,7 @@ abstract class BaseViewModel : ViewModel() {
 
     var canUserClick: Boolean = true
         get() {
-            return if (SystemClock.elapsedRealtime() - mLastClickTime < 1000) {
+            return if (SystemClock.elapsedRealtime() - mLastClickTime < 300) {
                 false
             } else {
                 mLastClickTime = SystemClock.elapsedRealtime()

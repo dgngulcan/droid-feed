@@ -9,7 +9,6 @@ import android.support.v7.widget.RecyclerView
 import com.bumptech.glide.load.DataSource
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.load.engine.GlideException
-import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.target.Target
 import com.droidfeed.data.model.Article
@@ -26,6 +25,7 @@ class ArticleLargeViewHolder(private val binding: ListItemFeedLargeBinding) : Re
     fun bind(article: Article, onRssClickListener: ArticleClickListener) {
         binding.aboutScreenClickListener = onRssClickListener
         binding.rssItem = article
+        binding.executePendingBindings()
 
         GlideApp.with(binding.root.context)
                 .load(article.image)
@@ -53,16 +53,11 @@ class ArticleLargeViewHolder(private val binding: ListItemFeedLargeBinding) : Re
                         return false
                     }
 
-                    override fun onLoadFailed(e: GlideException?, model: Any?, target: Target<Drawable>?, isFirstResource: Boolean): Boolean {
-//                        binding.imgArticle.toggleVisibility(false)
-                        return false
-                    }
+                    override fun onLoadFailed(e: GlideException?, model: Any?, target: Target<Drawable>?, isFirstResource: Boolean): Boolean =//                        binding.imgArticle.toggleVisibility(false)
+                            false
                 })
                 .diskCacheStrategy(DiskCacheStrategy.DATA)
-                .transition(DrawableTransitionOptions.withCrossFade())
                 .centerCrop()
-//                .apply(RequestOptions()
-//                        .error(binding.root.context.getDrawable(R.drawable.ic_broken_image_black_24dp)))
                 .into(binding.imgArticle)
     }
 

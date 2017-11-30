@@ -115,12 +115,28 @@ class RssXmlParser @Inject constructor(private var dateTimeUtils: DateTimeUtils)
                     article.rawContent = parser.nextText()
                     article.content = parseArticleContent(article.rawContent)
                 }
+                "description" -> article.content.contentImage = getImageFromDescription(parser.nextText())
+
 
                 else -> skip(parser)
             }
         }
 
         return article
+    }
+
+    private fun getImageFromDescription(descText: String): String {
+        val doc = Jsoup.parse(descText)
+
+        var image = ""
+        try {
+            image = doc.select("img").first().attr("abs:src")
+
+        } catch (e: NullPointerException) {
+//            DebugUtils.showStackTrace(e, "Rss article does not have an image")
+        }
+
+        return image
     }
 
     private fun parseArticleContent(contentText: String): Content {

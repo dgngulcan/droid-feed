@@ -1,10 +1,7 @@
 package com.droidfeed.data.db
 
 import android.arch.lifecycle.LiveData
-import android.arch.persistence.room.Dao
-import android.arch.persistence.room.Insert
-import android.arch.persistence.room.OnConflictStrategy
-import android.arch.persistence.room.Query
+import android.arch.persistence.room.*
 import com.droidfeed.data.model.Article
 
 /**
@@ -13,12 +10,14 @@ import com.droidfeed.data.model.Article
 @Dao
 interface RssDao {
 
-
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
     fun insertArticles(rssItem: List<Article>)
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insertArticle(article: Article)
+    fun updateArticle(article: Article)
+
+    @Delete
+    fun deleteArticle(article: Article)
 
     @Query("SELECT * FROM ${AppDatabase.RSS_TABLE_NAME}")
     fun getAllRss(): LiveData<List<Article>>
@@ -28,11 +27,5 @@ interface RssDao {
 
     @Query("SELECT COUNT(*) from ${AppDatabase.RSS_TABLE_NAME}")
     fun getFeedItemCount(): Int
-
-    @Query("DELETE FROM ${AppDatabase.RSS_TABLE_NAME}")
-    fun flushRssCache() {
-
-
-    }
 
 }

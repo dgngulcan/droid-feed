@@ -1,9 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-
-    android:descendantFocusability="beforeDescendants">
+    xmlns:tools="http://schemas.android.com/tools">
 
     <data>
 
@@ -25,7 +23,7 @@
 
         <android.support.constraint.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="wrap_content">
 
             <TextView
                 android:id="@+id/txtTitle"
@@ -101,6 +99,7 @@
             <ImageView
                 android:id="@+id/imgBookmark"
                 style="BorderlessImageButton"
+                avdImageResource="@{rssItem.bookmarkObservable}"
                 android:layout_width="48dp"
                 android:layout_height="48dp"
                 android:adjustViewBounds="false"
@@ -109,7 +108,6 @@
                 android:cropToPadding="false"
                 android:onClick="@{()->aboutScreenClickListener.onBookmarkClick(rssItem)}"
                 android:scaleType="centerInside"
-                android:src="@{rssItem.bookmarkIcon}"
                 app:layout_constraintEnd_toStartOf="@+id/imgShare"
                 app:layout_constraintTop_toTopOf="@+id/imgShare"
                 tools:src="@drawable/ic_bookmark_black_24dp" />
