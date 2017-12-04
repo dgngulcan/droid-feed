@@ -77,10 +77,13 @@ data class Article(
     override fun compareTo(other: Article): Int =
             compareValuesBy(this, other, { it.pubDateTimestamp })
 
-    override fun isSame(item: Diffable): Boolean =
-            link.contentEquals((item as Article).link)
+    override fun isSame(item: Diffable): Boolean = this.link.contentEquals((item as Article).link)
 
-    override fun isContentSame(item: Diffable): Boolean =
-            this.link.contentEquals((item as Article).link)
+    override fun isContentSame(item: Diffable): Boolean {
+        item as Article
+//        val content1 = this.bookmarked == (item as Article).bookmarked
+        val content2 = this.link.contentEquals(item.link)
 
+        return  content2
+    }
 }

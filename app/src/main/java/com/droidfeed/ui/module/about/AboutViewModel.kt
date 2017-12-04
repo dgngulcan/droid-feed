@@ -4,13 +4,13 @@ import android.arch.lifecycle.LiveData
 import android.arch.lifecycle.MutableLiveData
 import android.content.Intent
 import android.net.Uri
-import android.view.View
 import com.droidfeed.BuildConfig
 import com.droidfeed.data.model.Licence
 import com.droidfeed.ui.adapter.model.LicenceUiModel
+import com.droidfeed.util.DebugUtils
+import com.droidfeed.util.workerThread
 import com.nytclient.ui.common.BaseViewModel
 import com.nytclient.ui.common.SingleLiveEvent
-import org.jetbrains.anko.coroutines.experimental.bg
 
 
 /**
@@ -22,57 +22,60 @@ class AboutViewModel : BaseViewModel() {
     val rateAppEvent = SingleLiveEvent<Intent>()
     val contactDevEvent = SingleLiveEvent<Intent>()
     val shareAppEvent = SingleLiveEvent<Intent>()
+    val licenceClickEvent = SingleLiveEvent<Licence>()
 
     val licenceUiModels: LiveData<List<LicenceUiModel>>
         get() = provideOpenSourceLibraryList()
 
-    val aboutScreenClickListener = object : AboutFragmentClickListener {
-        override fun onRateAppClicked() {
-            rateAppEvent.setValue(getRateAppIntent())
-        }
-
-        override fun onContactClicked() {
-            contactDevEvent.setValue(getContactIntent())
-        }
-
-        override fun onShareClicked() {
-            shareAppEvent.setValue(getShareAppIntent())
-        }
-    }
-
-    private val licenceClickListener = View.OnClickListener {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-    }
-
-    private fun getRateAppIntent(): Intent {
-        return try {
+    val rateAppIntent: Intent by lazy {
+        try {
             Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=" + BuildConfig.APPLICATION_ID))
-        } catch (anfe: android.content.ActivityNotFoundException) {
+        } catch (e: android.content.ActivityNotFoundException) {
+            DebugUtils.showStackTrace(e)
             Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?id=" + BuildConfig.APPLICATION_ID))
         }
     }
 
-    private fun getContactIntent(): Intent {
+    val contactIntent: Intent by lazy {
         val intent = Intent(Intent.ACTION_SENDTO)
         intent.data = Uri.parse("mailto:paxolite@gmail.com")
         intent.putExtra(Intent.EXTRA_EMAIL, "paxolite@gmail.com")
         intent.putExtra(Intent.EXTRA_SUBJECT, "About DroidFeed")
-        return intent
     }
 
-    private fun getShareAppIntent(): Intent {
-        val sendIntent = Intent()
-        sendIntent.action = Intent.ACTION_SEND
-        sendIntent.putExtra(Intent.EXTRA_TEXT, "This app helps me to keep up with Android" +
+    val shareIntent: Intent by lazy {
+        val intent = Intent()
+        intent.action = Intent.ACTION_SEND
+        intent.putExtra(Intent.EXTRA_TEXT, "This app helps me to keep up with Android" +
                 "\n\nhttps://play.google.com/store/apps/details?id=" + BuildConfig.APPLICATION_ID)
-        sendIntent.type = "text/plain"
-        return sendIntent
+        intent.type = "text/plain"
+        intent
+    }
+
+    val aboutScreenClickListener = object : AboutFragmentClickListener {
+        override fun onRateAppClicked() {
+            if (canUserClick) rateAppEvent.setValue(rateAppIntent)
+        }
+
+        override fun onContactClicked() {
+            if (canUserClick) contactDevEvent.setValue(contactIntent)
+        }
+
+        override fun onShareClicked() {
+            if (canUserClick) shareAppEvent.setValue(shareIntent)
+        }
+    }
+
+    private val licenceClickListener = object : LicenceClickListener {
+        override fun onClick(licence: Licence) {
+            if (canUserClick) licenceClickEvent.setValue(licence)
+        }
     }
 
     private fun provideOpenSourceLibraryList(): LiveData<List<LicenceUiModel>> {
         val licencesLiveData = MutableLiveData<List<LicenceUiModel>>()
 
-        bg {
+        workerThread {
             val uiModels = ArrayList<LicenceUiModel>()
             getLicences().mapTo(uiModels) { LicenceUiModel(it, licenceClickListener) }
             licencesLiveData.postValue(uiModels)

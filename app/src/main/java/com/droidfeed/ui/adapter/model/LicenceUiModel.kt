@@ -1,7 +1,6 @@
 package com.droidfeed.ui.adapter.model
 
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import com.droidfeed.data.model.Licence
 import com.droidfeed.databinding.ListItemLicenceBinding
@@ -9,13 +8,14 @@ import com.droidfeed.ui.adapter.UiModelType
 import com.droidfeed.ui.adapter.diff.Diffable
 import com.droidfeed.ui.adapter.viewholder.LicenceViewHolder
 import com.droidfeed.ui.common.BaseUiModel
+import com.droidfeed.ui.module.about.LicenceClickListener
 
 /**
  * Created by Dogan Gulcan on 11/9/17.
  */
 class LicenceUiModel(
         private val licence: Licence,
-        private val onClickListener: View.OnClickListener
+        private val licenceClickListener: LicenceClickListener
 ) : BaseUiModel<LicenceViewHolder>() {
 
     override fun getViewHolder(parent: ViewGroup): LicenceViewHolder {
@@ -27,7 +27,7 @@ class LicenceUiModel(
     }
 
     override fun bindViewHolder(viewHolder: LicenceViewHolder) {
-        viewHolder.bind(licence, onClickListener)
+        viewHolder.bind(licence, licenceClickListener)
     }
 
     override fun getViewType(): Int = UiModelType.LICENCE.ordinal

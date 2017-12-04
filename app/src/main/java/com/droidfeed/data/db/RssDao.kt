@@ -13,16 +13,19 @@ interface RssDao {
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     fun insertArticles(rssItem: List<Article>)
 
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    @Update(onConflict = OnConflictStrategy.REPLACE)
     fun updateArticle(article: Article)
 
     @Delete
     fun deleteArticle(article: Article)
 
-    @Query("SELECT * FROM ${AppDatabase.RSS_TABLE_NAME}")
+    @Query("SELECT * FROM ${AppDatabase.RSS_TABLE_NAME} " +
+            "ORDER BY pub_date_timestamp DESC")
     fun getAllRss(): LiveData<List<Article>>
 
-    @Query("SELECT * FROM ${AppDatabase.RSS_TABLE_NAME} WHERE bookmarked = 1")
+    @Query("SELECT * FROM ${AppDatabase.RSS_TABLE_NAME} " +
+            "WHERE bookmarked = 1 " +
+            "ORDER BY pub_date_timestamp DESC")
     fun getBookmarkedArticles(): LiveData<List<Article>>
 
     @Query("SELECT COUNT(*) from ${AppDatabase.RSS_TABLE_NAME}")

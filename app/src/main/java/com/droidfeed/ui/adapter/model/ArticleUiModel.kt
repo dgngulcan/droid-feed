@@ -52,4 +52,5 @@ data class ArticleUiModel(
     override fun getViewType(): Int = article.layoutType.ordinal
 
     override fun getData(): Diffable = article
+
 }

@@ -19,7 +19,7 @@ import com.nytclient.ui.common.SingleLiveEvent
  * Created by Dogan Gulcan on 9/22/17.
  */
 @Suppress("UNCHECKED_CAST")
-class FeedViewModel(private val rssRepo: RssRepo, feedType: FeedType) : BaseViewModel() {
+class FeedViewModel(private val rssRepo: RssRepo) : BaseViewModel() {
 
     val isLoading = ObservableBoolean(true)
     val loadingFailedEvent = SingleLiveEvent<Boolean>()
@@ -28,14 +28,14 @@ class FeedViewModel(private val rssRepo: RssRepo, feedType: FeedType) : BaseView
 
     private val result = MutableLiveData<List<ArticleUiModel>>()
     private val bookmarkResult = MutableLiveData<List<ArticleUiModel>>()
-
+//
 //    private var rssResponses = when (feedType) {
 //        FeedType.ALL -> rssRepo.getAllRss()
 //        FeedType.BOOKMARKS -> rssRepo.getBookmarkedArticles()
 //    }
 
-    private var rssResponses = rssRepo.getAllRss()
-    private var rssBookmarkResponses = rssRepo.getBookmarkedArticles()
+    private val rssResponses by lazy { rssRepo.getAllRss() }
+    private val rssBookmarkResponses by lazy { rssRepo.getBookmarkedArticles() }
 
     var rssUiModelData: LiveData<List<ArticleUiModel>> =
             Transformations.switchMap(rssResponses, { response ->
@@ -45,17 +45,16 @@ class FeedViewModel(private val rssRepo: RssRepo, feedType: FeedType) : BaseView
 
     var rssUiBookmarksModelData: LiveData<List<ArticleUiModel>> =
             Transformations.switchMap(rssBookmarkResponses, { response ->
-                //                handleResponseStates(response)
+                handleResponseStates(response)
                 handleBookmarkResponseData(response)
             })
 
-    private fun handleResponseData(response: Resource<List<Article>>): MutableLiveData<List<ArticleUiModel>> {
+    private fun handleResponseData(response: Resource<List<Article>>): LiveData<List<ArticleUiModel>> {
 
         response.data?.let {
-            val sortedList = it.sortedWith(compareByDescending(Article::pubDateTimestamp))
             var counter = 0
 
-            result.postValue(sortedList.map { article ->
+            result.value = (it.map { article ->
                 article.layoutType = if (counter % 5 == 0 && article.image.isNotBlank()) {
                     UiModelType.ARTICLE_LARGE
                 } else {
@@ -69,13 +68,12 @@ class FeedViewModel(private val rssRepo: RssRepo, feedType: FeedType) : BaseView
         return result
     }
 
-    private fun handleBookmarkResponseData(response: Resource<List<Article>>): MutableLiveData<List<ArticleUiModel>> {
+    private fun handleBookmarkResponseData(response: Resource<List<Article>>): LiveData<List<ArticleUiModel>> {
 
         response.data?.let {
-            val sortedList = it.sortedWith(compareByDescending(Article::pubDateTimestamp))
             var counter = 0
 
-            bookmarkResult.postValue(sortedList.map { article ->
+            bookmarkResult.value = ((it.map { article ->
                 article.layoutType = if (counter % 5 == 0 && article.image.isNotBlank()) {
                     UiModelType.ARTICLE_LARGE
                 } else {
@@ -83,7 +81,7 @@ class FeedViewModel(private val rssRepo: RssRepo, feedType: FeedType) : BaseView
                 }
                 counter++
                 ArticleUiModel(article, newsClickCallback)
-            })
+            }))
         }
 
         return bookmarkResult
@@ -127,16 +125,14 @@ class FeedViewModel(private val rssRepo: RssRepo, feedType: FeedType) : BaseView
             article.bookmarked = 1
         }
 
-        article.title = "jamiryo"
         rssRepo.updateArticle(article)
-//        rssRepo.deleteArticle(article)
     }
 
     /**
      * Factory class for [ViewModelProvider]. Used to pass values to constructor of the [ViewModel].
      */
     class Factory(private val newsRepo: RssRepo, private val feedType: FeedType) : ViewModelProvider.NewInstanceFactory() {
-        override fun <T : ViewModel> create(modelClass: Class<T>): T = FeedViewModel(newsRepo, feedType) as T
+        override fun <T : ViewModel> create(modelClass: Class<T>): T = FeedViewModel(newsRepo) as T
     }
 
 }
