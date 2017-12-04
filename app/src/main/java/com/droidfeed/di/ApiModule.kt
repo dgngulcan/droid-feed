@@ -15,7 +15,6 @@ import javax.inject.Singleton
 @Module
 class ApiModule {
 
-
     @Singleton
     @Provides
     fun provideOkHttpClient(): OkHttpClient {

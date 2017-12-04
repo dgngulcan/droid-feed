@@ -4,6 +4,7 @@ import android.content.Context
 import android.support.v4.app.Fragment
 import dagger.android.support.AndroidSupportInjection
 
+
 /**
  * Created by Dogan Gulcan on 9/13/17.
  */
@@ -13,4 +14,5 @@ open class BaseFragment : Fragment() {
         AndroidSupportInjection.inject(this)
         super.onAttach(context)
     }
+
 }

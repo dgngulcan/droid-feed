@@ -9,15 +9,15 @@ import android.support.customtabs.CustomTabsServiceConnection
 import android.support.v4.content.ContextCompat
 import android.view.View
 import android.webkit.URLUtil
-import com.droidfeed.BuildConfig
 import com.droidfeed.R
 import org.jetbrains.anko.design.snackbar
+import javax.inject.Inject
 
 
 /**
  * Created by Dogan Gulcan on 11/8/17.
  */
-class CustomTab constructor(val activity: Activity) {
+class CustomTab @Inject constructor(val activity: Activity) {
 
     fun showTab(url: String) {
 

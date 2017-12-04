@@ -10,6 +10,7 @@ import android.view.ViewGroup
 import com.droidfeed.databinding.FragmentAboutBinding
 import com.droidfeed.ui.adapter.BaseUiModelAlias
 import com.droidfeed.ui.adapter.UiModelAdapter
+import com.droidfeed.util.CustomTab
 import com.nytclient.ui.common.BaseFragment
 import javax.inject.Inject
 
@@ -20,7 +21,9 @@ class AboutFragment : BaseFragment() {
 
     private lateinit var binding: FragmentAboutBinding
     private lateinit var viewModel: AboutViewModel
+
     @Inject lateinit var adapter: UiModelAdapter
+    @Inject lateinit var customTab: CustomTab
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         binding = FragmentAboutBinding.inflate(inflater, container, false)
@@ -64,6 +67,10 @@ class AboutFragment : BaseFragment() {
             if (it?.resolveActivity(activity?.packageManager) != null) {
                 startActivity(it)
             }
+        })
+
+        viewModel.licenceClickEvent.observe(this, Observer {
+            it?.url?.let { it1 -> customTab.showTab(it1) }
         })
     }
 

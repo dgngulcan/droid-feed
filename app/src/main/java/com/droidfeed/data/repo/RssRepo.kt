@@ -8,11 +8,12 @@ import com.droidfeed.data.NetworkBoundResource
 import com.droidfeed.data.Resource
 import com.droidfeed.data.api.ApiResponse
 import com.droidfeed.data.api.RssLoader
+import com.droidfeed.data.db.AppDatabase
 import com.droidfeed.data.db.RssDao
 import com.droidfeed.data.model.Article
 import com.droidfeed.util.DateTimeUtils
 import com.droidfeed.util.DebugUtils
-import org.jetbrains.anko.coroutines.experimental.bg
+import com.droidfeed.util.workerThread
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -24,6 +25,7 @@ import javax.inject.Singleton
 @Singleton
 class RssRepo @Inject constructor(
         val appContext: App,
+        val database: AppDatabase,
         val dateTimeUtils: DateTimeUtils,
         val rssFeedProvider: RssLoader,
         val rssDao: RssDao
@@ -120,13 +122,13 @@ class RssRepo @Inject constructor(
     }
 
     fun updateArticle(article: Article) {
-        bg {
+        workerThread {
             rssDao.updateArticle(article)
         }
     }
 
     fun deleteArticle(article: Article) {
-        bg {
+        workerThread {
             rssDao.deleteArticle(article)
         }
     }
