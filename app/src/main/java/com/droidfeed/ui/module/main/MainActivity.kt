@@ -36,7 +36,6 @@ class MainActivity : BaseActivity() {
 
         viewModel = ViewModelProviders.of(this).get(MainViewModel::class.java)
 
-
         setSupportActionBar(binding.appbar.toolbar)
         supportActionBar?.title = getString(R.string.app_name)
 

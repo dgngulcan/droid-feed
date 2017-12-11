@@ -23,7 +23,7 @@ class FeedViewModel(private val rssRepo: RssRepo) : BaseViewModel() {
 
     val isLoading = ObservableBoolean(true)
     val loadingFailedEvent = SingleLiveEvent<Boolean>()
-    val articleClickEvent = SingleLiveEvent<Article>()
+    val articleOpenDetail = SingleLiveEvent<Article>()
     val articleShareEvent = SingleLiveEvent<Intent>()
 
     private val result = MutableLiveData<List<ArticleUiModel>>()
@@ -103,7 +103,7 @@ class FeedViewModel(private val rssRepo: RssRepo) : BaseViewModel() {
     private val newsClickCallback by lazy {
         object : ArticleClickListener {
             override fun onItemClick(article: Article) {
-                if (canUserClick) articleClickEvent.setValue(article)
+                if (canUserClick) articleOpenDetail.setValue(article)
             }
 
             override fun onShareClick(article: Article) {
@@ -131,7 +131,7 @@ class FeedViewModel(private val rssRepo: RssRepo) : BaseViewModel() {
     /**
      * Factory class for [ViewModelProvider]. Used to pass values to constructor of the [ViewModel].
      */
-    class Factory(private val newsRepo: RssRepo, private val feedType: FeedType) : ViewModelProvider.NewInstanceFactory() {
+    class Factory(private val newsRepo: RssRepo) : ViewModelProvider.NewInstanceFactory() {
         override fun <T : ViewModel> create(modelClass: Class<T>): T = FeedViewModel(newsRepo) as T
     }
 

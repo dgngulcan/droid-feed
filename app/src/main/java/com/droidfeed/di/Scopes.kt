@@ -1,5 +1,6 @@
 package com.droidfeed.di
 
+import com.droidfeed.ui.module.detail.ArticleDetailActivity
 import com.droidfeed.ui.module.main.MainActivity
 import javax.inject.Scope
 
@@ -13,3 +14,10 @@ import javax.inject.Scope
 @Scope
 @Retention(AnnotationRetention.RUNTIME)
 annotation class MainScope
+
+/**
+ * Scope of [ArticleDetailActivity].
+ */
+@Scope
+@Retention(AnnotationRetention.RUNTIME)
+annotation class ArticleDetailScope

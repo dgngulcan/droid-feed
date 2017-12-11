@@ -1,16 +1,20 @@
 package com.droidfeed.data.model
 
+import android.annotation.SuppressLint
 import android.arch.persistence.room.*
 import android.content.Intent
 import android.databinding.ObservableInt
+import android.os.Parcelable
 import com.droidfeed.R
 import com.droidfeed.data.db.AppDatabase
 import com.droidfeed.ui.adapter.UiModelType
 import com.droidfeed.ui.adapter.diff.Diffable
+import kotlinx.android.parcel.Parcelize
 
 /**
  * Created by Dogan Gulcan on 9/22/17.
  */
+@Parcelize
 @Entity(tableName = AppDatabase.RSS_TABLE_NAME)
 data class Article(
         @PrimaryKey
@@ -44,7 +48,7 @@ data class Article(
         @Ignore
         var layoutType: UiModelType = UiModelType.ARTICLE_SMALL
 
-) : Diffable, Comparable<Article> {
+) : Diffable, Comparable<Article>, Parcelable {
 
     @ColumnInfo(name = "bookmarked")
     var bookmarked: Int = 0
@@ -81,9 +85,10 @@ data class Article(
 
     override fun isContentSame(item: Diffable): Boolean {
         item as Article
-        val content1 = this.bookmarked == (item as Article).bookmarked
+
+        val content1 = this.bookmarked == item.bookmarked
         val content2 = this.link.contentEquals(item.link)
 
-        return  content2&&content1
+        return content2 && content1
     }
 }
