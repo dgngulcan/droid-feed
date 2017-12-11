@@ -14,7 +14,6 @@ import com.droidfeed.databinding.FragmentArticlesBinding
 import com.droidfeed.ui.adapter.BaseUiModelAlias
 import com.droidfeed.ui.adapter.UiModelAdapter
 import com.droidfeed.ui.adapter.model.ArticleUiModel
-import com.droidfeed.ui.module.detail.ArticleDetailActivity
 import com.droidfeed.util.CustomTab
 import com.droidfeed.util.DebugUtils
 import com.droidfeed.util.NetworkUtils
@@ -110,18 +109,11 @@ class FeedFragment : BaseFragment() {
     }
 
     private fun openArticleDetail(article: Article) {
-        activity?.let {
-            startActivity(ArticleDetailActivity.getInstance(it, article))
+
+        if (networkUtils.isDeviceConnectedToInternet()) {
+            customTab.showTab(article.link)
         }
-//
-//        if (networkUtils.isDeviceConnectedToInternet()) {
-//            customTab.showTab(article.link)
-//
-//        } else {
-//            activity?.let {
-//                startActivity(ArticleDetailActivity.getInstance(it, article))
-//            }
-//        }
+
     }
 
 

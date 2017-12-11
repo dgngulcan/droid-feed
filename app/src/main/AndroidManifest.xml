@@ -24,8 +24,6 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".ui.module.detail.ArticleDetailActivity" />
-
     </application>
 
 </manifest>
