@@ -5,7 +5,7 @@ import android.arch.lifecycle.MutableLiveData
 import android.arch.lifecycle.Observer
 import android.support.annotation.MainThread
 import android.support.annotation.Nullable
-import android.util.Log
+import com.droidfeed.util.DebugUtils
 import java.util.concurrent.atomic.AtomicBoolean
 
 /**
@@ -30,7 +30,9 @@ class SingleLiveEvent<T> : MutableLiveData<T>() {
     override fun observe(owner: LifecycleOwner, observer: Observer<T>) {
 
         if (hasActiveObservers()) {
-            Log.w("SingleLiveEvent", "Multiple observers registered but only one will be notified of changes.")
+//            removeObservers(owner)
+            DebugUtils.log("SingleLiveEvent: Multiple observers" +
+                    " registered but only one will be notified of changes.")
         }
 
         super.observe(owner, Observer<T> {

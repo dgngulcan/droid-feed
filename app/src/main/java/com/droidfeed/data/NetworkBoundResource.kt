@@ -30,10 +30,8 @@ abstract class NetworkBoundResource<ResultType, RequestType>(val context: Contex
             if (shouldFetch(data)) {
                 fetchFromNetwork(dbSource)
             } else {
-//                result.addSource(dbSource,
-//                        { newData -> result.setValue(Resource.success(newData)) })
-                result.setValue(Resource.success(data))
-
+                result.addSource(dbSource,
+                        { newData -> result.setValue(Resource.success(newData)) })
             }
         })
     }
@@ -46,6 +44,7 @@ abstract class NetworkBoundResource<ResultType, RequestType>(val context: Contex
                 { newData ->
                     result.setValue(Resource.loading(newData))
                 })
+
 
         result.addSource(apiResponse, { response ->
             result.removeSource(apiResponse)

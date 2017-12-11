@@ -23,15 +23,7 @@ abstract class BaseActivity : AppCompatActivity(), HasSupportFragmentInjector {
     override fun onCreate(savedInstanceState: Bundle?) {
         AndroidInjection.inject(this)
         super.onCreate(savedInstanceState)
-
-        initViewModel()
-        createBindings()
-        bindBindings()
     }
-
-    abstract fun initViewModel()
-    abstract fun createBindings()
-    abstract fun bindBindings()
 
     override fun supportFragmentInjector(): AndroidInjector<Fragment> = fragmentInjector
 }

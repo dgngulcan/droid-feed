@@ -6,20 +6,17 @@ import android.support.v7.widget.RecyclerView
 import android.view.ViewGroup
 import com.droidfeed.ui.adapter.diff.UiModelDiffCallback
 import com.droidfeed.ui.common.BaseUiModel
-import kotlinx.coroutines.experimental.android.UI
-import kotlinx.coroutines.experimental.async
-import org.jetbrains.anko.coroutines.experimental.bg
+import com.droidfeed.util.uiThread
+import com.droidfeed.util.workerThread
 import javax.inject.Inject
 
 
-@Suppress("UNCHECKED_CAST")
 /**
  * Generic [RecyclerView.Adapter] for [BaseUiModel]s.
  *
  * Created by Dogan Gulcan on 11/2/17.
  */
-typealias BaseUiModelAlias = BaseUiModel<in RecyclerView.ViewHolder>
-
+@Suppress("UNCHECKED_CAST")
 class UiModelAdapter @Inject constructor() : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     private val uiModels = ArrayList<BaseUiModelAlias>()
@@ -35,7 +32,7 @@ class UiModelAdapter @Inject constructor() : RecyclerView.Adapter<RecyclerView.V
     override fun getItemCount(): Int = uiModels.size
 
     override fun getItemViewType(position: Int): Int {
-        return if (position < itemCount && itemCount > 0) {
+        return if (position in 0..(itemCount - 1) && itemCount > 0) {
             uiModels[position].getViewType()
         } else {
             0
@@ -44,21 +41,21 @@ class UiModelAdapter @Inject constructor() : RecyclerView.Adapter<RecyclerView.V
 
     @Synchronized
     fun addUiModels(uiModels: Collection<BaseUiModelAlias>?) {
-        if (uiModels != null && uiModels.isNotEmpty()) {
-            async(UI) {
-                val abc = bg {
-                    val diffResult = DiffUtil.calculateDiff(
-                            UiModelDiffCallback(this@UiModelAdapter.uiModels,
-                                    uiModels as List<BaseUiModelAlias>))
+        if (uiModels != null) {
+            workerThread {
 
-                    this@UiModelAdapter.uiModels.clear()
-                    this@UiModelAdapter.uiModels.addAll(uiModels)
+                val diffResult = DiffUtil.calculateDiff(
+                        UiModelDiffCallback(this@UiModelAdapter.uiModels,
+                                uiModels as List<BaseUiModelAlias>))
 
-                    updateViewTypes(this@UiModelAdapter.uiModels)
-                    diffResult
+                this@UiModelAdapter.uiModels.clear()
+                this@UiModelAdapter.uiModels.addAll(uiModels)
+
+                updateViewTypes(this@UiModelAdapter.uiModels)
+
+                uiThread {
+                    diffResult.dispatchUpdatesTo(this@UiModelAdapter)
                 }
-
-                abc.await().dispatchUpdatesTo(this@UiModelAdapter)
             }
         }
     }
@@ -70,3 +67,5 @@ class UiModelAdapter @Inject constructor() : RecyclerView.Adapter<RecyclerView.V
     }
 
 }
+
+typealias BaseUiModelAlias = BaseUiModel<in RecyclerView.ViewHolder>

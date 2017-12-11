@@ -1,9 +1,9 @@
 package com.droidfeed.ui.module.feed
 
-import android.app.Activity
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
+import android.support.v7.widget.DefaultItemAnimator
 import android.support.v7.widget.LinearLayoutManager
 import android.view.LayoutInflater
 import android.view.View
@@ -12,7 +12,9 @@ import com.droidfeed.data.repo.RssRepo
 import com.droidfeed.databinding.FragmentNewsBinding
 import com.droidfeed.ui.adapter.BaseUiModelAlias
 import com.droidfeed.ui.adapter.UiModelAdapter
+import com.droidfeed.ui.adapter.model.ArticleUiModel
 import com.droidfeed.util.CustomTab
+import com.droidfeed.util.DebugUtils
 import com.nytclient.ui.common.BaseFragment
 import javax.inject.Inject
 
@@ -24,13 +26,6 @@ import javax.inject.Inject
  */
 class FeedFragment : BaseFragment() {
 
-    private lateinit var binding: FragmentNewsBinding
-    private var viewModel: FeedViewModel? = null
-    private val adapter: UiModelAdapter by lazy { UiModelAdapter() }
-    private val customTab: CustomTab by lazy { CustomTab(activity as Activity) }
-
-    @Inject lateinit var newsRepo: RssRepo
-
     companion object {
         private val EXTRA_FEED_TYPE = "feed_type"
 
@@ -41,6 +36,19 @@ class FeedFragment : BaseFragment() {
             feedFragment.arguments = bundle
             return feedFragment
         }
+    }
+
+    private lateinit var binding: FragmentNewsBinding
+    private var viewModel: FeedViewModel? = null
+    private val adapter: UiModelAdapter by lazy { UiModelAdapter() }
+
+    //    val customTab: CustomTab by lazy { CustomTab(activity!!) }
+    @Inject lateinit var newsRepo: RssRepo
+    @Inject lateinit var customTab: CustomTab
+
+
+    private val feedObserver = Observer<List<ArticleUiModel>> {
+        adapter.addUiModels(it as Collection<BaseUiModelAlias>)
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -64,44 +72,28 @@ class FeedFragment : BaseFragment() {
                 }
             }
 
-            initAnimations()
-            initDataObservables()
         }
-
-    }
-
-    private fun initAnimations() {
-//        val anim1Y = SpringAnimation(binding.newsRecyclerView, DynamicAnimation.TRANSLATION_Y)
-//        anim1Y.addUpdateListener { _, value, _ -> anim1Y.animateToFinalPosition(value) }
+        initDataObservables()
     }
 
     private fun init() {
         val layoutManager = LinearLayoutManager(activity)
         layoutManager.initialPrefetchItemCount = 3
         binding.newsRecyclerView.layoutManager = layoutManager
-        binding.newsRecyclerView.adapter = adapter
+        (binding.newsRecyclerView.itemAnimator as DefaultItemAnimator).supportsChangeAnimations = false
+        binding.newsRecyclerView.swapAdapter(adapter, true)
     }
 
     private fun initDataObservables() {
+        DebugUtils.log("initDataObservables")
         arguments?.let {
             when (FeedType.valueOf(it.getString(EXTRA_FEED_TYPE))) {
-                FeedType.ALL -> {
-                    viewModel?.rssUiModelData?.observe(this, Observer {
-                        if (it != null) adapter.addUiModels(it as Collection<BaseUiModelAlias>)
-                    })
-                }
-                FeedType.BOOKMARKS -> {
+                FeedType.ALL -> viewModel?.rssUiModelData?.observe(this, feedObserver)
 
-                    viewModel?.rssUiBookmarksModelData?.observe(this, Observer {
-                        if (it != null) adapter.addUiModels(it as Collection<BaseUiModelAlias>)
-                    })
-                }
-
+                FeedType.BOOKMARKS ->
+                    viewModel?.rssUiBookmarksModelData?.observe(this, feedObserver)
             }
         }
-//        viewModel?.rssUiModelData?.observe(this, Observer {
-//            if (it != null) adapter.addUiModels(it as Collection<BaseUiModelAlias>)
-//        })
 
         viewModel?.articleClickEvent?.observe(this, Observer {
             it?.link?.let { it1 -> customTab.showTab(it1) }
@@ -116,5 +108,6 @@ class FeedFragment : BaseFragment() {
         })
 
     }
+
 
 }
