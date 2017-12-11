@@ -8,13 +8,16 @@ import android.support.v7.widget.LinearLayoutManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import com.droidfeed.data.model.Article
 import com.droidfeed.data.repo.RssRepo
-import com.droidfeed.databinding.FragmentNewsBinding
+import com.droidfeed.databinding.FragmentArticlesBinding
 import com.droidfeed.ui.adapter.BaseUiModelAlias
 import com.droidfeed.ui.adapter.UiModelAdapter
 import com.droidfeed.ui.adapter.model.ArticleUiModel
+import com.droidfeed.ui.module.detail.ArticleDetailActivity
 import com.droidfeed.util.CustomTab
 import com.droidfeed.util.DebugUtils
+import com.droidfeed.util.NetworkUtils
 import com.nytclient.ui.common.BaseFragment
 import javax.inject.Inject
 
@@ -38,13 +41,14 @@ class FeedFragment : BaseFragment() {
         }
     }
 
-    private lateinit var binding: FragmentNewsBinding
+    private lateinit var binding: FragmentArticlesBinding
     private var viewModel: FeedViewModel? = null
     private val adapter: UiModelAdapter by lazy { UiModelAdapter() }
 
     //    val customTab: CustomTab by lazy { CustomTab(activity!!) }
     @Inject lateinit var newsRepo: RssRepo
     @Inject lateinit var customTab: CustomTab
+    @Inject lateinit var networkUtils: NetworkUtils
 
 
     private val feedObserver = Observer<List<ArticleUiModel>> {
@@ -52,7 +56,7 @@ class FeedFragment : BaseFragment() {
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        binding = FragmentNewsBinding.inflate(inflater, container, false)
+        binding = FragmentArticlesBinding.inflate(inflater, container, false)
         return binding.root
     }
 
@@ -62,17 +66,13 @@ class FeedFragment : BaseFragment() {
         init()
 
         if (viewModel == null) {
-            arguments?.let {
-                val factory = FeedViewModel.Factory(newsRepo,
-                        FeedType.valueOf(it.getString(EXTRA_FEED_TYPE)))
+            val factory = FeedViewModel.Factory(newsRepo)
 
-                viewModel = activity?.let { it1 ->
-                    ViewModelProviders.of(it1, factory)
-                            .get(FeedViewModel::class.java)
-                }
+            viewModel = activity?.let { activity ->
+                ViewModelProviders.of(activity, factory).get(FeedViewModel::class.java)
             }
-
         }
+
         initDataObservables()
     }
 
@@ -95,8 +95,8 @@ class FeedFragment : BaseFragment() {
             }
         }
 
-        viewModel?.articleClickEvent?.observe(this, Observer {
-            it?.link?.let { it1 -> customTab.showTab(it1) }
+        viewModel?.articleOpenDetail?.observe(this, Observer {
+            it?.let(this::openArticleDetail)
         })
 
         viewModel?.articleShareEvent?.observe(this, Observer {
@@ -107,6 +107,21 @@ class FeedFragment : BaseFragment() {
 
         })
 
+    }
+
+    private fun openArticleDetail(article: Article) {
+        activity?.let {
+            startActivity(ArticleDetailActivity.getInstance(it, article))
+        }
+//
+//        if (networkUtils.isDeviceConnectedToInternet()) {
+//            customTab.showTab(article.link)
+//
+//        } else {
+//            activity?.let {
+//                startActivity(ArticleDetailActivity.getInstance(it, article))
+//            }
+//        }
     }
 
 

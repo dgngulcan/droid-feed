@@ -1,19 +1,23 @@
 package com.droidfeed.di
 
+import com.droidfeed.di.fragment.MainFragmentModule
+import com.droidfeed.ui.module.detail.ArticleDetailActivity
 import com.droidfeed.ui.module.main.MainActivity
-import com.droidfeed.di.main.MainFragmentModule
-import com.droidfeed.di.main.MainModule
 import dagger.Module
 import dagger.android.ContributesAndroidInjector
 
 /**
- * Created by Dogan Gulcan on 9/22/17.
+ * Created by Dogan Gulcan on 12/11/17.
  */
 @Module
 abstract class ActivityModule {
 
     @MainScope
-    @ContributesAndroidInjector(modules = [MainFragmentModule::class, MainModule::class])
+    @ContributesAndroidInjector(modules = [MainFragmentModule::class])
     abstract fun contributeMainActivity(): MainActivity
+
+    @ArticleDetailScope
+    @ContributesAndroidInjector
+    abstract fun contributeArticleDetail(): ArticleDetailActivity
 
 }
