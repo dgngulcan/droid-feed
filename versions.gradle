@@ -1,5 +1,5 @@
 /**
- *  Maven repository build versions.
+ *  Build versions of the libraries used.
  */
 ext {
     kotlinVersion = '1.2.0'

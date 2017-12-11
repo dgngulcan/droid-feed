@@ -81,9 +81,9 @@ data class Article(
 
     override fun isContentSame(item: Diffable): Boolean {
         item as Article
-//        val content1 = this.bookmarked == (item as Article).bookmarked
+        val content1 = this.bookmarked == (item as Article).bookmarked
         val content2 = this.link.contentEquals(item.link)
 
-        return  content2
+        return  content2&&content1
     }
 }

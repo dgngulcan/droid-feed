@@ -26,15 +26,26 @@ class MainActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        initBindings()
         init()
         initDrawer()
+        initObservers()
     }
 
-    override fun initViewModel() {
+    private fun init() {
+
         viewModel = ViewModelProviders.of(this).get(MainViewModel::class.java)
+
+
+        setSupportActionBar(binding.appbar.toolbar)
+        supportActionBar?.title = getString(R.string.app_name)
+
+        binding.drawerLayout.systemUiVisibility = (View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                or View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+                or View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION)
     }
 
-    override fun createBindings() {
+    private fun initBindings() {
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
         navHeaderBinding = NavHeaderMainBinding.inflate(
                 layoutInflater,
@@ -44,20 +55,6 @@ class MainActivity : BaseActivity() {
         binding.navView.addHeaderView(navHeaderBinding.root)
     }
 
-    override fun bindBindings() {
-        viewModel.navigationHeaderImage.observe(this, Observer {
-            navHeaderBinding.drawerImage = it
-        })
-    }
-
-    private fun init() {
-        setSupportActionBar(binding.appbar.toolbar)
-        supportActionBar?.title = getString(R.string.app_name)
-
-        binding.drawerLayout.systemUiVisibility = (View.SYSTEM_UI_FLAG_LAYOUT_STABLE
-                or View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
-                or View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION)
-    }
 
     private fun initDrawer() {
         val toggle = ActionBarDrawerToggle(
@@ -74,6 +71,12 @@ class MainActivity : BaseActivity() {
         navView.setNavigationItemSelectedListener(navigationListener)
         navView.setCheckedItem(R.id.nav_feed)
         navController.openNewsFragment()
+    }
+
+    private fun initObservers() {
+        viewModel.navigationHeaderImage.observe(this, Observer {
+            //            navHeaderBinding.drawerImage = it
+        })
     }
 
     // todo move to vm
