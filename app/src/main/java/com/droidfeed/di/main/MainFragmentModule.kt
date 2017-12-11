@@ -1,8 +1,10 @@
-package com.droidfeed.ui.module.main
+package com.droidfeed.di.main
 
 import com.droidfeed.ui.module.about.AboutFragment
 import com.droidfeed.ui.module.feed.FeedFragment
+import com.droidfeed.util.CustomTab
 import dagger.Module
+import dagger.Provides
 import dagger.android.ContributesAndroidInjector
 
 /**

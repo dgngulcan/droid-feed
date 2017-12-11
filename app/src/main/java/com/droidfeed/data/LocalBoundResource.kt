@@ -9,7 +9,6 @@ import android.support.annotation.MainThread
  */
 abstract class LocalBoundResource<ResultType> {
 
-    //    private val result = MutableLiveData<Resource<ResultType?>>()
     private val result = MediatorLiveData<Resource<ResultType?>>()
 
     init {
@@ -17,10 +16,8 @@ abstract class LocalBoundResource<ResultType> {
 
         val dbSource = loadFromDb()
 
-        result.addSource(dbSource, { newData ->
-            result.removeSource(dbSource)
-            result.value = Resource.success(newData)
-        })
+        result.addSource(dbSource,
+                { newData -> result.setValue(Resource.success(newData)) })
     }
 
     @Suppress("UNCHECKED_CAST")

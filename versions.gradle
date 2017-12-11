@@ -1,9 +1,9 @@
 /**
- *  Maven repository build versions.
+ *  Build versions of the libraries used.
  */
 ext {
     kotlinVersion = '1.2.0'
-    gradleBuildVersion = '3.0.0'
+    gradleBuildVersion = '3.1.0-alpha04'
     archLifecycleVersion = '1.0.0'
     supportLibVersion = '27.0.2'
     ankoVersion = '0.10.3'

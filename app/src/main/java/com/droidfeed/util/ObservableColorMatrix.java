@@ -6,7 +6,6 @@ import android.util.Property;
 /**
  * Created by Dogan Gulcan on 11/7/17.
  */
-
 public class ObservableColorMatrix extends ColorMatrix {
 
     private float saturation = 1f;

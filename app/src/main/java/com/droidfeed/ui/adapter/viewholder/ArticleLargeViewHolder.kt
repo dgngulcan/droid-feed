@@ -22,8 +22,8 @@ import com.droidfeed.util.glide.GlideApp
  */
 class ArticleLargeViewHolder(private val binding: ListItemFeedLargeBinding) : RecyclerView.ViewHolder(binding.root) {
 
-    fun bind(article: Article, onRssClickListener: ArticleClickListener) {
-        binding.aboutScreenClickListener = onRssClickListener
+    fun bind(article: Article, articleClickListener: ArticleClickListener) {
+        binding.articleClickListener = articleClickListener
         binding.rssItem = article
         binding.executePendingBindings()
 

@@ -3,6 +3,7 @@ package com.droidfeed.ui.binding
 import android.databinding.BindingAdapter
 import android.support.v4.widget.ContentLoadingProgressBar
 import android.view.View
+import android.webkit.WebView
 import android.widget.ImageView
 import com.droidfeed.util.extention.loadImage
 
@@ -29,4 +30,11 @@ fun visibilityToggle(view: View, show: Boolean) {
 @BindingAdapter("contentProgressBarVisibility")
 fun contentProgressBarVisibility(view: ContentLoadingProgressBar, show: Boolean) {
     if (show) view.show() else view.hide()
+}
+
+@BindingAdapter("loadHtml")
+fun loadHtml(webView: WebView, htmlContent: String) {
+    if (htmlContent.isNotBlank()) {
+        webView.loadData(htmlContent, "text/html", "UTF-8")
+    }
 }
