@@ -28,13 +28,23 @@ class CustomTab @Inject constructor(val activity: Activity) {
                                                           client: CustomTabsClient) {
                     client.warmup(0L)
                     val builder = CustomTabsIntent.Builder()
-                    val customTabsIntent = builder.build()
                     builder.setToolbarColor(ContextCompat.getColor(activity, R.color.colorPrimary))
+
+                    builder.setStartAnimations(activity,
+                            android.R.anim.fade_in,
+                            android.R.anim.fade_out)
+                    builder.setExitAnimations(activity,
+                            android.R.anim.fade_in,
+                            android.R.anim.fade_out)
+
+                    val customTabsIntent = builder.build()
+
                     customTabsIntent.launchUrl(activity, Uri.parse(url))
                 }
 
                 override fun onServiceDisconnected(name: ComponentName) {}
             }
+
             CustomTabsClient.bindCustomTabsService(activity, "com.android.chrome", connection)
 
         } else {

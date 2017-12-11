@@ -3,6 +3,7 @@ package com.droidfeed.ui.module.feed
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
+import android.support.v7.widget.DefaultItemAnimator
 import android.support.v7.widget.LinearLayoutManager
 import android.view.LayoutInflater
 import android.view.View
@@ -13,6 +14,7 @@ import com.droidfeed.ui.adapter.BaseUiModelAlias
 import com.droidfeed.ui.adapter.UiModelAdapter
 import com.droidfeed.ui.adapter.model.ArticleUiModel
 import com.droidfeed.util.CustomTab
+import com.droidfeed.util.DebugUtils
 import com.nytclient.ui.common.BaseFragment
 import javax.inject.Inject
 
@@ -23,6 +25,18 @@ import javax.inject.Inject
  * Created by Dogan Gulcan on 9/22/17.
  */
 class FeedFragment : BaseFragment() {
+
+    companion object {
+        private val EXTRA_FEED_TYPE = "feed_type"
+
+        fun getInstance(feedType: FeedType): FeedFragment {
+            val feedFragment = FeedFragment()
+            val bundle = Bundle()
+            bundle.putString(EXTRA_FEED_TYPE, feedType.name)
+            feedFragment.arguments = bundle
+            return feedFragment
+        }
+    }
 
     private lateinit var binding: FragmentNewsBinding
     private var viewModel: FeedViewModel? = null
@@ -35,18 +49,6 @@ class FeedFragment : BaseFragment() {
 
     private val feedObserver = Observer<List<ArticleUiModel>> {
         adapter.addUiModels(it as Collection<BaseUiModelAlias>)
-    }
-
-    companion object {
-        private val EXTRA_FEED_TYPE = "feed_type"
-
-        fun getInstance(feedType: FeedType): FeedFragment {
-            val feedFragment = FeedFragment()
-            val bundle = Bundle()
-            bundle.putString(EXTRA_FEED_TYPE, feedType.name)
-            feedFragment.arguments = bundle
-            return feedFragment
-        }
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -70,31 +72,26 @@ class FeedFragment : BaseFragment() {
                 }
             }
 
-            initDataObservables()
         }
-
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-//        viewModel?.rssUiModelData?.removeObserver(feedObserver)
-//        viewModel?.rssUiBookmarksModelData?.removeObserver(feedObserver)
+        initDataObservables()
     }
 
     private fun init() {
         val layoutManager = LinearLayoutManager(activity)
         layoutManager.initialPrefetchItemCount = 3
         binding.newsRecyclerView.layoutManager = layoutManager
-        binding.newsRecyclerView.adapter = adapter
+        (binding.newsRecyclerView.itemAnimator as DefaultItemAnimator).supportsChangeAnimations = false
+        binding.newsRecyclerView.swapAdapter(adapter, true)
     }
 
     private fun initDataObservables() {
+        DebugUtils.log("initDataObservables")
         arguments?.let {
             when (FeedType.valueOf(it.getString(EXTRA_FEED_TYPE))) {
-                FeedType.ALL -> viewModel?.rssUiModelData?.observeForever(feedObserver)
+                FeedType.ALL -> viewModel?.rssUiModelData?.observe(this, feedObserver)
 
                 FeedType.BOOKMARKS ->
-                    viewModel?.rssUiBookmarksModelData?.observeForever(feedObserver)
+                    viewModel?.rssUiBookmarksModelData?.observe(this, feedObserver)
             }
         }
 

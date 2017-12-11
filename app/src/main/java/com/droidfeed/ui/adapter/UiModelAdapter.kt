@@ -11,14 +11,12 @@ import com.droidfeed.util.workerThread
 import javax.inject.Inject
 
 
-@Suppress("UNCHECKED_CAST")
 /**
  * Generic [RecyclerView.Adapter] for [BaseUiModel]s.
  *
  * Created by Dogan Gulcan on 11/2/17.
  */
-typealias BaseUiModelAlias = BaseUiModel<in RecyclerView.ViewHolder>
-
+@Suppress("UNCHECKED_CAST")
 class UiModelAdapter @Inject constructor() : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     private val uiModels = ArrayList<BaseUiModelAlias>()
@@ -69,3 +67,5 @@ class UiModelAdapter @Inject constructor() : RecyclerView.Adapter<RecyclerView.V
     }
 
 }
+
+typealias BaseUiModelAlias = BaseUiModel<in RecyclerView.ViewHolder>
