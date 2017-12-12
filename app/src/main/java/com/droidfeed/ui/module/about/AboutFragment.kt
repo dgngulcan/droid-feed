@@ -44,6 +44,7 @@ class AboutFragment : BaseFragment() {
     private fun init() {
         binding.recyclerView.layoutManager = LinearLayoutManager(activity)
         binding.recyclerView.adapter = adapter
+        binding.recyclerView.isNestedScrollingEnabled = false
     }
 
     private fun initObservers() {
