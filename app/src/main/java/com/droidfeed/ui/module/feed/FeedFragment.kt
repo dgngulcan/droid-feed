@@ -2,22 +2,25 @@ package com.droidfeed.ui.module.feed
 
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
+import android.databinding.ObservableBoolean
 import android.os.Bundle
 import android.support.v7.widget.DefaultItemAnimator
 import android.support.v7.widget.LinearLayoutManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import com.droidfeed.R
 import com.droidfeed.data.model.Article
 import com.droidfeed.data.repo.RssRepo
 import com.droidfeed.databinding.FragmentArticlesBinding
 import com.droidfeed.ui.adapter.BaseUiModelAlias
+import com.droidfeed.ui.adapter.DataInsertedCallback
 import com.droidfeed.ui.adapter.UiModelAdapter
-import com.droidfeed.ui.adapter.model.ArticleUiModel
 import com.droidfeed.util.CustomTab
 import com.droidfeed.util.DebugUtils
 import com.droidfeed.util.NetworkUtils
 import com.nytclient.ui.common.BaseFragment
+import org.jetbrains.anko.design.snackbar
 import javax.inject.Inject
 
 
@@ -40,18 +43,32 @@ class FeedFragment : BaseFragment() {
         }
     }
 
+    private val isEmptyBookmarked = ObservableBoolean(false)
+
     private lateinit var binding: FragmentArticlesBinding
     private var viewModel: FeedViewModel? = null
-    private val adapter: UiModelAdapter by lazy { UiModelAdapter() }
+    private val adapter: UiModelAdapter by lazy { UiModelAdapter(dataInsertedCallback) }
 
-    //    val customTab: CustomTab by lazy { CustomTab(activity!!) }
     @Inject lateinit var newsRepo: RssRepo
     @Inject lateinit var customTab: CustomTab
     @Inject lateinit var networkUtils: NetworkUtils
+    private val feedType by lazy {
+        arguments?.getString(EXTRA_FEED_TYPE)?.let { FeedType.valueOf(it) }
+    }
 
+    private val dataInsertedCallback = object : DataInsertedCallback {
+        override fun onUpdated() {
+            if (feedType == FeedType.BOOKMARKS) {
+                isEmptyBookmarked.set(adapter.itemCount == 0)
+            }
+            if (binding.swipeRefreshArticles.isRefreshing) {
+                binding.swipeRefreshArticles.isRefreshing = false
+            }
+        }
 
-    private val feedObserver = Observer<List<ArticleUiModel>> {
-        adapter.addUiModels(it as Collection<BaseUiModelAlias>)
+        override fun onDataInserted(position: Int) {
+            binding.newsRecyclerView.smoothScrollToPosition(position)
+        }
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -63,36 +80,38 @@ class FeedFragment : BaseFragment() {
         super.onActivityCreated(savedInstanceState)
 
         init()
-
         if (viewModel == null) {
-            val factory = FeedViewModel.Factory(newsRepo)
-
-            viewModel = activity?.let { activity ->
-                ViewModelProviders.of(activity, factory).get(FeedViewModel::class.java)
+            feedType?.let {
+                val factory = FeedViewModel.Factory(newsRepo, it)
+                viewModel = ViewModelProviders
+                        .of(this, factory)
+                        .get(FeedViewModel::class.java)
             }
         }
+
+        binding.viewModel = viewModel
+        binding.isEmptyBookmarked = isEmptyBookmarked
 
         initDataObservables()
     }
 
     private fun init() {
         val layoutManager = LinearLayoutManager(activity)
-        layoutManager.initialPrefetchItemCount = 3
         binding.newsRecyclerView.layoutManager = layoutManager
         (binding.newsRecyclerView.itemAnimator as DefaultItemAnimator).supportsChangeAnimations = false
         binding.newsRecyclerView.swapAdapter(adapter, true)
+
+        binding.swipeRefreshArticles.setOnRefreshListener {
+            viewModel?.onRefreshArticles()
+        }
+
     }
 
     private fun initDataObservables() {
         DebugUtils.log("initDataObservables")
-        arguments?.let {
-            when (FeedType.valueOf(it.getString(EXTRA_FEED_TYPE))) {
-                FeedType.ALL -> viewModel?.rssUiModelData?.observe(this, feedObserver)
-
-                FeedType.BOOKMARKS ->
-                    viewModel?.rssUiBookmarksModelData?.observe(this, feedObserver)
-            }
-        }
+        viewModel?.rssUiModelData?.observe(this, Observer {
+            adapter.addUiModels(it as Collection<BaseUiModelAlias>)
+        })
 
         viewModel?.articleOpenDetail?.observe(this, Observer {
             it?.let(this::openArticleDetail)
@@ -103,17 +122,17 @@ class FeedFragment : BaseFragment() {
         })
 
         viewModel?.loadingFailedEvent?.observe(this, Observer {
-
+            if (it == true) snackbar(binding.root, R.string.error_obtaining_feed)
         })
 
     }
 
     private fun openArticleDetail(article: Article) {
-
         if (networkUtils.isDeviceConnectedToInternet()) {
             customTab.showTab(article.link)
+        } else {
+            snackbar(binding.root, R.string.info_no_internet)
         }
-
     }
 
 

@@ -2,13 +2,13 @@ package com.droidfeed.ui.adapter
 
 import android.support.v4.util.SparseArrayCompat
 import android.support.v7.util.DiffUtil
+import android.support.v7.util.ListUpdateCallback
 import android.support.v7.widget.RecyclerView
 import android.view.ViewGroup
 import com.droidfeed.ui.adapter.diff.UiModelDiffCallback
 import com.droidfeed.ui.common.BaseUiModel
 import com.droidfeed.util.uiThread
 import com.droidfeed.util.workerThread
-import javax.inject.Inject
 
 
 /**
@@ -17,7 +17,9 @@ import javax.inject.Inject
  * Created by Dogan Gulcan on 11/2/17.
  */
 @Suppress("UNCHECKED_CAST")
-class UiModelAdapter @Inject constructor() : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class UiModelAdapter constructor(
+        private val dataInsertedCallback: DataInsertedCallback? = null
+) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     private val uiModels = ArrayList<BaseUiModelAlias>()
     private val viewTypes = SparseArrayCompat<BaseUiModelAlias>()
@@ -52,9 +54,9 @@ class UiModelAdapter @Inject constructor() : RecyclerView.Adapter<RecyclerView.V
                 this@UiModelAdapter.uiModels.addAll(uiModels)
 
                 updateViewTypes(this@UiModelAdapter.uiModels)
-
                 uiThread {
-                    diffResult.dispatchUpdatesTo(this@UiModelAdapter)
+                    diffResult.dispatchUpdatesTo(listUpdateCallBack)
+                    dataInsertedCallback?.onUpdated()
                 }
             }
         }
@@ -63,6 +65,25 @@ class UiModelAdapter @Inject constructor() : RecyclerView.Adapter<RecyclerView.V
     private fun updateViewTypes(uiModels: ArrayList<BaseUiModelAlias>) {
         uiModels.forEach {
             viewTypes.put(it.getViewType(), it)
+        }
+    }
+
+    private val listUpdateCallBack = object : ListUpdateCallback {
+        override fun onInserted(position: Int, count: Int) {
+            notifyItemRangeInserted(position, count)
+            dataInsertedCallback?.onDataInserted(position)
+        }
+
+        override fun onRemoved(position: Int, count: Int) {
+            notifyItemRangeRemoved(position, count)
+        }
+
+        override fun onMoved(fromPosition: Int, toPosition: Int) {
+            notifyItemMoved(fromPosition, toPosition)
+        }
+
+        override fun onChanged(position: Int, count: Int, payload: Any) {
+            notifyItemRangeChanged(position, count, payload)
         }
     }
 

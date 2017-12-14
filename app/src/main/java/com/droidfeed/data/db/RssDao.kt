@@ -28,7 +28,13 @@ interface RssDao {
             "ORDER BY pub_date_timestamp DESC")
     fun getBookmarkedArticles(): LiveData<List<Article>>
 
-    @Query("SELECT COUNT(*) from ${AppDatabase.RSS_TABLE_NAME}")
+    @Query("SELECT COUNT(*) FROM ${AppDatabase.RSS_TABLE_NAME}")
     fun getFeedItemCount(): Int
+
+    @Query("DELETE FROM ${AppDatabase.RSS_TABLE_NAME} " +
+            "WHERE bookmarked == 0 " +
+            "IN (SELECT pub_date_timestamp from ${AppDatabase.RSS_TABLE_NAME} " +
+            "ORDER BY pub_date_timestamp DESC LIMIT 10)")
+    fun trimCache()
 
 }

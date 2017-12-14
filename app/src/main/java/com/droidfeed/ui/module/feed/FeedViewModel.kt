@@ -19,7 +19,7 @@ import com.nytclient.ui.common.SingleLiveEvent
  * Created by Dogan Gulcan on 9/22/17.
  */
 @Suppress("UNCHECKED_CAST")
-class FeedViewModel(private val rssRepo: RssRepo) : BaseViewModel() {
+class FeedViewModel(private val rssRepo: RssRepo, private val feedType: FeedType) : BaseViewModel() {
 
     val isLoading = ObservableBoolean(true)
     val loadingFailedEvent = SingleLiveEvent<Boolean>()
@@ -27,27 +27,28 @@ class FeedViewModel(private val rssRepo: RssRepo) : BaseViewModel() {
     val articleShareEvent = SingleLiveEvent<Intent>()
 
     private val result = MutableLiveData<List<ArticleUiModel>>()
-    private val bookmarkResult = MutableLiveData<List<ArticleUiModel>>()
-//
-//    private var rssResponses = when (feedType) {
-//        FeedType.ALL -> rssRepo.getAllRss()
-//        FeedType.BOOKMARKS -> rssRepo.getBookmarkedArticles()
-//    }
+    private val refreshToggle = MutableLiveData<Boolean>()
 
-    private val rssResponses by lazy { rssRepo.getAllRss() }
-    private val rssBookmarkResponses by lazy { rssRepo.getBookmarkedArticles() }
+    private val rssResponses: LiveData<Resource<List<Article>>> =
+            Transformations.switchMap(refreshToggle,
+                    { loadArticles(feedType) })
 
-    var rssUiModelData: LiveData<List<ArticleUiModel>> =
+    private fun loadArticles(feedType: FeedType): LiveData<Resource<List<Article>>> {
+        return when (feedType) {
+            FeedType.ALL -> rssRepo.getAllRss()
+            FeedType.BOOKMARKS -> rssRepo.getBookmarkedArticles()
+        }
+    }
+
+    val rssUiModelData: LiveData<List<ArticleUiModel>> =
             Transformations.switchMap(rssResponses, { response ->
                 handleResponseStates(response)
                 handleResponseData(response)
             })
 
-    var rssUiBookmarksModelData: LiveData<List<ArticleUiModel>> =
-            Transformations.switchMap(rssBookmarkResponses, { response ->
-                handleResponseStates(response)
-                handleBookmarkResponseData(response)
-            })
+    init {
+        refreshToggle.value = true // initial loading trigger
+    }
 
     private fun handleResponseData(response: Resource<List<Article>>): LiveData<List<ArticleUiModel>> {
 
@@ -68,31 +69,18 @@ class FeedViewModel(private val rssRepo: RssRepo) : BaseViewModel() {
         return result
     }
 
-    private fun handleBookmarkResponseData(response: Resource<List<Article>>): LiveData<List<ArticleUiModel>> {
-
-        response.data?.let {
-            var counter = 0
-
-            bookmarkResult.value = ((it.map { article ->
-                article.layoutType = if (counter % 5 == 0 && article.image.isNotBlank()) {
-                    UiModelType.ARTICLE_LARGE
-                } else {
-                    UiModelType.ARTICLE_SMALL
-                }
-                counter++
-                ArticleUiModel(article, newsClickCallback)
-            }))
-        }
-
-        return bookmarkResult
-    }
-
     private fun handleResponseStates(response: Resource<List<Article>>) {
         loadingFailedEvent.setValue(false)
 
         when (response.status) {
-            Status.LOADING -> isLoading.set(true)
-            Status.SUCCESS -> isLoading.set(false)
+            Status.LOADING -> {
+                rssUiModelData.value?.let { if (it.isEmpty()) isLoading.set(true) }
+            }
+
+            Status.SUCCESS -> {
+                isLoading.set(false)
+            }
+
             Status.ERROR -> {
                 isLoading.set(false)
                 loadingFailedEvent.setValue(true)
@@ -125,14 +113,23 @@ class FeedViewModel(private val rssRepo: RssRepo) : BaseViewModel() {
             article.bookmarked = 1
         }
 
-        rssRepo.updateArticle(article)
+//        rssRepo.updateArticle(article)
+        rssRepo.deleteArticle(article)
     }
 
     /**
      * Factory class for [ViewModelProvider]. Used to pass values to constructor of the [ViewModel].
      */
-    class Factory(private val newsRepo: RssRepo) : ViewModelProvider.NewInstanceFactory() {
-        override fun <T : ViewModel> create(modelClass: Class<T>): T = FeedViewModel(newsRepo) as T
+    class Factory(
+            private val newsRepo: RssRepo,
+            private val feedType: FeedType
+    ) : ViewModelProvider.NewInstanceFactory() {
+        override fun <T : ViewModel> create(modelClass: Class<T>) =
+                FeedViewModel(newsRepo, feedType) as T
+    }
+
+    fun onRefreshArticles() {
+        refreshToggle.value = true
     }
 
 }
