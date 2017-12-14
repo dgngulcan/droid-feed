@@ -1,6 +1,7 @@
 package com.droidfeed.di
 
-import com.droidfeed.di.fragment.MainFragmentModule
+import com.droidfeed.di.main.MainFragmentModule
+import com.droidfeed.di.main.MainModule
 import com.droidfeed.ui.module.main.MainActivity
 import dagger.Module
 import dagger.android.ContributesAndroidInjector
@@ -12,7 +13,7 @@ import dagger.android.ContributesAndroidInjector
 abstract class ActivityModule {
 
     @MainScope
-    @ContributesAndroidInjector(modules = [MainFragmentModule::class])
+    @ContributesAndroidInjector(modules = [MainFragmentModule::class, MainModule::class])
     abstract fun contributeMainActivity(): MainActivity
 
 }

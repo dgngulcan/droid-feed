@@ -8,7 +8,6 @@ import com.droidfeed.data.NetworkBoundResource
 import com.droidfeed.data.Resource
 import com.droidfeed.data.api.ApiResponse
 import com.droidfeed.data.api.RssLoader
-import com.droidfeed.data.db.AppDatabase
 import com.droidfeed.data.db.RssDao
 import com.droidfeed.data.model.Article
 import com.droidfeed.util.DateTimeUtils
@@ -25,14 +24,13 @@ import javax.inject.Singleton
 @Singleton
 class RssRepo @Inject constructor(
         val appContext: App,
-        val database: AppDatabase,
         val dateTimeUtils: DateTimeUtils,
         val rssFeedProvider: RssLoader,
         val rssDao: RssDao
 ) {
 
     companion object {
-        private val MAX_CACHE_ITEM_COUNT = 100
+        private val MAX_CACHE_ITEM_COUNT = 150
         private val NETWORK_FETCH_DIMINISHING_IN_MILLIS = 100
     }
 
@@ -70,7 +68,8 @@ class RssRepo @Inject constructor(
 
             override fun saveCallResult(item: ArrayList<Article>) {
                 if (rssDao.getFeedItemCount() > MAX_CACHE_ITEM_COUNT) {
-//                    rssDao.flushRssCache()
+                    rssDao.trimCache()
+                    DebugUtils.log("Trimmed cache")
                 }
                 rssDao.insertArticles(item)
             }
@@ -114,11 +113,6 @@ class RssRepo @Inject constructor(
         return object : LocalBoundResource<List<Article>>() {
             override fun loadFromDb(): LiveData<List<Article>> = rssDao.getBookmarkedArticles()
         }.asLiveData()
-//
-//                    Transformations.map(rssDao.getAllRss(),
-//                            { it -> it.filter { it.bookmarked == 1 } })
-//        }.asLiveData()
-
     }
 
     fun updateArticle(article: Article) {

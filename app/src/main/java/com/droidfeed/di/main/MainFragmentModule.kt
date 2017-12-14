@@ -1,4 +1,4 @@
-package com.droidfeed.di.fragment
+package com.droidfeed.di.main
 
 import com.droidfeed.ui.module.about.AboutFragment
 import com.droidfeed.ui.module.feed.FeedFragment
