@@ -5,7 +5,6 @@ import android.arch.lifecycle.ViewModelProviders
 import android.databinding.ObservableBoolean
 import android.os.Bundle
 import android.support.v7.widget.DefaultItemAnimator
-import android.support.v7.widget.LinearLayoutManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -16,6 +15,7 @@ import com.droidfeed.databinding.FragmentArticlesBinding
 import com.droidfeed.ui.adapter.BaseUiModelAlias
 import com.droidfeed.ui.adapter.DataInsertedCallback
 import com.droidfeed.ui.adapter.UiModelAdapter
+import com.droidfeed.ui.common.WrapContentLinearLayoutManager
 import com.droidfeed.util.CustomTab
 import com.droidfeed.util.DebugUtils
 import com.droidfeed.util.NetworkUtils
@@ -71,7 +71,11 @@ class FeedFragment : BaseFragment() {
         }
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(inflater: LayoutInflater,
+                              container: ViewGroup?,
+                              savedInstanceState: Bundle?): View? {
+        super.onCreateView(inflater, container, savedInstanceState)
+
         binding = FragmentArticlesBinding.inflate(inflater, container, false)
         return binding.root
     }
@@ -96,7 +100,7 @@ class FeedFragment : BaseFragment() {
     }
 
     private fun init() {
-        val layoutManager = LinearLayoutManager(activity)
+        val layoutManager = activity?.let { WrapContentLinearLayoutManager(it) }
         binding.newsRecyclerView.layoutManager = layoutManager
         (binding.newsRecyclerView.itemAnimator as DefaultItemAnimator).supportsChangeAnimations = false
         binding.newsRecyclerView.swapAdapter(adapter, true)

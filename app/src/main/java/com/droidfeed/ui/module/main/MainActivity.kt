@@ -74,20 +74,36 @@ class MainActivity : BaseActivity() {
 
     private fun initObservers() {
         viewModel.navigationHeaderImage.observe(this, Observer {
-            //            navHeaderBinding.drawerImage = it
+            navHeaderBinding.drawerImage = it
         })
     }
 
     // todo move to vm
     private val navigationListener = NavigationView.OnNavigationItemSelectedListener { item ->
         when (item.itemId) {
-            R.id.nav_feed -> navController.openNewsFragment()
-            R.id.nav_bookmarks -> navController.openBookmarksFragment()
-            R.id.nav_about -> navController.openAboutFragment()
+            R.id.nav_feed -> {
+                navController.openNewsFragment()
+                binding.appbar.toolbar.setTitle(R.string.app_name)
+            }
+            R.id.nav_bookmarks -> {
+                navController.openBookmarksFragment()
+                binding.appbar.toolbar.setTitle(R.string.nav_bookmarks)
+            }
+            R.id.nav_about -> {
+                navController.openAboutFragment()
+                binding.appbar.toolbar.setTitle(R.string.nav_about)
+            }
+            R.id.nav_help_us -> {
+                navController.openHelpUsFragment()
+                binding.appbar.toolbar.setTitle(R.string.nav_help_us)
+            }
         }
+
+
 
         drawer_layout.closeDrawer(GravityCompat.START)
         true
     }
+
 
 }

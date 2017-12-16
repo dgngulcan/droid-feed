@@ -11,6 +11,7 @@ import com.droidfeed.databinding.FragmentAboutBinding
 import com.droidfeed.ui.adapter.BaseUiModelAlias
 import com.droidfeed.ui.adapter.UiModelAdapter
 import com.droidfeed.util.CustomTab
+import com.droidfeed.util.extention.startActivity
 import com.nytclient.ui.common.BaseFragment
 import javax.inject.Inject
 
@@ -53,21 +54,15 @@ class AboutFragment : BaseFragment() {
         })
 
         viewModel.rateAppEvent.observe(this, Observer {
-            if (it?.resolveActivity(activity?.packageManager) != null) {
-                startActivity(it)
-            }
+            activity?.let { it1 -> it?.startActivity(it1) }
         })
 
         viewModel.contactDevEvent.observe(this, Observer {
-            if (it?.resolveActivity(activity?.packageManager) != null) {
-                startActivity(it)
-            }
+            activity?.let { it1 -> it?.startActivity(it1) }
         })
 
         viewModel.shareAppEvent.observe(this, Observer {
-            if (it?.resolveActivity(activity?.packageManager) != null) {
-                startActivity(it)
-            }
+            activity?.let { it1 -> it?.startActivity(it1) }
         })
 
         viewModel.licenceClickEvent.observe(this, Observer {

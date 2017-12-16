@@ -8,7 +8,7 @@ import java.util.concurrent.Executors
 /**
  * Created by Dogan Gulcan on 11/30/17.
  */
-private val IO_EXECUTOR = Executors.newSingleThreadExecutor()
+private val IO_EXECUTOR by lazy { Executors.newSingleThreadExecutor() }
 private val UI_EXECUTOR by lazy { MainThreadExecutor() }
 
 fun workerThread(f: () -> Unit) {

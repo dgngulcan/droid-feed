@@ -39,6 +39,7 @@ class RssRepo @Inject constructor(
                 "https://android.jlelse.eu/feed",
                 "https://proandroiddev.com/feed",
                 "https://medium.com/feed/google-developers",
+                "https://rss.simplecast.com/podcasts/3213/rss",
                 "http://androidbackstage.blogspot.com/feeds/posts/default?alt=rss",
                 "http://fragmentedpodcast.com/feed"
         )

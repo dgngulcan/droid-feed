@@ -11,7 +11,7 @@ apiKeyProperties.load(new FileInputStream(apiKeyPropertiesFile))
 android {
 
     compileSdkVersion 27
-    buildToolsVersion '27.0.1'
+    buildToolsVersion '27.0.2'
 
     defaultConfig {
         applicationId "com.droidfeed"
@@ -20,6 +20,8 @@ android {
         versionCode 1
         versionName "1.0.0-alpha"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+
+        vectorDrawables.useSupportLibrary = true
     }
 
     buildTypes {

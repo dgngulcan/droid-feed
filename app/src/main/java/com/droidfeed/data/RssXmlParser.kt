@@ -73,6 +73,7 @@ class RssXmlParser @Inject constructor(private var dateTimeUtils: DateTimeUtils)
                 else -> skip(parser)
             }
         }
+
         return articles
     }
 
@@ -107,16 +108,10 @@ class RssXmlParser @Inject constructor(private var dateTimeUtils: DateTimeUtils)
                 "title" -> article.title = parser.nextText()
                 "dc:creator" -> article.author = parser.nextText()
                 "link" -> article.link = parser.nextText()
-                "pubDate" -> {
-                    article.pubDate = parser.nextText()
-                    article.pubDateTimestamp = dateTimeUtils.getTimeStampFromDate(article.pubDate) ?: 0
-                }
-                "content:encoded" -> {
-                    article.rawContent = parser.nextText()
-                    article.content = parseArticleContent(article.rawContent)
-                }
-                "description" -> article.content.contentImage = getImageFromDescription(parser.nextText())
-
+                "pubDate" -> article.pubDateTimestamp = getPublishDate(parser.nextText())
+                "content:encoded" -> article.content = parseArticleContent(parser.nextText())
+                "description" -> article.content.contentImage =
+                        getImageFromDescription(parser.nextText())
 
                 else -> skip(parser)
             }
@@ -125,18 +120,17 @@ class RssXmlParser @Inject constructor(private var dateTimeUtils: DateTimeUtils)
         return article
     }
 
+    private fun getPublishDate(rawDate: String) =
+            dateTimeUtils.getTimeStampFromDate(rawDate) ?: 0
+
     private fun getImageFromDescription(descText: String): String {
         val doc = Jsoup.parse(descText)
 
-        var image = ""
-        try {
-            image = doc.select("img").first().attr("abs:src")
-
+        return try {
+            doc.select("img").first().attr("abs:src")
         } catch (e: NullPointerException) {
-//            DebugUtils.showStackTrace(e, "Rss article does not have an image")
+            ""
         }
-
-        return image
     }
 
     private fun parseArticleContent(contentText: String): Content {
@@ -145,7 +139,6 @@ class RssXmlParser @Inject constructor(private var dateTimeUtils: DateTimeUtils)
 
         try {
             content.contentImage = doc.select("img").first().attr("abs:src")
-
         } catch (e: NullPointerException) {
 //            DebugUtils.showStackTrace(e, "Rss article does not have an image")
         }
@@ -166,8 +159,8 @@ class RssXmlParser @Inject constructor(private var dateTimeUtils: DateTimeUtils)
                     XmlPullParser.START_TAG -> depth++
                 }
             }
-        } catch (ignored: Exception) {
-            DebugUtils.showStackTrace(ignored)
+        } catch (e: Exception) {
+            DebugUtils.showStackTrace(e)
         }
     }
 

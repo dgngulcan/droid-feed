@@ -44,8 +44,8 @@ class UiModelAdapter constructor(
     @Synchronized
     fun addUiModels(uiModels: Collection<BaseUiModelAlias>?) {
         if (uiModels != null) {
-            workerThread {
 
+            workerThread {
                 val diffResult = DiffUtil.calculateDiff(
                         UiModelDiffCallback(this@UiModelAdapter.uiModels,
                                 uiModels as List<BaseUiModelAlias>))
@@ -54,11 +54,13 @@ class UiModelAdapter constructor(
                 this@UiModelAdapter.uiModels.addAll(uiModels)
 
                 updateViewTypes(this@UiModelAdapter.uiModels)
+
                 uiThread {
                     diffResult.dispatchUpdatesTo(listUpdateCallBack)
                     dataInsertedCallback?.onUpdated()
                 }
             }
+
         }
     }
 

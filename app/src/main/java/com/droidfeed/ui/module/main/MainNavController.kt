@@ -6,6 +6,7 @@ import com.droidfeed.di.MainScope
 import com.droidfeed.ui.module.about.AboutFragment
 import com.droidfeed.ui.module.feed.FeedFragment
 import com.droidfeed.ui.module.feed.FeedType
+import com.droidfeed.ui.module.helpus.HelpUsFragment
 import javax.inject.Inject
 
 /**
@@ -20,12 +21,17 @@ class MainNavController @Inject constructor(activity: MainActivity) {
     private val feedFragment: FeedFragment by lazy {
         FeedFragment.getInstance(FeedType.ALL)
     }
+
     private val bookmarkFragment: FeedFragment by lazy {
         FeedFragment.getInstance(FeedType.BOOKMARKS)
     }
 
     private val aboutFragment: AboutFragment by lazy {
         AboutFragment()
+    }
+
+    private val helpUsFragment: HelpUsFragment by lazy {
+        HelpUsFragment()
     }
 
     fun openNewsFragment() {
@@ -40,6 +46,10 @@ class MainNavController @Inject constructor(activity: MainActivity) {
         changeFragment(aboutFragment)
     }
 
+    fun openHelpUsFragment() {
+        changeFragment(helpUsFragment)
+    }
+
     private fun changeFragment(fragment: Fragment) {
         fragmentManager.beginTransaction()
                 .setCustomAnimations(android.R.animator.fade_in,
@@ -47,5 +57,6 @@ class MainNavController @Inject constructor(activity: MainActivity) {
                 .replace(containerId, fragment)
                 .commitAllowingStateLoss()
     }
+
 
 }
