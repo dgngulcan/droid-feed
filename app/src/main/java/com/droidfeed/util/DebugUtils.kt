@@ -5,6 +5,7 @@ import com.crashlytics.android.Crashlytics
 import com.droidfeed.BuildConfig
 import java.lang.Exception
 
+@Suppress("ConstantConditionIf")
 /**
  * Created by Dogan Gulcan on 10/26/17.
  */

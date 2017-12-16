@@ -70,29 +70,29 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
-                android:text="@string/about_app" />
+                android:text="@string/nav_about" />
 
             <TextView
                 android:id="@+id/btnRateApp"
                 style="@style/ButtonRowStyle"
-                android:drawableLeft="@drawable/ic_star_black_24dp"
                 android:drawablePadding="24dp"
+                android:drawableStart="@drawable/ic_star_black_24dp"
                 android:onClick="@{()->onClickListener.onRateAppClicked()}"
                 android:text="@string/rate_app" />
 
             <TextView
                 android:id="@+id/btnContact"
                 style="@style/ButtonRowStyle"
-                android:drawableLeft="@drawable/ic_email_black_24dp"
                 android:drawablePadding="24dp"
+                android:drawableStart="@drawable/ic_email_black_24dp"
                 android:onClick="@{()->onClickListener.onContactClicked()}"
                 android:text="@string/contact" />
 
             <TextView
                 android:id="@+id/btnShare"
                 style="@style/ButtonRowStyle"
-                android:drawableLeft="@drawable/ic_share_black_24dp"
                 android:drawablePadding="24dp"
+                android:drawableStart="@drawable/ic_share_black_24dp"
                 android:onClick="@{()->onClickListener.onShareClicked()}"
                 android:text="@string/share" />
 
