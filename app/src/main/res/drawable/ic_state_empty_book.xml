@@ -1,30 +1,26 @@
 <vector xmlns:android="http://schemas.android.com/apk/res/android"
-        android:width="57dp"
-        android:height="66dp"
+        android:width="100dp"
+        android:height="120dp"
         android:viewportWidth="57.0"
         android:viewportHeight="66.0">
     <path
         android:pathData="M16.15,27C16.16,27 16.17,27 16.18,27L39.82,27C40.46,27.01 40.99,26.57 41,26.01C41.01,25.46 40.5,25.01 39.85,25C39.84,25 39.83,25 39.82,25L16.18,25C15.54,24.99 15.01,25.43 15,25.99C14.99,26.54 15.5,26.99 16.15,27Z"
-        android:strokeColor="#00000000"
         android:fillType="nonZero"
-        android:fillColor="#000000"
+        android:fillColor="@color/secondaryTextColor"
         android:strokeWidth="1"/>
     <path
         android:pathData="M11.45,0L9.34,0L5.71,0C2.57,0 0,2.58 0,5.72L0,60.27C0,63.41 2.57,66 5.71,66C22.42,66 39.12,65.98 55.83,65.98C56.48,65.98 57,65.46 57,64.81L57,1.16C57,0.52 56.48,0 55.83,0L19.58,0L11.45,0ZM2.34,5.72C2.34,3.84 3.85,2.33 5.71,2.33L8.17,2.33L8.19,56.39L2.34,56.39L2.34,5.72L2.34,5.72ZM54.66,63.65C38.34,63.65 22.03,63.67 5.71,63.67C3.86,63.67 2.34,62.15 2.34,60.27L2.34,58.71L54.66,58.71L54.66,63.65L54.66,63.65ZM54.66,2.33L54.66,56.39L10.53,56.39L10.51,2.33L11.45,2.33L19.58,2.33L54.66,2.33Z"
-        android:strokeColor="#00000000"
         android:fillType="nonZero"
-        android:fillColor="#000000"
+        android:fillColor="@color/secondaryTextColor"
         android:strokeWidth="1"/>
     <path
         android:pathData="M16.17,20C16.18,20 16.19,20 16.2,20L50.8,20C51.45,20.01 51.99,19.57 52,19.01C52.01,18.46 51.49,18.01 50.84,18C50.82,18 50.81,18 50.8,18L16.2,18C15.55,17.99 15.01,18.43 15,18.99C14.99,19.54 15.51,19.99 16.17,20Z"
-        android:strokeColor="#00000000"
         android:fillType="nonZero"
-        android:fillColor="#000000"
+        android:fillColor="@color/secondaryTextColor"
         android:strokeWidth="1"/>
     <path
         android:pathData="M16.17,13C16.18,13 16.19,13 16.2,13L50.8,13C51.45,13.01 51.99,12.57 52,12.01C52.01,11.46 51.49,11.01 50.84,11C50.82,11 50.81,11 50.8,11L16.2,11C15.55,10.99 15.01,11.43 15,11.99C14.99,12.54 15.51,12.99 16.17,13Z"
-        android:strokeColor="#00000000"
         android:fillType="nonZero"
-        android:fillColor="#000000"
+        android:fillColor="@color/secondaryTextColor"
         android:strokeWidth="1"/>
 </vector>

@@ -23,9 +23,10 @@
 
     <string name="send_email">Send email</string>
     <string name="made_in_brooklyn">Made in Brooklyn</string>
-    <string name="about_page_copy">DroidFeed is created to provide a curated list of Android development related media.</string>
-    <string name="info_no_internet">Network is not available</string>
-    <string name="empty_screen_bookmark">You can find your bookmarked articles here!</string>
+    <string name="about_page_copy">Your hub for the latest Android Development news and thoughts.</string>
+    <string name="info_no_internet">Network is not available.</string>
+    <string name="can_not_refresh">Can\'t refresh.</string>
+    <string name="empty_screen_bookmark">You haven\'t bookmarked anything yet.</string>
 
 
     <string name="content_desc_share_button">Share button</string>

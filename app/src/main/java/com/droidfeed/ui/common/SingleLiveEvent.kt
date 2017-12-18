@@ -1,4 +1,4 @@
-package com.nytclient.ui.common
+package com.droidfeed.ui.common
 
 import android.arch.lifecycle.LifecycleOwner
 import android.arch.lifecycle.MutableLiveData

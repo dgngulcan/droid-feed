@@ -6,6 +6,7 @@ import android.databinding.DataBindingUtil
 import android.os.Bundle
 import android.support.design.widget.NavigationView
 import android.support.v4.view.GravityCompat
+import android.support.v4.widget.DrawerLayout
 import android.support.v7.app.ActionBarDrawerToggle
 import android.view.View
 import com.droidfeed.R
@@ -67,6 +68,13 @@ class MainActivity : BaseActivity() {
         drawer_layout.addDrawerListener(toggle)
         toggle.syncState()
 
+        drawer_layout.addDrawerListener(object : DrawerLayout.SimpleDrawerListener() {
+            override fun onDrawerClosed(drawerView: View) {
+                super.onDrawerClosed(drawerView)
+                viewModel.shuffleHeaderImage()
+            }
+        })
+
         navView.setNavigationItemSelectedListener(navigationListener)
         navView.setCheckedItem(R.id.nav_feed)
         navController.openNewsFragment()
@@ -98,8 +106,6 @@ class MainActivity : BaseActivity() {
                 binding.appbar.toolbar.setTitle(R.string.nav_help_us)
             }
         }
-
-
 
         drawer_layout.closeDrawer(GravityCompat.START)
         true

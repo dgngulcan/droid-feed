@@ -6,6 +6,7 @@ import android.content.Intent
 import android.content.res.Resources
 import android.net.ConnectivityManager
 import com.droidfeed.util.DebugUtils
+import java.util.*
 
 /**
  * Created by Dogan Gulcan on 11/8/17.
@@ -30,3 +31,5 @@ fun Intent.startActivity(activity: Activity) {
         DebugUtils.log("There are no activity can handle this intent")
     }
 }
+
+fun ClosedRange<Int>.random() = Random().nextInt(endInclusive - start) + start

@@ -40,7 +40,8 @@ class RssRepo @Inject constructor(
                 "https://proandroiddev.com/feed",
                 "https://medium.com/feed/google-developers",
                 "https://rss.simplecast.com/podcasts/3213/rss",
-                "http://androidbackstage.blogspot.com/feeds/posts/default?alt=rss",
+                "http://androidbackstage.blogspot.com/feeds/posts/default?alt=rss", // droid snacks
+//                "https://www.youtube.com/feeds/videos.xml?channel_id=UCVHFbqXqoYvEWM1Ddxl0QDg", // android dev youtube channel
                 "http://fragmentedpodcast.com/feed"
         )
     }
