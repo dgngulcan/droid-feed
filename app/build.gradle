@@ -21,7 +21,9 @@ android {
         versionName "1.0.0-alpha"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
 
-        vectorDrawables.useSupportLibrary = true
+        multiDexEnabled true
+
+        vectorDrawables.useSupportLibrary true
     }
 
     buildTypes {
@@ -29,11 +31,16 @@ android {
         debug {
             applicationIdSuffix ".debug"
             buildConfigField "Boolean", "DEBUG_MODE", "true"
+
+
+//            shrinkResources true
+//            minifyEnabled true
+//            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
 
         release {
-            shrinkResources true
-            minifyEnabled true
+            shrinkResources false
+            minifyEnabled false
             buildConfigField "Boolean", "DEBUG_MODE", "false"
 
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'

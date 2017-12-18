@@ -19,3 +19,13 @@
 # If you keep the line number information, uncomment this to
 # hide the original source file name.
 #-renamesourcefileattribute SourceFile
+
+
+-dontwarn com.squareup.okhttp.**
+-dontwarn okio.**
+-dontwarn retrofit.**
+-dontwarn retrofit2.**
+-dontwarn com.bumptech.glide.**
+-dontwarn com.google.common.**
+-dontwarn com.google.api.client.googleapis.**
+-dontwarn com.google.errorprone.annotations.*
