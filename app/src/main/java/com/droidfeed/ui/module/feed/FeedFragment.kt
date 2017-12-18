@@ -19,6 +19,7 @@ import com.droidfeed.ui.common.WrapContentLinearLayoutManager
 import com.droidfeed.util.CustomTab
 import com.droidfeed.util.DebugUtils
 import com.droidfeed.util.NetworkUtils
+import com.droidfeed.util.extention.isOnline
 import com.nytclient.ui.common.BaseFragment
 import org.jetbrains.anko.design.snackbar
 import javax.inject.Inject
@@ -126,7 +127,15 @@ class FeedFragment : BaseFragment() {
         })
 
         viewModel?.loadingFailedEvent?.observe(this, Observer {
-            if (it == true) snackbar(binding.root, R.string.error_obtaining_feed)
+            if (it == true) {
+
+                val snackBarText = if (activity?.isOnline() == true) {
+                    getString(R.string.error_obtaining_feed)
+                } else {
+                    getString(R.string.info_no_internet) + " " + getString(R.string.can_not_refresh)
+                }
+                snackbar(binding.root, snackBarText)
+            }
         })
 
     }

@@ -3,7 +3,7 @@ package com.droidfeed.ui.module.helpus
 import android.content.Intent
 import com.droidfeed.util.contactIntent
 import com.nytclient.ui.common.BaseViewModel
-import com.nytclient.ui.common.SingleLiveEvent
+import com.droidfeed.ui.common.SingleLiveEvent
 
 /**
  * Created by Dogan Gulcan on 12/16/17.

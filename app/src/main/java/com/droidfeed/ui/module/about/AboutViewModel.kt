@@ -11,7 +11,7 @@ import com.droidfeed.util.rateAppIntent
 import com.droidfeed.util.shareIntent
 import com.droidfeed.util.workerThread
 import com.nytclient.ui.common.BaseViewModel
-import com.nytclient.ui.common.SingleLiveEvent
+import com.droidfeed.ui.common.SingleLiveEvent
 
 
 /**

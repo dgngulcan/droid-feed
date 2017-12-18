@@ -42,12 +42,17 @@
             android:layout_centerInParent="true" />
 
         <TextView
+            style="@style/Base.TextAppearance.AppCompat.Subhead"
             visibilityToggle="@{isEmptyBookmarked}"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:layout_margin="@dimen/spacing_medium"
-            android:text="@string/empty_screen_bookmark" />
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="140dp"
+            android:drawablePadding="@dimen/spacing_large"
+            android:drawableTop="@drawable/ic_state_empty_book"
+            android:padding="@dimen/spacing_medium"
+            android:text="@string/empty_screen_bookmark"
+            android:textColor="@color/secondaryTextColor" />
 
     </RelativeLayout>
 

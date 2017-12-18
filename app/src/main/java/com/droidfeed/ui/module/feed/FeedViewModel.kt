@@ -10,7 +10,7 @@ import com.droidfeed.data.repo.RssRepo
 import com.droidfeed.ui.adapter.UiModelType
 import com.droidfeed.ui.adapter.model.ArticleUiModel
 import com.nytclient.ui.common.BaseViewModel
-import com.nytclient.ui.common.SingleLiveEvent
+import com.droidfeed.ui.common.SingleLiveEvent
 
 
 /**
@@ -70,20 +70,21 @@ class FeedViewModel(private val rssRepo: RssRepo, private val feedType: FeedType
     }
 
     private fun handleResponseStates(response: Resource<List<Article>>) {
-        loadingFailedEvent.setValue(false)
 
         when (response.status) {
             Status.LOADING -> {
                 rssUiModelData.value?.let { if (it.isEmpty()) isLoading.set(true) }
+                loadingFailedEvent.setValue(false)
             }
 
             Status.SUCCESS -> {
                 isLoading.set(false)
+                loadingFailedEvent.setValue(false)
             }
 
             Status.ERROR -> {
                 isLoading.set(false)
-                loadingFailedEvent.setValue(true)
+                if (loadingFailedEvent.value == false) loadingFailedEvent.setValue(true)
             }
         }
     }
@@ -113,8 +114,7 @@ class FeedViewModel(private val rssRepo: RssRepo, private val feedType: FeedType
             article.bookmarked = 1
         }
 
-//        rssRepo.updateArticle(article)
-        rssRepo.deleteArticle(article)
+        rssRepo.updateArticle(article)
     }
 
     /**

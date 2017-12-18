@@ -11,6 +11,8 @@
     <dimen name="spacing_medium">16dp</dimen>
     <dimen name="spacing_large">24dp</dimen>
     <dimen name="spacing_xlarge">36dp</dimen>
+    <dimen name="spacing_xxlarge">48dp</dimen>
+    <dimen name="spacing_xxxlarge">76dp</dimen>
 
     <dimen name="card_corner_radius">16dp</dimen>
     <dimen name="touch_raise">4dp</dimen>
