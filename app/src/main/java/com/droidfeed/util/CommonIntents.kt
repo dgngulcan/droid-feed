@@ -18,7 +18,7 @@ val contactIntent: Intent by lazy {
 val shareIntent: Intent by lazy {
     val intent = Intent()
     intent.action = Intent.ACTION_SEND
-    intent.putExtra(Intent.EXTRA_TEXT, "This activity helps me to keep up with Android" +
+    intent.putExtra(Intent.EXTRA_TEXT, "Check out this app! It helps me stay up to date with Android development news." +
             "\n\nhttps://play.google.com/store/apps/details?id=" + BuildConfig.APPLICATION_ID)
     intent.type = "text/plain"
     intent
