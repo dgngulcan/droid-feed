@@ -1,13 +1,42 @@
 <resources>
 
-    <string name="app_name">droidnews</string>
+    <string name="app_name">DroidFeed</string>
     <string name="title_home">Home</string>
-    <string name="title_dashboard">Dashboard</string>
-    <string name="title_notifications">Notifications</string>
-    <string name="title_news">News</string>
-    <string name="title_bookmarks">Bookmarks</string>
-    <string name="title_about">About</string>
-    <string name="content_desc_bookmark_button">Bookmark Button</string>
-    <string name="content_desc_share_button">Share Button</string>
+
+    <string name="error_invalid_article_url">Article URL is invalid</string>
+
+    <string name="nav_feed">Feed</string>
+    <string name="nav_bookmarks">Bookmarks</string>
+    <string name="nav_about">About</string>
+    <string name="nav_header_title">Android Studio</string>
+    <string name="nav_header_subtitle">android.studio@android.com</string>
+    <string name="nav_header_desc">Navigation header</string>
+    <string name="nav_help_us">Help Us</string>
+
+    <string name="share">Share</string>
+    <string name="rate_app">Rate App</string>
+    <string name="contact">Contact</string>
+    <string name="licences">Licences</string>
+    <string name="dashed_text"> - %s</string>
+    <string name="send_with">Send with</string>
+    <string name="title_activity_main2">Main2Activity</string>
+
+    <string name="send_email">Send email</string>
+    <string name="made_in_brooklyn">Made in Brooklyn</string>
+    <string name="about_page_copy">Your hub for the latest Android Development news and thoughts.</string>
+    <string name="info_no_internet">Network is not available.</string>
+    <string name="can_not_refresh">Can\'t refresh.</string>
+    <string name="empty_screen_bookmark">You haven\'t bookmarked anything yet.</string>
+
+
+    <string name="content_desc_share_button">Share button</string>
+    <string name="content_desc_bookmark_button">Bookmark button</string>
+    <string name="error_obtaining_feed">Couldn\'t retrieve the feed!</string>
+
+    <string name="hello">Hello!</string>
+    <string name="help_us_desc">We created DroidFeed to help Android Developers to stay informed about the latest news, thoughts and ideas.\n\nWe would love to have your help to make this app better. We\'d super appreciate it if you let us know\n\n* other Android Development article sources\n* what you like/not like about the app\n* any features you want to see\n* bugs you\'ve encountered\n* any visual designers who can bringing this app\'s design to another level\n* anything else you\'d like us to know\n\nSay hi to us by clicking the button below. We can\'t wait to hear from you!\n\n- Dogan &amp; Anyi</string>
+    <string name="send_feedback">Send Feedback</string>
+    <string name="info_bookmark_removed">Bookmark is removed</string>
+    <string name="undo">Undo</string>
 
 </resources>
