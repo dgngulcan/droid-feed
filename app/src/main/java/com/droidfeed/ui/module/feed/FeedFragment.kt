@@ -3,6 +3,7 @@ package com.droidfeed.ui.module.feed
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
 import android.databinding.ObservableBoolean
+import android.graphics.Color
 import android.os.Bundle
 import android.support.v7.widget.DefaultItemAnimator
 import android.view.LayoutInflater
@@ -68,7 +69,7 @@ class FeedFragment : BaseFragment() {
         }
 
         override fun onDataInserted(position: Int) {
-            binding.newsRecyclerView.smoothScrollToPosition(position)
+//            binding.newsRecyclerView.smoothScrollToPosition(position)
         }
     }
 
@@ -102,8 +103,11 @@ class FeedFragment : BaseFragment() {
 
     private fun init() {
         val layoutManager = activity?.let { WrapContentLinearLayoutManager(it) }
+
         binding.newsRecyclerView.layoutManager = layoutManager
+
         (binding.newsRecyclerView.itemAnimator as DefaultItemAnimator).supportsChangeAnimations = false
+
         binding.newsRecyclerView.swapAdapter(adapter, true)
 
         binding.swipeRefreshArticles.setOnRefreshListener {
@@ -114,6 +118,7 @@ class FeedFragment : BaseFragment() {
 
     private fun initDataObservables() {
         DebugUtils.log("initDataObservables")
+
         viewModel?.rssUiModelData?.observe(this, Observer {
             adapter.addUiModels(it as Collection<BaseUiModelAlias>)
         })
@@ -121,6 +126,17 @@ class FeedFragment : BaseFragment() {
         viewModel?.articleOpenDetail?.observe(this, Observer {
             it?.let(this::openArticleDetail)
         })
+
+        // bookmark undo snackbar after unbookmarking
+        if (feedType == FeedType.BOOKMARKS) {
+            viewModel?.articleOnUnBookmark?.observe(this, Observer { article ->
+                article?.let {
+                    snackbar(binding.root, R.string.info_bookmark_removed, R.string.undo, {
+                        viewModel!!.toggleBookmark(article)
+                    }).setActionTextColor(Color.YELLOW)
+                }
+            })
+        }
 
         viewModel?.articleShareEvent?.observe(this, Observer {
             startActivity(it)
@@ -138,6 +154,10 @@ class FeedFragment : BaseFragment() {
             }
         })
 
+    }
+
+    internal fun scrollToTop() {
+        binding.newsRecyclerView.smoothScrollToPosition(0)
     }
 
     private fun openArticleDetail(article: Article) {

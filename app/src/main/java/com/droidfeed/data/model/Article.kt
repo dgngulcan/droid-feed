@@ -5,6 +5,7 @@ import android.arch.persistence.room.*
 import android.content.Intent
 import android.databinding.ObservableInt
 import android.os.Parcelable
+import android.util.DebugUtils
 import com.droidfeed.R
 import com.droidfeed.data.db.AppDatabase
 import com.droidfeed.ui.adapter.UiModelType
@@ -63,9 +64,11 @@ data class Article(
             }
         }
 
+    @Transient
     @Ignore
     val bookmarkObservable = ObservableInt(R.drawable.avd_bookmark_negative)
 
+    @Transient
     @ColumnInfo(name = "contentImage")
     var image: String = ""
         get() = if (content.contentImage.isBlank()) channel.imageUrl else content.contentImage
@@ -85,7 +88,6 @@ data class Article(
 
     override fun isContentSame(item: Diffable): Boolean {
         item as Article
-
         val content1 = this.bookmarked == item.bookmarked
         val content2 = this.link.contentEquals(item.link)
 

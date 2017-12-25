@@ -14,6 +14,7 @@ import com.droidfeed.databinding.ActivityMainBinding
 import com.droidfeed.databinding.NavHeaderMainBinding
 import com.nytclient.ui.common.BaseActivity
 import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.activity_main_app_bar.*
 import javax.inject.Inject
 
 
@@ -43,6 +44,10 @@ class MainActivity : BaseActivity() {
         binding.drawerLayout.systemUiVisibility = (View.SYSTEM_UI_FLAG_LAYOUT_STABLE
                 or View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
                 or View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION)
+
+        toolbar.getChildAt(0).setOnClickListener({
+           navController.scrollToTop()
+        })
     }
 
     private fun initBindings() {
