@@ -22,7 +22,7 @@ class ApiModule {
         val loggingInterceptor = HttpLoggingInterceptor()
 
         if (BuildConfig.DEBUG) {
-            loggingInterceptor.level = HttpLoggingInterceptor.Level.BODY
+//            loggingInterceptor.level = HttpLoggingInterceptor.Level.BODY
         }
 
         return OkHttpClient.Builder()

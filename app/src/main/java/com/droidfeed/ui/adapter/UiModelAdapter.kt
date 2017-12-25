@@ -7,8 +7,9 @@ import android.support.v7.widget.RecyclerView
 import android.view.ViewGroup
 import com.droidfeed.ui.adapter.diff.UiModelDiffCallback
 import com.droidfeed.ui.common.BaseUiModel
-import com.droidfeed.util.uiThread
-import com.droidfeed.util.workerThread
+import kotlinx.coroutines.experimental.android.UI
+import kotlinx.coroutines.experimental.async
+import org.jetbrains.anko.coroutines.experimental.bg
 
 
 /**
@@ -44,21 +45,41 @@ class UiModelAdapter constructor(
     @Synchronized
     fun addUiModels(uiModels: Collection<BaseUiModelAlias>?) {
         if (uiModels != null) {
+            async(UI) {
+                val oldItems = ArrayList(this@UiModelAdapter.uiModels)
 
-            workerThread {
-                val diffResult = DiffUtil.calculateDiff(
-                        UiModelDiffCallback(this@UiModelAdapter.uiModels,
-                                uiModels as List<BaseUiModelAlias>))
+                val diffResult = bg {
+                    this@UiModelAdapter.uiModels.clear()
+                    this@UiModelAdapter.uiModels.addAll(uiModels)
 
-                this@UiModelAdapter.uiModels.clear()
-                this@UiModelAdapter.uiModels.addAll(uiModels)
+                    updateViewTypes(this@UiModelAdapter.uiModels)
 
-                updateViewTypes(this@UiModelAdapter.uiModels)
-
-                uiThread {
-                    diffResult.dispatchUpdatesTo(listUpdateCallBack)
-                    dataInsertedCallback?.onUpdated()
+                    DiffUtil.calculateDiff(UiModelDiffCallback(oldItems, uiModels as List<BaseUiModelAlias>))
                 }
+
+
+                diffResult.await().dispatchUpdatesTo(this@UiModelAdapter)
+//                diffResult.await().dispatchUpdatesTo(object : ListUpdateCallback {
+//                    override fun onInserted(position: Int, count: Int) {
+////                        notifyItemRangeInserted(position, count)
+//                        notifyDataSetChanged()
+//                        dataInsertedCallback?.onDataInserted(position)
+//                    }
+//
+//                    override fun onRemoved(position: Int, count: Int) {
+//                        notifyItemRangeRemoved(position, count)
+//                    }
+//
+//                    override fun onMoved(fromPosition: Int, toPosition: Int) {
+//                        notifyItemMoved(fromPosition, toPosition)
+//                    }
+//
+//                    override fun onChanged(position: Int, count: Int, payload: Any) {
+//                        notifyItemRangeChanged(position, count, payload)
+//                    }
+//                })
+
+                dataInsertedCallback?.onUpdated()
             }
 
         }

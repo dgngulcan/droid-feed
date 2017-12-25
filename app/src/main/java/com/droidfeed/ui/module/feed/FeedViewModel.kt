@@ -9,8 +9,8 @@ import com.droidfeed.data.model.Article
 import com.droidfeed.data.repo.RssRepo
 import com.droidfeed.ui.adapter.UiModelType
 import com.droidfeed.ui.adapter.model.ArticleUiModel
-import com.nytclient.ui.common.BaseViewModel
 import com.droidfeed.ui.common.SingleLiveEvent
+import com.nytclient.ui.common.BaseViewModel
 
 
 /**
@@ -24,6 +24,7 @@ class FeedViewModel(private val rssRepo: RssRepo, private val feedType: FeedType
     val isLoading = ObservableBoolean(true)
     val loadingFailedEvent = SingleLiveEvent<Boolean>()
     val articleOpenDetail = SingleLiveEvent<Article>()
+    val articleOnUnBookmark = SingleLiveEvent<Article>()
     val articleShareEvent = SingleLiveEvent<Intent>()
 
     private val result = MutableLiveData<List<ArticleUiModel>>()
@@ -107,9 +108,10 @@ class FeedViewModel(private val rssRepo: RssRepo, private val feedType: FeedType
         }
     }
 
-    private fun toggleBookmark(article: Article) {
+    fun toggleBookmark(article: Article) {
         if (article.bookmarked == 1) {
             article.bookmarked = 0
+            articleOnUnBookmark.setValue(article)
         } else {
             article.bookmarked = 1
         }

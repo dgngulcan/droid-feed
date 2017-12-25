@@ -12,7 +12,7 @@ abstract class AppDatabase : RoomDatabase() {
 
     companion object {
         const val RSS_TABLE_NAME = "rss"
-        const val APP_DATABASE_NAME = "droid_news.db"
+        const val APP_DATABASE_NAME = "droidfeed.db"
     }
 
     abstract fun rssDao(): RssDao

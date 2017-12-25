@@ -13,7 +13,7 @@ import javax.inject.Inject
  * Created by Dogan Gulcan on 9/22/17.
  */
 @MainScope
-class MainNavController @Inject constructor(activity: MainActivity) {
+class MainNavController @Inject constructor(val activity: MainActivity) {
 
     private val fragmentManager = activity.supportFragmentManager
     private val containerId = R.id.fragmentContainer
@@ -56,6 +56,14 @@ class MainNavController @Inject constructor(activity: MainActivity) {
                         android.R.animator.fade_out)
                 .replace(containerId, fragment)
                 .commitAllowingStateLoss()
+    }
+
+    fun scrollToTop() {
+        val currentFragment = fragmentManager.findFragmentById(containerId)
+        when (currentFragment) {
+            is FeedFragment -> currentFragment.scrollToTop()
+        }
+
     }
 
 

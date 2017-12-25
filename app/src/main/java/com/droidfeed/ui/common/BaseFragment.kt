@@ -8,7 +8,7 @@ import dagger.android.support.AndroidSupportInjection
 /**
  * Created by Dogan Gulcan on 9/13/17.
  */
-open class BaseFragment : Fragment() {
+abstract class BaseFragment : Fragment() {
 
     override fun onAttach(context: Context?) {
         AndroidSupportInjection.inject(this)
