@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <data>
+
+        <variable
+            name="viewModel"
+            type="com.droidfeed.ui.module.feed.FeedViewModel" />
+
+        <variable
+            name="isEmptyBookmarked"
+            type="android.databinding.ObservableBoolean" />
+
+    </data>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <android.support.v4.widget.SwipeRefreshLayout
+            android:id="@+id/swipeRefreshArticles"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/newsRecyclerView"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:clipToPadding="false"
+                android:fitsSystemWindows="true"
+                android:paddingBottom="8dp"
+                android:paddingTop="8dp" />
+
+        </android.support.v4.widget.SwipeRefreshLayout>
+
+        <ProgressBar
+            android:id="@+id/progressBar"
+            style="?android:attr/progressBarStyle"
+            visibilityToggle="@{viewModel.isLoading}"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true" />
+
+        <TextView
+            style="@style/Base.TextAppearance.AppCompat.Subhead"
+            visibilityToggle="@{isEmptyBookmarked}"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="140dp"
+            android:drawablePadding="@dimen/spacing_large"
+            android:drawableTop="@drawable/ic_state_empty_book"
+            android:padding="@dimen/spacing_medium"
+            android:text="@string/empty_screen_bookmark"
+            android:textColor="@color/secondaryTextColor" />
+
+    </RelativeLayout>
+
+</layout>
