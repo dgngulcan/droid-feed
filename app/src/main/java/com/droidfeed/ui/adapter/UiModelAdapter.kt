@@ -36,13 +36,12 @@ class UiModelAdapter constructor(
 
     override fun getItemViewType(position: Int): Int {
         return if (position in 0..(itemCount - 1) && itemCount > 0) {
-            uiModels[position].getViewType()
+            uiModels[position]?.getViewType()
         } else {
             0
         }
     }
 
-    @Synchronized
     fun addUiModels(uiModels: Collection<BaseUiModelAlias>?) {
         if (uiModels != null) {
             async(UI) {
