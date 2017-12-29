@@ -10,9 +10,11 @@
 
     </data>
 
-    <ScrollView
+    <android.support.v4.widget.NestedScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:clipToPadding="false"
+        android:paddingBottom="@dimen/spacing_xlarge">
 
         <android.support.constraint.ConstraintLayout
             android:layout_width="match_parent"
@@ -53,8 +55,12 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/textView" />
 
+            <android.support.v4.widget.Space
+                android:layout_width="wrap_content"
+                android:layout_height="@dimen/spacing_xlarge"
+                app:layout_constraintTop_toBottomOf="@+id/button2" />
 
         </android.support.constraint.ConstraintLayout>
-    </ScrollView>
+    </android.support.v4.widget.NestedScrollView>
 
 </layout>
