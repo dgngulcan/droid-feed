@@ -33,12 +33,14 @@
                 android:layout_marginEnd="@dimen/spacing_medium"
                 android:layout_marginStart="@dimen/spacing_medium"
                 android:layout_marginTop="@dimen/spacing_medium"
+                android:ellipsize="end"
+                android:maxLines="3"
                 android:text="@{rssItem.title}"
                 app:layout_constraintEnd_toStartOf="@+id/imgArticle"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_goneMarginEnd="16dp"
-                tools:text="This Is A Click Bait Title of A News" />
+                tools:text="This Is A Click Bait Title of A News That Is About To Get So Long to Test What Is Going to Happen If The Title Is Long" />
 
             <TextView
                 android:id="@+id/txtSource"
