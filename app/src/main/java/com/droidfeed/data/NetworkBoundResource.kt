@@ -12,7 +12,7 @@ import org.jetbrains.anko.coroutines.experimental.bg
 import org.jetbrains.annotations.Nullable
 
 /**
- * Adapted from <a href="https://developer.android.com/topic/libraries/architecture/guide.html">
+ * Adapted from https://developer.android.com/topic/libraries/architecture/guide.html
  *
  * Created by Dogan Gulcan on 9/22/17.
  */

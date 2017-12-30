@@ -12,7 +12,7 @@ import com.droidfeed.data.db.RssDao
 import com.droidfeed.data.model.Article
 import com.droidfeed.util.DateTimeUtils
 import com.droidfeed.util.DebugUtils
-import com.droidfeed.util.workerThread
+import org.jetbrains.anko.coroutines.experimental.bg
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -71,20 +71,17 @@ class RssRepo @Inject constructor(
             override fun saveCallResult(item: ArrayList<Article>) {
                 if (rssDao.getFeedItemCount() > MAX_CACHE_ITEM_COUNT) {
                     rssDao.trimCache()
-                    DebugUtils.log("Trimmed cache")
+                    DebugUtils.log("Trimmed cache, removed $MAX_CACHE_ITEM_COUNT oldest article.")
                 }
                 rssDao.insertArticles(item)
             }
 
             override fun shouldFetch(data: List<Article>?): Boolean {
                 if (data != null && data.isNotEmpty()) {
-                    val latestNewsCreationDate = if (data.isNotEmpty()) {
-                        data.first().pubDate
-                    } else {
-                        ""
-                    }
-                    return if (latestNewsCreationDate.isNotBlank()) {
-                        latestNewsCreationDate.let {
+                    val latestCreationDate = if (data.isNotEmpty()) data.first().pubDate else ""
+
+                    return if (latestCreationDate.isNotBlank()) {
+                        latestCreationDate.let {
                             dateTimeUtils.getTimeStampFromDate(it)?.
                                     let {
                                         val currentMillis = System.currentTimeMillis()
@@ -102,6 +99,7 @@ class RssRepo @Inject constructor(
             }
 
             override fun onFetchFailed() {
+                // todo let user know!
                 DebugUtils.log("onFetchFailed")
             }
 
@@ -111,20 +109,19 @@ class RssRepo @Inject constructor(
         }.asLiveData()
     }
 
-    fun getBookmarkedArticles(): LiveData<Resource<List<Article>>> {
-        return object : LocalBoundResource<List<Article>>() {
-            override fun loadFromDb(): LiveData<List<Article>> = rssDao.getBookmarkedArticles()
-        }.asLiveData()
-    }
+    fun getBookmarkedArticles(): LiveData<Resource<List<Article>>> =
+            object : LocalBoundResource<List<Article>>() {
+                override fun loadFromDb(): LiveData<List<Article>> = rssDao.getBookmarkedArticles()
+            }.asLiveData()
 
     fun updateArticle(article: Article) {
-        workerThread {
+        bg {
             rssDao.updateArticle(article)
         }
     }
 
     fun deleteArticle(article: Article) {
-        workerThread {
+        bg {
             rssDao.deleteArticle(article)
         }
     }
