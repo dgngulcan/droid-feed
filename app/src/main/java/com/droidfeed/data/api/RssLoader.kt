@@ -4,6 +4,8 @@ import android.arch.lifecycle.MutableLiveData
 import com.droidfeed.data.RssXmlParser
 import com.droidfeed.data.model.Article
 import com.droidfeed.util.uiThread
+import kotlinx.coroutines.experimental.android.UI
+import kotlinx.coroutines.experimental.async
 import okhttp3.*
 import java.io.IOException
 import javax.inject.Inject
@@ -32,14 +34,14 @@ class RssLoader @Inject constructor(
             override fun onResponse(call: Call, response: Response) {
                 response.let {
                     val articles = response.body()?.string()?.let { it1 -> rssXmlParser.parse(it1) }
-                    uiThread {
+                    async(UI) {
                         fetchResponse.value = ApiResponse(response, articles)
                     }
                 }
             }
 
             override fun onFailure(call: Call, e: IOException) {
-                uiThread {
+                async(UI) {
                     fetchResponse.value = ApiResponse(e)
                 }
             }

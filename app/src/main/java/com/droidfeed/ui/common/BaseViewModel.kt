@@ -11,7 +11,10 @@ abstract class BaseViewModel : ViewModel() {
 
     private var mLastClickTime: Long = 0
 
-    var canUserClick: Boolean = true
+    /**
+     * To prevent click spams.
+     */
+    var userCanClick: Boolean = true
         get() {
             return if (SystemClock.elapsedRealtime() - mLastClickTime < 300) {
                 false

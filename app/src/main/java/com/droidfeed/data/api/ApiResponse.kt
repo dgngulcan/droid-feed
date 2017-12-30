@@ -5,6 +5,7 @@ import java.io.IOException
 
 /**
  * Generic class used for API responses.
+ * Adopted from https://github.com/googlesamples/android-architecture-components.
  *
  * Created by Dogan Gulcan on 9/22/17.
  */

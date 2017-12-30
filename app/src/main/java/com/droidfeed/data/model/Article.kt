@@ -1,11 +1,9 @@
 package com.droidfeed.data.model
 
-import android.annotation.SuppressLint
 import android.arch.persistence.room.*
 import android.content.Intent
 import android.databinding.ObservableInt
 import android.os.Parcelable
-import android.util.DebugUtils
 import com.droidfeed.R
 import com.droidfeed.data.db.AppDatabase
 import com.droidfeed.ui.adapter.UiModelType
@@ -51,12 +49,12 @@ data class Article(
 
 ) : Diffable, Comparable<Article>, Parcelable {
 
+    @Transient
     @ColumnInfo(name = "bookmarked")
     var bookmarked: Int = 0
         set(value) {
             field = value
 
-            // can not use selectors because states cant be manipulated from xml
             if (value == 1) {
                 bookmarkObservable.set(R.drawable.avd_bookmark_positive)
             } else {
@@ -88,9 +86,10 @@ data class Article(
 
     override fun isContentSame(item: Diffable): Boolean {
         item as Article
+
         val content1 = this.bookmarked == item.bookmarked
         val content2 = this.link.contentEquals(item.link)
 
-        return content2 && content1
+        return content1 && content2
     }
 }

@@ -93,15 +93,15 @@ class FeedViewModel(private val rssRepo: RssRepo, private val feedType: FeedType
     private val newsClickCallback by lazy {
         object : ArticleClickListener {
             override fun onItemClick(article: Article) {
-                if (canUserClick) articleOpenDetail.setValue(article)
+                if (userCanClick) articleOpenDetail.setValue(article)
             }
 
             override fun onShareClick(article: Article) {
-                if (canUserClick) articleShareEvent.setValue(article.getShareIntent())
+                if (userCanClick) articleShareEvent.setValue(article.getShareIntent())
             }
 
             override fun onBookmarkClick(article: Article) {
-                if (canUserClick) {
+                if (userCanClick) {
                     toggleBookmark(article)
                 }
             }
