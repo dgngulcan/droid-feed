@@ -6,12 +6,12 @@ import android.content.Intent
 import com.droidfeed.BuildConfig
 import com.droidfeed.data.model.Licence
 import com.droidfeed.ui.adapter.model.LicenceUiModel
+import com.droidfeed.ui.common.SingleLiveEvent
 import com.droidfeed.util.contactIntent
 import com.droidfeed.util.rateAppIntent
 import com.droidfeed.util.shareIntent
-import com.droidfeed.util.workerThread
 import com.nytclient.ui.common.BaseViewModel
-import com.droidfeed.ui.common.SingleLiveEvent
+import org.jetbrains.anko.coroutines.experimental.bg
 
 
 /**
@@ -30,28 +30,28 @@ class AboutViewModel : BaseViewModel() {
 
     val aboutScreenClickListener = object : AboutFragmentClickListener {
         override fun onRateAppClicked() {
-            if (canUserClick) rateAppEvent.setValue(rateAppIntent)
+            if (userCanClick) rateAppEvent.setValue(rateAppIntent)
         }
 
         override fun onContactClicked() {
-            if (canUserClick) contactDevEvent.setValue(contactIntent)
+            if (userCanClick) contactDevEvent.setValue(contactIntent)
         }
 
         override fun onShareClicked() {
-            if (canUserClick) shareAppEvent.setValue(shareIntent)
+            if (userCanClick) shareAppEvent.setValue(shareIntent)
         }
     }
 
     private val licenceClickListener = object : LicenceClickListener {
         override fun onClick(licence: Licence) {
-            if (canUserClick) licenceClickEvent.setValue(licence)
+            if (userCanClick) licenceClickEvent.setValue(licence)
         }
     }
 
     private fun provideOpenSourceLibraryList(): LiveData<List<LicenceUiModel>> {
         val licencesLiveData = MutableLiveData<List<LicenceUiModel>>()
 
-        workerThread {
+        bg {
             val uiModels = ArrayList<LicenceUiModel>()
             getLicences().mapTo(uiModels) { LicenceUiModel(it, licenceClickListener) }
             licencesLiveData.postValue(uiModels)

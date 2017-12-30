@@ -43,7 +43,7 @@ class UiModelAdapter constructor(
     }
 
     fun addUiModels(uiModels: Collection<BaseUiModelAlias>?) {
-        if (uiModels != null) {
+        uiModels?.let {
             async(UI) {
                 val oldItems = ArrayList(this@UiModelAdapter.uiModels)
 
@@ -56,56 +56,16 @@ class UiModelAdapter constructor(
                     DiffUtil.calculateDiff(UiModelDiffCallback(oldItems, uiModels as List<BaseUiModelAlias>))
                 }
 
-
                 diffResult.await().dispatchUpdatesTo(this@UiModelAdapter)
-//                diffResult.await().dispatchUpdatesTo(object : ListUpdateCallback {
-//                    override fun onInserted(position: Int, count: Int) {
-////                        notifyItemRangeInserted(position, count)
-//                        notifyDataSetChanged()
-//                        dataInsertedCallback?.onDataInserted(position)
-//                    }
-//
-//                    override fun onRemoved(position: Int, count: Int) {
-//                        notifyItemRangeRemoved(position, count)
-//                    }
-//
-//                    override fun onMoved(fromPosition: Int, toPosition: Int) {
-//                        notifyItemMoved(fromPosition, toPosition)
-//                    }
-//
-//                    override fun onChanged(position: Int, count: Int, payload: Any) {
-//                        notifyItemRangeChanged(position, count, payload)
-//                    }
-//                })
 
                 dataInsertedCallback?.onUpdated()
             }
-
         }
     }
 
     private fun updateViewTypes(uiModels: ArrayList<BaseUiModelAlias>) {
         uiModels.forEach {
             viewTypes.put(it.getViewType(), it)
-        }
-    }
-
-    private val listUpdateCallBack = object : ListUpdateCallback {
-        override fun onInserted(position: Int, count: Int) {
-            notifyItemRangeInserted(position, count)
-            dataInsertedCallback?.onDataInserted(position)
-        }
-
-        override fun onRemoved(position: Int, count: Int) {
-            notifyItemRangeRemoved(position, count)
-        }
-
-        override fun onMoved(fromPosition: Int, toPosition: Int) {
-            notifyItemMoved(fromPosition, toPosition)
-        }
-
-        override fun onChanged(position: Int, count: Int, payload: Any) {
-            notifyItemRangeChanged(position, count, payload)
         }
     }
 
