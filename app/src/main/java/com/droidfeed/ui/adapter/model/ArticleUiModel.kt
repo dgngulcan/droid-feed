@@ -1,16 +1,17 @@
 package com.droidfeed.ui.adapter.model
 
+import android.databinding.DataBindingUtil
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import com.droidfeed.R
 import com.droidfeed.data.model.Article
-import com.droidfeed.databinding.ListItemFeedLargeBinding
-import com.droidfeed.databinding.ListItemFeelSmallBinding
+import com.droidfeed.databinding.ListItemArticleLargeBinding
+import com.droidfeed.databinding.ListItemArticleSmallBinding
 import com.droidfeed.ui.adapter.UiModelType
 import com.droidfeed.ui.adapter.diff.Diffable
-import com.droidfeed.ui.adapter.viewholder.ArticleLargeViewHolder
 import com.droidfeed.ui.adapter.viewholder.ArticleSmallViewHolder
-import com.droidfeed.ui.binding.DateDataBindingComponent
+import com.droidfeed.ui.adapter.viewholder.ArticleLargeViewHolder
 import com.droidfeed.ui.common.BaseUiModel
 import com.droidfeed.ui.module.feed.ArticleClickListener
 
@@ -22,24 +23,20 @@ data class ArticleUiModel(
         private val onRssClickListener: ArticleClickListener
 ) : BaseUiModel<RecyclerView.ViewHolder>() {
 
-    private val dataBindingComponent: DateDataBindingComponent = DateDataBindingComponent() // unnecessary
 
     override fun getViewHolder(parent: ViewGroup): RecyclerView.ViewHolder =
             when (article.layoutType) {
                 UiModelType.ARTICLE_SMALL -> ArticleSmallViewHolder(
-                        ListItemFeelSmallBinding.inflate(
+                        ListItemArticleSmallBinding.inflate(
                                 LayoutInflater.from(parent.context),
                                 parent,
-                                false,
-                                dataBindingComponent))
+                                false))
 
                 else -> ArticleLargeViewHolder(
-                        ListItemFeedLargeBinding.inflate(
+                        ListItemArticleLargeBinding.inflate(
                                 LayoutInflater.from(parent.context),
                                 parent,
-                                false,
-                                dataBindingComponent))
-
+                                false))
             }
 
     override fun bindViewHolder(viewHolder: RecyclerView.ViewHolder) {
