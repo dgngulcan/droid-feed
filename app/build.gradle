@@ -38,7 +38,6 @@ android {
             applicationIdSuffix ".debug"
             buildConfigField "Boolean", "DEBUG_MODE", "true"
 
-
 //            shrinkResources true
 //            minifyEnabled true
 //            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
@@ -111,15 +110,17 @@ dependencies {
     implementation "com.squareup.okhttp3:okhttp:$okHttpVersion"
     implementation "com.squareup.okhttp3:logging-interceptor:$okHttpVersion"
 
-    compile('com.crashlytics.sdk.android:crashlytics:2.7.1@aar') {
+    implementation('com.crashlytics.sdk.android:crashlytics:2.7.1@aar') {
         transitive = true
     }
-    compile "com.google.firebase:firebase-core:$firebaseVersion"
 
-    compile 'org.jsoup:jsoup:1.11.2'
+    implementation "com.google.firebase:firebase-core:$firebaseVersion"
+
+    implementation "org.jsoup:jsoup:$jSoupVersion"
 
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'com.android.support.test:runner:1.0.1'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.1'
 }
+
 apply plugin: 'com.google.gms.google-services'
