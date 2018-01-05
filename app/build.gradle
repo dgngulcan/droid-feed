@@ -30,7 +30,11 @@ android {
                 arguments = ["room.schemaLocation": "$projectDir/schemas".toString()]
             }
         }
+
+
     }
+
+
 
     buildTypes {
 
@@ -41,6 +45,7 @@ android {
 //            shrinkResources true
 //            minifyEnabled true
 //            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+
         }
 
         release {
@@ -59,7 +64,10 @@ android {
     dexOptions {
         javaMaxHeapSize "4g"
     }
+
+
 }
+
 
 kotlin {
     experimental {
@@ -75,6 +83,7 @@ dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation 'com.android.support.constraint:constraint-layout:1.0.2'
     kapt "com.android.databinding:compiler:$databindingCompilerVersion"
+
 
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jre8:$kotlinVersion"
 
@@ -122,5 +131,6 @@ dependencies {
     androidTestImplementation 'com.android.support.test:runner:1.0.1'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.1'
 }
+
 
 apply plugin: 'com.google.gms.google-services'
