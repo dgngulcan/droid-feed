@@ -37,4 +37,5 @@ fun loadHtml(webView: WebView, htmlContent: String) {
     if (htmlContent.isNotBlank()) {
         webView.loadData(htmlContent, "text/html", "UTF-8")
     }
+
 }
