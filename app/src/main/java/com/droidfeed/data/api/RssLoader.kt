@@ -3,7 +3,6 @@ package com.droidfeed.data.api
 import android.arch.lifecycle.MutableLiveData
 import com.droidfeed.data.RssXmlParser
 import com.droidfeed.data.model.Article
-import com.droidfeed.util.uiThread
 import kotlinx.coroutines.experimental.android.UI
 import kotlinx.coroutines.experimental.async
 import okhttp3.*
