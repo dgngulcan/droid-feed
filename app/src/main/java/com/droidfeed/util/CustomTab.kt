@@ -17,39 +17,48 @@ import javax.inject.Inject
 /**
  * Created by Dogan Gulcan on 11/8/17.
  */
-class CustomTab @Inject constructor(val activity: Activity) {
+class CustomTab @Inject constructor(
+        val activity: Activity,
+        val networkUtils: NetworkUtils) {
+
 
     fun showTab(url: String) {
 
-        if (URLUtil.isValidUrl(url)) {
+        if (networkUtils.isDeviceConnectedToInternet()) {
 
-            val connection = object : CustomTabsServiceConnection() {
-                override fun onCustomTabsServiceConnected(componentName: ComponentName,
-                                                          client: CustomTabsClient) {
-                    client.warmup(0L)
-                    val builder = CustomTabsIntent.Builder()
-                    builder.setToolbarColor(ContextCompat.getColor(activity, R.color.colorPrimary))
+            if (URLUtil.isValidUrl(url)) {
 
-                    builder.setStartAnimations(activity,
-                            android.R.anim.fade_in,
-                            android.R.anim.fade_out)
-                    builder.setExitAnimations(activity,
-                            android.R.anim.fade_in,
-                            android.R.anim.fade_out)
+                val connection = object : CustomTabsServiceConnection() {
+                    override fun onCustomTabsServiceConnected(componentName: ComponentName,
+                                                              client: CustomTabsClient) {
+                        client.warmup(0L)
+                        val builder = CustomTabsIntent.Builder()
+                        builder.setToolbarColor(ContextCompat.getColor(activity, R.color.colorPrimary))
 
-                    val customTabsIntent = builder.build()
+                        builder.setStartAnimations(activity,
+                                android.R.anim.fade_in,
+                                android.R.anim.fade_out)
 
-                    customTabsIntent.launchUrl(activity, Uri.parse(url))
+                        builder.setExitAnimations(activity,
+                                android.R.anim.fade_in,
+                                android.R.anim.fade_out)
+
+                        val customTabsIntent = builder.build()
+
+                        customTabsIntent.launchUrl(activity, Uri.parse(url))
+                    }
+
+                    override fun onServiceDisconnected(name: ComponentName) {}
                 }
 
-                override fun onServiceDisconnected(name: ComponentName) {}
+                CustomTabsClient.bindCustomTabsService(activity, "com.android.chrome", connection)
+
+            } else {
+                snackbar(activity.window.decorView.rootView, activity.getString(R.string.error_invalid_article_url))
             }
 
-            CustomTabsClient.bindCustomTabsService(activity, "com.android.chrome", connection)
-
         } else {
-            snackbar(View(activity), activity.getString(R.string.error_invalid_article_url))
+            snackbar(activity.window.decorView.rootView, R.string.info_no_internet)
         }
-
     }
 }

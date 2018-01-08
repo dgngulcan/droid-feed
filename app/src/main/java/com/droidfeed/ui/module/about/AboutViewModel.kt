@@ -22,13 +22,17 @@ class AboutViewModel : BaseViewModel() {
     val appVersion = BuildConfig.VERSION_NAME
     val rateAppEvent = SingleLiveEvent<Intent>()
     val contactDevEvent = SingleLiveEvent<Intent>()
+    val openLinkEvent = SingleLiveEvent<String>()
     val shareAppEvent = SingleLiveEvent<Intent>()
-    val licenceClickEvent = SingleLiveEvent<Licence>()
 
     val licenceUiModels: LiveData<List<LicenceUiModel>>
         get() = provideOpenSourceLibraryList()
 
     val aboutScreenClickListener = object : AboutFragmentClickListener {
+        override fun onContributeClicked() {
+            if (userCanClick) openLinkEvent.setValue("https://github.com/dgngulcan/droid-feed")
+        }
+
         override fun onRateAppClicked() {
             if (userCanClick) rateAppEvent.setValue(rateAppIntent)
         }
@@ -44,7 +48,7 @@ class AboutViewModel : BaseViewModel() {
 
     private val licenceClickListener = object : LicenceClickListener {
         override fun onClick(licence: Licence) {
-            if (userCanClick) licenceClickEvent.setValue(licence)
+            if (userCanClick) openLinkEvent.setValue(licence.url)
         }
     }
 

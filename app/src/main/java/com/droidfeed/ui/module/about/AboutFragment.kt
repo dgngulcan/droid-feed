@@ -65,9 +65,10 @@ class AboutFragment : BaseFragment() {
             activity?.let { it1 -> it?.startActivity(it1) }
         })
 
-        viewModel.licenceClickEvent.observe(this, Observer {
-            it?.url?.let { it1 -> customTab.showTab(it1) }
+        viewModel.openLinkEvent.observe(this, Observer {
+            it?.let { it1 -> customTab.showTab(it1) }
         })
+
     }
 
 

@@ -73,6 +73,14 @@
                 android:text="@string/nav_about" />
 
             <TextView
+                android:id="@+id/btnGithub"
+                style="@style/ButtonRowStyle"
+                android:drawablePadding="24dp"
+                android:drawableStart="@drawable/ic_github_circle"
+                android:onClick="@{()->onClickListener.onContributeClicked()}"
+                android:text="@string/contribute_on_github" />
+
+            <TextView
                 android:id="@+id/btnRateApp"
                 style="@style/ButtonRowStyle"
                 android:drawablePadding="24dp"

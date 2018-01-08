@@ -5,6 +5,8 @@ package com.droidfeed.ui.module.about
  */
 interface AboutFragmentClickListener {
 
+    fun onContributeClicked()
+
     fun onRateAppClicked()
 
     fun onContactClicked()
