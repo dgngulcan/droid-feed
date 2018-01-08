@@ -2,6 +2,7 @@ package com.droidfeed.di.main
 
 import com.droidfeed.ui.module.main.MainActivity
 import com.droidfeed.util.CustomTab
+import com.droidfeed.util.NetworkUtils
 import dagger.Module
 import dagger.Provides
 
@@ -12,7 +13,7 @@ import dagger.Provides
 class MainModule {
 
     @Provides
-    fun providesCustomTab(activity: MainActivity): CustomTab {
-        return CustomTab(activity)
+    fun providesCustomTab(activity: MainActivity, networkUtils: NetworkUtils): CustomTab {
+        return CustomTab(activity, networkUtils)
     }
 }

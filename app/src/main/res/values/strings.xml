@@ -38,5 +38,6 @@
     <string name="send_feedback">Send Feedback</string>
     <string name="info_bookmark_removed">Bookmark is removed</string>
     <string name="undo">Undo</string>
+    <string name="contribute_on_github">Contribute on Github</string>
 
 </resources>

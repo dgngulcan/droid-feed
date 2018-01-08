@@ -53,7 +53,6 @@ class FeedFragment : BaseFragment() {
 
     @Inject lateinit var newsRepo: RssRepo
     @Inject lateinit var customTab: CustomTab
-    @Inject lateinit var networkUtils: NetworkUtils
     private val feedType by lazy {
         arguments?.getString(EXTRA_FEED_TYPE)?.let { FeedType.valueOf(it) }
     }
@@ -124,7 +123,9 @@ class FeedFragment : BaseFragment() {
         })
 
         viewModel?.articleOpenDetail?.observe(this, Observer {
-            it?.let(this::openArticleDetail)
+            it?.let {
+                customTab.showTab(it.link)
+            }
         })
 
         // bookmark undo snackbar after unbookmarking
@@ -159,14 +160,5 @@ class FeedFragment : BaseFragment() {
     internal fun scrollToTop() {
         binding.newsRecyclerView.smoothScrollToPosition(0)
     }
-
-    private fun openArticleDetail(article: Article) {
-        if (networkUtils.isDeviceConnectedToInternet()) {
-            customTab.showTab(article.link)
-        } else {
-            snackbar(binding.root, R.string.info_no_internet)
-        }
-    }
-
 
 }
