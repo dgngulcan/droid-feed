@@ -34,18 +34,15 @@ android {
 
     }
 
-
+    afterEvaluate {
+        tasks['kaptDebugKotlin'].dependsOn('transformDataBindingWithDataBindingMergeArtifactsForDebug')
+    }
 
     buildTypes {
 
         debug {
             applicationIdSuffix ".debug"
             buildConfigField "Boolean", "DEBUG_MODE", "true"
-
-//            shrinkResources true
-//            minifyEnabled true
-//            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-
         }
 
         release {
@@ -53,7 +50,6 @@ android {
             minifyEnabled false
             buildConfigField "Boolean", "DEBUG_MODE", "false"
 
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
 
@@ -82,7 +78,7 @@ androidExtensions {
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation 'com.android.support.constraint:constraint-layout:1.0.2'
-    kapt "com.android.databinding:compiler:$databindingCompilerVersion"
+    kapt "com.android.databinding:compiler:$gradleBuildVersion"
 
 
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jre8:$kotlinVersion"

@@ -51,7 +51,7 @@ class MainActivity : BaseActivity() {
     }
 
     private fun initBindings() {
-        binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
+        binding = DataBindingUtil.setContentView(this, R.layout.activity_main)!!
         navHeaderBinding = NavHeaderMainBinding.inflate(
                 layoutInflater,
                 binding.navView,
@@ -106,7 +106,7 @@ class MainActivity : BaseActivity() {
                 navController.openAboutFragment()
                 binding.appbar?.toolbar?.setTitle(R.string.nav_about)
             }
-            R.id.nav_help_us -> {
+            R.id.nav_contribute -> {
                 navController.openHelpUsFragment()
                 binding.appbar?.toolbar?.setTitle(R.string.nav_help_us)
             }

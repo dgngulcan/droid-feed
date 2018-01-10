@@ -13,7 +13,6 @@ import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.target.Target
 import com.droidfeed.data.model.Article
 import com.droidfeed.databinding.ListItemArticleSmallBinding
-import com.droidfeed.databinding.ListItemFeelSmallBinding
 import com.droidfeed.ui.module.feed.ArticleClickListener
 import com.droidfeed.util.ObservableColorMatrix
 import com.droidfeed.util.glide.GlideApp

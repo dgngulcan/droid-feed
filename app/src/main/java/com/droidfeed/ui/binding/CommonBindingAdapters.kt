@@ -2,10 +2,13 @@ package com.droidfeed.ui.binding
 
 import android.databinding.BindingAdapter
 import android.support.v4.widget.ContentLoadingProgressBar
+import android.text.format.DateUtils
 import android.view.View
 import android.webkit.WebView
 import android.widget.ImageView
+import android.widget.TextView
 import com.droidfeed.util.extention.loadImage
+import java.util.*
 
 /**
  * Created by Dogan Gulcan on 9/30/17.
@@ -37,5 +40,12 @@ fun loadHtml(webView: WebView, htmlContent: String) {
     if (htmlContent.isNotBlank()) {
         webView.loadData(htmlContent, "text/html", "UTF-8")
     }
+}
 
+@BindingAdapter("relativeDate")
+fun setRelativeDate(view: TextView, timeStamp: Long) {
+    view.text = DateUtils.getRelativeTimeSpanString(
+            timeStamp,
+            Calendar.getInstance(TimeZone.getDefault()).timeInMillis,
+            android.text.format.DateUtils.SECOND_IN_MILLIS)
 }
