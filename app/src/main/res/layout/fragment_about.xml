@@ -29,14 +29,15 @@
                 android:id="@+id/imgAppLogo"
                 android:layout_width="96dp"
                 android:layout_height="96dp"
-                android:layout_marginTop="24dp"
+                android:layout_marginTop="@dimen/spacing_large"
                 android:scaleType="centerInside"
-                android:src="@mipmap/ic_launcher" />
+                android:src="@drawable/df_icon_512" />
 
             <TextView
                 style="@style/TextAppearance.AppCompat.Title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/spacing_small"
                 android:text="@string/app_name" />
 
             <TextView
@@ -69,13 +70,13 @@
                 style="@style/GroupTitleStyle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
+                android:layout_marginTop="@dimen/spacing_small"
                 android:text="@string/nav_about" />
 
             <TextView
                 android:id="@+id/btnGithub"
                 style="@style/ButtonRowStyle"
-                android:drawablePadding="24dp"
+                android:drawablePadding="@dimen/spacing_large"
                 android:drawableStart="@drawable/ic_github_circle"
                 android:onClick="@{()->onClickListener.onContributeClicked()}"
                 android:text="@string/contribute_on_github" />
@@ -99,7 +100,7 @@
             <TextView
                 android:id="@+id/btnShare"
                 style="@style/ButtonRowStyle"
-                android:drawablePadding="24dp"
+                android:drawablePadding="@dimen/spacing_large"
                 android:drawableStart="@drawable/ic_share_black_24dp"
                 android:onClick="@{()->onClickListener.onShareClicked()}"
                 android:text="@string/share" />

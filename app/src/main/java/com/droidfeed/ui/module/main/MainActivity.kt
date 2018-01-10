@@ -38,7 +38,7 @@ class MainActivity : BaseActivity() {
 
         viewModel = ViewModelProviders.of(this).get(MainViewModel::class.java)
 
-        setSupportActionBar(binding.appbar.toolbar)
+        setSupportActionBar(binding.appbar?.toolbar)
         supportActionBar?.title = getString(R.string.app_name)
 
         binding.drawerLayout.systemUiVisibility = (View.SYSTEM_UI_FLAG_LAYOUT_STABLE
@@ -51,7 +51,7 @@ class MainActivity : BaseActivity() {
     }
 
     private fun initBindings() {
-        binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
+        binding = DataBindingUtil.setContentView(this, R.layout.activity_main)!!
         navHeaderBinding = NavHeaderMainBinding.inflate(
                 layoutInflater,
                 binding.navView,
@@ -65,7 +65,7 @@ class MainActivity : BaseActivity() {
         val toggle = ActionBarDrawerToggle(
                 this,
                 binding.drawerLayout,
-                binding.appbar.toolbar,
+                binding.appbar?.toolbar,
                 0,
                 0)
 
@@ -96,19 +96,19 @@ class MainActivity : BaseActivity() {
         when (item.itemId) {
             R.id.nav_feed -> {
                 navController.openNewsFragment()
-                binding.appbar.toolbar.setTitle(R.string.app_name)
+                binding.appbar?.toolbar?.setTitle(R.string.app_name)
             }
             R.id.nav_bookmarks -> {
                 navController.openBookmarksFragment()
-                binding.appbar.toolbar.setTitle(R.string.nav_bookmarks)
+                binding.appbar?.toolbar?.setTitle(R.string.nav_bookmarks)
             }
             R.id.nav_about -> {
                 navController.openAboutFragment()
-                binding.appbar.toolbar.setTitle(R.string.nav_about)
+                binding.appbar?.toolbar?.setTitle(R.string.nav_about)
             }
-            R.id.nav_help_us -> {
+            R.id.nav_contribute -> {
                 navController.openHelpUsFragment()
-                binding.appbar.toolbar.setTitle(R.string.nav_help_us)
+                binding.appbar?.toolbar?.setTitle(R.string.nav_help_us)
             }
         }
 

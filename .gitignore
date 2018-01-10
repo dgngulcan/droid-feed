@@ -7,3 +7,4 @@
 /captures
 .externalNativeBuild
 api_key.properties
+/app/google-services.json
