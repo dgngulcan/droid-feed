@@ -16,7 +16,6 @@ import javax.inject.Singleton
 
 
 /**
- *
  * Created by Dogan Gulcan on 10/27/17.
  */
 @Singleton
@@ -139,8 +138,8 @@ class RssXmlParser @Inject constructor(private var dateTimeUtils: DateTimeUtils)
 
         try {
             content.contentImage = doc.select("img").first().attr("abs:src")
-        } catch (e: NullPointerException) {
-//            DebugUtils.showStackTrace(e, "Rss article does not have an image")
+            // content.content
+        } catch (ignored: NullPointerException) {
         }
 
         return content

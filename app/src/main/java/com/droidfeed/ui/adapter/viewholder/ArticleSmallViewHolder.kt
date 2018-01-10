@@ -12,7 +12,7 @@ import com.bumptech.glide.load.engine.GlideException
 import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.target.Target
 import com.droidfeed.data.model.Article
-import com.droidfeed.databinding.ListItemFeelSmallBinding
+import com.droidfeed.databinding.ListItemArticleSmallBinding
 import com.droidfeed.ui.module.feed.ArticleClickListener
 import com.droidfeed.util.ObservableColorMatrix
 import com.droidfeed.util.glide.GlideApp
@@ -20,10 +20,10 @@ import com.droidfeed.util.glide.GlideApp
 /**
  * Created by Dogan Gulcan on 11/2/17.
  */
-class ArticleSmallViewHolder(private val binding: ListItemFeelSmallBinding) : RecyclerView.ViewHolder(binding.root) {
+class ArticleSmallViewHolder(private val binding: ListItemArticleSmallBinding) : RecyclerView.ViewHolder(binding.root) {
 
-    fun bind(article: Article, onRssClickListener: ArticleClickListener) {
-        binding.aboutScreenClickListener = onRssClickListener
+    fun bind(article: Article, articleClickListener: ArticleClickListener) {
+        binding.articleClickListener = articleClickListener
         binding.rssItem = article
         binding.executePendingBindings()
 
@@ -60,7 +60,6 @@ class ArticleSmallViewHolder(private val binding: ListItemFeelSmallBinding) : Re
                 .centerCrop()
                 .into(binding.imgArticle)
     }
-
 
 
 }

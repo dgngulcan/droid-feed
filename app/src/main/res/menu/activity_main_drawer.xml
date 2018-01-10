@@ -17,9 +17,9 @@
             android:icon="@drawable/ic_info_black_24dp"
             android:title="@string/nav_about" />
         <item
-            android:id="@+id/nav_help_us"
+            android:id="@+id/nav_contribute"
             android:icon="@drawable/ic_human_greeting"
-            android:title="@string/nav_help_us" />
+            android:title="@string/nav_contribute" />
     </group>
 
 </menu>

@@ -39,5 +39,6 @@
     <string name="info_bookmark_removed">Bookmark is removed</string>
     <string name="undo">Undo</string>
     <string name="contribute_on_github">Contribute on Github</string>
+    <string name="nav_contribute">Contribute</string>
 
 </resources>

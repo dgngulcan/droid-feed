@@ -7,5 +7,4 @@
 /captures
 .externalNativeBuild
 api_key.properties
-app/src/debug/google-services.json
 app/google-services.json
