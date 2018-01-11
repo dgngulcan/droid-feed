@@ -46,7 +46,7 @@ class MainActivity : BaseActivity() {
                 or View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION)
 
         toolbar.getChildAt(0).setOnClickListener({
-           navController.scrollToTop()
+            navController.scrollToTop()
         })
     }
 
@@ -108,7 +108,7 @@ class MainActivity : BaseActivity() {
             }
             R.id.nav_contribute -> {
                 navController.openHelpUsFragment()
-                binding.appbar?.toolbar?.setTitle(R.string.nav_help_us)
+                binding.appbar?.toolbar?.setTitle(R.string.nav_contribute)
             }
         }
 
