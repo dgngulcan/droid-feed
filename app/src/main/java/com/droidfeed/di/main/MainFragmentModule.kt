@@ -2,7 +2,7 @@ package com.droidfeed.di.main
 
 import com.droidfeed.ui.module.about.AboutFragment
 import com.droidfeed.ui.module.feed.FeedFragment
-import com.droidfeed.ui.module.helpus.HelpUsFragment
+import com.droidfeed.ui.module.contribute.ContributeFragment
 import dagger.Module
 import dagger.android.ContributesAndroidInjector
 
@@ -19,6 +19,6 @@ abstract class MainFragmentModule {
     abstract fun contributeAboutFragment(): AboutFragment
 
     @ContributesAndroidInjector()
-    abstract fun contributeHelpUsFragment(): HelpUsFragment
+    abstract fun contributeHelpUsFragment(): ContributeFragment
 
 }

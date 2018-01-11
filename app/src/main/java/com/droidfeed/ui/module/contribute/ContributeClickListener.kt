@@ -1,9 +1,9 @@
-package com.droidfeed.ui.module.helpus
+package com.droidfeed.ui.module.contribute
 
 /**
  * Created by Dogan Gulcan on 12/16/17.
  */
-interface HelpUsClickListener {
+interface ContributeClickListener {
 
     fun onSendFeedbackClicked()
 

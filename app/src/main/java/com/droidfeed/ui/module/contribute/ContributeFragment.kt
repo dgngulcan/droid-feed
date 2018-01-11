@@ -1,4 +1,4 @@
-package com.droidfeed.ui.module.helpus
+package com.droidfeed.ui.module.contribute
 
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
@@ -6,28 +6,30 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.droidfeed.databinding.FragmentHelpusBinding
-import com.droidfeed.util.extention.startActivity
+import com.droidfeed.databinding.FragmentContributeBinding
+import com.droidfeed.util.CustomTab
 import com.nytclient.ui.common.BaseFragment
+import javax.inject.Inject
 
 /**
  * Created by Dogan Gulcan on 12/16/17.
  */
-class HelpUsFragment : BaseFragment() {
+class ContributeFragment : BaseFragment() {
 
-    private lateinit var binding: FragmentHelpusBinding
-    private lateinit var viewModel: HelpUsViewModel
+    private lateinit var binding: FragmentContributeBinding
+    private lateinit var viewModel: ContributeViewModel
+    @Inject lateinit var customTab: CustomTab
 
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         super.onCreateView(inflater, container, savedInstanceState)
-        binding = FragmentHelpusBinding.inflate(inflater, container, false)
+        binding = FragmentContributeBinding.inflate(inflater, container, false)
         return binding.root
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        viewModel = ViewModelProviders.of(this).get(HelpUsViewModel::class.java)
+        viewModel = ViewModelProviders.of(this).get(ContributeViewModel::class.java)
 
         binding.onClickListener = viewModel.onClickListener
 
@@ -36,7 +38,7 @@ class HelpUsFragment : BaseFragment() {
 
     private fun initObservables() {
         viewModel.contactDevEvent.observe(this, Observer {
-            activity?.let { it1 -> it?.startActivity(it1) }
+            it?.let { it1 -> customTab.showTab(it1) }
         })
 
     }

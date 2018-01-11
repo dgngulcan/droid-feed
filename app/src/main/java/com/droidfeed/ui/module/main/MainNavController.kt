@@ -6,7 +6,7 @@ import com.droidfeed.di.MainScope
 import com.droidfeed.ui.module.about.AboutFragment
 import com.droidfeed.ui.module.feed.FeedFragment
 import com.droidfeed.ui.module.feed.FeedType
-import com.droidfeed.ui.module.helpus.HelpUsFragment
+import com.droidfeed.ui.module.contribute.ContributeFragment
 import javax.inject.Inject
 
 /**
@@ -30,8 +30,8 @@ class MainNavController @Inject constructor(val activity: MainActivity) {
         AboutFragment()
     }
 
-    private val helpUsFragment: HelpUsFragment by lazy {
-        HelpUsFragment()
+    private val contribueFragment: ContributeFragment by lazy {
+        ContributeFragment()
     }
 
     fun openNewsFragment() {
@@ -47,7 +47,7 @@ class MainNavController @Inject constructor(val activity: MainActivity) {
     }
 
     fun openHelpUsFragment() {
-        changeFragment(helpUsFragment)
+        changeFragment(contribueFragment)
     }
 
     private fun changeFragment(fragment: Fragment) {

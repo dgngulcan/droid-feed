@@ -11,7 +11,7 @@
     <string name="nav_header_title">Android Studio</string>
     <string name="nav_header_subtitle">android.studio@android.com</string>
     <string name="nav_header_desc">Navigation header</string>
-    <string name="nav_help_us">Help Us</string>
+    <string name="nav_contribute">Contribute</string>
 
     <string name="share">Share</string>
     <string name="rate_app">Rate App</string>
@@ -34,11 +34,10 @@
     <string name="error_obtaining_feed">Couldn\'t retrieve the feed!</string>
 
     <string name="hello">Hello!</string>
-    <string name="help_us_desc">We created DroidFeed to help Android Developers to stay informed about the latest news, thoughts and ideas.\n\nWe would love to have your help to make this app better. We\'d super appreciate it if you let us know\n\n* other Android Development article sources\n* what you like/not like about the app\n* any features you want to see\n* bugs you\'ve encountered\n* any visual designers who can bringing this app\'s design to another level\n* anything else you\'d like us to know\n\nSay hi to us by clicking the button below. We can\'t wait to hear from you!\n\n- Dogan &amp; Anyi</string>
+    <string name="help_us_desc">Want to help spread Android development knowledge? Get involved by contributing to DroidFeed on GitHub or leaving a feedback. \n\nDroidFeed is an open source app that\'s made by developers for developers.\n\nJoin us to help Android Developers to stay informed about the latest news, thoughts, and ideas. We can\'t wait to hear from you!</string>
     <string name="send_feedback">Send Feedback</string>
     <string name="info_bookmark_removed">Bookmark is removed</string>
     <string name="undo">Undo</string>
     <string name="contribute_on_github">Contribute on Github</string>
-    <string name="nav_contribute">Contribute</string>
 
 </resources>

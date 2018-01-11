@@ -6,7 +6,7 @@
 
         <variable
             name="onClickListener"
-            type="com.droidfeed.ui.module.helpus.HelpUsClickListener" />
+            type="com.droidfeed.ui.module.contribute.ContributeClickListener" />
 
     </data>
 
@@ -50,7 +50,7 @@
                 android:layout_marginEnd="@dimen/spacing_xlarge"
                 android:onClick="@{()->onClickListener.onSendFeedbackClicked()}"
                 android:padding="@dimen/spacing_medium"
-                android:text="@string/send_feedback"
+                android:text="@string/contribute_on_github"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/textView" />
 
