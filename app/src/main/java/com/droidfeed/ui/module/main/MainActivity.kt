@@ -12,6 +12,7 @@ import android.view.View
 import com.droidfeed.R
 import com.droidfeed.databinding.ActivityMainBinding
 import com.droidfeed.databinding.NavHeaderMainBinding
+import com.droidfeed.ui.adapter.UiModelAdapter
 import com.nytclient.ui.common.BaseActivity
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.activity_main_app_bar.*
@@ -30,7 +31,7 @@ class MainActivity : BaseActivity() {
 
         initBindings()
         init()
-        initDrawer()
+        initNavigationDrawer()
         initObservers()
     }
 
@@ -60,8 +61,7 @@ class MainActivity : BaseActivity() {
         binding.navView.addHeaderView(navHeaderBinding.root)
     }
 
-
-    private fun initDrawer() {
+    private fun initNavigationDrawer() {
         val toggle = ActionBarDrawerToggle(
                 this,
                 binding.drawerLayout,
@@ -83,6 +83,12 @@ class MainActivity : BaseActivity() {
         navView.setNavigationItemSelectedListener(navigationListener)
         navView.setCheckedItem(R.id.nav_feed)
         navController.openNewsFragment()
+    }
+
+    private fun initFilterDrawer() {
+        val adapter = UiModelAdapter()
+        binding.filterRecycler.adapter = adapter
+
     }
 
     private fun initObservers() {

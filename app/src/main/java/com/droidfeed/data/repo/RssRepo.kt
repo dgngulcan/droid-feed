@@ -10,6 +10,7 @@ import com.droidfeed.data.api.ApiResponse
 import com.droidfeed.data.api.RssLoader
 import com.droidfeed.data.db.RssDao
 import com.droidfeed.data.model.Article
+import com.droidfeed.data.model.Source
 import com.droidfeed.util.DateTimeUtils
 import com.droidfeed.util.DebugUtils
 import org.jetbrains.anko.coroutines.experimental.bg
@@ -34,22 +35,22 @@ class RssRepo @Inject constructor(
         private val NETWORK_FETCH_DIMINISHING_IN_MILLIS = 100
     }
 
-    private fun getRssSourceList(): List<String> {
+    private fun getRssSourceList(): List<Source> {
+        // todo: move to db and make it live data
         return listOf(
-                "https://android.jlelse.eu/feed",
-                "https://proandroiddev.com/feed",
-                "https://medium.com/feed/google-developers",
-                "https://rss.simplecast.com/podcasts/3213/rss",
-                "http://androidbackstage.blogspot.com/feeds/posts/default?alt=rss", // droid snacks
-//                "https://www.youtube.com/feeds/videos.xml?channel_id=UCVHFbqXqoYvEWM1Ddxl0QDg", // android dev youtube channel
-                "http://fragmentedpodcast.com/feed"
+                Source("AndroidPub", "https://android.jlelse.eu/feed"),
+                Source("ProAndroidDev", "https://proandroiddev.com/feed"),
+                Source("Google Developers", "https://medium.com/feed/google-developers"),
+                Source("Android Snacks", "https://rss.simplecast.com/podcasts/3213/rss"),
+                Source("Android Developers Backstage", "http://androidbackstage.blogspot.com/feeds/posts/default?alt=rss"), // droid snacks
+                Source("Fragmented", "http://fragmentedpodcast.com/feed")
         )
     }
 
     fun getAllRss(): MediatorLiveData<Resource<List<Article>>> {
         val resources = MediatorLiveData<Resource<List<Article>>>()
 
-        getRssSourceList().map { getRssFeed(it) }
+        getRssSourceList().map { getRssFeed(it.url) }
                 .forEach {
                     resources.addSource(it,
                             { response ->
