@@ -7,6 +7,7 @@ import android.support.v7.widget.RecyclerView
 import android.view.ViewGroup
 import com.droidfeed.ui.adapter.diff.UiModelDiffCallback
 import com.droidfeed.ui.common.BaseUiModel
+import com.droidfeed.util.DebugUtils
 import kotlinx.coroutines.experimental.android.UI
 import kotlinx.coroutines.experimental.async
 import org.jetbrains.anko.coroutines.experimental.bg
@@ -34,13 +35,18 @@ class UiModelAdapter constructor(
 
     override fun getItemCount(): Int = uiModels.size
 
-    override fun getItemViewType(position: Int): Int {
-        return if (position in 0..(itemCount - 1) && itemCount > 0) {
-            uiModels[position]?.getViewType()
-        } else {
-            0
-        }
-    }
+    override fun getItemViewType(position: Int): Int =
+            try {
+                if (position in 0..(itemCount - 1) && itemCount > 0) {
+                    uiModels[position].getViewType()
+                } else {
+                    0
+                }
+            } catch (e: Exception) {
+                DebugUtils.showStackTrace(e)
+                0
+            }
+
 
     fun addUiModels(uiModels: Collection<BaseUiModelAlias>?) {
         uiModels?.let {
