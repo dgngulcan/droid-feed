@@ -5,7 +5,7 @@ ext {
     kotlinVersion = '1.2.10'
     archLifecycleVersion = '1.0.0'
     supportLibVersion = '27.0.2'
-    ankoVersion = '0.10.3'
+    ankoVersion = '0.10.4'
     constraintLayoutVersion = '1.0.2'
     glideVersion = '4.3.1'
     retrofitVersion = '2.3.0'

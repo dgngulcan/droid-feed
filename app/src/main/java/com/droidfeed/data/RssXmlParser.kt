@@ -29,7 +29,11 @@ class RssXmlParser @Inject constructor(private var dateTimeUtils: DateTimeUtils)
             val parser = Xml.newPullParser()
             parser.setFeature(XmlPullParser.FEATURE_PROCESS_NAMESPACES, false)
             parser.setInput(inputStream)
-            parser.nextTag()
+            try {
+                parser.nextTag()
+            } catch (e: Exception) {
+                DebugUtils.showStackTrace(e)
+            }
             return readFeed(parser)
         }
     }

@@ -3,6 +3,7 @@ package com.droidfeed.ui.adapter.diff
 import android.support.v7.util.DiffUtil
 import com.droidfeed.ui.adapter.BaseUiModelAlias
 
+
 /**
  * [DiffUtil.Callback] for UI models.
  *
@@ -28,4 +29,9 @@ class UiModelDiffCallback(
 
     override fun getNewListSize(): Int = newModels.size
 
+    override fun getChangePayload(oldItemPosition: Int, newItemPosition: Int): Any? {
+//        val oldItem = oldModels[oldItemPosition]
+        val newItem = newModels[newItemPosition]
+        return newItem.getData()
+    }
 }
