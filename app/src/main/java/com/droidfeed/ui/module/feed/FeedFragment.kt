@@ -24,6 +24,8 @@ import com.droidfeed.util.extention.isOnline
 import com.nytclient.ui.common.BaseFragment
 import org.jetbrains.anko.design.snackbar
 import javax.inject.Inject
+import com.droidfeed.R.id.recyclerView
+import android.os.Parcelable
 
 
 /**
@@ -49,7 +51,7 @@ class FeedFragment : BaseFragment() {
 
     private lateinit var binding: FragmentArticlesBinding
     private var viewModel: FeedViewModel? = null
-    private val adapter: UiModelAdapter by lazy { UiModelAdapter(dataInsertedCallback) }
+    private lateinit var adapter: UiModelAdapter
 
     @Inject lateinit var newsRepo: RssRepo
     @Inject lateinit var customTab: CustomTab
@@ -103,12 +105,13 @@ class FeedFragment : BaseFragment() {
     private fun init() {
         val layoutManager = activity?.let { WrapContentLinearLayoutManager(it) }
 
+        adapter = UiModelAdapter(dataInsertedCallback, layoutManager)
+
         binding.newsRecyclerView.layoutManager = layoutManager
 
         (binding.newsRecyclerView.itemAnimator as DefaultItemAnimator).supportsChangeAnimations = false
 
         binding.newsRecyclerView.swapAdapter(adapter, true)
-
         binding.swipeRefreshArticles.setOnRefreshListener {
             viewModel?.onRefreshArticles()
         }
@@ -119,7 +122,9 @@ class FeedFragment : BaseFragment() {
         DebugUtils.log("initDataObservables")
 
         viewModel?.rssUiModelData?.observe(this, Observer {
+
             adapter.addUiModels(it as Collection<BaseUiModelAlias>)
+
         })
 
         viewModel?.articleOpenDetail?.observe(this, Observer {
