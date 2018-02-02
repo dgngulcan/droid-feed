@@ -17,11 +17,18 @@ import com.nytclient.ui.common.BaseActivity
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.activity_main_app_bar.*
 import javax.inject.Inject
+import android.arch.lifecycle.ViewModelProvider
+import kotlinx.android.synthetic.main.activity_main.view.*
 
 
 class MainActivity : BaseActivity() {
 
-    @Inject lateinit var navController: MainNavController
+    @Inject
+    lateinit var navController: MainNavController
+
+    @Inject
+    lateinit var viewModelFactory: ViewModelProvider.Factory
+
     private lateinit var binding: ActivityMainBinding
     private lateinit var viewModel: MainViewModel
     private lateinit var navHeaderBinding: NavHeaderMainBinding
@@ -37,7 +44,9 @@ class MainActivity : BaseActivity() {
 
     private fun init() {
 
-        viewModel = ViewModelProviders.of(this).get(MainViewModel::class.java)
+        viewModel = ViewModelProviders
+                .of(this, viewModelFactory)
+                .get(MainViewModel::class.java)
 
         setSupportActionBar(binding.appbar?.toolbar)
         supportActionBar?.title = getString(R.string.app_name)
@@ -87,7 +96,7 @@ class MainActivity : BaseActivity() {
 
     private fun initFilterDrawer() {
         val adapter = UiModelAdapter()
-        binding.filterRecycler.adapter = adapter
+//        binding.filterView.filterView.adapter = adapter
 
     }
 

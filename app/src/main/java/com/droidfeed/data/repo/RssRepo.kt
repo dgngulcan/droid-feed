@@ -9,10 +9,12 @@ import com.droidfeed.data.Resource
 import com.droidfeed.data.api.ApiResponse
 import com.droidfeed.data.api.RssLoader
 import com.droidfeed.data.db.RssDao
+import com.droidfeed.data.db.SourceDao
 import com.droidfeed.data.model.Article
-import com.droidfeed.data.model.Source
 import com.droidfeed.util.DateTimeUtils
 import com.droidfeed.util.DebugUtils
+import kotlinx.coroutines.experimental.android.UI
+import kotlinx.coroutines.experimental.async
 import org.jetbrains.anko.coroutines.experimental.bg
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -24,40 +26,33 @@ import javax.inject.Singleton
  */
 @Singleton
 class RssRepo @Inject constructor(
-        val appContext: App,
-        val dateTimeUtils: DateTimeUtils,
-        val rssFeedProvider: RssLoader,
-        val rssDao: RssDao
+    val appContext: App,
+    val dateTimeUtils: DateTimeUtils,
+    val rssFeedProvider: RssLoader,
+    val rssDao: RssDao,
+    val sourceDao: SourceDao
 ) {
 
     companion object {
-        private val MAX_CACHE_ITEM_COUNT = 150
-        private val NETWORK_FETCH_DIMINISHING_IN_MILLIS = 100
-    }
-
-    private fun getRssSourceList(): List<Source> {
-        // todo: move to db and make it live data
-        return listOf(
-                Source("AndroidPub", "https://android.jlelse.eu/feed"),
-                Source("ProAndroidDev", "https://proandroiddev.com/feed"),
-                Source("Google Developers", "https://medium.com/feed/google-developers"),
-                Source("Android Snacks", "https://rss.simplecast.com/podcasts/3213/rss"),
-                Source("Android Developers Backstage", "http://androidbackstage.blogspot.com/feeds/posts/default?alt=rss"), // droid snacks
-                Source("Fragmented", "http://fragmentedpodcast.com/feed")
-        )
+        private const val MAX_CACHE_ITEM_COUNT = 150
+        private const val NETWORK_FETCH_DIMINISHING_IN_MILLIS = 100
     }
 
     fun getAllRss(): MediatorLiveData<Resource<List<Article>>> {
         val resources = MediatorLiveData<Resource<List<Article>>>()
 
-        getRssSourceList().map { getRssFeed(it.url) }
-                .forEach {
-                    resources.addSource(it,
-                            { response ->
-                                resources.value = response
-                            })
-                }
+        async(UI) {
+            val sources = bg { sourceDao.getSources() }
 
+            sources.await().value
+                ?.map { getRssFeed(it.url) }
+                ?.forEach {
+                    resources.addSource(it,
+                        { response ->
+                            resources.value = response
+                        })
+                }
+        }
         return resources
     }
 
@@ -67,7 +62,7 @@ class RssRepo @Inject constructor(
             override fun loadFromDb(): LiveData<List<Article>> = rssDao.getAllRss()
 
             override fun createCall(): LiveData<ApiResponse<ArrayList<Article>>> =
-                    rssFeedProvider.fetch(url)
+                rssFeedProvider.fetch(url)
 
             override fun saveCallResult(item: ArrayList<Article>) {
                 if (rssDao.getFeedItemCount() > MAX_CACHE_ITEM_COUNT) {
@@ -83,13 +78,12 @@ class RssRepo @Inject constructor(
 
                     return if (latestCreationDate.isNotBlank()) {
                         latestCreationDate.let {
-                            dateTimeUtils.getTimeStampFromDate(it)?.
-                                    let {
-                                        val currentMillis = System.currentTimeMillis()
-                                        val timeDifference = currentMillis - it
-                                        timeDifference > NETWORK_FETCH_DIMINISHING_IN_MILLIS
-                                                || timeDifference < 0
-                                    }
+                            dateTimeUtils.getTimeStampFromDate(it)?.let {
+                                val currentMillis = System.currentTimeMillis()
+                                val timeDifference = currentMillis - it
+                                timeDifference > NETWORK_FETCH_DIMINISHING_IN_MILLIS
+                                        || timeDifference < 0
+                            }
                         } != false
                     } else {
                         return true
@@ -111,9 +105,9 @@ class RssRepo @Inject constructor(
     }
 
     fun getBookmarkedArticles(): LiveData<Resource<List<Article>>> =
-            object : LocalBoundResource<List<Article>>() {
-                override fun loadFromDb(): LiveData<List<Article>> = rssDao.getBookmarkedArticles()
-            }.asLiveData()
+        object : LocalBoundResource<List<Article>>() {
+            override fun loadFromDb(): LiveData<List<Article>> = rssDao.getBookmarkedArticles()
+        }.asLiveData()
 
     fun updateArticle(article: Article) {
         bg {

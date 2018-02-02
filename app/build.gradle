@@ -62,7 +62,10 @@ android {
         javaMaxHeapSize "4g"
     }
 
-
+    sourceSets {
+        androidTest.assets.srcDirs +=
+                files("$projectDir/schemas".toString())
+    }
 }
 
 
@@ -93,9 +96,10 @@ dependencies {
 
     implementation "android.arch.lifecycle:runtime:$archLifecycleVersion"
     implementation "android.arch.lifecycle:extensions:$archLifecycleVersion"
-    implementation "android.arch.persistence.room:runtime:$archLifecycleVersion"
     kapt "android.arch.lifecycle:compiler:$archLifecycleVersion"
-    kapt "android.arch.persistence.room:compiler:$archLifecycleVersion"
+
+    implementation "android.arch.persistence.room:runtime:$archRoomVersion"
+    kapt "android.arch.persistence.room:compiler:$archRoomVersion"
 
     implementation "org.jetbrains.anko:anko-commons:$ankoVersion"
     implementation "org.jetbrains.anko:anko-design:$ankoVersion"
@@ -124,9 +128,15 @@ dependencies {
 
     implementation "org.jsoup:jsoup:$jSoupVersion"
 
+    debugImplementation 'com.amitshekhar.android:debug-db:1.0.2'
+
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'com.android.support.test:runner:1.0.1'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.1'
+    androidTestImplementation "android.arch.persistence.room:testing:$archRoomVersion"
+    testImplementation 'org.mockito:mockito-core:2.7.22'
+    androidTestImplementation 'org.mockito:mockito-android:2.7.22'
+
 }
 
 

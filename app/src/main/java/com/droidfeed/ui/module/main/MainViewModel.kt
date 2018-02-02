@@ -2,13 +2,15 @@ package com.droidfeed.ui.module.main
 
 import android.arch.lifecycle.MutableLiveData
 import com.droidfeed.R
+import com.droidfeed.data.db.SourceDao
 import com.droidfeed.util.extention.random
 import com.nytclient.ui.common.BaseViewModel
+import javax.inject.Inject
 
 /**
  * Created by Dogan Gulcan on 11/9/17.
  */
-class MainViewModel : BaseViewModel() {
+class MainViewModel @Inject constructor(val sourceDao: SourceDao) : BaseViewModel() {
 
     val navigationHeaderImage = MutableLiveData<Int>()
 
