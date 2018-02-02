@@ -1,3 +1,5 @@
+<img  src="/art/Screenshot 1_v4.png" height="420"/><img  src="/art/Screenshot 2_v4.png" height="420"/><img  src="/art/Screenshot 3_v4.png" height="420"/>
+
 # DroidFeed
 Curated feed for Android Developers!
 
