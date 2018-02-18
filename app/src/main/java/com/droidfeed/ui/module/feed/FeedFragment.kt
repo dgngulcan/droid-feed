@@ -12,13 +12,14 @@ import android.view.ViewGroup
 import com.droidfeed.R
 import com.droidfeed.data.model.Article
 import com.droidfeed.data.repo.RssRepo
-import com.droidfeed.data.repo.SourceRepo
 import com.droidfeed.databinding.FragmentArticlesBinding
 import com.droidfeed.ui.adapter.BaseUiModelAlias
 import com.droidfeed.ui.adapter.DataInsertedCallback
 import com.droidfeed.ui.adapter.UiModelAdapter
 import com.droidfeed.ui.common.WrapContentLinearLayoutManager
 import com.droidfeed.util.CustomTab
+import com.droidfeed.util.DebugUtils
+import com.droidfeed.util.NetworkUtils
 import com.droidfeed.util.extention.isOnline
 import com.nytclient.ui.common.BaseFragment
 import org.jetbrains.anko.design.snackbar
@@ -49,14 +50,10 @@ class FeedFragment : BaseFragment() {
 
     private lateinit var binding: FragmentArticlesBinding
     private var viewModel: FeedViewModel? = null
-    private val adapter: UiModelAdapter by lazy { UiModelAdapter(dataInsertedCallback) }
+    private lateinit var adapter: UiModelAdapter
 
-    @Inject
-    lateinit var rssRepo: RssRepo
-    @Inject
-    lateinit var sourceRepo: SourceRepo
-    @Inject
-    lateinit var customTab: CustomTab
+    @Inject lateinit var newsRepo: RssRepo
+    @Inject lateinit var customTab: CustomTab
     private val feedType by lazy {
         arguments?.getString(EXTRA_FEED_TYPE)?.let { FeedType.valueOf(it) }
     }
@@ -69,11 +66,9 @@ class FeedFragment : BaseFragment() {
         }
     }
 
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
+    override fun onCreateView(inflater: LayoutInflater,
+                              container: ViewGroup?,
+                              savedInstanceState: Bundle?): View? {
         super.onCreateView(inflater, container, savedInstanceState)
 
         binding = FragmentArticlesBinding.inflate(inflater, container, false)
@@ -85,28 +80,30 @@ class FeedFragment : BaseFragment() {
 
         init()
         if (viewModel == null) {
-            feedType?.let { feedType ->
-                val factory = FeedViewModel.Factory(rssRepo, sourceRepo, feedType)
+            feedType?.let {
+                val factory = FeedViewModel.Factory(newsRepo, it)
                 viewModel = ViewModelProviders
-                    .of(this, factory)
-                    .get(FeedViewModel::class.java)
+                        .of(this, factory)
+                        .get(FeedViewModel::class.java)
             }
         }
 
         binding.viewModel = viewModel
         binding.isEmptyBookmarked = isEmptyBookmarked
-        binding.isEmptyFeed = isEmptyFeed
 
         initDataObservables()
     }
 
     private fun init() {
         val layoutManager = activity?.let { WrapContentLinearLayoutManager(it) }
+        adapter = UiModelAdapter(dataInsertedCallback, layoutManager)
 
         binding.newsRecyclerView.layoutManager = layoutManager
-        (binding.newsRecyclerView.itemAnimator as DefaultItemAnimator)
-            .supportsChangeAnimations = false
+
+        (binding.newsRecyclerView.itemAnimator as DefaultItemAnimator).supportsChangeAnimations = false
+
         binding.newsRecyclerView.swapAdapter(adapter, true)
+
         binding.swipeRefreshArticles.setOnRefreshListener {
             viewModel?.onRefreshArticles()
         }
@@ -114,7 +111,6 @@ class FeedFragment : BaseFragment() {
     }
 
     private fun initDataObservables() {
-
         viewModel?.apply {
 
             noSourceSelected.observe(this@FeedFragment, Observer {
@@ -147,7 +143,6 @@ class FeedFragment : BaseFragment() {
                 })
             }
         }
-
     }
 
     private fun showBookmarkUndoSnackbar(article: Article?) {
@@ -169,7 +164,6 @@ class FeedFragment : BaseFragment() {
             snackbar(binding.root, snackBarText)
         }
     }
-
     internal fun scrollToTop() {
         binding.newsRecyclerView.smoothScrollToPosition(0)
     }

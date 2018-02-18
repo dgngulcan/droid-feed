@@ -18,24 +18,23 @@ import javax.inject.Singleton
 /**
  * Created by Dogan Gulcan on 10/27/17.
  */
+@Singleton
 class RssXmlParser @Inject constructor(private var dateTimeUtils: DateTimeUtils) {
 
-    @Throws(XmlPullParserException::class, IOException::class, AccessDeniedException::class)
+    @Throws(XmlPullParserException::class, IOException::class)
     fun parse(xml: String): ArrayList<Article> {
-
         val inputStream = StringReader(xml)
 
-        try {
-            inputStream.use {
-                val parser = Xml.newPullParser()
-                parser.setFeature(XmlPullParser.FEATURE_PROCESS_NAMESPACES, false)
-                parser.setInput(inputStream)
+        inputStream.use {
+            val parser = Xml.newPullParser()
+            parser.setFeature(XmlPullParser.FEATURE_PROCESS_NAMESPACES, false)
+            parser.setInput(inputStream)
+            try {
                 parser.nextTag()
-                return readFeed(parser)
+            } catch (e: Exception) {
+                DebugUtils.showStackTrace(e)
             }
-        } catch (e: Exception) {
-            DebugUtils.showStackTrace(e)
-            return ArrayList()
+            return readFeed(parser)
         }
     }
 
@@ -62,7 +61,7 @@ class RssXmlParser @Inject constructor(private var dateTimeUtils: DateTimeUtils)
     }
 
     private fun parseChannel(parser: XmlPullParser): ArrayList<Article> {
-        val rssChannel = Channel()
+        var rssChannel = Channel()
         val articles = ArrayList<Article>()
 
         while (parser.next() != XmlPullParser.END_TAG) {
