@@ -22,7 +22,7 @@ data class Source(
 ) : Diffable {
 
     @ColumnInfo(name = "is_active")
-    var isActive: Boolean = false
+    var isActive: Boolean = true
         set(value) {
             isEnabled.set(value)
             field = value

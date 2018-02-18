@@ -12,6 +12,7 @@ import android.view.ViewGroup
 import com.droidfeed.R
 import com.droidfeed.data.model.Article
 import com.droidfeed.data.repo.RssRepo
+import com.droidfeed.data.repo.SourceRepo
 import com.droidfeed.databinding.FragmentArticlesBinding
 import com.droidfeed.ui.adapter.BaseUiModelAlias
 import com.droidfeed.ui.adapter.DataInsertedCallback
@@ -52,8 +53,13 @@ class FeedFragment : BaseFragment() {
     private var viewModel: FeedViewModel? = null
     private lateinit var adapter: UiModelAdapter
 
-    @Inject lateinit var newsRepo: RssRepo
-    @Inject lateinit var customTab: CustomTab
+    @Inject
+    lateinit var rssRepo: RssRepo
+    @Inject
+    lateinit var sourceRepo: SourceRepo
+
+    @Inject
+    lateinit var customTab: CustomTab
     private val feedType by lazy {
         arguments?.getString(EXTRA_FEED_TYPE)?.let { FeedType.valueOf(it) }
     }
@@ -66,9 +72,11 @@ class FeedFragment : BaseFragment() {
         }
     }
 
-    override fun onCreateView(inflater: LayoutInflater,
-                              container: ViewGroup?,
-                              savedInstanceState: Bundle?): View? {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
         super.onCreateView(inflater, container, savedInstanceState)
 
         binding = FragmentArticlesBinding.inflate(inflater, container, false)
@@ -81,15 +89,16 @@ class FeedFragment : BaseFragment() {
         init()
         if (viewModel == null) {
             feedType?.let {
-                val factory = FeedViewModel.Factory(newsRepo, it)
+                val factory = FeedViewModel.Factory(rssRepo, sourceRepo, it)
                 viewModel = ViewModelProviders
-                        .of(this, factory)
-                        .get(FeedViewModel::class.java)
+                    .of(this, factory)
+                    .get(FeedViewModel::class.java)
             }
         }
 
         binding.viewModel = viewModel
         binding.isEmptyBookmarked = isEmptyBookmarked
+        binding.isEmptyFeed = isEmptyFeed
 
         initDataObservables()
     }
@@ -100,7 +109,8 @@ class FeedFragment : BaseFragment() {
 
         binding.newsRecyclerView.layoutManager = layoutManager
 
-        (binding.newsRecyclerView.itemAnimator as DefaultItemAnimator).supportsChangeAnimations = false
+        (binding.newsRecyclerView.itemAnimator as DefaultItemAnimator).supportsChangeAnimations =
+                false
 
         binding.newsRecyclerView.swapAdapter(adapter, true)
 
@@ -164,6 +174,7 @@ class FeedFragment : BaseFragment() {
             snackbar(binding.root, snackBarText)
         }
     }
+
     internal fun scrollToTop() {
         binding.newsRecyclerView.smoothScrollToPosition(0)
     }

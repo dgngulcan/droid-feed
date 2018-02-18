@@ -76,7 +76,7 @@ class FeedViewModel(
                 val articles = if (feedType == FeedType.ALL) {
                     filterActiveArticles(articleList)
                 } else {
-                    noBookmarkedArticle.postValue(articleList.isEmpty())
+                    noBookmarkedArticle.setValue(articleList.isEmpty())
                     articleList
                 }
 

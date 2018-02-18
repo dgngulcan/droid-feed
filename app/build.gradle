@@ -17,8 +17,8 @@ android {
         applicationId "com.droidfeed"
         minSdkVersion 21
         targetSdkVersion 27
-        versionCode 2
-        versionName "1.0.1"
+        versionCode 4
+        versionName "1.1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
 
         multiDexEnabled true
@@ -30,8 +30,6 @@ android {
                 arguments = ["room.schemaLocation": "$projectDir/schemas".toString()]
             }
         }
-
-
     }
 
     buildTypes {
@@ -78,7 +76,6 @@ dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation 'com.android.support.constraint:constraint-layout:1.0.2'
     kapt "com.android.databinding:compiler:$gradleBuildVersion"
-
 
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jre8:$kotlinVersion"
 
@@ -131,8 +128,6 @@ dependencies {
     androidTestImplementation "android.arch.persistence.room:testing:$archRoomVersion"
     testImplementation 'org.mockito:mockito-core:2.7.22'
     androidTestImplementation 'org.mockito:mockito-android:2.7.22'
-
 }
-
 
 apply plugin: 'com.google.gms.google-services'

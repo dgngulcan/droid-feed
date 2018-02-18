@@ -62,10 +62,6 @@ class DatabaseModule {
                         "https://rss.simplecast.com/podcasts/3213/rss"
                     ),
                     Source(
-                        "Android Developers Backstage",
-                        "http://androidbackstage.blogspot.com/feeds/posts/default?alt=rss"
-                    ), // droid snacks
-                    Source(
                         "Fragmented",
                         "http://fragmentedpodcast.com/feed"
                     )
