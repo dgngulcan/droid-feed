@@ -34,11 +34,6 @@ android {
 
     }
 
-    afterEvaluate {
-        tasks['kaptDebugKotlin'].dependsOn('transformDataBindingWithDataBindingMergeArtifactsForDebug')
-        tasks['kaptReleaseKotlin'].dependsOn('transformDataBindingWithDataBindingMergeArtifactsForRelease')
-    }
-
     buildTypes {
 
         debug {

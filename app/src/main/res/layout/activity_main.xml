@@ -29,14 +29,29 @@
             android:id="@+id/filterView"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
+            android:background="@color/darkGrey"
             android:layout_gravity="end"
             android:fitsSystemWindows="true">
 
-            <android.support.v7.widget.RecyclerView
-                android:id="@+id/filterRecycler"
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent" />
+                android:layout_height="match_parent"
+                android:orientation="vertical">
 
+                <TextView
+                    style="@style/GroupTitleStyle"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/spacing_xxlarge"
+                    android:text="@string/sources" />
+
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/filterRecycler"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" />
+
+
+            </LinearLayout>
         </android.support.design.widget.NavigationView>
 
     </android.support.v4.widget.DrawerLayout>

@@ -10,5 +10,6 @@
 
     <color name="navBarColor">#70000000</color>
     <color name="statusBarColor">#90000000</color>
+    <color name="darkThemeRippleColor">#90ffffff</color>
 
 </resources>

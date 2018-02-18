@@ -2,6 +2,7 @@ package com.droidfeed.data.repo
 
 import android.arch.lifecycle.LiveData
 import android.arch.lifecycle.MediatorLiveData
+import android.arch.lifecycle.Transformations
 import com.droidfeed.App
 import com.droidfeed.data.LocalBoundResource
 import com.droidfeed.data.NetworkBoundResource
@@ -9,12 +10,10 @@ import com.droidfeed.data.Resource
 import com.droidfeed.data.api.ApiResponse
 import com.droidfeed.data.api.RssLoader
 import com.droidfeed.data.db.RssDao
-import com.droidfeed.data.db.SourceDao
 import com.droidfeed.data.model.Article
+import com.droidfeed.data.model.Source
 import com.droidfeed.util.DateTimeUtils
 import com.droidfeed.util.DebugUtils
-import kotlinx.coroutines.experimental.android.UI
-import kotlinx.coroutines.experimental.async
 import org.jetbrains.anko.coroutines.experimental.bg
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -29,32 +28,30 @@ class RssRepo @Inject constructor(
     val appContext: App,
     val dateTimeUtils: DateTimeUtils,
     val rssFeedProvider: RssLoader,
-    val rssDao: RssDao,
-    val sourceDao: SourceDao
+    val rssDao: RssDao
 ) {
 
     companion object {
         private const val MAX_CACHE_ITEM_COUNT = 150
-        private const val NETWORK_FETCH_DIMINISHING_IN_MILLIS = 100
+        private const val NETWORK_FETCH_DIMINISHING_IN_MILLIS = 120000
     }
 
-    fun getAllRss(): MediatorLiveData<Resource<List<Article>>> {
-        val resources = MediatorLiveData<Resource<List<Article>>>()
+    private val articleResources = MediatorLiveData<Resource<List<Article>>>()
 
-        async(UI) {
-            val sources = bg { sourceDao.getSources() }
-
-            sources.await().value
-                ?.map { getRssFeed(it.url) }
-                ?.forEach {
-                    resources.addSource(it,
-                        { response ->
-                            resources.value = response
-                        })
-                }
-        }
-        return resources
-    }
+    fun getAllActiveRss(sources: LiveData<List<Source>>): LiveData<Resource<List<Article>>> =
+        Transformations.switchMap(
+            sources,
+            {
+                it.filter { it.isActive }
+                    .map { source -> getRssFeed(source.url) }
+                    .forEach {
+                        articleResources.addSource(it,
+                            {
+                                articleResources.value = it
+                            })
+                    }
+                articleResources as LiveData<Resource<List<Article>>>
+            })
 
     private fun getRssFeed(url: String): LiveData<Resource<List<Article>>> {
         return object : NetworkBoundResource<List<Article>, ArrayList<Article>>(appContext) {
@@ -94,7 +91,6 @@ class RssRepo @Inject constructor(
             }
 
             override fun onFetchFailed() {
-                // todo let user know!
                 DebugUtils.log("onFetchFailed")
             }
 
@@ -118,6 +114,12 @@ class RssRepo @Inject constructor(
     fun deleteArticle(article: Article) {
         bg {
             rssDao.deleteArticle(article)
+        }
+    }
+
+    fun clearSource(source: Source) {
+        bg {
+            rssDao.clearNonBookmarkedSource(source.name)
         }
     }
 

@@ -20,14 +20,14 @@ import org.jetbrains.anko.coroutines.experimental.bg
  */
 @Suppress("UNCHECKED_CAST")
 class UiModelAdapter constructor(
-        private val dataInsertedCallback: DataInsertedCallback? = null
+    private val dataInsertedCallback: DataInsertedCallback? = null
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
-    private val uiModels = ArrayList<BaseUiModelAlias>()
+    val uiModels = ArrayList<BaseUiModelAlias>()
     private val viewTypes = SparseArrayCompat<BaseUiModelAlias>()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder =
-            viewTypes.get(viewType).getViewHolder(parent) as RecyclerView.ViewHolder
+        viewTypes.get(viewType).getViewHolder(parent) as RecyclerView.ViewHolder
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         uiModels[position].bindViewHolder(holder)
@@ -36,16 +36,16 @@ class UiModelAdapter constructor(
     override fun getItemCount(): Int = uiModels.size
 
     override fun getItemViewType(position: Int): Int =
-            try {
-                if (position in 0..(itemCount - 1) && itemCount > 0) {
-                    uiModels[position].getViewType()
-                } else {
-                    0
-                }
-            } catch (e: Exception) {
-                DebugUtils.showStackTrace(e)
+        try {
+            if (position in 0..(itemCount - 1) && itemCount > 0) {
+                uiModels[position].getViewType()
+            } else {
                 0
             }
+        } catch (e: Exception) {
+            DebugUtils.showStackTrace(e)
+            0
+        }
 
 
     fun addUiModels(uiModels: Collection<BaseUiModelAlias>?) {
@@ -59,14 +59,25 @@ class UiModelAdapter constructor(
 
                     updateViewTypes(this@UiModelAdapter.uiModels)
 
-                    DiffUtil.calculateDiff(UiModelDiffCallback(oldItems, uiModels as List<BaseUiModelAlias>))
+                    DiffUtil.calculateDiff(
+                        UiModelDiffCallback(
+                            oldItems,
+                            uiModels as List<BaseUiModelAlias>
+                        )
+                    )
                 }
 
-                diffResult.await().dispatchUpdatesTo(this@UiModelAdapter)
-
-                dataInsertedCallback?.onUpdated()
+                diffResult.await().let {
+                    it.dispatchUpdatesTo(this@UiModelAdapter)
+                    dataInsertedCallback?.onUpdated()
+                }
             }
         }
+    }
+
+    fun setUiModels(newList: List<BaseUiModelAlias>) {
+
+
     }
 
     private fun updateViewTypes(uiModels: ArrayList<BaseUiModelAlias>) {
@@ -74,6 +85,7 @@ class UiModelAdapter constructor(
             viewTypes.put(it.getViewType(), it)
         }
     }
+
 
 }
 

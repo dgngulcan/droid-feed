@@ -2,9 +2,9 @@
  *  Build versions of the libraries used.
  */
 ext {
-    kotlinVersion = '1.2.20'
+    kotlinVersion = '1.2.21'
     archLifecycleVersion = '1.1.0'
-    archRoomVersion = '1.1.0-alpha1'
+    archRoomVersion = '1.0.0'
     supportLibVersion = '27.0.2'
     ankoVersion = '0.10.3'
     constraintLayoutVersion = '1.0.2'

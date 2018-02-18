@@ -5,6 +5,7 @@ import android.arch.lifecycle.MutableLiveData
 import android.content.Intent
 import com.droidfeed.BuildConfig
 import com.droidfeed.data.model.Licence
+import com.droidfeed.ui.adapter.UiModelClickListener
 import com.droidfeed.ui.adapter.model.LicenceUiModel
 import com.droidfeed.ui.common.SingleLiveEvent
 import com.droidfeed.util.contactIntent
@@ -46,7 +47,7 @@ class AboutViewModel : BaseViewModel() {
         }
     }
 
-    private val licenceClickListener = object : LicenceClickListener {
+    private val licenceClickListener = object : UiModelClickListener<Licence> {
         override fun onClick(licence: Licence) {
             if (userCanClick) openLinkEvent.setValue(licence.url)
         }

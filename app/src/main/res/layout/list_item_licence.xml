@@ -10,7 +10,7 @@
 
         <variable
             name="licenceClickListener"
-            type="com.droidfeed.ui.module.about.LicenceClickListener" />
+            type="com.droidfeed.ui.adapter.UiModelClickListener" />
 
     </data>
 

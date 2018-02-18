@@ -18,19 +18,24 @@ import javax.inject.Singleton
 /**
  * Created by Dogan Gulcan on 10/27/17.
  */
-@Singleton
 class RssXmlParser @Inject constructor(private var dateTimeUtils: DateTimeUtils) {
 
-    @Throws(XmlPullParserException::class, IOException::class)
+    @Throws(XmlPullParserException::class, IOException::class, AccessDeniedException::class)
     fun parse(xml: String): ArrayList<Article> {
+
         val inputStream = StringReader(xml)
 
-        inputStream.use {
-            val parser = Xml.newPullParser()
-            parser.setFeature(XmlPullParser.FEATURE_PROCESS_NAMESPACES, false)
-            parser.setInput(inputStream)
-            parser.nextTag()
-            return readFeed(parser)
+        try {
+            inputStream.use {
+                val parser = Xml.newPullParser()
+                parser.setFeature(XmlPullParser.FEATURE_PROCESS_NAMESPACES, false)
+                parser.setInput(inputStream)
+                parser.nextTag()
+                return readFeed(parser)
+            }
+        } catch (e: Exception) {
+            DebugUtils.showStackTrace(e)
+            return ArrayList()
         }
     }
 
@@ -57,7 +62,7 @@ class RssXmlParser @Inject constructor(private var dateTimeUtils: DateTimeUtils)
     }
 
     private fun parseChannel(parser: XmlPullParser): ArrayList<Article> {
-        var rssChannel = Channel()
+        val rssChannel = Channel()
         val articles = ArrayList<Article>()
 
         while (parser.next() != XmlPullParser.END_TAG) {
@@ -68,7 +73,8 @@ class RssXmlParser @Inject constructor(private var dateTimeUtils: DateTimeUtils)
             when (parser.name) {
                 "item" -> articles.add(readArticle(parser, rssChannel))
                 "title" -> rssChannel.title = parser.nextText()
-                "image" -> rssChannel = parseChannelImage(parser)
+                "atom:link" -> rssChannel.link = parseChannelLink(parser)
+                "image" -> rssChannel.imageUrl = parseChannelImage(parser)
                 else -> skip(parser)
             }
         }
@@ -76,21 +82,28 @@ class RssXmlParser @Inject constructor(private var dateTimeUtils: DateTimeUtils)
         return articles
     }
 
-    private fun parseChannelImage(parser: XmlPullParser): Channel {
-        val rssChannel = Channel()
+    private fun parseChannelLink(parser: XmlPullParser): String {
+        val link = parser.getAttributeValue(
+            XmlPullParser.NO_NAMESPACE,
+            "href"
+        )
+        parser.nextTag()
+        return link
+    }
+
+    private fun parseChannelImage(parser: XmlPullParser): String {
+        var channelImage = ""
         while (parser.next() != XmlPullParser.END_TAG) {
             if (parser.eventType != XmlPullParser.START_TAG) {
                 continue
             }
 
             when (parser.name) {
-                "url" -> rssChannel.imageUrl = parser.nextText()
-                "title" -> rssChannel.title = parser.nextText()
-                "link" -> rssChannel.link = parser.nextText()
+                "url" -> channelImage = parser.nextText()
                 else -> skip(parser)
             }
         }
-        return rssChannel
+        return channelImage
     }
 
     private fun readArticle(parser: XmlPullParser, rssChannel: Channel): Article {
@@ -120,7 +133,7 @@ class RssXmlParser @Inject constructor(private var dateTimeUtils: DateTimeUtils)
     }
 
     private fun getPublishDate(rawDate: String) =
-            dateTimeUtils.getTimeStampFromDate(rawDate) ?: 0
+        dateTimeUtils.getTimeStampFromDate(rawDate) ?: 0
 
     private fun getImageFromDescription(descText: String): String {
         val doc = Jsoup.parse(descText)
@@ -138,7 +151,6 @@ class RssXmlParser @Inject constructor(private var dateTimeUtils: DateTimeUtils)
 
         try {
             content.contentImage = doc.select("img").first().attr("abs:src")
-            // content.content
         } catch (ignored: NullPointerException) {
         }
 

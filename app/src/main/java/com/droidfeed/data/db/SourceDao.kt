@@ -11,13 +11,13 @@ import com.droidfeed.data.model.Source
 @Dao
 interface SourceDao {
 
+    @Query("SELECT * FROM $SOURCE_TABLE_NAME")
+    fun getSources(): LiveData<List<Source>>
+
     @Insert(onConflict = OnConflictStrategy.IGNORE)
-    fun insertSources(rssItem: List<Source>)
+    fun insertSources(source: List<Source>)
 
     @Update(onConflict = OnConflictStrategy.REPLACE)
     fun updateSource(source: Source)
-
-    @Query("SELECT * FROM $SOURCE_TABLE_NAME")
-    fun getSources(): LiveData<List<Source>>
 
 }

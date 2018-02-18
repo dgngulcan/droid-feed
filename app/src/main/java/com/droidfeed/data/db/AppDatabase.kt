@@ -9,7 +9,7 @@ import com.droidfeed.data.model.Source
 /**
  * Created by Dogan Gulcan on 9/30/17.
  */
-@Database(entities = [(Article::class), (Source::class)], version = 2)
+@Database(entities = [(Source::class), (Article::class)], version = 2)
 abstract class AppDatabase : RoomDatabase() {
 
     companion object {
@@ -21,7 +21,6 @@ abstract class AppDatabase : RoomDatabase() {
     abstract fun rssDao(): RssDao
 
     abstract fun sourceDao(): SourceDao
-
 
 }
 
