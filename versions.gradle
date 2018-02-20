@@ -4,7 +4,7 @@
 ext {
     kotlinVersion = '1.2.21'
     archLifecycleVersion = '1.1.0'
-    archRoomVersion = '1.0.0'
+    archRoomVersion = '1.1.0-alpha2'
     supportLibVersion = '27.0.2'
     ankoVersion = '0.10.4'
     constraintLayoutVersion = '1.0.2'

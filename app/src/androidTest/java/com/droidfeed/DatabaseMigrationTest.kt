@@ -1,6 +1,5 @@
 package com.droidfeed
 
-import android.arch.persistence.db.SupportSQLiteDatabase
 import android.arch.persistence.db.framework.FrameworkSQLiteOpenHelperFactory
 import android.arch.persistence.room.Room
 import android.arch.persistence.room.testing.MigrationTestHelper
@@ -23,7 +22,7 @@ import org.mockito.MockitoAnnotations
 @RunWith(AndroidJUnit4::class)
 class DatabaseMigrationTest {
 
-    private val testDbNam = "dfTest.db"
+    private val TEST_DB_NAME = "dfTest.db"
     private lateinit var mSqliteTestDbHelper: SqliteTestDbOpenHelper
 
     @get:Rule
@@ -38,13 +37,17 @@ class DatabaseMigrationTest {
         MockitoAnnotations.initMocks(this)
         mSqliteTestDbHelper = SqliteTestDbOpenHelper(
             InstrumentationRegistry.getTargetContext(),
-            testDbNam
+            TEST_DB_NAME
         )
+
+        val db = mSqliteTestDbHelper.writableDatabase
+        db.execSQL("CREATE TABLE IF NOT EXISTS `rss` (`bookmarked` INTEGER NOT NULL, `contentImage` TEXT NOT NULL, `link` TEXT NOT NULL, `pub_date` TEXT NOT NULL, `pub_date_timestamp` INTEGER NOT NULL, `title` TEXT NOT NULL, `author` TEXT NOT NULL, `content_raw` TEXT NOT NULL, `channel_title` TEXT NOT NULL, `channel_image_url` TEXT NOT NULL, `channel_link` TEXT NOT NULL, `content_image` TEXT NOT NULL, `content` TEXT NOT NULL, PRIMARY KEY(`link`))")
+        db.close()
     }
 
     @After
     fun tearDown() {
-        val db = mSqliteTestDbHelper.writableDatabase;
+        val db = mSqliteTestDbHelper.writableDatabase
         db.execSQL("DROP TABLE IF EXISTS source")
         db.close()
     }
@@ -54,49 +57,32 @@ class DatabaseMigrationTest {
     @UiThreadTest
     fun testMigrationFrom1To2_containsCorrectData() {
         // Create the database in version 1
-        var db = testHelper.createDatabase(testDbNam, 1)
-//        db.close()
-        assertEquals(1, 1)
+        var db = testHelper.createDatabase(TEST_DB_NAME, 1)
+        db.close()
+
 
         testHelper.runMigrationsAndValidate(
-            testDbNam,
+            TEST_DB_NAME,
             2,
             true,
             MIGRATION_1_2
         )
 
-        val sources = getMigratedRoomDatabase().sourceDao().getSources().blockingObserve()
+        val sources = getMigratedRoomDatabase().sourceDao().getSources()
 ////        verify(observer).onChanged(sources)
 //        sources?.let { assertEquals(true, sources.isNotEmpty()) }
 //        assertEquals(1, 1)
     }
 
 
-//    @Test
-//    @UiThreadTest
-//    fun testMig1To2() {
-//        val db = testHelper.createDatabase(testDbNam, 1)
-//
-//        // Re-open the database with version 2 and provide
-//        // MIGRATION_1_2 as the migration process.
-//        testHelper.runMigrationsAndValidate(testDbNam, 2, true, MIGRATION_1_2);
-////        val sources = getMigratedRoomDatabase().sourceDao().getSources().blockingObserve()
-////        sources?.let { assertEquals(true, sources.isNotEmpty()) }
-//
-//        // MigrationTestHelper automatically verifies the schema changes,
-//        // but you need to validate that the data was migrated properly.
-//    }
-
-
-
     private fun getMigratedRoomDatabase(): com.droidfeed.data.db.AppDatabase {
         val database = Room.databaseBuilder(
             InstrumentationRegistry.getTargetContext(),
-            com.droidfeed.data.db.AppDatabase::class.java!!, testDbNam
+            com.droidfeed.data.db.AppDatabase::class.java!!, TEST_DB_NAME
         )
             .addMigrations(MIGRATION_1_2)
             .build()
-        // close the database and release any stream resources when the test finishes
+
         testHelper.closeWhenFinished(database)
         return database
     }

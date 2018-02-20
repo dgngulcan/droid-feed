@@ -18,9 +18,8 @@ import com.droidfeed.ui.adapter.BaseUiModelAlias
 import com.droidfeed.ui.adapter.DataInsertedCallback
 import com.droidfeed.ui.adapter.UiModelAdapter
 import com.droidfeed.ui.common.WrapContentLinearLayoutManager
+import com.droidfeed.util.AnalyticsUtil
 import com.droidfeed.util.CustomTab
-import com.droidfeed.util.DebugUtils
-import com.droidfeed.util.NetworkUtils
 import com.droidfeed.util.extention.isOnline
 import com.nytclient.ui.common.BaseFragment
 import org.jetbrains.anko.design.snackbar
@@ -54,7 +53,11 @@ class FeedFragment : BaseFragment() {
     private lateinit var adapter: UiModelAdapter
 
     @Inject
+    lateinit var analyticsUtil: AnalyticsUtil
+
+    @Inject
     lateinit var rssRepo: RssRepo
+
     @Inject
     lateinit var sourceRepo: SourceRepo
 
@@ -89,7 +92,7 @@ class FeedFragment : BaseFragment() {
         init()
         if (viewModel == null) {
             feedType?.let {
-                val factory = FeedViewModel.Factory(rssRepo, sourceRepo, it)
+                val factory = FeedViewModel.Factory(rssRepo, sourceRepo, it,analyticsUtil)
                 viewModel = ViewModelProviders
                     .of(this, factory)
                     .get(FeedViewModel::class.java)

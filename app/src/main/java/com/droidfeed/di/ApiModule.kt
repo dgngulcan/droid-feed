@@ -1,6 +1,8 @@
 package com.droidfeed.di
 
+import com.droidfeed.App
 import com.droidfeed.BuildConfig
+import com.google.firebase.analytics.FirebaseAnalytics
 import dagger.Module
 import dagger.Provides
 import okhttp3.OkHttpClient
@@ -26,9 +28,13 @@ class ApiModule {
         }
 
         return OkHttpClient.Builder()
-                .addInterceptor(loggingInterceptor)
-                .build()
+            .addInterceptor(loggingInterceptor)
+            .build()
     }
+
+    @Singleton
+    @Provides
+    fun provideFirebaseAnalytics(app: App): FirebaseAnalytics = FirebaseAnalytics.getInstance(app)
 
 
 }

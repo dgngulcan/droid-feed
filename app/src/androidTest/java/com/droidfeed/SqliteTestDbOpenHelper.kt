@@ -11,7 +11,7 @@ internal class SqliteTestDbOpenHelper(context: Context, databaseName: String) :
     SQLiteOpenHelper(context, databaseName, null, DATABASE_VERSION) {
 
     override fun onCreate(db: SQLiteDatabase) {
-        db.execSQL("CREATE TABLE dummy ( userid INTEGER  PRIMARY KEY, username TEXT )")
+//        db.execSQL("CREATE TABLE dummy ( userid INTEGER  PRIMARY KEY, username TEXT )")
     }
 
     override fun onUpgrade(db: SQLiteDatabase, oldVersion: Int, newVersion: Int) {

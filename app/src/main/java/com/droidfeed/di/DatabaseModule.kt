@@ -26,16 +26,18 @@ class DatabaseModule {
             app,
             AppDatabase::class.java,
             AppDatabase.APP_DATABASE_NAME
-        ).addCallback(object : RoomDatabase.Callback() {
-            override fun onCreate(db: SupportSQLiteDatabase) {
-                insertSources(appDatabase)
-            }
 
-            override fun onOpen(db: SupportSQLiteDatabase) {
-                insertSources(appDatabase)
-            }
-        })
+        )
             .addMigrations(MIGRATION_1_2)
+            .addCallback(object : RoomDatabase.Callback() {
+                override fun onCreate(db: SupportSQLiteDatabase) {
+                    insertSources(appDatabase)
+                }
+
+                override fun onOpen(db: SupportSQLiteDatabase) {
+                    insertSources(appDatabase)
+                }
+            })
             .build()
 
         return appDatabase

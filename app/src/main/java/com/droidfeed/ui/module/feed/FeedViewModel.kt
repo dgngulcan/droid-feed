@@ -12,6 +12,7 @@ import com.droidfeed.data.repo.SourceRepo
 import com.droidfeed.ui.adapter.UiModelType
 import com.droidfeed.ui.adapter.model.ArticleUiModel
 import com.droidfeed.ui.common.SingleLiveEvent
+import com.droidfeed.util.AnalyticsUtil
 import com.nytclient.ui.common.BaseViewModel
 import kotlinx.coroutines.experimental.CommonPool
 import kotlinx.coroutines.experimental.launch
@@ -25,8 +26,9 @@ import kotlinx.coroutines.experimental.launch
 @Suppress("UNCHECKED_CAST")
 class FeedViewModel(
     private val rssRepo: RssRepo,
-    private val sourceRepo: SourceRepo,
-    private val feedType: FeedType
+    sourceRepo: SourceRepo,
+    private val feedType: FeedType,
+    private val analytics: AnalyticsUtil
 ) : BaseViewModel() {
 
     val isLoading = ObservableBoolean(true)
@@ -76,7 +78,7 @@ class FeedViewModel(
                 val articles = if (feedType == FeedType.ALL) {
                     filterActiveArticles(articleList)
                 } else {
-                    noBookmarkedArticle.setValue(articleList.isEmpty())
+                    noBookmarkedArticle.postValue(articleList.isEmpty())
                     articleList
                 }
 
@@ -138,11 +140,17 @@ class FeedViewModel(
     private val newsClickCallback by lazy {
         object : ArticleClickListener {
             override fun onItemClick(article: Article) {
-                if (userCanClick) articleOpenDetail.setValue(article)
+                if (userCanClick) {
+                    articleOpenDetail.setValue(article)
+                    analytics.logArticleClick()
+                }
             }
 
             override fun onShareClick(article: Article) {
-                if (userCanClick) articleShareEvent.setValue(article.getShareIntent())
+                if (userCanClick) {
+                    articleShareEvent.setValue(article.getShareIntent())
+                    analytics.logShare()
+                }
             }
 
             override fun onBookmarkClick(article: Article) {
@@ -161,6 +169,7 @@ class FeedViewModel(
             article.bookmarked = 1
         }
 
+        analytics.logBookmark(article.bookmarked == 1)
         rssRepo.updateArticle(article)
     }
 
@@ -170,10 +179,11 @@ class FeedViewModel(
     class Factory(
         private val newsRepo: RssRepo,
         private val sourceRepo: SourceRepo,
-        private val feedType: FeedType
+        private val feedType: FeedType,
+        private val analytics: AnalyticsUtil
     ) : ViewModelProvider.NewInstanceFactory() {
         override fun <T : ViewModel> create(modelClass: Class<T>) =
-            FeedViewModel(newsRepo, sourceRepo, feedType) as T
+            FeedViewModel(newsRepo, sourceRepo, feedType, analytics) as T
     }
 
     fun onRefreshArticles() {

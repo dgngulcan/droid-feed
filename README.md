@@ -1,5 +1,7 @@
+<img  src="/art/Screenshot 1_v4.png" height="420"/><img  src="/art/Screenshot 2_v4.png" height="420"/><img  src="/art/Screenshot 3_v4.png" height="420"/>
+
 # DroidFeed
-Curated feed for Android Developers!
+Curated news feed for Android Developers!
 
 Stay up to date with the latest Android Development news. Built for the Android developer community, DroidFeed presents news, articles, and podcasts about Android Development from a curated list of sources.
 
