@@ -39,5 +39,8 @@
     <string name="info_bookmark_removed">Bookmark is removed</string>
     <string name="undo">Undo</string>
     <string name="contribute_on_github">Contribute on Github</string>
+    <string name="filter">Filter</string>
+    <string name="sources">Sources</string>
+    <string name="empty_screen_feed">No sources selected. To select sources, swipe from the right to open filter drawer.</string>
 
 </resources>

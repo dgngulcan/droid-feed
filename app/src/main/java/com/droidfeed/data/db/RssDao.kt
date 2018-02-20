@@ -19,22 +19,35 @@ interface RssDao {
     @Delete
     fun deleteArticle(article: Article)
 
-    @Query("SELECT * FROM ${AppDatabase.RSS_TABLE_NAME} " +
-            "ORDER BY pub_date_timestamp DESC")
+    @Query(
+        "SELECT * FROM ${AppDatabase.RSS_TABLE_NAME} " +
+                "ORDER BY pub_date_timestamp DESC"
+    )
     fun getAllRss(): LiveData<List<Article>>
 
-    @Query("SELECT * FROM ${AppDatabase.RSS_TABLE_NAME} " +
-            "WHERE bookmarked = 1 " +
-            "ORDER BY pub_date_timestamp DESC")
+    @Query(
+        "SELECT * FROM ${AppDatabase.RSS_TABLE_NAME} " +
+                "WHERE bookmarked = 1 " +
+                "ORDER BY pub_date_timestamp DESC"
+    )
     fun getBookmarkedArticles(): LiveData<List<Article>>
 
     @Query("SELECT COUNT(*) FROM ${AppDatabase.RSS_TABLE_NAME}")
     fun getFeedItemCount(): Int
 
-    @Query("DELETE FROM ${AppDatabase.RSS_TABLE_NAME} " +
-            "WHERE bookmarked == 0 " +
-            "IN (SELECT pub_date_timestamp from ${AppDatabase.RSS_TABLE_NAME} " +
-            "ORDER BY pub_date_timestamp DESC LIMIT 10)")
+    @Query(
+        "DELETE FROM ${AppDatabase.RSS_TABLE_NAME} " +
+                "WHERE bookmarked = 0 " +
+                "IN (SELECT pub_date_timestamp from ${AppDatabase.RSS_TABLE_NAME} " +
+                "ORDER BY pub_date_timestamp DESC LIMIT 10)"
+    )
     fun trimCache()
+
+    @Query(
+        "DELETE FROM ${AppDatabase.RSS_TABLE_NAME} " +
+                "WHERE bookmarked == 0 " +
+                "AND channel_title LIKE :sourceUrl || '%'"
+    )
+    fun clearNonBookmarkedSource(sourceUrl: String)
 
 }

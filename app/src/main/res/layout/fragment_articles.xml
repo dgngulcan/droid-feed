@@ -11,6 +11,10 @@
             name="isEmptyBookmarked"
             type="android.databinding.ObservableBoolean" />
 
+        <variable
+            name="isEmptyFeed"
+            type="android.databinding.ObservableBoolean" />
+
     </data>
 
     <RelativeLayout
@@ -50,8 +54,26 @@
             android:layout_marginTop="140dp"
             android:drawablePadding="@dimen/spacing_large"
             android:drawableTop="@drawable/ic_state_empty_book"
+            android:gravity="center"
             android:padding="@dimen/spacing_medium"
             android:text="@string/empty_screen_bookmark"
+            android:textColor="@color/secondaryTextColor" />
+
+
+        <TextView
+            style="@style/Base.TextAppearance.AppCompat.Subhead"
+            visibilityToggle="@{isEmptyFeed}"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_marginLeft="32dp"
+            android:layout_marginRight="32dp"
+            android:layout_marginTop="140dp"
+            android:drawablePadding="@dimen/spacing_large"
+            android:drawableTop="@drawable/ic_state_empty_filter"
+            android:gravity="center"
+            android:padding="@dimen/spacing_medium"
+            android:text="@string/empty_screen_feed"
             android:textColor="@color/secondaryTextColor" />
 
     </RelativeLayout>

@@ -17,8 +17,8 @@ android {
         applicationId "com.droidfeed"
         minSdkVersion 21
         targetSdkVersion 27
-        versionCode 2
-        versionName "1.0.1"
+        versionCode 7
+        versionName "1.1.1"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
 
         multiDexEnabled true
@@ -30,13 +30,6 @@ android {
                 arguments = ["room.schemaLocation": "$projectDir/schemas".toString()]
             }
         }
-
-
-    }
-
-    afterEvaluate {
-        tasks['kaptDebugKotlin'].dependsOn('transformDataBindingWithDataBindingMergeArtifactsForDebug')
-        tasks['kaptReleaseKotlin'].dependsOn('transformDataBindingWithDataBindingMergeArtifactsForRelease')
     }
 
     buildTypes {
@@ -62,7 +55,10 @@ android {
         javaMaxHeapSize "4g"
     }
 
-
+    sourceSets {
+        androidTest.assets.srcDirs +=
+                files("$projectDir/schemas".toString())
+    }
 }
 
 
@@ -79,8 +75,6 @@ androidExtensions {
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation 'com.android.support.constraint:constraint-layout:1.0.2'
-    kapt "com.android.databinding:compiler:$gradleBuildVersion"
-
 
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jre8:$kotlinVersion"
 
@@ -93,9 +87,10 @@ dependencies {
 
     implementation "android.arch.lifecycle:runtime:$archLifecycleVersion"
     implementation "android.arch.lifecycle:extensions:$archLifecycleVersion"
-    implementation "android.arch.persistence.room:runtime:$archLifecycleVersion"
     kapt "android.arch.lifecycle:compiler:$archLifecycleVersion"
-    kapt "android.arch.persistence.room:compiler:$archLifecycleVersion"
+
+    implementation "android.arch.persistence.room:runtime:$archRoomVersion"
+    kapt "android.arch.persistence.room:compiler:$archRoomVersion"
 
     implementation "org.jetbrains.anko:anko-commons:$ankoVersion"
     implementation "org.jetbrains.anko:anko-design:$ankoVersion"
@@ -124,10 +119,14 @@ dependencies {
 
     implementation "org.jsoup:jsoup:$jSoupVersion"
 
+    debugImplementation 'com.amitshekhar.android:debug-db:1.0.2'
+
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'com.android.support.test:runner:1.0.1'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.1'
+    androidTestImplementation "android.arch.persistence.room:testing:$archRoomVersion"
+    testImplementation 'org.mockito:mockito-core:2.7.22'
+    androidTestImplementation 'org.mockito:mockito-android:2.7.22'
 }
-
 
 apply plugin: 'com.google.gms.google-services'

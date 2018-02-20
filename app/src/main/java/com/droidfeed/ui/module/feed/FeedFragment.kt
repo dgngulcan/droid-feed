@@ -12,20 +12,18 @@ import android.view.ViewGroup
 import com.droidfeed.R
 import com.droidfeed.data.model.Article
 import com.droidfeed.data.repo.RssRepo
+import com.droidfeed.data.repo.SourceRepo
 import com.droidfeed.databinding.FragmentArticlesBinding
 import com.droidfeed.ui.adapter.BaseUiModelAlias
 import com.droidfeed.ui.adapter.DataInsertedCallback
 import com.droidfeed.ui.adapter.UiModelAdapter
 import com.droidfeed.ui.common.WrapContentLinearLayoutManager
+import com.droidfeed.util.AnalyticsUtil
 import com.droidfeed.util.CustomTab
-import com.droidfeed.util.DebugUtils
-import com.droidfeed.util.NetworkUtils
 import com.droidfeed.util.extention.isOnline
 import com.nytclient.ui.common.BaseFragment
 import org.jetbrains.anko.design.snackbar
 import javax.inject.Inject
-import com.droidfeed.R.id.recyclerView
-import android.os.Parcelable
 
 
 /**
@@ -36,7 +34,7 @@ import android.os.Parcelable
 class FeedFragment : BaseFragment() {
 
     companion object {
-        private val EXTRA_FEED_TYPE = "feed_type"
+        private const val EXTRA_FEED_TYPE = "feed_type"
 
         fun getInstance(feedType: FeedType): FeedFragment {
             val feedFragment = FeedFragment()
@@ -47,36 +45,41 @@ class FeedFragment : BaseFragment() {
         }
     }
 
+    private val isEmptyFeed = ObservableBoolean(false)
     private val isEmptyBookmarked = ObservableBoolean(false)
 
     private lateinit var binding: FragmentArticlesBinding
     private var viewModel: FeedViewModel? = null
     private lateinit var adapter: UiModelAdapter
 
-    @Inject lateinit var newsRepo: RssRepo
-    @Inject lateinit var customTab: CustomTab
+    @Inject
+    lateinit var analyticsUtil: AnalyticsUtil
+
+    @Inject
+    lateinit var rssRepo: RssRepo
+
+    @Inject
+    lateinit var sourceRepo: SourceRepo
+
+    @Inject
+    lateinit var customTab: CustomTab
     private val feedType by lazy {
         arguments?.getString(EXTRA_FEED_TYPE)?.let { FeedType.valueOf(it) }
     }
 
     private val dataInsertedCallback = object : DataInsertedCallback {
         override fun onUpdated() {
-            if (feedType == FeedType.BOOKMARKS) {
-                isEmptyBookmarked.set(adapter.itemCount == 0)
-            }
             if (binding.swipeRefreshArticles.isRefreshing) {
                 binding.swipeRefreshArticles.isRefreshing = false
             }
         }
-
-        override fun onDataInserted(position: Int) {
-//            binding.newsRecyclerView.smoothScrollToPosition(position)
-        }
     }
 
-    override fun onCreateView(inflater: LayoutInflater,
-                              container: ViewGroup?,
-                              savedInstanceState: Bundle?): View? {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
         super.onCreateView(inflater, container, savedInstanceState)
 
         binding = FragmentArticlesBinding.inflate(inflater, container, false)
@@ -89,29 +92,31 @@ class FeedFragment : BaseFragment() {
         init()
         if (viewModel == null) {
             feedType?.let {
-                val factory = FeedViewModel.Factory(newsRepo, it)
+                val factory = FeedViewModel.Factory(rssRepo, sourceRepo, it,analyticsUtil)
                 viewModel = ViewModelProviders
-                        .of(this, factory)
-                        .get(FeedViewModel::class.java)
+                    .of(this, factory)
+                    .get(FeedViewModel::class.java)
             }
         }
 
         binding.viewModel = viewModel
         binding.isEmptyBookmarked = isEmptyBookmarked
+        binding.isEmptyFeed = isEmptyFeed
 
         initDataObservables()
     }
 
     private fun init() {
         val layoutManager = activity?.let { WrapContentLinearLayoutManager(it) }
-
         adapter = UiModelAdapter(dataInsertedCallback, layoutManager)
 
         binding.newsRecyclerView.layoutManager = layoutManager
 
-        (binding.newsRecyclerView.itemAnimator as DefaultItemAnimator).supportsChangeAnimations = false
+        (binding.newsRecyclerView.itemAnimator as DefaultItemAnimator).supportsChangeAnimations =
+                false
 
         binding.newsRecyclerView.swapAdapter(adapter, true)
+
         binding.swipeRefreshArticles.setOnRefreshListener {
             viewModel?.onRefreshArticles()
         }
@@ -119,47 +124,58 @@ class FeedFragment : BaseFragment() {
     }
 
     private fun initDataObservables() {
-        DebugUtils.log("initDataObservables")
+        viewModel?.apply {
 
-        viewModel?.rssUiModelData?.observe(this, Observer {
-
-            adapter.addUiModels(it as Collection<BaseUiModelAlias>)
-
-        })
-
-        viewModel?.articleOpenDetail?.observe(this, Observer {
-            it?.let {
-                customTab.showTab(it.link)
-            }
-        })
-
-        // bookmark undo snackbar after unbookmarking
-        if (feedType == FeedType.BOOKMARKS) {
-            viewModel?.articleOnUnBookmark?.observe(this, Observer { article ->
-                article?.let {
-                    snackbar(binding.root, R.string.info_bookmark_removed, R.string.undo, {
-                        viewModel!!.toggleBookmark(article)
-                    }).setActionTextColor(Color.YELLOW)
-                }
+            noSourceSelected.observe(this@FeedFragment, Observer {
+                it?.let { isEmptyFeed.set(it) }
             })
-        }
 
-        viewModel?.articleShareEvent?.observe(this, Observer {
-            startActivity(it)
-        })
+            noBookmarkedArticle.observe(this@FeedFragment, Observer {
+                it?.let { isEmptyBookmarked.set(it) }
+            })
 
-        viewModel?.loadingFailedEvent?.observe(this, Observer {
-            if (it == true) {
+            rssUiModelData.observe(this@FeedFragment, Observer {
+                adapter.addUiModels(it as Collection<BaseUiModelAlias>)
+            })
 
-                val snackBarText = if (activity?.isOnline() == true) {
-                    getString(R.string.error_obtaining_feed)
-                } else {
-                    getString(R.string.info_no_internet) + " " + getString(R.string.can_not_refresh)
-                }
-                snackbar(binding.root, snackBarText)
+            articleOpenDetail.observe(this@FeedFragment, Observer {
+                it?.let { customTab.showTab(it.link) }
+            })
+
+            articleShareEvent.observe(this@FeedFragment, Observer {
+                startActivity(it)
+            })
+
+            loadingFailedEvent.observe(this@FeedFragment, Observer {
+                showLoadFailedSnackbar(it)
+            })
+
+            if (feedType == FeedType.BOOKMARKS) {
+                articleOnUnBookmark.observe(this@FeedFragment, Observer { article ->
+                    showBookmarkUndoSnackbar(article)
+                })
             }
-        })
+        }
+    }
 
+    private fun showBookmarkUndoSnackbar(article: Article?) {
+        article?.let {
+            snackbar(binding.root, R.string.info_bookmark_removed, R.string.undo, {
+                viewModel!!.toggleBookmark(article)
+            }).setActionTextColor(Color.YELLOW)
+        }
+    }
+
+    private fun showLoadFailedSnackbar(it: Boolean?) {
+        if (it == true) {
+            val snackBarText = if (activity?.isOnline() == true) {
+                getString(R.string.error_obtaining_feed)
+            } else {
+                getString(R.string.info_no_internet) + " " +
+                        getString(R.string.can_not_refresh)
+            }
+            snackbar(binding.root, snackBarText)
+        }
     }
 
     internal fun scrollToTop() {

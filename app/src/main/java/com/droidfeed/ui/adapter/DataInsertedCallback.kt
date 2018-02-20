@@ -5,8 +5,6 @@ package com.droidfeed.ui.adapter
  */
 interface DataInsertedCallback {
 
-    fun onDataInserted(position: Int)
-
     fun onUpdated()
 
 }
