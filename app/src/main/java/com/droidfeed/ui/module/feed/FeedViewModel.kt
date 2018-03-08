@@ -13,7 +13,7 @@ import com.droidfeed.ui.adapter.UiModelType
 import com.droidfeed.ui.adapter.model.ArticleUiModel
 import com.droidfeed.ui.common.SingleLiveEvent
 import com.droidfeed.util.AnalyticsUtil
-import com.nytclient.ui.common.BaseViewModel
+import com.droidfeed.ui.common.BaseViewModel
 import kotlinx.coroutines.experimental.CommonPool
 import kotlinx.coroutines.experimental.launch
 

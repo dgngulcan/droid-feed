@@ -1,7 +1,7 @@
 package com.droidfeed.ui.module.contribute
 
 import com.droidfeed.ui.common.SingleLiveEvent
-import com.nytclient.ui.common.BaseViewModel
+import com.droidfeed.ui.common.BaseViewModel
 
 /**
  * Created by Dogan Gulcan on 12/16/17.

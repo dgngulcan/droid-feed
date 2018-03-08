@@ -11,7 +11,7 @@ import com.droidfeed.ui.common.SingleLiveEvent
 import com.droidfeed.util.contactIntent
 import com.droidfeed.util.rateAppIntent
 import com.droidfeed.util.shareIntent
-import com.nytclient.ui.common.BaseViewModel
+import com.droidfeed.ui.common.BaseViewModel
 import org.jetbrains.anko.coroutines.experimental.bg
 
 

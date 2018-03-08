@@ -18,10 +18,15 @@ class ContributeFragment : BaseFragment() {
 
     private lateinit var binding: FragmentContributeBinding
     private lateinit var viewModel: ContributeViewModel
-    @Inject lateinit var customTab: CustomTab
+    @Inject
+    lateinit var customTab: CustomTab
 
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
         super.onCreateView(inflater, container, savedInstanceState)
         binding = FragmentContributeBinding.inflate(inflater, container, false)
         return binding.root

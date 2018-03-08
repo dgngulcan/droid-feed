@@ -66,7 +66,7 @@ class MainActivity : BaseActivity() {
 
     private fun initBindings() {
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main)!!
-        binding.setLifecycleOwner(this)
+//        binding.setLifecycleOwner(this)
         navHeaderBinding = NavHeaderMainBinding.inflate(
             layoutInflater,
             binding.navView,

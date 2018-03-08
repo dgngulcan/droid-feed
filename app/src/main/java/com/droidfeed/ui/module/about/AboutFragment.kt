@@ -24,9 +24,14 @@ class AboutFragment : BaseFragment() {
     private lateinit var viewModel: AboutViewModel
 
     private val adapter: UiModelAdapter by lazy { UiModelAdapter() }
-    @Inject lateinit var customTab: CustomTab
+    @Inject
+    lateinit var customTab: CustomTab
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
         binding = FragmentAboutBinding.inflate(inflater, container, false)
         return binding.root
     }
