@@ -51,7 +51,7 @@ class ArticleSmallViewHolder(private val binding: ListItemArticleSmallBinding) :
                         saturation.addUpdateListener {
                             binding.imgArticle.colorFilter = ColorMatrixColorFilter(cm)
                         }
-                        saturation.duration = 2000L
+                        saturation.duration = 1000L
                         saturation.addListener(object : AnimatorListenerAdapter() {
                             override fun onAnimationEnd(animation: Animator) {
                                 binding.imgArticle.clearColorFilter()

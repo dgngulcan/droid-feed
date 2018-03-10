@@ -9,7 +9,7 @@ import com.droidfeed.data.db.MIGRATION_1_2
 import com.droidfeed.data.model.Source
 import dagger.Module
 import dagger.Provides
-import org.jetbrains.anko.coroutines.experimental.bg
+import kotlinx.coroutines.experimental.launch
 import javax.inject.Singleton
 
 /**
@@ -44,7 +44,7 @@ class DatabaseModule {
     }
 
     private fun insertSources(appDatabase: AppDatabase?) {
-        bg {
+        launch {
             appDatabase?.sourceDao()?.insertSources(
                 listOf(
                     Source(

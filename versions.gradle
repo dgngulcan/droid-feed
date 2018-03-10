@@ -3,6 +3,7 @@
  */
 ext {
     kotlinVersion = '1.2.21'
+    kotlinCoroutinesVersion = '0.22.5'
     androidKtx = '0.2'
     archLifecycleVersion = '1.1.0'
     archRoomVersion = '1.1.0-alpha3'
