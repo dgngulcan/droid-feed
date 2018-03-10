@@ -20,8 +20,8 @@ import com.droidfeed.ui.adapter.UiModelAdapter
 import com.droidfeed.ui.common.WrapContentLinearLayoutManager
 import com.droidfeed.util.AnalyticsUtil
 import com.droidfeed.util.CustomTab
+import com.droidfeed.ui.common.BaseFragment
 import com.droidfeed.util.extention.isOnline
-import com.nytclient.ui.common.BaseFragment
 import org.jetbrains.anko.design.snackbar
 import javax.inject.Inject
 

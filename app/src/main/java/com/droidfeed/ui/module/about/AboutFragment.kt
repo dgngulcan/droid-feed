@@ -10,9 +10,9 @@ import android.view.ViewGroup
 import com.droidfeed.databinding.FragmentAboutBinding
 import com.droidfeed.ui.adapter.BaseUiModelAlias
 import com.droidfeed.ui.adapter.UiModelAdapter
+import com.droidfeed.ui.common.BaseFragment
 import com.droidfeed.util.CustomTab
 import com.droidfeed.util.extention.startActivity
-import com.nytclient.ui.common.BaseFragment
 import javax.inject.Inject
 
 /**

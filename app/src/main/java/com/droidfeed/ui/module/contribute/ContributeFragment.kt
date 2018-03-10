@@ -7,8 +7,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.droidfeed.databinding.FragmentContributeBinding
+import com.droidfeed.ui.common.BaseFragment
 import com.droidfeed.util.CustomTab
-import com.nytclient.ui.common.BaseFragment
 import javax.inject.Inject
 
 /**

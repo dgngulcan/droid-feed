@@ -19,7 +19,7 @@ import com.droidfeed.databinding.ActivityMainBinding
 import com.droidfeed.databinding.NavHeaderMainBinding
 import com.droidfeed.ui.adapter.BaseUiModelAlias
 import com.droidfeed.ui.adapter.UiModelAdapter
-import com.nytclient.ui.common.BaseActivity
+import com.droidfeed.ui.common.BaseActivity
 import kotlinx.android.synthetic.main.activity_main_app_bar.*
 import javax.inject.Inject
 
