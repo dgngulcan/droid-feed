@@ -12,10 +12,10 @@ import java.util.*
  * Created by Dogan Gulcan on 11/8/17.
  */
 
-val Int.asPx: Int
+val Int.toPx: Int
     get() = (this * Resources.getSystem().displayMetrics.density).toInt()
 
-val Int.asDp: Int
+val Int.toDp: Int
     get() = (this / Resources.getSystem().displayMetrics.density).toInt()
 
 fun Context.isOnline(): Boolean {

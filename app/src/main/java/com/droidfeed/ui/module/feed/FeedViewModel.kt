@@ -95,7 +95,6 @@ class FeedViewModel(
         return result
     }
 
-
     private fun generateUiModel(article: Article, counter: Int): ArticleUiModel {
         article.layoutType = if (counter % 5 == 0 && article.image.isNotBlank()) {
             UiModelType.ARTICLE_LARGE

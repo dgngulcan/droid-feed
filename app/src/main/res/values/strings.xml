@@ -42,5 +42,6 @@
     <string name="filter">Filter</string>
     <string name="sources">Sources</string>
     <string name="empty_screen_feed">No sources selected. To select sources, swipe from the right to open filter drawer.</string>
+    <string name="libraries">Libraries</string>
 
 </resources>

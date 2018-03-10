@@ -64,6 +64,14 @@ class DatabaseModule {
                         "https://rss.simplecast.com/podcasts/3213/rss"
                     ),
                     Source(
+                        "AndroidDev",
+                        "http://twitrss.me/twitter_user_to_rss/?user=AndroidDev"
+                    ),
+                    Source(
+                        "Android Developers Blog",
+                        "https://www.blogger.com/feeds/6755709643044947179/posts/default?alt=rss&max-results=25"
+                    ),
+                    Source(
                         "Fragmented",
                         "http://fragmentedpodcast.com/feed"
                     )
