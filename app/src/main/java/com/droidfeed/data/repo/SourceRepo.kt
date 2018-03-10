@@ -2,7 +2,7 @@ package com.droidfeed.data.repo
 
 import com.droidfeed.data.db.SourceDao
 import com.droidfeed.data.model.Source
-import org.jetbrains.anko.coroutines.experimental.bg
+import kotlinx.coroutines.experimental.launch
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -17,7 +17,7 @@ class SourceRepo @Inject constructor(
     val sources by lazy { sourceDao.getSources() }
 
     fun updateSource(source: Source) {
-        bg {
+        launch {
             sourceDao.updateSource(source)
         }
     }

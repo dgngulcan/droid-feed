@@ -10,7 +10,7 @@ import com.droidfeed.data.repo.SourceRepo
 import com.droidfeed.ui.adapter.UiModelClickListener
 import com.droidfeed.ui.adapter.model.SourceUiModel
 import com.droidfeed.util.extention.random
-import com.nytclient.ui.common.BaseViewModel
+import com.droidfeed.ui.common.BaseViewModel
 import javax.inject.Inject
 
 /**

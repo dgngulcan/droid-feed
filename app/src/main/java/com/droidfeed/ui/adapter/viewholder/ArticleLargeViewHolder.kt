@@ -14,8 +14,6 @@ import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.target.Target
 import com.droidfeed.data.model.Article
 import com.droidfeed.databinding.ListItemArticleLargeBinding
-import com.droidfeed.databinding.ListItemArticleSmallBinding
-import com.droidfeed.ui.adapter.UiModelType
 import com.droidfeed.ui.module.feed.ArticleClickListener
 import com.droidfeed.util.ObservableColorMatrix
 import com.droidfeed.util.glide.GlideApp
@@ -34,37 +32,49 @@ class ArticleLargeViewHolder(val binding: ViewDataBinding) : RecyclerView.ViewHo
             binding.executePendingBindings()
 
             GlideApp.with(binding.root.context)
-                    .load(article.image)
-                    .listener(object : RequestListener<Drawable> {
-                        override fun onResourceReady(resource: Drawable?, model: Any?, target: Target<Drawable>?, dataSource: DataSource?, isFirstResource: Boolean): Boolean {
-                            if (!article.hasFadedIn) {
+                .load(article.image)
+                .listener(object : RequestListener<Drawable> {
+                    override fun onResourceReady(
+                        resource: Drawable?,
+                        model: Any?,
+                        target: Target<Drawable>?,
+                        dataSource: DataSource?,
+                        isFirstResource: Boolean
+                    ): Boolean {
+                        if (!article.hasFadedIn) {
 
-                                binding.imgArticle.setHasTransientState(true)
-                                val cm = ObservableColorMatrix()
-                                val saturation = ObjectAnimator.ofFloat(
-                                        cm, ObservableColorMatrix.SATURATION, 0f, 1f)
-                                saturation.addUpdateListener {
-                                    binding.imgArticle.colorFilter = ColorMatrixColorFilter(cm)
-                                }
-                                saturation.duration = 2000L
-                                saturation.addListener(object : AnimatorListenerAdapter() {
-                                    override fun onAnimationEnd(animation: Animator) {
-                                        binding.imgArticle.clearColorFilter()
-                                        binding.imgArticle.setHasTransientState(false)
-                                    }
-                                })
-                                saturation.start()
-                                article.hasFadedIn = true
+                            binding.imgArticle.setHasTransientState(true)
+                            val cm = ObservableColorMatrix()
+                            val saturation = ObjectAnimator.ofFloat(
+                                cm, ObservableColorMatrix.SATURATION, 0f, 1f
+                            )
+                            saturation.addUpdateListener {
+                                binding.imgArticle.colorFilter = ColorMatrixColorFilter(cm)
                             }
-                            return false
+                            saturation.duration = 2000L
+                            saturation.addListener(object : AnimatorListenerAdapter() {
+                                override fun onAnimationEnd(animation: Animator) {
+                                    binding.imgArticle.clearColorFilter()
+                                    binding.imgArticle.setHasTransientState(false)
+                                }
+                            })
+                            saturation.start()
+                            article.hasFadedIn = true
                         }
+                        return false
+                    }
 
-                        override fun onLoadFailed(e: GlideException?, model: Any?, target: Target<Drawable>?, isFirstResource: Boolean): Boolean =//                        binding.imgArticle.toggleVisibility(false)
-                                false
-                    })
-                    .diskCacheStrategy(DiskCacheStrategy.DATA)
-                    .centerCrop()
-                    .into(binding.imgArticle)
+                    override fun onLoadFailed(
+                        e: GlideException?,
+                        model: Any?,
+                        target: Target<Drawable>?,
+                        isFirstResource: Boolean
+                    ): Boolean =//                        binding.imgArticle.toggleVisibility(false)
+                        false
+                })
+                .diskCacheStrategy(DiskCacheStrategy.DATA)
+                .centerCrop()
+                .into(binding.imgArticle)
         }
 
         if (binding is ListItemArticleLargeBinding) {
@@ -74,37 +84,49 @@ class ArticleLargeViewHolder(val binding: ViewDataBinding) : RecyclerView.ViewHo
             binding.executePendingBindings()
 
             GlideApp.with(binding.root.context)
-                    .load(article.image)
-                    .listener(object : RequestListener<Drawable> {
-                        override fun onResourceReady(resource: Drawable?, model: Any?, target: Target<Drawable>?, dataSource: DataSource?, isFirstResource: Boolean): Boolean {
-                            if (!article.hasFadedIn) {
+                .load(article.image)
+                .listener(object : RequestListener<Drawable> {
+                    override fun onResourceReady(
+                        resource: Drawable?,
+                        model: Any?,
+                        target: Target<Drawable>?,
+                        dataSource: DataSource?,
+                        isFirstResource: Boolean
+                    ): Boolean {
+                        if (!article.hasFadedIn) {
 
-                                binding.imgArticle.setHasTransientState(true)
-                                val cm = ObservableColorMatrix()
-                                val saturation = ObjectAnimator.ofFloat(
-                                        cm, ObservableColorMatrix.SATURATION, 0f, 1f)
-                                saturation.addUpdateListener {
-                                    binding.imgArticle.colorFilter = ColorMatrixColorFilter(cm)
-                                }
-                                saturation.duration = 2000L
-                                saturation.addListener(object : AnimatorListenerAdapter() {
-                                    override fun onAnimationEnd(animation: Animator) {
-                                        binding.imgArticle.clearColorFilter()
-                                        binding.imgArticle.setHasTransientState(false)
-                                    }
-                                })
-                                saturation.start()
-                                article.hasFadedIn = true
+                            binding.imgArticle.setHasTransientState(true)
+                            val cm = ObservableColorMatrix()
+                            val saturation = ObjectAnimator.ofFloat(
+                                cm, ObservableColorMatrix.SATURATION, 0f, 1f
+                            )
+                            saturation.addUpdateListener {
+                                binding.imgArticle.colorFilter = ColorMatrixColorFilter(cm)
                             }
-                            return false
+                            saturation.duration = 2000L
+                            saturation.addListener(object : AnimatorListenerAdapter() {
+                                override fun onAnimationEnd(animation: Animator) {
+                                    binding.imgArticle.clearColorFilter()
+                                    binding.imgArticle.setHasTransientState(false)
+                                }
+                            })
+                            saturation.start()
+                            article.hasFadedIn = true
                         }
+                        return false
+                    }
 
-                        override fun onLoadFailed(e: GlideException?, model: Any?, target: Target<Drawable>?, isFirstResource: Boolean): Boolean =//                        binding.imgArticle.toggleVisibility(false)
-                                false
-                    })
-                    .diskCacheStrategy(DiskCacheStrategy.DATA)
-                    .centerCrop()
-                    .into(binding.imgArticle)
+                    override fun onLoadFailed(
+                        e: GlideException?,
+                        model: Any?,
+                        target: Target<Drawable>?,
+                        isFirstResource: Boolean
+                    ): Boolean =//                        binding.imgArticle.toggleVisibility(false)
+                        false
+                })
+                .diskCacheStrategy(DiskCacheStrategy.DATA)
+                .centerCrop()
+                .into(binding.imgArticle)
         }
     }
 

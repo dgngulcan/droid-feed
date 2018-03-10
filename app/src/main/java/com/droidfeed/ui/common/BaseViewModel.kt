@@ -1,4 +1,4 @@
-package com.nytclient.ui.common
+package com.droidfeed.ui.common
 
 import android.arch.lifecycle.ViewModel
 import android.os.SystemClock

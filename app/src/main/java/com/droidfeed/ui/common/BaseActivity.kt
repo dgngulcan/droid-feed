@@ -1,4 +1,4 @@
-package com.nytclient.ui.common
+package com.droidfeed.ui.common
 
 import android.annotation.SuppressLint
 import android.os.Bundle

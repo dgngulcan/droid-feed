@@ -19,7 +19,7 @@ import com.droidfeed.databinding.ActivityMainBinding
 import com.droidfeed.databinding.NavHeaderMainBinding
 import com.droidfeed.ui.adapter.BaseUiModelAlias
 import com.droidfeed.ui.adapter.UiModelAdapter
-import com.nytclient.ui.common.BaseActivity
+import com.droidfeed.ui.common.BaseActivity
 import kotlinx.android.synthetic.main.activity_main_app_bar.*
 import javax.inject.Inject
 
@@ -66,7 +66,7 @@ class MainActivity : BaseActivity() {
 
     private fun initBindings() {
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main)!!
-        binding.setLifecycleOwner(this)
+//        binding.setLifecycleOwner(this)
         navHeaderBinding = NavHeaderMainBinding.inflate(
             layoutInflater,
             binding.navView,

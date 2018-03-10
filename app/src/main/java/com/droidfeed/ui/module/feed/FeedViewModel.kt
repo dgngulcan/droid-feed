@@ -13,7 +13,7 @@ import com.droidfeed.ui.adapter.UiModelType
 import com.droidfeed.ui.adapter.model.ArticleUiModel
 import com.droidfeed.ui.common.SingleLiveEvent
 import com.droidfeed.util.AnalyticsUtil
-import com.nytclient.ui.common.BaseViewModel
+import com.droidfeed.ui.common.BaseViewModel
 import kotlinx.coroutines.experimental.CommonPool
 import kotlinx.coroutines.experimental.launch
 
@@ -94,7 +94,6 @@ class FeedViewModel(
 
         return result
     }
-
 
     private fun generateUiModel(article: Article, counter: Int): ArticleUiModel {
         article.layoutType = if (counter % 5 == 0 && article.image.isNotBlank()) {

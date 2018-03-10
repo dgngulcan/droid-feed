@@ -14,7 +14,7 @@ import com.droidfeed.data.model.Article
 import com.droidfeed.data.model.Source
 import com.droidfeed.util.DateTimeUtils
 import com.droidfeed.util.DebugUtils
-import org.jetbrains.anko.coroutines.experimental.bg
+import kotlinx.coroutines.experimental.launch
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -106,19 +106,19 @@ class RssRepo @Inject constructor(
         }.asLiveData()
 
     fun updateArticle(article: Article) {
-        bg {
+        launch {
             rssDao.updateArticle(article)
         }
     }
 
     fun deleteArticle(article: Article) {
-        bg {
+        launch {
             rssDao.deleteArticle(article)
         }
     }
 
     fun clearSource(source: Source) {
-        bg {
+        launch {
             rssDao.clearNonBookmarkedSource(source.name)
         }
     }

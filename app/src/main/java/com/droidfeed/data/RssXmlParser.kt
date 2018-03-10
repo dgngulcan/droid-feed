@@ -11,6 +11,7 @@ import org.xmlpull.v1.XmlPullParser
 import org.xmlpull.v1.XmlPullParserException
 import java.io.IOException
 import java.io.StringReader
+import java.net.URLDecoder
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -61,7 +62,7 @@ class RssXmlParser @Inject constructor(private var dateTimeUtils: DateTimeUtils)
     }
 
     private fun parseChannel(parser: XmlPullParser): ArrayList<Article> {
-        var rssChannel = Channel()
+        val rssChannel = Channel()
         val articles = ArrayList<Article>()
 
         while (parser.next() != XmlPullParser.END_TAG) {
@@ -149,7 +150,20 @@ class RssXmlParser @Inject constructor(private var dateTimeUtils: DateTimeUtils)
         val content = Content()
 
         try {
-            content.contentImage = doc.select("img").first().attr("abs:src")
+            val frame = doc.select("iframe")?.first()?.toString()
+
+            content.contentImage =
+                    if (frame != null && !frame.isBlank() && frame.contains("image=")) {
+                        val subFrame = frame.indexOf("image=") + 6
+                        URLDecoder.decode(
+                            frame.subSequence(subFrame, frame.indexOf("&", subFrame))
+                                .toString()
+                        )
+
+                    } else {
+                        doc.select("img").first().attr("abs:src")
+                    }
+
         } catch (ignored: NullPointerException) {
         }
 
