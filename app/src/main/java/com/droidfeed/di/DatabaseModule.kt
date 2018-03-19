@@ -18,15 +18,14 @@ import javax.inject.Singleton
 @Module
 class DatabaseModule {
 
-    //    @Singleton
     @Provides
+    @Singleton
     fun providesAppDatabase(app: App): AppDatabase {
         var appDatabase: AppDatabase? = null
         appDatabase = Room.databaseBuilder(
             app,
             AppDatabase::class.java,
             AppDatabase.APP_DATABASE_NAME
-
         )
             .addMigrations(MIGRATION_1_2)
             .addCallback(object : RoomDatabase.Callback() {
@@ -43,6 +42,9 @@ class DatabaseModule {
         return appDatabase
     }
 
+    /**
+     * Inserts default sources to the database.
+     */
     private fun insertSources(appDatabase: AppDatabase?) {
         launch {
             appDatabase?.sourceDao()?.insertSources(
@@ -80,12 +82,12 @@ class DatabaseModule {
         }
     }
 
-    @Singleton
     @Provides
+    @Singleton
     fun providesRssDao(database: AppDatabase) = database.rssDao()
 
-    @Singleton
     @Provides
+    @Singleton
     fun providesSourceDao(database: AppDatabase) = database.sourceDao()
 
 }
