@@ -186,5 +186,4 @@ class FeedViewModel @Inject constructor(
         refreshToggle.value = true
     }
 
-
 }
