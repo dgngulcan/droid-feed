@@ -9,8 +9,8 @@ import com.droidfeed.data.repo.RssRepo
 import com.droidfeed.data.repo.SourceRepo
 import com.droidfeed.ui.adapter.UiModelClickListener
 import com.droidfeed.ui.adapter.model.SourceUiModel
-import com.droidfeed.util.extention.random
 import com.droidfeed.ui.common.BaseViewModel
+import com.droidfeed.util.extention.random
 import javax.inject.Inject
 
 /**
@@ -21,10 +21,9 @@ class MainViewModel @Inject constructor(
     rssRepo: RssRepo
 ) : BaseViewModel() {
 
-    val navigationHeaderImage = MutableLiveData<Int>()
-
-    //    private val sources by lazy { }
     private val result = MutableLiveData<List<SourceUiModel>>()
+
+    val navigationHeaderImage = MutableLiveData<Int>()
 
     val sourceUiModelData: LiveData<List<SourceUiModel>> =
         Transformations.switchMap(

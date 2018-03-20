@@ -30,7 +30,7 @@ class MainNavController @Inject constructor(val activity: MainActivity) {
         AboutFragment()
     }
 
-    private val contribueFragment: ContributeFragment by lazy {
+    private val contributeFragment: ContributeFragment by lazy {
         ContributeFragment()
     }
 
@@ -47,15 +47,17 @@ class MainNavController @Inject constructor(val activity: MainActivity) {
     }
 
     fun openHelpUsFragment() {
-        changeFragment(contribueFragment)
+        changeFragment(contributeFragment)
     }
 
     private fun changeFragment(fragment: Fragment) {
         fragmentManager.beginTransaction()
-                .setCustomAnimations(android.R.animator.fade_in,
-                        android.R.animator.fade_out)
-                .replace(containerId, fragment)
-                .commitAllowingStateLoss()
+            .setCustomAnimations(
+                android.R.animator.fade_in,
+                android.R.animator.fade_out
+            )
+            .replace(containerId, fragment)
+            .commitAllowingStateLoss()
     }
 
     fun scrollToTop() {
@@ -63,7 +65,6 @@ class MainNavController @Inject constructor(val activity: MainActivity) {
         when (currentFragment) {
             is FeedFragment -> currentFragment.scrollToTop()
         }
-
     }
 
 

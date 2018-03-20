@@ -1,7 +1,10 @@
 package com.droidfeed.ui.module.feed
 
 import android.arch.lifecycle.Observer
+import android.arch.lifecycle.ViewModelProvider
 import android.arch.lifecycle.ViewModelProviders
+import android.content.Intent
+import android.content.SharedPreferences
 import android.databinding.ObservableBoolean
 import android.graphics.Color
 import android.os.Bundle
@@ -11,17 +14,16 @@ import android.view.View
 import android.view.ViewGroup
 import com.droidfeed.R
 import com.droidfeed.data.model.Article
-import com.droidfeed.data.repo.RssRepo
-import com.droidfeed.data.repo.SourceRepo
 import com.droidfeed.databinding.FragmentArticlesBinding
 import com.droidfeed.ui.adapter.BaseUiModelAlias
 import com.droidfeed.ui.adapter.DataInsertedCallback
 import com.droidfeed.ui.adapter.UiModelAdapter
-import com.droidfeed.ui.common.WrapContentLinearLayoutManager
-import com.droidfeed.util.AnalyticsUtil
-import com.droidfeed.util.CustomTab
 import com.droidfeed.ui.common.BaseFragment
+import com.droidfeed.ui.common.WrapContentLinearLayoutManager
+import com.droidfeed.util.AppRateHelper
+import com.droidfeed.util.CustomTab
 import com.droidfeed.util.extention.isOnline
+import com.droidfeed.util.shareCount
 import org.jetbrains.anko.design.snackbar
 import javax.inject.Inject
 
@@ -34,6 +36,7 @@ import javax.inject.Inject
 class FeedFragment : BaseFragment() {
 
     companion object {
+        private const val REQUEST_CODE_SHARE = 4122
         private const val EXTRA_FEED_TYPE = "feed_type"
 
         fun getInstance(feedType: FeedType): FeedFragment {
@@ -49,20 +52,8 @@ class FeedFragment : BaseFragment() {
     private val isEmptyBookmarked = ObservableBoolean(false)
 
     private lateinit var binding: FragmentArticlesBinding
-    private var viewModel: FeedViewModel? = null
     private lateinit var adapter: UiModelAdapter
-
-    @Inject
-    lateinit var analyticsUtil: AnalyticsUtil
-
-    @Inject
-    lateinit var rssRepo: RssRepo
-
-    @Inject
-    lateinit var sourceRepo: SourceRepo
-
-    @Inject
-    lateinit var customTab: CustomTab
+    private var viewModel: FeedViewModel? = null
     private val feedType by lazy {
         arguments?.getString(EXTRA_FEED_TYPE)?.let { FeedType.valueOf(it) }
     }
@@ -74,6 +65,18 @@ class FeedFragment : BaseFragment() {
             }
         }
     }
+
+    @Inject
+    lateinit var viewModelFactory: ViewModelProvider.Factory
+
+    @Inject
+    lateinit var customTab: CustomTab
+
+    @Inject
+    lateinit var sharedPrefs: SharedPreferences
+
+    @Inject
+    lateinit var appRateHelper: AppRateHelper
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -91,12 +94,11 @@ class FeedFragment : BaseFragment() {
 
         init()
         if (viewModel == null) {
-            feedType?.let {
-                val factory = FeedViewModel.Factory(rssRepo, sourceRepo, it,analyticsUtil)
-                viewModel = ViewModelProviders
-                    .of(this, factory)
-                    .get(FeedViewModel::class.java)
-            }
+            viewModel = ViewModelProviders
+                .of(this, viewModelFactory)
+                .get(FeedViewModel::class.java)
+
+            feedType?.let { viewModel!!.setFeedType(it) }
         }
 
         binding.viewModel = viewModel
@@ -112,8 +114,8 @@ class FeedFragment : BaseFragment() {
 
         binding.newsRecyclerView.layoutManager = layoutManager
 
-        (binding.newsRecyclerView.itemAnimator as DefaultItemAnimator).supportsChangeAnimations =
-                false
+        (binding.newsRecyclerView.itemAnimator as DefaultItemAnimator)
+            .supportsChangeAnimations = false
 
         binding.newsRecyclerView.swapAdapter(adapter, true)
 
@@ -143,7 +145,12 @@ class FeedFragment : BaseFragment() {
             })
 
             articleShareEvent.observe(this@FeedFragment, Observer {
-                startActivity(it)
+                sharedPrefs.shareCount += 1
+                startActivityForResult(it, REQUEST_CODE_SHARE)
+            })
+
+            articleBookmarkEvent.observe(this@FeedFragment, Observer {
+                appRateHelper.checkAppRatePrompt(binding.root)
             })
 
             loadingFailedEvent.observe(this@FeedFragment, Observer {
@@ -157,6 +164,16 @@ class FeedFragment : BaseFragment() {
             }
         }
     }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        when (requestCode) {
+            REQUEST_CODE_SHARE -> {
+                appRateHelper.checkAppRatePrompt(binding.root)
+            }
+        }
+    }
+
 
     private fun showBookmarkUndoSnackbar(article: Article?) {
         article?.let {

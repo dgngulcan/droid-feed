@@ -47,7 +47,6 @@ class MainActivity : BaseActivity() {
     }
 
     private fun init() {
-
         viewModel = ViewModelProviders
             .of(this, viewModelFactory)
             .get(MainViewModel::class.java)
@@ -66,7 +65,6 @@ class MainActivity : BaseActivity() {
 
     private fun initBindings() {
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main)!!
-//        binding.setLifecycleOwner(this)
         navHeaderBinding = NavHeaderMainBinding.inflate(
             layoutInflater,
             binding.navView,
@@ -77,7 +75,6 @@ class MainActivity : BaseActivity() {
     }
 
     private fun initNavigationDrawer() {
-
         val toggle = ActionBarDrawerToggle(
             this,
             binding.drawerLayout,
@@ -94,7 +91,6 @@ class MainActivity : BaseActivity() {
                 super.onDrawerClosed(drawerView)
                 viewModel.shuffleHeaderImage()
             }
-
         })
 
         binding.navView.setNavigationItemSelectedListener(navigationListener)
@@ -103,11 +99,12 @@ class MainActivity : BaseActivity() {
     }
 
     private fun initFilterDrawer() {
-
         val adapter = UiModelAdapter()
+
         viewModel.sourceUiModelData.observe(this, Observer {
             adapter.addUiModels(it as Collection<BaseUiModelAlias>)
         })
+
         (binding.filterRecycler.itemAnimator as DefaultItemAnimator)
             .supportsChangeAnimations = false
         binding.filterRecycler.adapter = adapter
