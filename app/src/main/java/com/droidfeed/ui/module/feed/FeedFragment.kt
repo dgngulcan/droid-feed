@@ -9,9 +9,7 @@ import android.databinding.ObservableBoolean
 import android.graphics.Color
 import android.os.Bundle
 import android.support.v7.widget.DefaultItemAnimator
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import com.droidfeed.R
 import com.droidfeed.data.model.Article
 import com.droidfeed.databinding.FragmentArticlesBinding
@@ -87,6 +85,11 @@ class FeedFragment : BaseFragment() {
 
         binding = FragmentArticlesBinding.inflate(inflater, container, false)
         return binding.root
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        if (feedType == FeedType.ALL) setHasOptionsMenu(true)
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
@@ -174,6 +177,10 @@ class FeedFragment : BaseFragment() {
         }
     }
 
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        activity?.menuInflater?.inflate(R.menu.activity_main_options, menu)
+        super.onCreateOptionsMenu(menu, inflater)
+    }
 
     private fun showBookmarkUndoSnackbar(article: Article?) {
         article?.let {
