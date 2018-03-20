@@ -3,6 +3,7 @@ package com.droidfeed.di
 import android.arch.lifecycle.ViewModel
 import android.arch.lifecycle.ViewModelProvider
 import com.droidfeed.ui.common.DFViewModelFactory
+import com.droidfeed.ui.module.feed.FeedViewModel
 import com.droidfeed.ui.module.main.MainViewModel
 import dagger.Binds
 import dagger.Module
@@ -19,6 +20,11 @@ abstract class ViewModelModule {
     @IntoMap
     @ViewModelKey(MainViewModel::class)
     abstract fun bindMainViewModel(mainViewModel: MainViewModel): ViewModel
+
+    @Binds
+    @IntoMap
+    @ViewModelKey(FeedViewModel::class)
+    abstract fun bindFeedViewModel(feedViewModel: FeedViewModel): ViewModel
 
     @Binds
     internal abstract fun bindViewModelFactory(factory: DFViewModelFactory): ViewModelProvider.Factory

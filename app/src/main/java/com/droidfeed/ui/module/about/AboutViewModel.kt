@@ -27,7 +27,7 @@ class AboutViewModel : BaseViewModel() {
     val shareAppEvent = SingleLiveEvent<Intent>()
 
     val licenceUiModels: LiveData<List<LicenceUiModel>>
-        get() = provideOpenSourceLibraryList()
+        get() = getLibrariesUiModels()
 
     val aboutScreenClickListener = object : AboutFragmentClickListener {
         override fun onContributeClicked() {
@@ -47,25 +47,25 @@ class AboutViewModel : BaseViewModel() {
         }
     }
 
-    private val licenceClickListener = object : UiModelClickListener<Licence> {
+    private val libraryClickListener = object : UiModelClickListener<Licence> {
         override fun onClick(licence: Licence) {
             if (userCanClick) openLinkEvent.setValue(licence.url)
         }
     }
 
-    private fun provideOpenSourceLibraryList(): LiveData<List<LicenceUiModel>> {
+    private fun getLibrariesUiModels(): LiveData<List<LicenceUiModel>> {
         val licencesLiveData = MutableLiveData<List<LicenceUiModel>>()
 
         launch {
             val uiModels = ArrayList<LicenceUiModel>()
-            getLicences().mapTo(uiModels) { LicenceUiModel(it, licenceClickListener) }
+            getLibraries().mapTo(uiModels) { LicenceUiModel(it, libraryClickListener) }
             licencesLiveData.postValue(uiModels)
         }
 
         return licencesLiveData
     }
 
-    private fun getLicences(): List<Licence> {
+    private fun getLibraries(): List<Licence> {
         val licences = ArrayList<Licence>()
 
         licences.add(
@@ -87,6 +87,13 @@ class AboutViewModel : BaseViewModel() {
                 "Dagger",
                 "A fast dependency injector for Android and Java.",
                 "https://github.com/google/dagger"
+            )
+        )
+        licences.add(
+            Licence(
+                "Android KTX",
+                "A set of Kotlin extensions for Android app development.",
+                "https://github.com/android/android-ktx"
             )
         )
         licences.add(

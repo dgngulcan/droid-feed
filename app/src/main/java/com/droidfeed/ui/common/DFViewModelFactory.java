@@ -10,6 +10,9 @@ import javax.inject.Provider;
 import javax.inject.Singleton;
 
 /**
+ * Used for ViewModel dependency injection.
+ * Adopted from https://github.com/googlesamples/android-architecture-components/blob/master/GithubBrowserSample/app/src/main/java/com/android/example/github/viewmodel/GithubViewModelFactory.java
+ * 
  * Created by Dogan Gulcan on 1/23/18.
  */
 @Singleton

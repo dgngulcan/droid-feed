@@ -11,7 +11,6 @@ import android.support.v4.widget.DrawerLayout
 import android.support.v7.app.ActionBarDrawerToggle
 import android.support.v7.widget.DefaultItemAnimator
 import android.support.v7.widget.LinearLayoutManager
-import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import com.droidfeed.R
@@ -47,7 +46,6 @@ class MainActivity : BaseActivity() {
     }
 
     private fun init() {
-
         viewModel = ViewModelProviders
             .of(this, viewModelFactory)
             .get(MainViewModel::class.java)
@@ -66,7 +64,6 @@ class MainActivity : BaseActivity() {
 
     private fun initBindings() {
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main)!!
-//        binding.setLifecycleOwner(this)
         navHeaderBinding = NavHeaderMainBinding.inflate(
             layoutInflater,
             binding.navView,
@@ -77,7 +74,6 @@ class MainActivity : BaseActivity() {
     }
 
     private fun initNavigationDrawer() {
-
         val toggle = ActionBarDrawerToggle(
             this,
             binding.drawerLayout,
@@ -94,7 +90,6 @@ class MainActivity : BaseActivity() {
                 super.onDrawerClosed(drawerView)
                 viewModel.shuffleHeaderImage()
             }
-
         })
 
         binding.navView.setNavigationItemSelectedListener(navigationListener)
@@ -103,11 +98,12 @@ class MainActivity : BaseActivity() {
     }
 
     private fun initFilterDrawer() {
-
         val adapter = UiModelAdapter()
+
         viewModel.sourceUiModelData.observe(this, Observer {
             adapter.addUiModels(it as Collection<BaseUiModelAlias>)
         })
+
         (binding.filterRecycler.itemAnimator as DefaultItemAnimator)
             .supportsChangeAnimations = false
         binding.filterRecycler.adapter = adapter
@@ -119,11 +115,6 @@ class MainActivity : BaseActivity() {
         viewModel.navigationHeaderImage.observe(this, Observer {
             navHeaderBinding.drawerImage = it
         })
-    }
-
-    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-        menuInflater.inflate(R.menu.activity_main_options, menu)
-        return super.onCreateOptionsMenu(menu)
     }
 
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {

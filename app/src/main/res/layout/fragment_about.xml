@@ -31,7 +31,7 @@
                 android:layout_height="96dp"
                 android:layout_marginTop="@dimen/spacing_large"
                 android:scaleType="centerInside"
-                android:src="@drawable/df_icon_512" />
+                tools:src="@drawable/df_icon_512" />
 
             <TextView
                 style="@style/TextAppearance.AppCompat.Title"

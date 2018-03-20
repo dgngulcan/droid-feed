@@ -4,10 +4,6 @@ apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-kapt'
 apply plugin: 'io.fabric'
 
-def apiKeyPropertiesFile = rootProject.file("api_key.properties")
-def apiKeyProperties = new Properties()
-apiKeyProperties.load(new FileInputStream(apiKeyPropertiesFile))
-
 android {
 
     compileSdkVersion 27
@@ -17,8 +13,8 @@ android {
         applicationId "com.droidfeed"
         minSdkVersion 21
         targetSdkVersion 27
-        versionCode 8
-        versionName "1.1.2"
+        versionCode 9
+        versionName "1.1.3"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
 
         multiDexEnabled true
@@ -33,7 +29,6 @@ android {
     }
 
     buildTypes {
-
         debug {
             applicationIdSuffix ".debug"
             buildConfigField "Boolean", "DEBUG_MODE", "true"
@@ -58,7 +53,6 @@ android {
                 files("$projectDir/schemas".toString())
     }
 }
-
 
 kotlin {
     experimental {

@@ -36,6 +36,12 @@ interface RssDao {
     fun getFeedItemCount(): Int
 
     @Query(
+        "SELECT COUNT(*) FROM ${AppDatabase.RSS_TABLE_NAME} " +
+                "WHERE bookmarked = 1"
+    )
+    fun getBookmarkedItemCount(): Int
+
+    @Query(
         "DELETE FROM ${AppDatabase.RSS_TABLE_NAME} " +
                 "WHERE bookmarked = 0 " +
                 "IN (SELECT pub_date_timestamp from ${AppDatabase.RSS_TABLE_NAME} " +

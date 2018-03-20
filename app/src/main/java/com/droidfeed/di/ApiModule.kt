@@ -17,14 +17,14 @@ import javax.inject.Singleton
 @Module
 class ApiModule {
 
-    @Singleton
     @Provides
+    @Singleton
     fun provideOkHttpClient(): OkHttpClient {
 
         val loggingInterceptor = HttpLoggingInterceptor()
 
         if (BuildConfig.DEBUG) {
-//            loggingInterceptor.level = HttpLoggingInterceptor.Level.BODY
+            loggingInterceptor.level = HttpLoggingInterceptor.Level.BODY
         }
 
         return OkHttpClient.Builder()
@@ -32,8 +32,8 @@ class ApiModule {
             .build()
     }
 
-    @Singleton
     @Provides
+    @Singleton
     fun provideFirebaseAnalytics(app: App): FirebaseAnalytics = FirebaseAnalytics.getInstance(app)
 
 
