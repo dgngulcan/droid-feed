@@ -7,12 +7,14 @@ import android.support.v7.widget.LinearLayoutManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import com.droidfeed.R
 import com.droidfeed.databinding.FragmentAboutBinding
 import com.droidfeed.ui.adapter.BaseUiModelAlias
 import com.droidfeed.ui.adapter.UiModelAdapter
 import com.droidfeed.ui.common.BaseFragment
 import com.droidfeed.util.CustomTab
 import com.droidfeed.util.extention.startActivity
+import com.droidfeed.util.glide.GlideApp
 import javax.inject.Inject
 
 /**
@@ -48,6 +50,10 @@ class AboutFragment : BaseFragment() {
     }
 
     private fun init() {
+        GlideApp.with(this)
+            .load(R.drawable.df_icon_512)
+            .into(binding.imgAppLogo)
+
         binding.recyclerView.layoutManager = LinearLayoutManager(activity)
         binding.recyclerView.adapter = adapter
         binding.recyclerView.isNestedScrollingEnabled = false
@@ -73,8 +79,6 @@ class AboutFragment : BaseFragment() {
         viewModel.openLinkEvent.observe(this, Observer {
             it?.let { it1 -> customTab.showTab(it1) }
         })
-
     }
-
 
 }

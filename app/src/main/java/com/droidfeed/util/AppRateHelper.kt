@@ -82,3 +82,6 @@ class AppRateHelper @Inject constructor(
     }
 
 }
+
+internal const val APP_RATE_PROMPT_INDEX = 3
+

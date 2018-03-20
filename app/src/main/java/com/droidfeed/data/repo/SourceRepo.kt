@@ -7,6 +7,8 @@ import javax.inject.Inject
 import javax.inject.Singleton
 
 /**
+ * Repository of feed sources.
+ *
  * Created by Dogan Gulcan on 2/12/18.
  */
 @Singleton

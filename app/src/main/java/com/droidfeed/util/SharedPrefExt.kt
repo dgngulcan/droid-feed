@@ -7,9 +7,6 @@ import androidx.content.edit
  * Created by Dogan Gulcan on 3/17/18.
  */
 
-
-internal const val APP_RATE_PROMPT_INDEX = 3
-
 internal var SharedPreferences.shareCount: Int
     set(value) {
         edit { putInt("share_count", value) }
