@@ -1,6 +1,7 @@
 <resources>
 
     <string name="app_name">DroidFeed</string>
+
     <string name="title_home">Home</string>
 
     <string name="error_invalid_article_url">Article URL is invalid</string>
@@ -13,35 +14,44 @@
     <string name="nav_header_desc">Navigation header</string>
     <string name="nav_contribute">Contribute</string>
 
+
+    <string name="send_email">Send email</string>
+    <string name="made_in_brooklyn">Made in Brooklyn</string>
+    <string name="about_page_copy">Your hub for the latest Android Development news and thoughts.</string>
+
+    <string name="info_no_internet">Network is not available.</string>
+    <string name="info_bookmark_removed">Bookmark is removed</string>
+
+    <string name="can_not_refresh">Can\'t refresh.</string>
+
+    <string name="content_desc_share_button">Share button</string>
+    <string name="content_desc_bookmark_button">Bookmark button</string>
+
+    <string name="error_obtaining_feed">Couldn\'t retrieve the feed!</string>
+
+    <string name="hello">Hello!</string>
+    <string name="help_us_desc">Want to help spread Android development knowledge? Get involved by contributing to DroidFeed on GitHub or leaving a feedback. \n\nDroidFeed is an open source app that\'s made by developers for developers.\n\nJoin us to help Android Developers to stay informed about the latest news, thoughts, and ideas. We can\'t wait to hear from you!</string>
+    <string name="send_feedback">Send Feedback</string>
+    <string name="undo">Undo</string>
+    <string name="contribute_on_github">Contribute on Github</string>
+    <string name="filter">Filter</string>
+    <string name="sources">Sources</string>
+    <string name="libraries">Libraries</string>
+    <string name="later">Later</string>
+    <string name="never_show">Never show</string>
+    <string name="sure">Sure</string>
     <string name="share">Share</string>
     <string name="rate_app">Rate App</string>
     <string name="contact">Contact</string>
     <string name="licences">Licences</string>
     <string name="dashed_text"> - %s</string>
     <string name="send_with">Send with</string>
-    <string name="title_activity_main2">Main2Activity</string>
 
-    <string name="send_email">Send email</string>
-    <string name="made_in_brooklyn">Made in Brooklyn</string>
-    <string name="about_page_copy">Your hub for the latest Android Development news and thoughts.</string>
-    <string name="info_no_internet">Network is not available.</string>
-    <string name="can_not_refresh">Can\'t refresh.</string>
+    <string name="empty_screen_feed">No sources selected. To select sources, swipe from the right to open filter drawer.</string>
     <string name="empty_screen_bookmark">You haven\'t bookmarked anything yet.</string>
 
-
-    <string name="content_desc_share_button">Share button</string>
-    <string name="content_desc_bookmark_button">Bookmark button</string>
-    <string name="error_obtaining_feed">Couldn\'t retrieve the feed!</string>
-
-    <string name="hello">Hello!</string>
-    <string name="help_us_desc">Want to help spread Android development knowledge? Get involved by contributing to DroidFeed on GitHub or leaving a feedback. \n\nDroidFeed is an open source app that\'s made by developers for developers.\n\nJoin us to help Android Developers to stay informed about the latest news, thoughts, and ideas. We can\'t wait to hear from you!</string>
-    <string name="send_feedback">Send Feedback</string>
-    <string name="info_bookmark_removed">Bookmark is removed</string>
-    <string name="undo">Undo</string>
-    <string name="contribute_on_github">Contribute on Github</string>
-    <string name="filter">Filter</string>
-    <string name="sources">Sources</string>
-    <string name="empty_screen_feed">No sources selected. To select sources, swipe from the right to open filter drawer.</string>
-    <string name="libraries">Libraries</string>
+    <string name="dialog_rate_app">We ❤️ you too!\nPlease rate us on Play Store.</string>
+    <string name="do_you_like_droidfeed">Do you like using DroidFeed?</string>
+    <string name="yes">Yes</string>
 
 </resources>
