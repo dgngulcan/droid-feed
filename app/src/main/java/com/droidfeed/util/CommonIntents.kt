@@ -10,8 +10,8 @@ import com.droidfeed.BuildConfig
 
 val contactIntent: Intent by lazy {
     val intent = Intent(Intent.ACTION_SENDTO)
-    intent.data = Uri.parse("mailto:hi.droidfeed@gmail.com")
-    intent.putExtra(Intent.EXTRA_EMAIL, "hi.droidfeed@gmail.com")
+    intent.data = Uri.parse("mailto:hi@droidfeed.io")
+    intent.putExtra(Intent.EXTRA_EMAIL, "hi@droidfeed.io")
     intent.putExtra(Intent.EXTRA_SUBJECT, "About DroidFeed")
 }
 
@@ -19,7 +19,7 @@ val shareIntent: Intent by lazy {
     val intent = Intent()
     intent.action = Intent.ACTION_SEND
     intent.putExtra(Intent.EXTRA_TEXT, "Check out this app! It helps me stay up to date with Android development news." +
-            "\n\nhttps://play.google.com/store/apps/details?id=" + BuildConfig.APPLICATION_ID)
+            "\n\nhttps://play.google.com/store/apps/details?id=${BuildConfig.APPLICATION_ID}&referrer=utm_source%3Din_app_share")
     intent.type = "text/plain"
     intent
 }
