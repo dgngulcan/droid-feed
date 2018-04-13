@@ -7,6 +7,12 @@ Stay up to date with the latest Android Development news. Built for the Android 
 
 <a  href='https://play.google.com/store/apps/details?id=com.droidfeed&referrer=utm_source%3Dgithub'><img width="200" alt='Get it on Google Play' src='https://play.google.com/intl/en_us/badges/images/generic/en_badge_web_generic.png'/></a>
 
+Contribution
+------------
+Contributions are most welcome to DroidFeed. You can contribute in various ways such as [reporting issues](https://github.com/dgngulcan/droid-feed/issues), [suggesting features](https://github.com/dgngulcan/droid-feed/issues), adding documentation and bug fixes.
+
+New developments are made in the `develop` branch. Feel free to send your pull requests to the `develop` branch.
+
 License
 -------
 
