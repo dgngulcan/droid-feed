@@ -14,10 +14,9 @@ import javax.inject.Inject
  * Created by Dogan Gulcan on 9/12/17.
  */
 @SuppressLint("Registered")
-abstract class BaseActivity : AppCompatActivity(), HasSupportFragmentInjector {
-
-    @Inject
-    lateinit var fragmentInjector: DispatchingAndroidInjector<Fragment>
+abstract class BaseActivity @Inject constructor(
+    private val fragmentInjector: DispatchingAndroidInjector<Fragment>
+) : AppCompatActivity(), HasSupportFragmentInjector {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         AndroidInjection.inject(this)

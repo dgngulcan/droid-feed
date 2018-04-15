@@ -1,5 +1,6 @@
 package com.droidfeed.ui.module.about
 
+import android.annotation.SuppressLint
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
@@ -17,17 +18,16 @@ import com.droidfeed.util.extention.startActivity
 import com.droidfeed.util.glide.GlideApp
 import javax.inject.Inject
 
+@SuppressLint("ValidFragment")
 /**
  * Created by Dogan Gulcan on 11/5/17.
  */
-class AboutFragment : BaseFragment() {
+class AboutFragment @Inject constructor(private val customTab: CustomTab) : BaseFragment() {
 
     private lateinit var binding: FragmentAboutBinding
     private lateinit var viewModel: AboutViewModel
 
     private val adapter: UiModelAdapter by lazy { UiModelAdapter() }
-    @Inject
-    lateinit var customTab: CustomTab
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -59,6 +59,7 @@ class AboutFragment : BaseFragment() {
         binding.recyclerView.isNestedScrollingEnabled = false
     }
 
+    @Suppress("UNCHECKED_CAST")
     private fun initObservers() {
         viewModel.licenceUiModels.observe(this, Observer {
             adapter.addUiModels(it as Collection<BaseUiModelAlias>)
