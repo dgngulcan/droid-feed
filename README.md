@@ -7,6 +7,16 @@ Stay up to date with the latest Android Development news. Built for the Android 
 
 <a  href='https://play.google.com/store/apps/details?id=com.droidfeed&referrer=utm_source%3Dgithub'><img width="200" alt='Get it on Google Play' src='https://play.google.com/intl/en_us/badges/images/generic/en_badge_web_generic.png'/></a>
 
+
+Development and Libraries
+------------
+* [Kotlin](https://kotlinlang.org/) - DroidFeed is written entirely in Kotlin with MVVM architecture
+* [Android Architecture Components](https://developer.android.com/topic/libraries/architecture/guide.html) - uses Room and all LifeCycle components
+* [Android Data Binding](https://developer.android.com/topic/libraries/data-binding/index.html)
+* [Retrofit2](http://square.github.io/retrofit/) - for REST API
+* [Dagger2](https://google.github.io/dagger/) - for dependency injection
+* [Glide](https://github.com/bumptech/glide) - for image loading
+
 Contribution
 ------------
 Contributions are most welcome to DroidFeed. You can contribute in various ways such as [reporting issues](https://github.com/dgngulcan/droid-feed/issues), [suggesting features](https://github.com/dgngulcan/droid-feed/issues), adding documentation and providing bug fixes.
