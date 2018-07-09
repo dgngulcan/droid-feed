@@ -2,32 +2,27 @@ package com.droidfeed.util
 
 import android.app.Activity
 import android.content.ComponentName
+import android.content.pm.PackageManager
 import android.net.Uri
 import android.support.customtabs.CustomTabsClient
 import android.support.customtabs.CustomTabsIntent
 import android.support.customtabs.CustomTabsServiceConnection
+import android.support.design.widget.Snackbar
 import android.support.v4.content.ContextCompat
 import android.webkit.URLUtil
 import com.droidfeed.R
-import org.jetbrains.anko.design.snackbar
+import com.droidfeed.util.extention.isOnline
 import javax.inject.Inject
-import android.content.pm.PackageManager
 
 
 /**
  * Created by Dogan Gulcan on 11/8/17.
  */
-class CustomTab @Inject constructor(
-    val activity: Activity,
-    private val networkUtils: NetworkUtils
-) {
+class CustomTab @Inject constructor(val activity: Activity) {
 
     fun showTab(url: String) {
-
-        if (networkUtils.isDeviceConnectedToInternet()) {
-
+        if (activity.isOnline()) {
             if (URLUtil.isValidUrl(url)) {
-
                 val chromePackage = "com.android.chrome"
                 if (isPackageExists(chromePackage)) {
                     val connection = object : CustomTabsServiceConnection() {
@@ -52,14 +47,19 @@ class CustomTab @Inject constructor(
                 }
 
             } else {
-                snackbar(
+                Snackbar.make(
                     activity.window.decorView.rootView,
-                    activity.getString(R.string.error_invalid_article_url)
-                )
+                    R.string.error_invalid_article_url,
+                    Snackbar.LENGTH_LONG
+                ).show()
             }
 
         } else {
-            snackbar(activity.window.decorView.rootView, R.string.info_no_internet)
+            Snackbar.make(
+                activity.window.decorView.rootView,
+                R.string.info_no_internet,
+                Snackbar.LENGTH_LONG
+            ).show()
         }
     }
 
