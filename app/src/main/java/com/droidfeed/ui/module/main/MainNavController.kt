@@ -7,6 +7,7 @@ import com.droidfeed.ui.module.about.AboutFragment
 import com.droidfeed.ui.module.feed.FeedFragment
 import com.droidfeed.ui.module.feed.FeedType
 import com.droidfeed.ui.module.contribute.ContributeFragment
+import com.droidfeed.ui.module.newsletter.NewsletterFragment
 import javax.inject.Inject
 
 /**
@@ -30,6 +31,10 @@ class MainNavController @Inject constructor(val activity: MainActivity) {
         AboutFragment()
     }
 
+    private val newsletterFragment: NewsletterFragment by lazy {
+        NewsletterFragment()
+    }
+
     private val contributeFragment: ContributeFragment by lazy {
         ContributeFragment()
     }
@@ -50,6 +55,10 @@ class MainNavController @Inject constructor(val activity: MainActivity) {
         changeFragment(contributeFragment)
     }
 
+    fun openNewsletterFragment() {
+        changeFragment(newsletterFragment)
+    }
+
     private fun changeFragment(fragment: Fragment) {
         fragmentManager.beginTransaction()
             .setCustomAnimations(
@@ -66,6 +75,5 @@ class MainNavController @Inject constructor(val activity: MainActivity) {
             is FeedFragment -> currentFragment.scrollToTop()
         }
     }
-
 
 }
