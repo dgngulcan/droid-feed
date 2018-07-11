@@ -23,6 +23,7 @@ import kotlinx.android.synthetic.main.activity_main_app_bar.*
 import javax.inject.Inject
 
 
+@Suppress("UNCHECKED_CAST")
 class MainActivity : BaseActivity() {
 
     @Inject
@@ -47,7 +48,10 @@ class MainActivity : BaseActivity() {
 
     private fun init() {
         viewModel = ViewModelProviders
-            .of(this, viewModelFactory)
+            .of(
+                this,
+                viewModelFactory
+            )
             .get(MainViewModel::class.java)
 
         setSupportActionBar(binding.appbar?.toolbar)
@@ -57,9 +61,9 @@ class MainActivity : BaseActivity() {
                 or View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
                 or View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION)
 
-        toolbar.getChildAt(0).setOnClickListener({
+        toolbar.getChildAt(0).setOnClickListener {
             navController.scrollToTop()
-        })
+        }
     }
 
     private fun initBindings() {
@@ -149,6 +153,10 @@ class MainActivity : BaseActivity() {
             R.id.nav_about -> {
                 navController.openAboutFragment()
                 binding.appbar?.toolbar?.setTitle(R.string.nav_about)
+            }
+            R.id.nav_newsletter -> {
+                navController.openNewsletterFragment()
+                binding.appbar?.toolbar?.setTitle(R.string.nav_newsletter)
             }
             R.id.nav_contribute -> {
                 navController.openHelpUsFragment()

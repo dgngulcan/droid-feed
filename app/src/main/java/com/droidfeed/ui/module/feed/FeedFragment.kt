@@ -8,6 +8,7 @@ import android.content.SharedPreferences
 import android.databinding.ObservableBoolean
 import android.graphics.Color
 import android.os.Bundle
+import android.support.design.widget.Snackbar
 import android.support.v7.widget.DefaultItemAnimator
 import android.view.*
 import com.droidfeed.R
@@ -22,7 +23,6 @@ import com.droidfeed.util.AppRateHelper
 import com.droidfeed.util.CustomTab
 import com.droidfeed.util.extention.isOnline
 import com.droidfeed.util.shareCount
-import org.jetbrains.anko.design.snackbar
 import javax.inject.Inject
 
 
@@ -82,7 +82,6 @@ class FeedFragment : BaseFragment() {
         savedInstanceState: Bundle?
     ): View? {
         super.onCreateView(inflater, container, savedInstanceState)
-
         binding = FragmentArticlesBinding.inflate(inflater, container, false)
         return binding.root
     }
@@ -95,7 +94,7 @@ class FeedFragment : BaseFragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
-        init()
+
         if (viewModel == null) {
             viewModel = ViewModelProviders
                 .of(this, viewModelFactory)
@@ -104,10 +103,7 @@ class FeedFragment : BaseFragment() {
             feedType?.let { viewModel!!.setFeedType(it) }
         }
 
-        binding.viewModel = viewModel
-        binding.isEmptyBookmarked = isEmptyBookmarked
-        binding.isEmptyFeed = isEmptyFeed
-
+        init()
         initDataObservables()
     }
 
@@ -115,17 +111,17 @@ class FeedFragment : BaseFragment() {
         val layoutManager = activity?.let { WrapContentLinearLayoutManager(it) }
         adapter = UiModelAdapter(dataInsertedCallback, layoutManager)
 
-        binding.newsRecyclerView.layoutManager = layoutManager
+        binding.apply {
+            newsRecyclerView.layoutManager = layoutManager
 
-        (binding.newsRecyclerView.itemAnimator as DefaultItemAnimator)
-            .supportsChangeAnimations = false
+            (newsRecyclerView.itemAnimator as DefaultItemAnimator).supportsChangeAnimations = false
+            newsRecyclerView.swapAdapter(adapter, true)
+            swipeRefreshArticles.setOnRefreshListener { this@FeedFragment.viewModel?.onRefreshArticles() }
 
-        binding.newsRecyclerView.swapAdapter(adapter, true)
-
-        binding.swipeRefreshArticles.setOnRefreshListener {
-            viewModel?.onRefreshArticles()
+            viewModel = this@FeedFragment.viewModel
+            isEmptyBookmarked = isEmptyBookmarked
+            isEmptyFeed = isEmptyFeed
         }
-
     }
 
     private fun initDataObservables() {
@@ -184,9 +180,17 @@ class FeedFragment : BaseFragment() {
 
     private fun showBookmarkUndoSnackbar(article: Article?) {
         article?.let {
-            snackbar(binding.root, R.string.info_bookmark_removed, R.string.undo, {
-                viewModel!!.toggleBookmark(article)
-            }).setActionTextColor(Color.YELLOW)
+            Snackbar.make(
+                binding.root,
+                R.string.info_bookmark_removed,
+                Snackbar.LENGTH_LONG
+            )
+                .setActionTextColor(Color.YELLOW)
+                .setAction(R.string.undo) {
+                    viewModel!!.toggleBookmark(article)
+                }
+
+                .show()
         }
     }
 
@@ -198,7 +202,12 @@ class FeedFragment : BaseFragment() {
                 getString(R.string.info_no_internet) + " " +
                         getString(R.string.can_not_refresh)
             }
-            snackbar(binding.root, snackBarText)
+
+            Snackbar.make(
+                binding.root,
+                snackBarText,
+                Snackbar.LENGTH_LONG
+            ).show()
         }
     }
 

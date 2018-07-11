@@ -18,9 +18,9 @@ class ContributeFragment : BaseFragment() {
 
     private lateinit var binding: FragmentContributeBinding
     private lateinit var viewModel: ContributeViewModel
+
     @Inject
     lateinit var customTab: CustomTab
-
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -47,6 +47,5 @@ class ContributeFragment : BaseFragment() {
         })
 
     }
-
 
 }

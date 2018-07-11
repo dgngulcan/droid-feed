@@ -110,7 +110,23 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
+                android:text="@string/legal" />
+
+            <TextView
+                android:id="@+id/btnPrivacyPolicy"
+                style="@style/ButtonRowStyle"
+                android:drawablePadding="@dimen/spacing_large"
+                android:drawableStart="@drawable/ic_script_black_24dp"
+                android:onClick="@{()->onClickListener.onPrivacyPolicyClicked()}"
+                android:text="@string/privacy_policy" />
+
+            <TextView
+                style="@style/GroupTitleStyle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
                 android:text="@string/libraries" />
+
 
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/recyclerView"

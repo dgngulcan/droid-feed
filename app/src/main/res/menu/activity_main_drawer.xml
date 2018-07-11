@@ -13,13 +13,17 @@
             android:icon="@drawable/ic_bookmark_black_24dp"
             android:title="@string/nav_bookmarks" />
         <item
-            android:id="@+id/nav_about"
-            android:icon="@drawable/ic_info_black_24dp"
-            android:title="@string/nav_about" />
+            android:id="@+id/nav_newsletter"
+            android:icon="@drawable/ic_newspaper_black_24dp"
+            android:title="@string/nav_newsletter" />
         <item
             android:id="@+id/nav_contribute"
             android:icon="@drawable/ic_human_greeting"
             android:title="@string/nav_contribute" />
+        <item
+            android:id="@+id/nav_about"
+            android:icon="@drawable/ic_info_black_24dp"
+            android:title="@string/nav_about" />
     </group>
 
 </menu>

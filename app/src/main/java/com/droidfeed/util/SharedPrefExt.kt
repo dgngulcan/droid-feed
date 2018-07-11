@@ -1,7 +1,7 @@
 package com.droidfeed.util
 
 import android.content.SharedPreferences
-import androidx.content.edit
+import androidx.core.content.edit
 
 /**
  * Created by Dogan Gulcan on 3/17/18.
