@@ -22,12 +22,15 @@ import javax.inject.Inject
 /**
  * Created by Dogan Gulcan on 11/5/17.
  */
-class AboutFragment @Inject constructor(private val customTab: CustomTab) : BaseFragment() {
+class AboutFragment : BaseFragment() {
 
     private lateinit var binding: FragmentAboutBinding
     private lateinit var viewModel: AboutViewModel
 
     private val adapter: UiModelAdapter by lazy { UiModelAdapter() }
+
+    @Inject
+    lateinit var customTab: CustomTab
 
     override fun onCreateView(
         inflater: LayoutInflater,
