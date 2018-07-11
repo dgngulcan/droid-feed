@@ -12,12 +12,11 @@ abstract class LocalBoundResource<ResultType> {
     private val result = MediatorLiveData<Resource<ResultType?>>()
 
     init {
-        result.value = Resource.loading(null)
+        result.value = Resource.loading()
 
         val dbSource = loadFromDb()
 
-        result.addSource(dbSource,
-                { newData -> result.setValue(Resource.success(newData)) })
+        result.addSource(dbSource) { newData -> result.setValue(Resource.success(newData)) }
     }
 
     @Suppress("UNCHECKED_CAST")
