@@ -54,7 +54,7 @@ class AboutFragment : BaseFragment() {
 
     private fun init() {
         GlideApp.with(this)
-            .load(R.drawable.df_icon_512)
+            .load(R.drawable.df_blinking)
             .into(binding.imgAppLogo)
 
         binding.recyclerView.layoutManager = LinearLayoutManager(activity)
