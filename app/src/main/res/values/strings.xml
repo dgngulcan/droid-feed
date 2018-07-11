@@ -16,7 +16,7 @@
 
 
     <string name="send_email">Send email</string>
-    <string name="made_in_brooklyn">Made in Brooklyn</string>
+    <string name="made_in_brooklyn">Made in Brooklyn, NY</string>
     <string name="about_page_copy">Your hub for the latest Android Development news and thoughts.</string>
 
     <string name="info_no_internet">Network is not available.</string>
@@ -46,12 +46,23 @@
     <string name="licences">Licences</string>
     <string name="dashed_text"> - %s</string>
     <string name="send_with">Send with</string>
+    <string name="yes">Yes</string>
+
+    <string name="newsletter_headline">Free weekly hand-picked Android dev news.</string>
 
     <string name="empty_screen_feed">No sources selected. To select sources, swipe from the right to open filter drawer.</string>
     <string name="empty_screen_bookmark">You haven\'t bookmarked anything yet.</string>
 
     <string name="dialog_rate_app">We ❤️ you too!\nPlease rate us on Play Store.</string>
     <string name="do_you_like_droidfeed">Do you like using DroidFeed?</string>
-    <string name="yes">Yes</string>
+    <string name="your_email">Your e-mail</string>
+    <string name="im_in">I\'m in</string>
+    <string name="newsletter_desc1">Sent out weekly. No spam ever.</string>
+    <string name="newsletter_desc2">Top news, articles, and podcasts of the week delivered to your inbox</string>
+    <string name="nav_newsletter">Newsletter</string>
+    <string name="error_empty_email">Your email is required!</string>
+    <string name="error_email_format">Please enter a valid email address</string>
+    <string name="legal">Legal</string>
+    <string name="privacy_policy">Privacy Policy</string>
 
 </resources>
