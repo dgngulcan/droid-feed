@@ -7,7 +7,7 @@ import org.jetbrains.annotations.Nullable
  *
  * Created by Dogan Gulcan on 9/22/17.
  */
-class Resource<out T>(val status: Status, val data: T?, @Nullable val message: String = "") {
+class Resource<out T>(val status: Status, @Nullable val data: T? = null, @Nullable val message: String = "") {
 
     companion object {
 
@@ -15,13 +15,14 @@ class Resource<out T>(val status: Status, val data: T?, @Nullable val message: S
             return Resource(Status.SUCCESS, data)
         }
 
+        fun <T> loading(@Nullable data: T? = null): Resource<T?> {
+            return Resource(Status.LOADING, data)
+        }
+
         fun <T> error(msg: String, @Nullable data: T): Resource<T> {
             return Resource(Status.ERROR, data, msg)
         }
 
-        fun <T> loading(@Nullable data: T? = null): Resource<T?> {
-            return Resource(Status.LOADING, data)
-        }
     }
 }
 
