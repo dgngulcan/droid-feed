@@ -12,10 +12,16 @@ import javax.inject.Singleton
 @Singleton
 class DateTimeUtils @Inject constructor() {
 
-    private val rssPubDateDateFormat = SimpleDateFormat("EEE, dd MMM yyyy HH:mm:ss zzz", Locale.ENGLISH)
+    enum class DateFormat(val format: SimpleDateFormat) {
+        RSS(SimpleDateFormat("EEE, dd MMM yyyy HH:mm:ss zzz", Locale.ENGLISH)),
+        ATOM(SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZZZ", Locale.ENGLISH))
+    }
 
     @Synchronized
-    fun getTimeStampFromDate(date: String, simpleDateFormat: SimpleDateFormat = rssPubDateDateFormat): Long? {
+    fun getTimeStampFromDate(
+        date: String,
+        simpleDateFormat: SimpleDateFormat
+    ): Long? {
         var mDate: Date? = null
 
         try {

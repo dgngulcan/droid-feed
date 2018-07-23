@@ -5,7 +5,7 @@ import android.arch.lifecycle.MutableLiveData
 import android.arch.lifecycle.Transformations
 import com.droidfeed.R
 import com.droidfeed.data.model.Source
-import com.droidfeed.data.repo.RssRepo
+import com.droidfeed.data.repo.FeedRepo
 import com.droidfeed.data.repo.SourceRepo
 import com.droidfeed.ui.adapter.UiModelClickListener
 import com.droidfeed.ui.adapter.model.SourceUiModel
@@ -18,7 +18,7 @@ import javax.inject.Inject
  */
 class MainViewModel @Inject constructor(
     sourceRepo: SourceRepo,
-    rssRepo: RssRepo
+    rssRepo: FeedRepo
 ) : BaseViewModel() {
 
     private val result = MutableLiveData<List<SourceUiModel>>()
@@ -27,13 +27,13 @@ class MainViewModel @Inject constructor(
 
     val sourceUiModelData: LiveData<List<SourceUiModel>> =
         Transformations.switchMap(
-            sourceRepo.sources,
-            { sourceList ->
-                result.value = sourceList.map {
-                    SourceUiModel(it, sourceClickListener)
-                }
-                result
-            })
+            sourceRepo.sources
+        ) { sourceList ->
+            result.value = sourceList.map {
+                SourceUiModel(it, sourceClickListener)
+            }
+            result
+        }
 
     private val sourceClickListener = object : UiModelClickListener<Source> {
         override fun onClick(model: Source) {
@@ -47,7 +47,10 @@ class MainViewModel @Inject constructor(
         }
     }
 
-    private val headerImageResources =
+    /**
+     * The drawable id's of the icons displayed on top of the navigation drawer.
+     */
+    private val drawerImageIds =
         listOf(
             R.drawable.ic_cat,
             R.drawable.ic_cloud_rain,
@@ -68,8 +71,7 @@ class MainViewModel @Inject constructor(
     }
 
     fun shuffleHeaderImage() {
-        navigationHeaderImage.value =
-                headerImageResources[(0 until headerImageResources.size).random()]
+        navigationHeaderImage.value = drawerImageIds[(0 until drawerImageIds.size).random()]
     }
 
 }

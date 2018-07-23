@@ -10,7 +10,7 @@ import com.droidfeed.data.Resource
 import com.droidfeed.data.Status
 import com.droidfeed.data.model.Article
 import com.droidfeed.data.model.Source
-import com.droidfeed.data.repo.RssRepo
+import com.droidfeed.data.repo.FeedRepo
 import com.droidfeed.data.repo.SourceRepo
 import com.droidfeed.ui.adapter.UiModelType
 import com.droidfeed.ui.adapter.model.ArticleUiModel
@@ -29,7 +29,7 @@ import javax.inject.Inject
  */
 @Suppress("UNCHECKED_CAST")
 class FeedViewModel @Inject constructor(
-    private val rssRepo: RssRepo,
+    private val rssRepo: FeedRepo,
     sourceRepo: SourceRepo,
     private val analytics: AnalyticsUtil
 ) : BaseViewModel() {

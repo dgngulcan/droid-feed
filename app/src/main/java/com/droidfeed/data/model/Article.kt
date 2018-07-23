@@ -16,36 +16,36 @@ import kotlinx.android.parcel.Parcelize
 @Parcelize
 @Entity(tableName = AppDatabase.RSS_TABLE_NAME)
 data class Article(
-        @PrimaryKey
-        @ColumnInfo(name = "link")
-        var link: String = "",
+    @PrimaryKey
+    @ColumnInfo(name = "link")
+    var link: String = "",
 
-        @ColumnInfo(name = "pub_date")
-        var pubDate: String = "",
+    @ColumnInfo(name = "pub_date")
+    var pubDate: String = "",
 
-        @ColumnInfo(name = "pub_date_timestamp")
-        var pubDateTimestamp: Long = 0,
+    @ColumnInfo(name = "pub_date_timestamp")
+    var pubDateTimestamp: Long = 0,
 
-        @ColumnInfo(name = "title")
-        var title: String = "",
+    @ColumnInfo(name = "title")
+    var title: String = "",
 
-        @ColumnInfo(name = "author")
-        var author: String = "",
+    @ColumnInfo(name = "author")
+    var author: String = "",
 
-        @ColumnInfo(name = "content_raw")
-        var rawContent: String = "",
+    @ColumnInfo(name = "content_raw")
+    var rawContent: String = "",
 
-        @Embedded
-        var channel: Channel = Channel(),
+    @Embedded
+    var channel: Channel = Channel(),
 
-        @Embedded
-        var content: Content = Content(),
+    @Embedded
+    var content: Content = Content(),
 
-        @Ignore
-        var hasFadedIn: Boolean = false,
+    @Ignore
+    var hasFadedIn: Boolean = false,
 
-        @Ignore
-        var layoutType: UiModelType = UiModelType.ARTICLE_SMALL
+    @Ignore
+    var layoutType: UiModelType = UiModelType.ARTICLE_SMALL
 
 ) : Diffable, Comparable<Article>, Parcelable {
 
@@ -80,7 +80,7 @@ data class Article(
     }
 
     override fun compareTo(other: Article): Int =
-            compareValuesBy(this, other, { it.pubDateTimestamp })
+        compareValuesBy(this, other) { it.pubDateTimestamp }
 
     override fun isSame(item: Diffable): Boolean = this.link.contentEquals((item as Article).link)
 

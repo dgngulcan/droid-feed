@@ -36,10 +36,9 @@ class UiModelAdapter constructor(
 
     override fun getItemViewType(position: Int): Int =
         try {
-            if (position in 0..(itemCount - 1) && itemCount > 0) {
-                uiModels[position].getViewType()
-            } else {
-                0
+            when {
+                position in 0..(itemCount - 1) && itemCount > 0 -> uiModels[position].getViewType()
+                else -> 0
             }
         } catch (e: Exception) {
             DebugUtils.showStackTrace(e)

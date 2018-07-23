@@ -24,7 +24,7 @@ import javax.inject.Singleton
  * Created by Dogan Gulcan on 9/22/17.
  */
 @Singleton
-class RssRepo @Inject constructor(
+class FeedRepo @Inject constructor(
     val appContext: App,
     val dateTimeUtils: DateTimeUtils,
     val rssFeedProvider: RssLoader,
@@ -40,28 +40,25 @@ class RssRepo @Inject constructor(
 
     fun getAllActiveRss(sources: LiveData<List<Source>>): LiveData<Resource<List<Article>>> =
         Transformations.switchMap(
-            sources,
-            {
-                it.filter { it.isActive }
-                    .map { source -> getRssFeed(source.url) }
-                    .forEach {
-                        articleResources.addSource(it,
-                            {
-                                articleResources.value = it
-                            })
-                    }
-                articleResources as LiveData<Resource<List<Article>>>
-            })
+            sources
+        ) {
+            it.filter { it.isActive }
+                .map { source -> getFeed(source.url) }
+                .forEach {
+                    articleResources.addSource(it) { articleResources.value = it }
+                }
+            articleResources as LiveData<Resource<List<Article>>>
+        }
 
-    private fun getRssFeed(url: String): LiveData<Resource<List<Article>>> {
-        return object : NetworkBoundResource<List<Article>, ArrayList<Article>>(appContext) {
+    private fun getFeed(url: String): LiveData<Resource<List<Article>>> {
+        return object : NetworkBoundResource<List<Article>, List<Article>>(appContext) {
 
             override fun loadFromDb(): LiveData<List<Article>> = rssDao.getAllRss()
 
-            override fun createCall(): LiveData<ApiResponse<ArrayList<Article>>> =
+            override fun createCall(): LiveData<ApiResponse<List<Article>>> =
                 rssFeedProvider.fetch(url)
 
-            override fun saveCallResult(item: ArrayList<Article>) {
+            override fun saveCallResult(item: List<Article>) {
                 if (rssDao.getFeedItemCount() > MAX_CACHE_ITEM_COUNT) {
                     rssDao.trimCache()
                     DebugUtils.log("Trimmed cache, removed $MAX_CACHE_ITEM_COUNT oldest article.")
@@ -70,34 +67,41 @@ class RssRepo @Inject constructor(
             }
 
             override fun shouldFetch(data: List<Article>?): Boolean {
-                if (data != null && data.isNotEmpty()) {
-                    val latestCreationDate = if (data.isNotEmpty()) data.first().pubDate else ""
-
-                    return if (latestCreationDate.isNotBlank()) {
-                        latestCreationDate.let {
-                            dateTimeUtils.getTimeStampFromDate(it)?.let {
-                                val currentMillis = System.currentTimeMillis()
-                                val timeDifference = currentMillis - it
-                                timeDifference > NETWORK_FETCH_DIMINISHING_IN_MILLIS
-                                        || timeDifference < 0
-                            }
-                        } != false
-                    } else {
-                        return true
-                    }
-                } else {
-                    return true
-                }
+                return shouldFetchFeed(data)
             }
 
             override fun onFetchFailed() {
                 DebugUtils.log("onFetchFailed")
             }
 
-            override fun processResponse(response: ApiResponse<ArrayList<Article>>):
-                    ArrayList<Article>? = response.body
+            override fun processResponse(response: ApiResponse<List<Article>>):
+                    List<Article>? = response.body
 
         }.asLiveData()
+    }
+
+    private fun shouldFetchFeed(data: List<Article>?): Boolean {
+        if (data != null && data.isNotEmpty()) {
+            val latestCreationDate = if (data.isNotEmpty()) data.first().pubDate else ""
+
+            return if (latestCreationDate.isNotBlank()) {
+                latestCreationDate.let {
+                    dateTimeUtils.getTimeStampFromDate(
+                        it,
+                        DateTimeUtils.DateFormat.RSS.format
+                    )?.let {
+                        val currentMillis = System.currentTimeMillis()
+                        val timeDifference = currentMillis - it
+                        timeDifference > NETWORK_FETCH_DIMINISHING_IN_MILLIS
+                                || timeDifference < 0
+                    }
+                } != false
+            } else {
+                return true
+            }
+        } else {
+            return true
+        }
     }
 
     fun getBookmarkedArticles(): LiveData<Resource<List<Article>>> =

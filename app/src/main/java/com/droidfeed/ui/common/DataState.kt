@@ -11,5 +11,4 @@ sealed class DataState {
 
     data class Error<out T>(val message: String = "", val data: T? = null) : DataState()
 
-
 }
