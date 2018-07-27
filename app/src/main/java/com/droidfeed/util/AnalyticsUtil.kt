@@ -4,9 +4,6 @@ import android.os.Bundle
 import com.google.firebase.analytics.FirebaseAnalytics
 import javax.inject.Inject
 
-/**
- * Created by Dogan Gulcan on 2/18/18.
- */
 class AnalyticsUtil @Inject constructor(private val analytics: FirebaseAnalytics) {
 
     fun logBookmark(isBookmarked: Boolean) {
@@ -22,5 +19,4 @@ class AnalyticsUtil @Inject constructor(private val analytics: FirebaseAnalytics
     fun logArticleClick() {
         analytics.logEvent(FirebaseAnalytics.Event.VIEW_ITEM, null)
     }
-
 }

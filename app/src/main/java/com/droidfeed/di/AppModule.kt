@@ -6,9 +6,6 @@ import dagger.Module
 import dagger.Provides
 import javax.inject.Singleton
 
-/**
- * Created by Dogan Gulcan on 9/22/17.
- */
 @Module(
     includes = [
         (DatabaseModule::class),
@@ -22,5 +19,4 @@ class AppModule {
     @Singleton
     fun provideSharedPrefs(app: App) =
         app.getSharedPreferences("df_sharedpreferences", Context.MODE_PRIVATE)
-
 }

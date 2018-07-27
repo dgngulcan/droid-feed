@@ -1,6 +1,10 @@
 package com.droidfeed.data.model
 
-import android.arch.persistence.room.*
+import android.arch.persistence.room.ColumnInfo
+import android.arch.persistence.room.Embedded
+import android.arch.persistence.room.Entity
+import android.arch.persistence.room.Ignore
+import android.arch.persistence.room.PrimaryKey
 import android.content.Intent
 import android.databinding.ObservableInt
 import android.os.Parcelable
@@ -8,11 +12,9 @@ import com.droidfeed.R
 import com.droidfeed.data.db.AppDatabase
 import com.droidfeed.ui.adapter.UiModelType
 import com.droidfeed.ui.adapter.diff.Diffable
+import kotlinx.android.parcel.IgnoredOnParcel
 import kotlinx.android.parcel.Parcelize
 
-/**
- * Created by Dogan Gulcan on 9/22/17.
- */
 @Parcelize
 @Entity(tableName = AppDatabase.RSS_TABLE_NAME)
 data class Article(
@@ -49,6 +51,7 @@ data class Article(
 
 ) : Diffable, Comparable<Article>, Parcelable {
 
+    @IgnoredOnParcel
     @Transient
     @ColumnInfo(name = "bookmarked")
     var bookmarked: Int = 0
@@ -62,10 +65,12 @@ data class Article(
             }
         }
 
+    @IgnoredOnParcel
     @Transient
     @Ignore
     val bookmarkObservable = ObservableInt(R.drawable.avd_bookmark_negative)
 
+    @IgnoredOnParcel
     @Transient
     @ColumnInfo(name = "contentImage")
     var image: String = ""
