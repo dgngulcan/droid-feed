@@ -1,7 +1,6 @@
 package com.droidfeed.ui.module.newsletter
 
 import android.annotation.SuppressLint
-import android.arch.lifecycle.ViewModelProvider
 import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
 import android.text.Editable
@@ -14,20 +13,13 @@ import com.droidfeed.data.api.mailchimp.MailchimpErrorType
 import com.droidfeed.databinding.FragmentNewsletterBinding
 import com.droidfeed.ui.common.BaseFragment
 import com.droidfeed.ui.common.DataState
-import com.droidfeed.ui.common.EventObserver
-import javax.inject.Inject
+import com.droidfeed.util.event.EventObserver
 
-/**
- * Created by Dogan Gulcan on 4/15/18.
- */
 @SuppressLint("ValidFragment")
 class NewsletterFragment : BaseFragment() {
 
     private lateinit var binding: FragmentNewsletterBinding
     private lateinit var viewModel: NewsletterViewModel
-
-    @Inject
-    lateinit var viewModelFactory: ViewModelProvider.Factory
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -44,10 +36,7 @@ class NewsletterFragment : BaseFragment() {
         super.onActivityCreated(savedInstanceState)
 
         viewModel = ViewModelProviders
-            .of(
-                this,
-                viewModelFactory
-            )
+            .of(this, viewModelFactory)
             .get(NewsletterViewModel::class.java)
 
         init()
@@ -71,12 +60,9 @@ class NewsletterFragment : BaseFragment() {
                 }
             }
         }
-
     }
 
     private fun onSignUpSuccess() {
-
-
     }
 
     /**
@@ -89,5 +75,4 @@ class NewsletterFragment : BaseFragment() {
             else -> binding.textInputLayout.error = getString(R.string.error_email_format)
         }
     }
-
 }

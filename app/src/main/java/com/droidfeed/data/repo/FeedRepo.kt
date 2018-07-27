@@ -13,15 +13,13 @@ import com.droidfeed.data.db.RssDao
 import com.droidfeed.data.model.Article
 import com.droidfeed.data.model.Source
 import com.droidfeed.util.DateTimeUtils
-import com.droidfeed.util.DebugUtils
+import com.droidfeed.util.logConsole
 import kotlinx.coroutines.experimental.launch
 import javax.inject.Inject
 import javax.inject.Singleton
 
 /**
- * Rss repository.
- *
- * Created by Dogan Gulcan on 9/22/17.
+ * Feed repository. Responsible for providing feeds from sources.
  */
 @Singleton
 class FeedRepo @Inject constructor(
@@ -31,14 +29,9 @@ class FeedRepo @Inject constructor(
     val rssDao: RssDao
 ) {
 
-    companion object {
-        private const val MAX_CACHE_ITEM_COUNT = 150
-        private const val NETWORK_FETCH_DIMINISHING_IN_MILLIS = 120000
-    }
-
     private val articleResources = MediatorLiveData<Resource<List<Article>>>()
 
-    fun getAllActiveRss(sources: LiveData<List<Source>>): LiveData<Resource<List<Article>>> =
+    fun getAllFeed(sources: LiveData<List<Source>>): LiveData<Resource<List<Article>>> =
         Transformations.switchMap(
             sources
         ) {
@@ -61,7 +54,7 @@ class FeedRepo @Inject constructor(
             override fun saveCallResult(item: List<Article>) {
                 if (rssDao.getFeedItemCount() > MAX_CACHE_ITEM_COUNT) {
                     rssDao.trimCache()
-                    DebugUtils.log("Trimmed cache, removed $MAX_CACHE_ITEM_COUNT oldest article.")
+                    logConsole("Trimmed cache, removed $MAX_CACHE_ITEM_COUNT oldest article.")
                 }
                 rssDao.insertArticles(item)
             }
@@ -71,12 +64,11 @@ class FeedRepo @Inject constructor(
             }
 
             override fun onFetchFailed() {
-                DebugUtils.log("onFetchFailed")
+                logConsole("onFetchFailed")
             }
 
             override fun processResponse(response: ApiResponse<List<Article>>):
-                    List<Article>? = response.body
-
+                List<Article>? = response.body
         }.asLiveData()
     }
 
@@ -92,8 +84,7 @@ class FeedRepo @Inject constructor(
                     )?.let {
                         val currentMillis = System.currentTimeMillis()
                         val timeDifference = currentMillis - it
-                        timeDifference > NETWORK_FETCH_DIMINISHING_IN_MILLIS
-                                || timeDifference < 0
+                        timeDifference > NETWORK_FETCH_DIMINISHING_IN_MILLIS || timeDifference < 0
                     }
                 } != false
             } else {
@@ -109,22 +100,20 @@ class FeedRepo @Inject constructor(
             override fun loadFromDb(): LiveData<List<Article>> = rssDao.getBookmarkedArticles()
         }.asLiveData()
 
-    fun updateArticle(article: Article) {
-        launch {
-            rssDao.updateArticle(article)
-        }
+    fun updateArticle(article: Article) = launch {
+        rssDao.updateArticle(article)
     }
 
-    fun deleteArticle(article: Article) {
-        launch {
-            rssDao.deleteArticle(article)
-        }
+    fun deleteArticle(article: Article) = launch {
+        rssDao.deleteArticle(article)
     }
 
-    fun clearSource(source: Source) {
-        launch {
-            rssDao.clearNonBookmarkedSource(source.name)
-        }
+    fun clearSource(source: Source) = launch {
+        rssDao.clearNonBookmarkedSource(source.name)
     }
 
+    companion object {
+        private const val MAX_CACHE_ITEM_COUNT = 150
+        private const val NETWORK_FETCH_DIMINISHING_IN_MILLIS = 120000
+    }
 }

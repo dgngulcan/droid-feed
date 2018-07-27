@@ -16,11 +16,8 @@ import retrofit2.converter.moshi.MoshiConverterFactory
 import javax.inject.Named
 import javax.inject.Singleton
 
-
 /**
  * Provider module for APIs.
- *
- * Created by Dogan Gulcan on 9/22/17.
  */
 @Module
 class ApiModule {
@@ -63,5 +60,4 @@ class ApiModule {
     @Singleton
     fun provideNewsletterService(@Named("mailchimp-retrofit") retrofit: Retrofit): NewsletterService =
         retrofit.create<NewsletterService>(NewsletterService::class.java)
-
 }

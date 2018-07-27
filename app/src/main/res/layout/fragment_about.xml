@@ -1,141 +1,147 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools">
+  xmlns:tools="http://schemas.android.com/tools">
 
-    <data>
+  <data>
 
-        <variable
-            name="viewModel"
-            type="com.droidfeed.ui.module.about.AboutViewModel" />
+    <variable
+      name="viewModel"
+      type="com.droidfeed.ui.module.about.AboutViewModel" />
 
-        <variable
-            name="onClickListener"
-            type="com.droidfeed.ui.module.about.AboutFragmentClickListener" />
-    </data>
+  </data>
 
-    <android.support.v4.widget.NestedScrollView
-        android:id="@+id/nestedScrollView"
+  <android.support.v4.widget.NestedScrollView
+    android:id="@+id/nestedScrollView"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+      android:layout_width="match_parent"
+      android:layout_height="match_parent"
+      android:descendantFocusability="blocksDescendants"
+      android:gravity="center_horizontal"
+      android:orientation="vertical">
+
+      <ImageView
+        android:id="@+id/imgAppLogo"
+        android:layout_width="96dp"
+        android:layout_height="96dp"
+        android:layout_marginTop="@dimen/spacing_large"
+        android:scaleType="centerInside"
+        tools:src="@drawable/df_icon_512" />
+
+      <TextView
+        style="@style/TextAppearance.AppCompat.Title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/spacing_small"
+        android:text="@string/app_name" />
+
+      <TextView
+        android:id="@+id/txtVersion"
+        style="@style/TextAppearance.AppCompat.Caption"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@{viewModel.appVersion}"
+        tools:text="1.0.3" />
+
+      <TextView
+        style="@style/TextAppearance.AppCompat.Body1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="@dimen/spacing_medium"
+        android:layout_marginStart="@dimen/spacing_medium"
+        android:layout_marginTop="@dimen/spacing_medium"
+        android:gravity="center"
+        android:text="@string/about_page_copy" />
+
+      <TextView
+        style="@style/TextAppearance.AppCompat.Caption"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/spacing_small"
+        android:gravity="center"
+        android:text="@string/made_in_brooklyn" />
+
+      <TextView
+        style="@style/GroupTitleStyle"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/spacing_small"
+        android:text="@string/nav_about" />
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:descendantFocusability="blocksDescendants"
-            android:gravity="center_horizontal"
-            android:orientation="vertical">
+      <TextView
+        android:id="@+id/btnGithub"
+        style="@style/ButtonRowStyle"
+        android:drawablePadding="@dimen/spacing_large"
+        android:drawableStart="@drawable/ic_github_circle"
+        android:onClick="@{()->viewModel.openContributionPage()}"
+        android:text="@string/contribute_on_github" />
 
-            <ImageView
-                android:id="@+id/imgAppLogo"
-                android:layout_width="96dp"
-                android:layout_height="96dp"
-                android:layout_marginTop="@dimen/spacing_large"
-                android:scaleType="centerInside"
-                tools:src="@drawable/df_icon_512" />
+      <TextView
+        android:id="@+id/btnRateApp"
+        style="@style/ButtonRowStyle"
+        android:drawablePadding="24dp"
+        android:drawableStart="@drawable/ic_star_black_24dp"
+        android:onClick="@{()->viewModel.openPlayStore()}"
+        android:text="@string/rate_app" />
 
-            <TextView
-                style="@style/TextAppearance.AppCompat.Title"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/spacing_small"
-                android:text="@string/app_name" />
+      <TextView
+        android:id="@+id/btnContact"
+        style="@style/ButtonRowStyle"
+        android:drawablePadding="24dp"
+        android:drawableStart="@drawable/ic_email_black_24dp"
+        android:onClick="@{()->viewModel.contactEmail()}"
+        android:text="@string/contact" />
 
-            <TextView
-                android:id="@+id/txtVersion"
-                style="@style/TextAppearance.AppCompat.Caption"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@{viewModel.appVersion}"
-                tools:text="1.0.3" />
+      <TextView
+        android:id="@+id/btnShare"
+        style="@style/ButtonRowStyle"
+        android:drawablePadding="@dimen/spacing_large"
+        android:drawableStart="@drawable/ic_share_black_24dp"
+        android:onClick="@{()->viewModel.shareApp()}"
+        android:text="@string/share" />
 
-            <TextView
-                style="@style/TextAppearance.AppCompat.Body1"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="@dimen/spacing_medium"
-                android:layout_marginStart="@dimen/spacing_medium"
-                android:layout_marginTop="@dimen/spacing_medium"
-                android:gravity="center"
-                android:text="@string/about_page_copy" />
-
-            <TextView
-                style="@style/TextAppearance.AppCompat.Caption"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/spacing_small"
-                android:gravity="center"
-                android:text="@string/made_in_brooklyn" />
-
-            <TextView
-                style="@style/GroupTitleStyle"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/spacing_small"
-                android:text="@string/nav_about" />
-
-            <TextView
-                android:id="@+id/btnGithub"
-                style="@style/ButtonRowStyle"
-                android:drawablePadding="@dimen/spacing_large"
-                android:drawableStart="@drawable/ic_github_circle"
-                android:onClick="@{()->onClickListener.onContributeClicked()}"
-                android:text="@string/contribute_on_github" />
-
-            <TextView
-                android:id="@+id/btnRateApp"
-                style="@style/ButtonRowStyle"
-                android:drawablePadding="24dp"
-                android:drawableStart="@drawable/ic_star_black_24dp"
-                android:onClick="@{()->onClickListener.onRateAppClicked()}"
-                android:text="@string/rate_app" />
-
-            <TextView
-                android:id="@+id/btnContact"
-                style="@style/ButtonRowStyle"
-                android:drawablePadding="24dp"
-                android:drawableStart="@drawable/ic_email_black_24dp"
-                android:onClick="@{()->onClickListener.onContactClicked()}"
-                android:text="@string/contact" />
-
-            <TextView
-                android:id="@+id/btnShare"
-                style="@style/ButtonRowStyle"
-                android:drawablePadding="@dimen/spacing_large"
-                android:drawableStart="@drawable/ic_share_black_24dp"
-                android:onClick="@{()->onClickListener.onShareClicked()}"
-                android:text="@string/share" />
-
-            <TextView
-                style="@style/GroupTitleStyle"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:text="@string/legal" />
-
-            <TextView
-                android:id="@+id/btnPrivacyPolicy"
-                style="@style/ButtonRowStyle"
-                android:drawablePadding="@dimen/spacing_large"
-                android:drawableStart="@drawable/ic_script_black_24dp"
-                android:onClick="@{()->onClickListener.onPrivacyPolicyClicked()}"
-                android:text="@string/privacy_policy" />
-
-            <TextView
-                style="@style/GroupTitleStyle"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:text="@string/libraries" />
+      <TextView
+        style="@style/GroupTitleStyle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="@string/legal" />
 
 
-            <android.support.v7.widget.RecyclerView
-                android:id="@+id/recyclerView"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:clipToPadding="false"
-                android:descendantFocusability="blocksDescendants"
-                android:paddingBottom="32dp" />
+      <TextView
+        android:id="@+id/btnPrivacyPolicy"
+        style="@style/ButtonRowStyle"
+        android:drawablePadding="@dimen/spacing_large"
+        android:drawableStart="@drawable/ic_script_black_24dp"
+        android:onClick="@{()->viewModel.openPrivacyPolicy()}"
+        android:text="@string/privacy_policy" />
 
-        </LinearLayout>
-    </android.support.v4.widget.NestedScrollView>
+      <TextView
+        style="@style/GroupTitleStyle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="@string/libraries" />
+
+      <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        style="@style/TextAppearance.AppCompat.Caption"
+        android:paddingStart="16dp"
+        android:paddingBottom="16dp"
+        android:paddingEnd="16dp"
+        android:text="@string/libraries_desc" />
+
+      <android.support.v7.widget.RecyclerView
+        android:id="@+id/recyclerView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:clipToPadding="false"
+        android:descendantFocusability="blocksDescendants"
+        android:paddingBottom="32dp" />
+
+    </LinearLayout>
+  </android.support.v4.widget.NestedScrollView>
 </layout>

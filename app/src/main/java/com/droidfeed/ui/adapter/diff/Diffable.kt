@@ -10,5 +10,4 @@ interface Diffable {
     fun isSame(item: Diffable): Boolean
 
     fun isContentSame(item: Diffable): Boolean
-
 }

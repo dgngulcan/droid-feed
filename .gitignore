@@ -6,6 +6,5 @@
 /build
 /captures
 .externalNativeBuild
-api_key.properties
 app/google-services.json
 /app/src/main/res/values/local_credentials.xml

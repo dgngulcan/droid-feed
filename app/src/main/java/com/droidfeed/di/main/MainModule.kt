@@ -7,8 +7,6 @@ import dagger.Provides
 
 /**
  * DI module for [MainActivity].
- *
- * Created by Dogan Gulcan on 12/12/17.
  */
 @Module
 class MainModule {

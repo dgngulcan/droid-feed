@@ -13,14 +13,10 @@ import com.droidfeed.ui.adapter.viewholder.ArticleSmallViewHolder
 import com.droidfeed.ui.common.BaseUiModel
 import com.droidfeed.ui.module.feed.ArticleClickListener
 
-/**
- * Created by Dogan Gulcan on 9/30/17.
- */
 data class ArticleUiModel(
     private val article: Article,
     private val onRssClickListener: ArticleClickListener
 ) : BaseUiModel<RecyclerView.ViewHolder>() {
-
 
     override fun getViewHolder(parent: ViewGroup): RecyclerView.ViewHolder =
         when (article.layoutType) {
@@ -51,5 +47,4 @@ data class ArticleUiModel(
     override fun getViewType(): Int = article.layoutType.ordinal
 
     override fun getData(): Diffable = article
-
 }

@@ -3,15 +3,11 @@ package com.droidfeed.util.extention
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
-import android.content.res.Resources
 import android.net.ConnectivityManager
-import com.droidfeed.util.DebugUtils
+import com.droidfeed.util.logConsole
+import com.droidfeed.util.logStackTrace
 import org.xmlpull.v1.XmlPullParser
-import java.util.*
-
-/**
- * Created by Dogan Gulcan on 11/8/17.
- */
+import java.util.Random
 
 /**
  * Checks if the device has internet access.
@@ -24,17 +20,15 @@ fun Context.isOnline(): Boolean {
     return activeNetwork != null && activeNetwork.isConnectedOrConnecting
 }
 
-
 fun Intent.startActivity(activity: Activity) {
     if (this.resolveActivity(activity.packageManager) != null) {
         activity.startActivity(this)
     } else {
-        DebugUtils.log("There are no activity can handle this intent")
+        logConsole("There are no activity can handle this intent")
     }
 }
 
 fun ClosedRange<Int>.random() = Random().nextInt(endInclusive - start) + start
-
 
 /**
  * Skips a tag within the parser.
@@ -51,7 +45,7 @@ fun XmlPullParser.skip() {
                 }
             }
         } catch (e: Exception) {
-            DebugUtils.showStackTrace(e)
+            logStackTrace(e)
         }
     }
 }

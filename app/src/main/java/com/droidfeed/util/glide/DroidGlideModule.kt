@@ -19,15 +19,15 @@ class DroidGlideModule : AppGlideModule() {
         val activityManager = context.getSystemService(ACTIVITY_SERVICE) as ActivityManager
 
         builder.setDefaultRequestOptions(
-                RequestOptions().format(
-                        if (activityManager.isLowRamDevice) {
-                            DecodeFormat.PREFER_RGB_565
-                        } else {
-                            DecodeFormat.PREFER_ARGB_8888
-                        }
-                ).disallowHardwareConfig())
+            RequestOptions().format(
+                if (activityManager.isLowRamDevice) {
+                    DecodeFormat.PREFER_RGB_565
+                } else {
+                    DecodeFormat.PREFER_ARGB_8888
+                }
+            ).disallowHardwareConfig()
+        )
     }
 
     override fun isManifestParsingEnabled(): Boolean = false
-
 }

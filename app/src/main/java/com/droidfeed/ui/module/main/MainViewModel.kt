@@ -13,9 +13,6 @@ import com.droidfeed.ui.common.BaseViewModel
 import com.droidfeed.util.extention.random
 import javax.inject.Inject
 
-/**
- * Created by Dogan Gulcan on 11/9/17.
- */
 class MainViewModel @Inject constructor(
     sourceRepo: SourceRepo,
     rssRepo: FeedRepo
@@ -73,5 +70,4 @@ class MainViewModel @Inject constructor(
     fun shuffleHeaderImage() {
         navigationHeaderImage.value = drawerImageIds[(0 until drawerImageIds.size).random()]
     }
-
 }

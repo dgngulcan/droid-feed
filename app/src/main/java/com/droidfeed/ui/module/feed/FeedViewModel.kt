@@ -21,7 +21,6 @@ import kotlinx.coroutines.experimental.CommonPool
 import kotlinx.coroutines.experimental.launch
 import javax.inject.Inject
 
-
 /**
  * [ViewModel] of [FeedFragment].
  *
@@ -29,15 +28,15 @@ import javax.inject.Inject
  */
 @Suppress("UNCHECKED_CAST")
 class FeedViewModel @Inject constructor(
-    private val rssRepo: FeedRepo,
     sourceRepo: SourceRepo,
+    private val rssRepo: FeedRepo,
     private val analytics: AnalyticsUtil
 ) : BaseViewModel() {
 
-    val isLoading = ObservableBoolean(true)
+    val isLoading = ObservableBoolean()
+    val isSourceEmpty = ObservableBoolean()
+    val isBookmarkEmpty = ObservableBoolean()
     val loadingFailedEvent = SingleLiveEvent<Boolean>()
-    val noSourceSelected = SingleLiveEvent<Boolean>()
-    val noBookmarkedArticle = SingleLiveEvent<Boolean>()
     val articleBookmarkEvent = SingleLiveEvent<Boolean>()
     val articleOpenDetail = SingleLiveEvent<Article>()
     val articleOnUnBookmark = SingleLiveEvent<Article>()
@@ -48,16 +47,17 @@ class FeedViewModel @Inject constructor(
     private lateinit var feedType: FeedType
 
     private val rssResponses: LiveData<Resource<List<Article>>> =
-        Transformations.switchMap(refreshToggle,
-            {
-                loadArticles(feedType)
-            })
+        Transformations.switchMap(
+            refreshToggle
+        ) {
+            loadArticles(feedType)
+        }
 
     val rssUiModelData: LiveData<List<ArticleUiModel>> =
-        Transformations.switchMap(rssResponses, { response ->
+        Transformations.switchMap(rssResponses) { response ->
             handleResponseStates(response)
             handleResponseData(response)
-        })
+        }
 
     /**
      * Sets feed type for the ViewModel. After type is set, the data is refreshed.
@@ -68,16 +68,16 @@ class FeedViewModel @Inject constructor(
     }
 
     val sources: LiveData<List<Source>> =
-        Transformations.map(sourceRepo.sources, { sourceList ->
+        Transformations.map(sourceRepo.sources) { sourceList ->
             val activeSources = sourceList.filter { it.isActive }
-            noSourceSelected.setValue(activeSources.isEmpty())
+            isSourceEmpty.set(activeSources.isEmpty())
             isLoading.set(!activeSources.isEmpty())
             sourceList
-        })
+        }
 
     private fun loadArticles(feedType: FeedType): LiveData<Resource<List<Article>>> =
         when (feedType) {
-            FeedType.ALL -> rssRepo.getAllActiveRss(sources)
+            FeedType.ALL -> rssRepo.getAllFeed(sources)
             FeedType.BOOKMARKS -> rssRepo.getBookmarkedArticles()
         }
 
@@ -87,7 +87,7 @@ class FeedViewModel @Inject constructor(
                 val articles = if (feedType == FeedType.ALL) {
                     filterActiveArticles(articleList)
                 } else {
-                    noBookmarkedArticle.postValue(articleList.isEmpty())
+                    isBookmarkEmpty.set(articleList.isEmpty())
                     articleList
                 }
 
@@ -126,10 +126,13 @@ class FeedViewModel @Inject constructor(
         }
 
     private fun handleResponseStates(response: Resource<List<Article>>) {
-
         when (response.status) {
             Status.LOADING -> {
-                rssUiModelData.value?.let { if (it.isEmpty()) isLoading.set(true) }
+                rssUiModelData.value?.let {
+                    if (it.isEmpty()) {
+                        isLoading.set(true)
+                    }
+                }
                 loadingFailedEvent.setValue(false)
             }
 
@@ -185,5 +188,4 @@ class FeedViewModel @Inject constructor(
     fun onRefreshArticles() {
         refreshToggle.value = true
     }
-
 }

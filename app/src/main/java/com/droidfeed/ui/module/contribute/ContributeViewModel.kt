@@ -1,19 +1,15 @@
 package com.droidfeed.ui.module.contribute
 
-import com.droidfeed.ui.common.SingleLiveEvent
+import com.droidfeed.BuildConfig
 import com.droidfeed.ui.common.BaseViewModel
+import com.droidfeed.ui.common.SingleLiveEvent
+import javax.inject.Inject
 
-/**
- * Created by Dogan Gulcan on 12/16/17.
- */
-class ContributeViewModel : BaseViewModel() {
+class ContributeViewModel @Inject constructor() : BaseViewModel() {
 
     val contactDevEvent = SingleLiveEvent<String>()
 
-    val onClickListener = object : ContributeClickListener {
-        override fun onSendFeedbackClicked() {
-            contactDevEvent.setValue("https://github.com/dgngulcan/droid-feed")
-        }
+    fun openGithubPage() {
+        contactDevEvent.setValue(BuildConfig.DROIDFEED_GITHUB_URL)
     }
-
 }

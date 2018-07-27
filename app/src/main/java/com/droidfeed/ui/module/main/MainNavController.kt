@@ -4,15 +4,12 @@ import android.support.v4.app.Fragment
 import com.droidfeed.R
 import com.droidfeed.di.MainScope
 import com.droidfeed.ui.module.about.AboutFragment
+import com.droidfeed.ui.module.contribute.ContributeFragment
 import com.droidfeed.ui.module.feed.FeedFragment
 import com.droidfeed.ui.module.feed.FeedType
-import com.droidfeed.ui.module.contribute.ContributeFragment
 import com.droidfeed.ui.module.newsletter.NewsletterFragment
 import javax.inject.Inject
 
-/**
- * Created by Dogan Gulcan on 9/22/17.
- */
 @MainScope
 class MainNavController @Inject constructor(val activity: MainActivity) {
 
@@ -75,5 +72,4 @@ class MainNavController @Inject constructor(val activity: MainActivity) {
             is FeedFragment -> currentFragment.scrollToTop()
         }
     }
-
 }

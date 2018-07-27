@@ -4,10 +4,9 @@ import android.arch.persistence.db.framework.FrameworkSQLiteOpenHelperFactory
 import android.arch.persistence.room.Room
 import android.arch.persistence.room.testing.MigrationTestHelper
 import android.support.test.InstrumentationRegistry
-import android.support.test.annotation.UiThreadTest
 import android.support.test.runner.AndroidJUnit4
+import android.test.UiThreadTest
 import com.droidfeed.data.db.MIGRATION_1_2
-import junit.framework.Assert.assertEquals
 import org.junit.After
 import org.junit.Before
 import org.junit.Rule
@@ -15,10 +14,6 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.MockitoAnnotations
 
-
-/**
- * Created by Dogan Gulcan on 1/27/18.
- */
 @RunWith(AndroidJUnit4::class)
 class DatabaseMigrationTest {
 
@@ -52,14 +47,12 @@ class DatabaseMigrationTest {
         db.close()
     }
 
-
     @Test
     @UiThreadTest
     fun testMigrationFrom1To2_containsCorrectData() {
         // Create the database in version 1
         var db = testHelper.createDatabase(TEST_DB_NAME, 1)
         db.close()
-
 
         testHelper.runMigrationsAndValidate(
             TEST_DB_NAME,
@@ -69,11 +62,7 @@ class DatabaseMigrationTest {
         )
 
         val sources = getMigratedRoomDatabase().sourceDao().getSources()
-////        verify(observer).onChanged(sources)
-//        sources?.let { assertEquals(true, sources.isNotEmpty()) }
-//        assertEquals(1, 1)
     }
-
 
     private fun getMigratedRoomDatabase(): com.droidfeed.data.db.AppDatabase {
         val database = Room.databaseBuilder(
@@ -86,5 +75,4 @@ class DatabaseMigrationTest {
         testHelper.closeWhenFinished(database)
         return database
     }
-
 }

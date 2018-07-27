@@ -1,19 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <data>
 
         <variable
             name="viewModel"
             type="com.droidfeed.ui.module.feed.FeedViewModel" />
-
-        <variable
-            name="isEmptyBookmarked"
-            type="android.databinding.ObservableBoolean" />
-
-        <variable
-            name="isEmptyFeed"
-            type="android.databinding.ObservableBoolean" />
 
     </data>
 
@@ -40,14 +33,16 @@
         <ProgressBar
             android:id="@+id/progressBar"
             style="?android:attr/progressBarStyle"
-            visibilityToggle="@{viewModel.isLoading}"
+            visibilityToggle="@{viewModel.isLoading()}"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_centerInParent="true" />
+            android:layout_centerInParent="true"
+            android:visibility="gone"
+            tools:visibility="visible" />
 
         <TextView
             style="@style/Base.TextAppearance.AppCompat.Subhead"
-            visibilityToggle="@{isEmptyBookmarked}"
+            visibilityToggle="@{viewModel.isBookmarkEmpty()}"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
@@ -62,7 +57,7 @@
 
         <TextView
             style="@style/Base.TextAppearance.AppCompat.Subhead"
-            visibilityToggle="@{isEmptyFeed}"
+            visibilityToggle="@{viewModel.isSourceEmpty()}"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"

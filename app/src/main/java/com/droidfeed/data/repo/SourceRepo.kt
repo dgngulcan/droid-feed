@@ -8,8 +8,6 @@ import javax.inject.Singleton
 
 /**
  * Repository of feed sources.
- *
- * Created by Dogan Gulcan on 2/12/18.
  */
 @Singleton
 class SourceRepo @Inject constructor(
@@ -23,5 +21,4 @@ class SourceRepo @Inject constructor(
             sourceDao.updateSource(source)
         }
     }
-
 }

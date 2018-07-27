@@ -4,15 +4,12 @@ import com.droidfeed.data.model.Article
 import com.droidfeed.data.model.Channel
 import com.droidfeed.data.model.Content
 import com.droidfeed.util.DateTimeUtils
-import com.droidfeed.util.DebugUtils
 import com.droidfeed.util.extention.skip
+import com.droidfeed.util.logStackTrace
 import org.xmlpull.v1.XmlPullParser
 import javax.inject.Inject
 import javax.inject.Singleton
 
-/**
- * Created by Dogan Gulcan on 7/14/18.
- */
 @Singleton
 class FeedParser @Inject constructor(private var dateTimeUtils: DateTimeUtils) : XmlParser() {
 
@@ -32,7 +29,7 @@ class FeedParser @Inject constructor(private var dateTimeUtils: DateTimeUtils) :
                 }
             }
         } catch (ignored: Exception) {
-            DebugUtils.showStackTrace(ignored)
+            logStackTrace(ignored)
         }
 
         return articles
@@ -98,5 +95,4 @@ class FeedParser @Inject constructor(private var dateTimeUtils: DateTimeUtils) :
         rawDate,
         DateTimeUtils.DateFormat.ATOM.format
     ) ?: 0
-
 }

@@ -2,7 +2,7 @@ package com.droidfeed.data.parser
 
 import android.util.Xml
 import com.droidfeed.data.model.Article
-import com.droidfeed.util.DebugUtils
+import com.droidfeed.util.logStackTrace
 import org.xmlpull.v1.XmlPullParser
 import org.xmlpull.v1.XmlPullParserException
 import java.io.IOException
@@ -10,10 +10,6 @@ import java.io.StringReader
 import javax.inject.Inject
 import javax.inject.Singleton
 
-
-/**
- * Created by Dogan Gulcan on 10/27/17.
- */
 @Singleton
 class NewsXmlParser @Inject constructor(
     private val rssParser: RssParser,
@@ -38,16 +34,14 @@ class NewsXmlParser @Inject constructor(
                 parser.setInput(inputStream)
                 parser.nextTag()
             } catch (e: Exception) {
-                DebugUtils.showStackTrace(e)
+                logStackTrace(e)
             }
 
             return when (parser.name) {
                 "rss" -> rssParser.parseArticles(parser)
                 "feed" -> feedParser.parseArticles(parser)
                 else -> listOf()
-
             }
         }
     }
-
 }
