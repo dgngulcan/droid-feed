@@ -1,6 +1,7 @@
 package com.droidfeed.ui.common
 
 import android.annotation.SuppressLint
+import android.arch.lifecycle.ViewModelProvider
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v7.app.AppCompatActivity
@@ -9,12 +10,11 @@ import dagger.android.DispatchingAndroidInjector
 import dagger.android.support.HasSupportFragmentInjector
 import javax.inject.Inject
 
-
-/**
- * Created by Dogan Gulcan on 9/12/17.
- */
 @SuppressLint("Registered")
 abstract class BaseActivity : AppCompatActivity(), HasSupportFragmentInjector {
+
+    @Inject
+    lateinit var viewModelFactory: ViewModelProvider.Factory
 
     @Inject
     lateinit var fragmentInjector: DispatchingAndroidInjector<Fragment>
