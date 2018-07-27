@@ -10,10 +10,6 @@ import dagger.android.DispatchingAndroidInjector
 import dagger.android.HasActivityInjector
 import javax.inject.Inject
 
-
-/**
- * Created by Dogan Gulcan on 9/22/17.
- */
 class App : Application(), HasActivityInjector {
 
     @Inject
@@ -40,5 +36,4 @@ class App : Application(), HasActivityInjector {
     override fun activityInjector(): AndroidInjector<Activity> {
         return dispatchingAndroidInjector
     }
-
 }
