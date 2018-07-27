@@ -19,9 +19,7 @@ import com.droidfeed.util.glide.GlideApp
 import javax.inject.Inject
 
 @SuppressLint("ValidFragment")
-/**
- * Created by Dogan Gulcan on 11/5/17.
- */
+
 class AboutFragment : BaseFragment() {
 
     private lateinit var binding: FragmentAboutBinding
@@ -43,10 +41,11 @@ class AboutFragment : BaseFragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        viewModel = ViewModelProviders.of(this).get(AboutViewModel::class.java)
+        viewModel = ViewModelProviders
+            .of(this, viewModelFactory)
+            .get(AboutViewModel::class.java)
 
         binding.viewModel = viewModel
-        binding.onClickListener = viewModel.aboutScreenClickListener
 
         init()
         initObservers()
@@ -84,5 +83,4 @@ class AboutFragment : BaseFragment() {
             it?.let { it1 -> customTab.showTab(it1) }
         })
     }
-
 }

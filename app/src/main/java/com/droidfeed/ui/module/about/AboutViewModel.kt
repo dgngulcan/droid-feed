@@ -13,12 +13,9 @@ import com.droidfeed.util.contactIntent
 import com.droidfeed.util.rateAppIntent
 import com.droidfeed.util.shareIntent
 import kotlinx.coroutines.experimental.launch
+import javax.inject.Inject
 
-
-/**
- * Created by Dogan Gulcan on 11/5/17.
- */
-class AboutViewModel : BaseViewModel() {
+class AboutViewModel @Inject constructor() : BaseViewModel() {
 
     val appVersion = BuildConfig.VERSION_NAME
     val rateAppEvent = SingleLiveEvent<Intent>()
@@ -28,26 +25,24 @@ class AboutViewModel : BaseViewModel() {
 
     val licenceUiModels by lazy { getLibrariesUiModels() }
 
-    val aboutScreenClickListener = object : AboutFragmentClickListener {
-        override fun onContributeClicked() {
-            if (userCanClick) openLinkEvent.setValue("https://github.com/dgngulcan/droid-feed")
-        }
+    fun openContributionPage() {
+        if (userCanClick) openLinkEvent.setValue(BuildConfig.DROIDFEED_GITHUB_URL)
+    }
 
-        override fun onRateAppClicked() {
-            if (userCanClick) rateAppEvent.setValue(rateAppIntent)
-        }
+    fun openPlayStore() {
+        if (userCanClick) rateAppEvent.setValue(rateAppIntent)
+    }
 
-        override fun onContactClicked() {
-            if (userCanClick) contactDevEvent.setValue(contactIntent)
-        }
+    fun contactEmail() {
+        if (userCanClick) contactDevEvent.setValue(contactIntent)
+    }
 
-        override fun onShareClicked() {
-            if (userCanClick) shareAppEvent.setValue(shareIntent)
-        }
+    fun shareApp() {
+        if (userCanClick) shareAppEvent.setValue(shareIntent)
+    }
 
-        override fun onPrivacyPolicyClicked() {
-            if (userCanClick) openLinkEvent.setValue("https://app.termly.io/document/privacy-policy/ab750f11-7f6d-499d-aafb-57697bd8aba0")
-        }
+    fun openPrivacyPolicy() {
+        if (userCanClick) openLinkEvent.setValue(BuildConfig.DROIDFEED_PRIVACY_POLICY)
     }
 
     private val libraryClickListener = object : UiModelClickListener<Licence> {
@@ -69,8 +64,22 @@ class AboutViewModel : BaseViewModel() {
     }
 
     private fun getLibraries(): List<Licence> {
-        val licences = ArrayList<Licence>()
+        val licences = mutableListOf<Licence>()
 
+        licences.add(
+            Licence(
+                "Android KTX",
+                "A set of Kotlin extensions for Android app development.",
+                "https://github.com/android/android-ktx/"
+            )
+        )
+        licences.add(
+            Licence(
+                "Dagger",
+                "A fast dependency injector for Android and Java.",
+                "https://github.com/google/dagger/"
+            )
+        )
         licences.add(
             Licence(
                 "Glide",
@@ -83,20 +92,6 @@ class AboutViewModel : BaseViewModel() {
                 "OkHttp",
                 "An HTTP & HTTP/2 client for Android and Java applications.",
                 "https://github.com/square/okhttp/"
-            )
-        )
-        licences.add(
-            Licence(
-                "Dagger",
-                "A fast dependency injector for Android and Java.",
-                "https://github.com/google/dagger/"
-            )
-        )
-        licences.add(
-            Licence(
-                "Android KTX",
-                "A set of Kotlin extensions for Android app development.",
-                "https://github.com/android/android-ktx/"
             )
         )
         licences.add(
