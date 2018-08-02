@@ -14,7 +14,7 @@
  * limitations under the License.
  *
  */
-package com.droidfeed.di.main
+package com.droidfeed.ui.common
 
 import android.arch.lifecycle.ViewModel
 import android.arch.lifecycle.ViewModelProvider

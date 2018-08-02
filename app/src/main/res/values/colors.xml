@@ -1,16 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#000000</color>
-    <color name="colorPrimaryDark">#000000</color>
-    <color name="colorAccent">#000000</color>
+  <color name="colorPrimary">#000000</color>
+  <color name="colorPrimaryDark">#000000</color>
+  <color name="colorAccent">#000000</color>
 
-    <color name="lightGrey">#878787</color>
-    <color name="darkGrey">#212121</color>
-    <color name="secondaryTextColor">#70000000</color>
+  <color name="lightGrey">#878787</color>
+  <color name="darkGrey">#212121</color>
+  <color name="secondaryTextColor">#70000000</color>
 
-    <color name="navBarColor">#70000000</color>
-    <color name="statusBarColor">#90000000</color>
-    <color name="darkThemeRippleColor">#90ffffff</color>
-    <color name="actionColor">#ffc66d</color>
+  <color name="navBarColor">#70000000</color>
+  <color name="statusBarColor">#90000000</color>
+  <color name="darkThemeRippleColor">#90ffffff</color>
+
+  <color name="yellow">#ffc66d</color>
+  <color name="green">#3b8686</color>
 
 </resources>

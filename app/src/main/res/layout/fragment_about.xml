@@ -74,7 +74,7 @@
         android:id="@+id/btnGithub"
         style="@style/ButtonRowStyle"
         android:drawablePadding="@dimen/spacing_large"
-        android:drawableStart="@drawable/ic_github_circle"
+        android:drawableStart="@drawable/ic_github_black_24dp"
         android:onClick="@{()->viewModel.openContributionPage()}"
         android:text="@string/contribute_on_github" />
 

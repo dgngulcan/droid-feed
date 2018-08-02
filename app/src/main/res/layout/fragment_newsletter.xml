@@ -118,7 +118,7 @@
       android:visibility="gone"
       android:gravity="center"
       tools:visibility="visible"
-      android:drawableTop="@drawable/ic_clipboard_mint_48dp"
+      android:drawableTop="@drawable/ic_clipboard_green_76dp"
       android:drawablePadding="8dp"
       android:id="@+id/txtSubscribed"
       app:layout_constraintStart_toStartOf="parent"

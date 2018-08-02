@@ -44,7 +44,7 @@ class AppRateHelper @Inject constructor(
             .setActionTextColor(
                 ContextCompat.getColor(
                     view.context,
-                    R.color.actionColor
+                    R.color.yellow
                 )
             )
             .addCallback(object : Snackbar.Callback() {

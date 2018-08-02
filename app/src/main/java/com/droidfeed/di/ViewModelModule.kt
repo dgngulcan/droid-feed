@@ -2,7 +2,7 @@ package com.droidfeed.di
 
 import android.arch.lifecycle.ViewModel
 import android.arch.lifecycle.ViewModelProvider
-import com.droidfeed.di.main.DFViewModelFactory
+import com.droidfeed.ui.common.DFViewModelFactory
 import com.droidfeed.ui.module.about.AboutViewModel
 import com.droidfeed.ui.module.contribute.ContributeViewModel
 import com.droidfeed.ui.module.feed.FeedViewModel
