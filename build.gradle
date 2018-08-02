@@ -17,8 +17,9 @@ buildscript {
             'dagger'                     : '2.16',
             'mockito'                    : '2.19.1',
             'fabric_gradle'              : '1.25.4',
-            'firebase'                   : '16.0.1',
-            'play_services'              : '3.1.0',
+            'firebase_core'              : '16.0.1',
+            'firebase_config'            : '16.0.0',
+            'play_services'              : '4.0.1',
             'jSoup'                      : '1.11.2',
             'support_test_runner'        : '1.0.2',
             'support_test_espresso'      : '3.0.2'
