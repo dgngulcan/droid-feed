@@ -108,7 +108,8 @@ dependencies {
 
     implementation "com.crashlytics.sdk.android:crashlytics:$versions.crashlytics"
 
-    implementation "com.google.firebase:firebase-core:$versions.firebase"
+    implementation "com.google.firebase:firebase-core:$versions.firebase_core"
+    implementation "com.google.firebase:firebase-config:$versions.firebase_config"
 
     implementation "org.jsoup:jsoup:$versions.jSoup"
 
