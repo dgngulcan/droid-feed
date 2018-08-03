@@ -79,6 +79,4 @@ class ArticleSmallViewHolder(private val binding: ListItemArticleSmallBinding) :
             )
             .into(binding.imgArticle)
     }
-
-
 }

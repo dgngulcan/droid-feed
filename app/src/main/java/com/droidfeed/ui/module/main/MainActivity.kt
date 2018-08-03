@@ -1,7 +1,6 @@
 package com.droidfeed.ui.module.main
 
 import android.arch.lifecycle.Observer
-import android.arch.lifecycle.ViewModelProvider
 import android.arch.lifecycle.ViewModelProviders
 import android.databinding.DataBindingUtil
 import android.os.Bundle
@@ -22,17 +21,14 @@ import com.droidfeed.ui.common.BaseActivity
 import kotlinx.android.synthetic.main.activity_main_app_bar.*
 import javax.inject.Inject
 
-
+@Suppress("UNCHECKED_CAST")
 class MainActivity : BaseActivity() {
 
     @Inject
     lateinit var navController: MainNavController
 
-    @Inject
-    lateinit var viewModelFactory: ViewModelProvider.Factory
-
-    private lateinit var binding: ActivityMainBinding
     private lateinit var viewModel: MainViewModel
+    private lateinit var binding: ActivityMainBinding
     private lateinit var navHeaderBinding: NavHeaderMainBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -54,16 +50,16 @@ class MainActivity : BaseActivity() {
         supportActionBar?.title = getString(R.string.app_name)
 
         binding.drawerLayout.systemUiVisibility = (View.SYSTEM_UI_FLAG_LAYOUT_STABLE
-                or View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
-                or View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION)
+            or View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+            or View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION)
 
-        toolbar.getChildAt(0).setOnClickListener({
+        toolbar.getChildAt(0).setOnClickListener {
             navController.scrollToTop()
-        })
+        }
     }
 
     private fun initBindings() {
-        binding = DataBindingUtil.setContentView(this, R.layout.activity_main)!!
+        binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
         navHeaderBinding = NavHeaderMainBinding.inflate(
             layoutInflater,
             binding.navView,
@@ -150,6 +146,10 @@ class MainActivity : BaseActivity() {
                 navController.openAboutFragment()
                 binding.appbar?.toolbar?.setTitle(R.string.nav_about)
             }
+            R.id.nav_newsletter -> {
+                navController.openNewsletterFragment()
+                binding.appbar?.toolbar?.setTitle(R.string.nav_newsletter)
+            }
             R.id.nav_contribute -> {
                 navController.openHelpUsFragment()
                 binding.appbar?.toolbar?.setTitle(R.string.nav_contribute)
@@ -159,6 +159,4 @@ class MainActivity : BaseActivity() {
         binding.drawerLayout.closeDrawer(GravityCompat.START)
         true
     }
-
-
 }

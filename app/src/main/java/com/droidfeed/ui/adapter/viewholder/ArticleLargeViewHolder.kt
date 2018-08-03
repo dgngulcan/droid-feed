@@ -18,9 +18,6 @@ import com.droidfeed.ui.module.feed.ArticleClickListener
 import com.droidfeed.util.ObservableColorMatrix
 import com.droidfeed.util.glide.GlideApp
 
-/**
- * Created by Dogan Gulcan on 11/2/17.
- */
 class ArticleLargeViewHolder(val binding: ViewDataBinding) : RecyclerView.ViewHolder(binding.root) {
 
     fun bind(article: Article, articleClickListener: ArticleClickListener) {
@@ -69,8 +66,7 @@ class ArticleLargeViewHolder(val binding: ViewDataBinding) : RecyclerView.ViewHo
                         model: Any?,
                         target: Target<Drawable>?,
                         isFirstResource: Boolean
-                    ): Boolean =//                        binding.imgArticle.toggleVisibility(false)
-                        false
+                    ): Boolean = false
                 })
                 .diskCacheStrategy(DiskCacheStrategy.DATA)
                 .centerCrop()
@@ -121,14 +117,11 @@ class ArticleLargeViewHolder(val binding: ViewDataBinding) : RecyclerView.ViewHo
                         model: Any?,
                         target: Target<Drawable>?,
                         isFirstResource: Boolean
-                    ): Boolean =//                        binding.imgArticle.toggleVisibility(false)
-                        false
+                    ): Boolean = false
                 })
                 .diskCacheStrategy(DiskCacheStrategy.DATA)
                 .centerCrop()
                 .into(binding.imgArticle)
         }
     }
-
-
 }

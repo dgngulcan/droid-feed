@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:app="http://schemas.android.com/apk/res-auto" xmlns:tools="http://schemas.android.com/tools">
+
+  <android.support.constraint.ConstraintLayout
+    android:layout_width="match_parent"
+    android:animateLayoutChanges="true"
+    android:layout_height="match_parent">
+
+    <TextView
+      android:id="@+id/textView2"
+      style="@style/Base.TextAppearance.AppCompat.Headline"
+      android:layout_width="0dp"
+      android:layout_height="61dp"
+      android:layout_marginEnd="@dimen/spacing_xlarge"
+      android:layout_marginStart="@dimen/spacing_xlarge"
+      android:layout_marginTop="40dp"
+      android:text="@string/newsletter_headline"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+      android:id="@+id/textView5"
+      style="@style/Base.TextAppearance.AppCompat.Body1"
+      android:layout_width="0dp"
+      android:layout_height="wrap_content"
+      android:layout_marginTop="@dimen/spacing_medium"
+      android:drawablePadding="@dimen/spacing_large"
+      android:drawableStart="@drawable/ic_email_black_24dp"
+      android:gravity="center_vertical"
+      android:text="@string/newsletter_desc1"
+      app:layout_constraintEnd_toEndOf="@+id/textView2"
+      app:layout_constraintStart_toStartOf="@+id/textView2"
+      app:layout_constraintTop_toBottomOf="@+id/textView2" />
+
+    <TextView
+      android:id="@+id/textView6"
+      style="@style/Base.TextAppearance.AppCompat.Body1"
+      android:layout_width="0dp"
+      android:layout_height="wrap_content"
+      android:layout_marginTop="@dimen/spacing_small"
+      android:drawablePadding="@dimen/spacing_large"
+      android:drawableStart="@drawable/ic_newspaper_black_24dp"
+      android:text="@string/newsletter_desc2"
+      app:layout_constraintEnd_toEndOf="@+id/textView2"
+      app:layout_constraintStart_toStartOf="@+id/textView2"
+      app:layout_constraintTop_toBottomOf="@+id/textView5" />
+
+    <android.support.design.widget.TextInputLayout
+      android:id="@+id/textInputLayout"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:layout_marginEnd="@dimen/spacing_xlarge"
+      android:layout_marginStart="@dimen/spacing_xlarge"
+      android:layout_marginTop="@dimen/spacing_xlarge"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintTop_toBottomOf="@+id/textView6">
+
+      <ProgressBar
+        style="?android:attr/progressBarStyleHorizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        tools:visibility="visible"
+        android:indeterminate="true"
+        android:id="@+id/progressBar"
+        android:layout_weight="1" />
+
+      <android.support.design.widget.TextInputEditText
+        android:id="@+id/edtEmail"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/your_email"
+        android:inputType="textEmailAddress"
+        android:maxLines="1" />
+
+    </android.support.design.widget.TextInputLayout>
+
+    <Button
+      android:id="@+id/btnImIn"
+      style="@style/Base.Widget.AppCompat.Button.Colored"
+      android:layout_width="120dp"
+      android:layout_height="wrap_content"
+      android:layout_marginEnd="@dimen/spacing_xlarge"
+      android:layout_marginTop="8dp"
+      android:padding="@dimen/spacing_medium"
+      android:text="@string/im_in"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintTop_toBottomOf="@+id/textInputLayout" />
+
+    <TextView
+      android:text="@string/newsletter_email_exist"
+      android:layout_marginStart="32dp"
+      android:layout_marginEnd="32dp"
+      android:layout_width="wrap_content"
+      style="@style/Base.TextAppearance.AppCompat.Subhead"
+      android:layout_height="wrap_content"
+      android:layout_marginTop="36dp"
+      android:visibility="gone"
+      tools:visibility="visible"
+      android:gravity="center"
+
+      android:id="@+id/txtAlreadySubscriber"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintTop_toBottomOf="@+id/btnImIn" />
+
+    <TextView
+      android:text="@string/newsletter_subscribed"
+      android:layout_marginStart="32dp"
+      android:layout_marginEnd="32dp"
+      android:layout_width="wrap_content"
+      style="@style/Base.TextAppearance.AppCompat.Headline"
+      android:layout_height="wrap_content"
+      android:layout_marginTop="36dp"
+      android:visibility="gone"
+      android:gravity="center"
+      tools:visibility="visible"
+      android:drawableTop="@drawable/ic_clipboard_green_76dp"
+      android:drawablePadding="8dp"
+      android:id="@+id/txtSubscribed"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintTop_toBottomOf="@+id/textView6" />
+
+  </android.support.constraint.ConstraintLayout>
+
+</layout>

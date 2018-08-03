@@ -5,9 +5,8 @@ import java.io.IOException
 
 /**
  * Generic class used for API responses.
- * Adopted from https://github.com/googlesamples/android-architecture-components.
  *
- * Created by Dogan Gulcan on 9/22/17.
+ * Adopted from https://github.com/googlesamples/android-architecture-components.
  */
 class ApiResponse<T> {
 
@@ -27,7 +26,6 @@ class ApiResponse<T> {
         if (response.isSuccessful) {
             body = response.body()
             errorMessage = ""
-
         } else {
             var message: String? = null
             if (response.errorBody() != null) {
@@ -36,7 +34,6 @@ class ApiResponse<T> {
                 } catch (e: IOException) {
                     e.printStackTrace()
                 }
-
             }
             if (message == null || message.trim { it <= ' ' }.isBlank()) {
                 message = response.message()
@@ -52,7 +49,6 @@ class ApiResponse<T> {
         if (response.isSuccessful) {
             this.body = body
             errorMessage = ""
-
         } else {
             errorMessage = "OkHttp call failed with code: ${response.code()}"
         }
@@ -61,5 +57,4 @@ class ApiResponse<T> {
     fun isSuccessful(): Boolean {
         return code in 200..299
     }
-
 }

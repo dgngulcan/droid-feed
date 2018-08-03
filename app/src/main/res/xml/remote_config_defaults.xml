@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<defaultsMap>
+  <entry>
+    <key>mailchimp_api_key</key>
+    <value></value>
+  </entry>
+  <entry>
+    <key>mailchimp_newsletter_list_id</key>
+    <value></value>
+  </entry>
+</defaultsMap>

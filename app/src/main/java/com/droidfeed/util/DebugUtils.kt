@@ -5,27 +5,19 @@ import com.crashlytics.android.Crashlytics
 import com.droidfeed.BuildConfig
 import java.lang.Exception
 
-@Suppress("ConstantConditionIf")
-/**
- * Created by Dogan Gulcan on 10/26/17.
- */
-class DebugUtils {
+private const val TAG = "DroidFeed"
 
-    companion object {
-        fun showStackTrace(e: Exception, message: String = "Exception") {
-            if (BuildConfig.DEBUG_MODE) {
-                Log.e("DebugLog", message, e)
-                e.printStackTrace()
-            }
-
-            Crashlytics.logException(e)
-        }
-
-        fun log(s: String) {
-            if (BuildConfig.DEBUG_MODE) {
-                Log.e("DebugLog", s)
-            }
-        }
+fun logStackTrace(exception: Exception, message: String = "Exception") {
+    if (BuildConfig.DEBUG) {
+        Log.e(TAG, message, exception)
+        exception.printStackTrace()
+    } else {
+        Crashlytics.logException(exception)
     }
+}
 
+fun logConsole(message: String) {
+    if (BuildConfig.DEBUG) {
+        Log.e(TAG, message)
+    }
 }

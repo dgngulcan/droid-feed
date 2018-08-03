@@ -3,15 +3,12 @@ package com.droidfeed.ui.adapter.diff
 import android.support.v7.util.DiffUtil
 import com.droidfeed.ui.adapter.BaseUiModelAlias
 
-
 /**
  * [DiffUtil.Callback] for UI models.
- *
- * Created by Dogan Gulcan on 11/7/17.
  */
 class UiModelDiffCallback(
-        private val oldModels: List<BaseUiModelAlias>,
-        private val newModels: List<BaseUiModelAlias>
+    private val oldModels: List<BaseUiModelAlias>,
+    private val newModels: List<BaseUiModelAlias>
 ) : DiffUtil.Callback() {
 
     override fun areItemsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
@@ -23,14 +20,13 @@ class UiModelDiffCallback(
     }
 
     override fun areContentsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean =
-            oldModels[oldItemPosition].getData().isContentSame(newModels[newItemPosition].getData())
+        oldModels[oldItemPosition].getData().isContentSame(newModels[newItemPosition].getData())
 
     override fun getOldListSize(): Int = oldModels.size
 
     override fun getNewListSize(): Int = newModels.size
 
     override fun getChangePayload(oldItemPosition: Int, newItemPosition: Int): Any? {
-//        val oldItem = oldModels[oldItemPosition]
         val newItem = newModels[newItemPosition]
         return newItem.getData()
     }

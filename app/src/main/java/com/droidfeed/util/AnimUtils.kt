@@ -1,15 +1,11 @@
 package com.droidfeed.util
 
-import android.util.Property
 import android.view.animation.AnimationUtils
 import android.view.animation.Interpolator
 import com.droidfeed.App
 import javax.inject.Inject
 import javax.inject.Singleton
 
-/**
- * Created by Dogan Gulcan on 11/5/17.
- */
 @Singleton
 class AnimUtils @Inject constructor(appContext: App) {
 
@@ -24,6 +20,4 @@ class AnimUtils @Inject constructor(appContext: App) {
     val getLinearOutSlowInInterpolator: Interpolator by lazy {
         AnimationUtils.loadInterpolator(appContext, android.R.interpolator.linear_out_slow_in)
     }
-
-
 }

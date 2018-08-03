@@ -13,9 +13,6 @@ import com.droidfeed.util.glide.GlideApp
 import kotlinx.coroutines.experimental.launch
 import javax.inject.Inject
 
-/**
- * Created by Dogan Gulcan on 3/17/18.
- */
 class AppRateHelper @Inject constructor(
     val sharedPrefs: SharedPreferences,
     val rssDao: RssDao
@@ -31,7 +28,7 @@ class AppRateHelper @Inject constructor(
 
                 if (sharedPrefs.appOpenCount > sharedPrefs.appRatePromptIndex &&
                     (bookmarkCount > sharedPrefs.appRatePromptIndex ||
-                            sharedPrefs.shareCount > sharedPrefs.appRatePromptIndex)
+                        sharedPrefs.shareCount > sharedPrefs.appRatePromptIndex)
                 ) {
                     showRateSnackbar(view)
                 }
@@ -41,13 +38,13 @@ class AppRateHelper @Inject constructor(
 
     private fun showRateSnackbar(view: View) {
         Snackbar.make(view, R.string.do_you_like_droidfeed, 7000)
-            .setAction(R.string.yes, {
+            .setAction(R.string.yes) {
                 buildRateAppDialog(view.context).show()
-            })
+            }
             .setActionTextColor(
                 ContextCompat.getColor(
                     view.context,
-                    R.color.actionColor
+                    R.color.yellow
                 )
             )
             .addCallback(object : Snackbar.Callback() {
@@ -72,16 +69,14 @@ class AppRateHelper @Inject constructor(
 
         return AlertDialog.Builder(context)
             .setView(view)
-            .setPositiveButton(R.string.sure, { _, _ ->
+            .setPositiveButton(R.string.sure) { _, _ ->
                 context.startActivity(rateAppIntent)
-            })
+            }
             .setNegativeButton(R.string.later, null)
-            .setNeutralButton(R.string.never_show, { _, _ ->
+            .setNeutralButton(R.string.never_show) { _, _ ->
                 sharedPrefs.appRatePrompt = false
-            })
+            }
     }
-
 }
 
 internal const val APP_RATE_PROMPT_INDEX = 3
-

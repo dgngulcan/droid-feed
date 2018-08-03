@@ -4,14 +4,12 @@ import android.support.v4.app.Fragment
 import com.droidfeed.R
 import com.droidfeed.di.MainScope
 import com.droidfeed.ui.module.about.AboutFragment
+import com.droidfeed.ui.module.contribute.ContributeFragment
 import com.droidfeed.ui.module.feed.FeedFragment
 import com.droidfeed.ui.module.feed.FeedType
-import com.droidfeed.ui.module.contribute.ContributeFragment
+import com.droidfeed.ui.module.newsletter.NewsletterFragment
 import javax.inject.Inject
 
-/**
- * Created by Dogan Gulcan on 9/22/17.
- */
 @MainScope
 class MainNavController @Inject constructor(val activity: MainActivity) {
 
@@ -28,6 +26,10 @@ class MainNavController @Inject constructor(val activity: MainActivity) {
 
     private val aboutFragment: AboutFragment by lazy {
         AboutFragment()
+    }
+
+    private val newsletterFragment: NewsletterFragment by lazy {
+        NewsletterFragment()
     }
 
     private val contributeFragment: ContributeFragment by lazy {
@@ -50,6 +52,10 @@ class MainNavController @Inject constructor(val activity: MainActivity) {
         changeFragment(contributeFragment)
     }
 
+    fun openNewsletterFragment() {
+        changeFragment(newsletterFragment)
+    }
+
     private fun changeFragment(fragment: Fragment) {
         fragmentManager.beginTransaction()
             .setCustomAnimations(
@@ -66,6 +72,4 @@ class MainNavController @Inject constructor(val activity: MainActivity) {
             is FeedFragment -> currentFragment.scrollToTop()
         }
     }
-
-
 }

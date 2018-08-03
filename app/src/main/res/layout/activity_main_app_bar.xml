@@ -6,14 +6,15 @@
     <android.support.design.widget.CoordinatorLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context="com.droidfeed.ui.module.main.Main2Activity">
+        tools:context="com.droidfeed.ui.module.main.MainActivity">
 
         <android.support.design.widget.AppBarLayout
             android:id="@+id/app_bar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:theme="@style/AppTheme.AppBarOverlay"
             app:layout_behavior="com.droidfeed.util.behavior.FixAppBarLayoutBehavior"
-            android:theme="@style/AppTheme.AppBarOverlay">
+            tools:context="com.droidfeed.ui.module.main.MainActivity">
 
             <android.support.v7.widget.Toolbar
                 android:id="@+id/toolbar"

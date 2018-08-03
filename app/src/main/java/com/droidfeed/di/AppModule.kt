@@ -2,17 +2,17 @@ package com.droidfeed.di
 
 import android.content.Context
 import com.droidfeed.App
+import com.droidfeed.di.api.ApiModule
+import com.squareup.moshi.Moshi
 import dagger.Module
 import dagger.Provides
 import javax.inject.Singleton
 
-/**
- * Created by Dogan Gulcan on 9/22/17.
- */
 @Module(
     includes = [
         (DatabaseModule::class),
         (ApiModule::class),
+        (FirebaseModule::class),
         (ViewModelModule::class)
     ]
 )

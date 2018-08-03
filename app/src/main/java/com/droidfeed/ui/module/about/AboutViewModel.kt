@@ -13,12 +13,9 @@ import com.droidfeed.util.contactIntent
 import com.droidfeed.util.rateAppIntent
 import com.droidfeed.util.shareIntent
 import kotlinx.coroutines.experimental.launch
+import javax.inject.Inject
 
-
-/**
- * Created by Dogan Gulcan on 11/5/17.
- */
-class AboutViewModel : BaseViewModel() {
+class AboutViewModel @Inject constructor() : BaseViewModel() {
 
     val appVersion = BuildConfig.VERSION_NAME
     val rateAppEvent = SingleLiveEvent<Intent>()
@@ -26,30 +23,31 @@ class AboutViewModel : BaseViewModel() {
     val openLinkEvent = SingleLiveEvent<String>()
     val shareAppEvent = SingleLiveEvent<Intent>()
 
-    val licenceUiModels: LiveData<List<LicenceUiModel>>
-        get() = getLibrariesUiModels()
+    val licenceUiModels by lazy { getLibrariesUiModels() }
 
-    val aboutScreenClickListener = object : AboutFragmentClickListener {
-        override fun onContributeClicked() {
-            if (userCanClick) openLinkEvent.setValue("https://github.com/dgngulcan/droid-feed")
-        }
+    fun openContributionPage() {
+        if (userCanClick) openLinkEvent.setValue(BuildConfig.DROIDFEED_GITHUB_URL)
+    }
 
-        override fun onRateAppClicked() {
-            if (userCanClick) rateAppEvent.setValue(rateAppIntent)
-        }
+    fun openPlayStore() {
+        if (userCanClick) rateAppEvent.setValue(rateAppIntent)
+    }
 
-        override fun onContactClicked() {
-            if (userCanClick) contactDevEvent.setValue(contactIntent)
-        }
+    fun contactEmail() {
+        if (userCanClick) contactDevEvent.setValue(contactIntent)
+    }
 
-        override fun onShareClicked() {
-            if (userCanClick) shareAppEvent.setValue(shareIntent)
-        }
+    fun shareApp() {
+        if (userCanClick) shareAppEvent.setValue(shareIntent)
+    }
+
+    fun openPrivacyPolicy() {
+        if (userCanClick) openLinkEvent.setValue(BuildConfig.DROIDFEED_PRIVACY_POLICY)
     }
 
     private val libraryClickListener = object : UiModelClickListener<Licence> {
-        override fun onClick(licence: Licence) {
-            if (userCanClick) openLinkEvent.setValue(licence.url)
+        override fun onClick(model: Licence) {
+            if (userCanClick) openLinkEvent.setValue(model.url)
         }
     }
 
@@ -66,13 +64,27 @@ class AboutViewModel : BaseViewModel() {
     }
 
     private fun getLibraries(): List<Licence> {
-        val licences = ArrayList<Licence>()
+        val licences = mutableListOf<Licence>()
 
+        licences.add(
+            Licence(
+                "Android KTX",
+                "A set of Kotlin extensions for Android app development.",
+                "https://github.com/android/android-ktx/"
+            )
+        )
+        licences.add(
+            Licence(
+                "Dagger",
+                "A fast dependency injector for Android and Java.",
+                "https://github.com/google/dagger/"
+            )
+        )
         licences.add(
             Licence(
                 "Glide",
                 "Glide is a fast and efficient open source media management and contentImage loading framework for Android that wraps media decoding, memory and disk caching, and resource pooling into a simple and easy to use interface.",
-                "https://github.com/bumptech/glide"
+                "https://github.com/bumptech/glide/"
             )
         )
         licences.add(
@@ -84,30 +96,9 @@ class AboutViewModel : BaseViewModel() {
         )
         licences.add(
             Licence(
-                "Dagger",
-                "A fast dependency injector for Android and Java.",
-                "https://github.com/google/dagger"
-            )
-        )
-        licences.add(
-            Licence(
-                "Android KTX",
-                "A set of Kotlin extensions for Android app development.",
-                "https://github.com/android/android-ktx"
-            )
-        )
-        licences.add(
-            Licence(
-                "Anko",
-                "Anko is a Kotlin library which makes Android application development faster and easier. It makes your code clean and easy to read.",
-                "https://github.com/Kotlin/anko"
-            )
-        )
-        licences.add(
-            Licence(
                 "Jsoup",
                 "Java library for working with real-world HTML.",
-                "https://github.com/jhy/jsoup"
+                "https://github.com/jhy/jsoup/"
             )
         )
         licences.add(

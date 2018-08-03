@@ -1,8 +1,6 @@
-package com.droidfeed.di
+package com.droidfeed.di.api
 
-import com.droidfeed.App
 import com.droidfeed.BuildConfig
-import com.google.firebase.analytics.FirebaseAnalytics
 import dagger.Module
 import dagger.Provides
 import okhttp3.OkHttpClient
@@ -11,30 +9,31 @@ import javax.inject.Singleton
 
 /**
  * Provider module for APIs.
- *
- * Created by Dogan Gulcan on 9/22/17.
  */
-@Module
+@Module(
+    includes = [
+        (MailchimpApiModule::class)
+    ]
+)
 class ApiModule {
 
     @Provides
     @Singleton
-    fun provideOkHttpClient(): OkHttpClient {
-
+    fun provideLoggingInterceptor(): HttpLoggingInterceptor {
         val loggingInterceptor = HttpLoggingInterceptor()
 
         if (BuildConfig.DEBUG) {
             loggingInterceptor.level = HttpLoggingInterceptor.Level.BODY
         }
 
-        return OkHttpClient.Builder()
-            .addInterceptor(loggingInterceptor)
-            .build()
+        return loggingInterceptor
     }
 
     @Provides
     @Singleton
-    fun provideFirebaseAnalytics(app: App): FirebaseAnalytics = FirebaseAnalytics.getInstance(app)
-
-
+    fun provideOkHttpClient(loggingInterceptor: HttpLoggingInterceptor): OkHttpClient {
+        return OkHttpClient.Builder()
+            .addInterceptor(loggingInterceptor)
+            .build()
+    }
 }

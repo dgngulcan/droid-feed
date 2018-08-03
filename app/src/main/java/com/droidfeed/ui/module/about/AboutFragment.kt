@@ -1,5 +1,6 @@
 package com.droidfeed.ui.module.about
 
+import android.annotation.SuppressLint
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
@@ -17,15 +18,15 @@ import com.droidfeed.util.extention.startActivity
 import com.droidfeed.util.glide.GlideApp
 import javax.inject.Inject
 
-/**
- * Created by Dogan Gulcan on 11/5/17.
- */
+@SuppressLint("ValidFragment")
+
 class AboutFragment : BaseFragment() {
 
     private lateinit var binding: FragmentAboutBinding
     private lateinit var viewModel: AboutViewModel
 
     private val adapter: UiModelAdapter by lazy { UiModelAdapter() }
+
     @Inject
     lateinit var customTab: CustomTab
 
@@ -40,10 +41,11 @@ class AboutFragment : BaseFragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        viewModel = ViewModelProviders.of(this).get(AboutViewModel::class.java)
+        viewModel = ViewModelProviders
+            .of(this, viewModelFactory)
+            .get(AboutViewModel::class.java)
 
         binding.viewModel = viewModel
-        binding.onClickListener = viewModel.aboutScreenClickListener
 
         init()
         initObservers()
@@ -51,7 +53,7 @@ class AboutFragment : BaseFragment() {
 
     private fun init() {
         GlideApp.with(this)
-            .load(R.drawable.df_icon_512)
+            .load(R.drawable.df_blinking)
             .into(binding.imgAppLogo)
 
         binding.recyclerView.layoutManager = LinearLayoutManager(activity)
@@ -59,6 +61,7 @@ class AboutFragment : BaseFragment() {
         binding.recyclerView.isNestedScrollingEnabled = false
     }
 
+    @Suppress("UNCHECKED_CAST")
     private fun initObservers() {
         viewModel.licenceUiModels.observe(this, Observer {
             adapter.addUiModels(it as Collection<BaseUiModelAlias>)
@@ -80,5 +83,4 @@ class AboutFragment : BaseFragment() {
             it?.let { it1 -> customTab.showTab(it1) }
         })
     }
-
 }

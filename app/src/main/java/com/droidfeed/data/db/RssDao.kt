@@ -1,12 +1,14 @@
 package com.droidfeed.data.db
 
 import android.arch.lifecycle.LiveData
-import android.arch.persistence.room.*
+import android.arch.persistence.room.Dao
+import android.arch.persistence.room.Delete
+import android.arch.persistence.room.Insert
+import android.arch.persistence.room.OnConflictStrategy
+import android.arch.persistence.room.Query
+import android.arch.persistence.room.Update
 import com.droidfeed.data.model.Article
 
-/**
- * Created by Dogan Gulcan on 9/30/17.
- */
 @Dao
 interface RssDao {
 
@@ -21,14 +23,14 @@ interface RssDao {
 
     @Query(
         "SELECT * FROM ${AppDatabase.RSS_TABLE_NAME} " +
-                "ORDER BY pub_date_timestamp DESC"
+            "ORDER BY pub_date_timestamp DESC"
     )
     fun getAllRss(): LiveData<List<Article>>
 
     @Query(
         "SELECT * FROM ${AppDatabase.RSS_TABLE_NAME} " +
-                "WHERE bookmarked = 1 " +
-                "ORDER BY pub_date_timestamp DESC"
+            "WHERE bookmarked = 1 " +
+            "ORDER BY pub_date_timestamp DESC"
     )
     fun getBookmarkedArticles(): LiveData<List<Article>>
 
@@ -37,23 +39,22 @@ interface RssDao {
 
     @Query(
         "SELECT COUNT(*) FROM ${AppDatabase.RSS_TABLE_NAME} " +
-                "WHERE bookmarked = 1"
+            "WHERE bookmarked = 1"
     )
     fun getBookmarkedItemCount(): Int
 
     @Query(
         "DELETE FROM ${AppDatabase.RSS_TABLE_NAME} " +
-                "WHERE bookmarked = 0 " +
-                "IN (SELECT pub_date_timestamp from ${AppDatabase.RSS_TABLE_NAME} " +
-                "ORDER BY pub_date_timestamp DESC LIMIT 10)"
+            "WHERE bookmarked = 0 " +
+            "IN (SELECT pub_date_timestamp from ${AppDatabase.RSS_TABLE_NAME} " +
+            "ORDER BY pub_date_timestamp DESC LIMIT 10)"
     )
     fun trimCache()
 
     @Query(
         "DELETE FROM ${AppDatabase.RSS_TABLE_NAME} " +
-                "WHERE bookmarked == 0 " +
-                "AND channel_title LIKE :sourceUrl || '%'"
+            "WHERE bookmarked == 0 " +
+            "AND channel_title LIKE :sourceUrl || '%'"
     )
     fun clearNonBookmarkedSource(sourceUrl: String)
-
 }
