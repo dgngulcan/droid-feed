@@ -1,27 +1,20 @@
 package com.droidfeed.data.api.mailchimp
 
+import android.support.annotation.Keep
 import com.squareup.moshi.FromJson
 import com.squareup.moshi.JsonDataException
-import com.squareup.moshi.ToJson
 
 internal class ErrorAdapter {
 
-    @ToJson
-    fun toJson(error: MailchimpError): MailchimpErrorJson {
-        val errorType = when (error.type) {
-            MailchimpErrorType.MEMBER_ALREADY_EXIST -> "Member Exists"
-        }
-
-        return MailchimpErrorJson(errorType, error.status, error.detail)
-    }
-
     @FromJson
-    fun fromJson(errorJson: MailchimpErrorJson): MailchimpError {
+    @Keep
+    fun fromJson(errorJson: ErrorJson): Error {
         val errorType = when (errorJson.title) {
-            "Member Exists" -> MailchimpErrorType.MEMBER_ALREADY_EXIST
+            "Member Exists" -> ErrorType.MEMBER_ALREADY_EXIST
+            "Invalid Resource" -> ErrorType.INVALID_RESOURCE
             else -> throw JsonDataException("unknown suit: $errorJson.title")
         }
 
-        return MailchimpError(errorType, errorJson.status, errorJson.detail)
+        return Error(errorType, errorJson.status, errorJson.detail)
     }
 }

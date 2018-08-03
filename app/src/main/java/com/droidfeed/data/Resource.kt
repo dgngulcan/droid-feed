@@ -4,8 +4,6 @@ import org.jetbrains.annotations.Nullable
 
 /**
  * A generic class that describes a data with a status.
- *
- * Created by Dogan Gulcan on 9/22/17.
  */
 class Resource<out T>(val status: Status, @Nullable val data: T? = null, @Nullable val message: String = "") {
 
@@ -22,12 +20,11 @@ class Resource<out T>(val status: Status, @Nullable val data: T? = null, @Nullab
         fun <T> error(msg: String, @Nullable data: T): Resource<T> {
             return Resource(Status.ERROR, data, msg)
         }
-
     }
 }
 
 /**
- * Status for data.
+ * Status for the calls.
  */
 enum class Status {
     SUCCESS,

@@ -4,9 +4,6 @@ import android.arch.lifecycle.LiveData
 import android.arch.lifecycle.MediatorLiveData
 import android.support.annotation.MainThread
 
-/**
- * Created by Dogan Gulcan on 9/22/17.
- */
 abstract class LocalBoundResource<ResultType> {
 
     private val result = MediatorLiveData<Resource<ResultType?>>()
@@ -24,7 +21,4 @@ abstract class LocalBoundResource<ResultType> {
 
     @MainThread
     protected abstract fun loadFromDb(): LiveData<ResultType>
-
 }
-
-

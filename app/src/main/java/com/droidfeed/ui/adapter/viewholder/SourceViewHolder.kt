@@ -5,9 +5,6 @@ import com.droidfeed.data.model.Source
 import com.droidfeed.databinding.ListItemSourceBinding
 import com.droidfeed.ui.adapter.UiModelClickListener
 
-/**
- * Created by Dogan Gulcan on 11/2/17.
- */
 class SourceViewHolder(
     private val binding: ListItemSourceBinding
 ) : RecyclerView.ViewHolder(binding.root) {
@@ -16,5 +13,4 @@ class SourceViewHolder(
         binding.source = source
         binding.clickListener = licenceClickListener
     }
-
 }

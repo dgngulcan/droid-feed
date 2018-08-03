@@ -34,9 +34,12 @@ class ContributeFragment : BaseFragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        viewModel = ViewModelProviders.of(this).get(ContributeViewModel::class.java)
+        viewModel = ViewModelProviders.of(
+            this,
+            viewModelFactory
+        ).get(ContributeViewModel::class.java)
 
-        binding.onClickListener = viewModel.onClickListener
+        binding.viewModel = viewModel
 
         initObservables()
     }
@@ -45,7 +48,5 @@ class ContributeFragment : BaseFragment() {
         viewModel.contactDevEvent.observe(this, Observer {
             it?.let { it1 -> customTab.showTab(it1) }
         })
-
     }
-
 }

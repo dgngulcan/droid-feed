@@ -1,7 +1,6 @@
 package com.droidfeed.ui.module.main
 
 import android.arch.lifecycle.Observer
-import android.arch.lifecycle.ViewModelProvider
 import android.arch.lifecycle.ViewModelProviders
 import android.databinding.DataBindingUtil
 import android.os.Bundle
@@ -22,18 +21,14 @@ import com.droidfeed.ui.common.BaseActivity
 import kotlinx.android.synthetic.main.activity_main_app_bar.*
 import javax.inject.Inject
 
-
 @Suppress("UNCHECKED_CAST")
 class MainActivity : BaseActivity() {
 
     @Inject
     lateinit var navController: MainNavController
 
-    @Inject
-    lateinit var viewModelFactory: ViewModelProvider.Factory
-
-    private lateinit var binding: ActivityMainBinding
     private lateinit var viewModel: MainViewModel
+    private lateinit var binding: ActivityMainBinding
     private lateinit var navHeaderBinding: NavHeaderMainBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -48,18 +43,15 @@ class MainActivity : BaseActivity() {
 
     private fun init() {
         viewModel = ViewModelProviders
-            .of(
-                this,
-                viewModelFactory
-            )
+            .of(this, viewModelFactory)
             .get(MainViewModel::class.java)
 
         setSupportActionBar(binding.appbar?.toolbar)
         supportActionBar?.title = getString(R.string.app_name)
 
         binding.drawerLayout.systemUiVisibility = (View.SYSTEM_UI_FLAG_LAYOUT_STABLE
-                or View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
-                or View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION)
+            or View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+            or View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION)
 
         toolbar.getChildAt(0).setOnClickListener {
             navController.scrollToTop()
@@ -67,7 +59,7 @@ class MainActivity : BaseActivity() {
     }
 
     private fun initBindings() {
-        binding = DataBindingUtil.setContentView(this, R.layout.activity_main)!!
+        binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
         navHeaderBinding = NavHeaderMainBinding.inflate(
             layoutInflater,
             binding.navView,
@@ -167,6 +159,4 @@ class MainActivity : BaseActivity() {
         binding.drawerLayout.closeDrawer(GravityCompat.START)
         true
     }
-
-
 }

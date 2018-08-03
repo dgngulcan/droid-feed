@@ -12,8 +12,6 @@ import org.jetbrains.annotations.Nullable
 
 /**
  * Adapted from https://developer.android.com/topic/libraries/architecture/guide.html
- *
- * Created by Dogan Gulcan on 9/22/17.
  */
 abstract class NetworkBoundResource<ResultType, RequestType>(val context: Context) {
 
@@ -47,11 +45,11 @@ abstract class NetworkBoundResource<ResultType, RequestType>(val context: Contex
             result.removeSource(dbSource)
 
             if (response?.isSuccessful()!!) {
-                launch(UI) {
-                    launch {
-                        response.let { processResponse(it)?.let { saveCallResult(it) } }
-                    }
+                launch {
+                    response.let { processResponse(it)?.let { saveCallResult(it) } }
+                }
 
+                launch(UI) {
                     result.addSource(loadFromDb()) { newData ->
                         result.setValue(
                             Resource.success(
@@ -60,7 +58,6 @@ abstract class NetworkBoundResource<ResultType, RequestType>(val context: Contex
                         )
                     }
                 }
-
             } else {
                 onFetchFailed()
                 result.addSource(dbSource) { newData ->
@@ -96,5 +93,3 @@ abstract class NetworkBoundResource<ResultType, RequestType>(val context: Contex
     @MainThread
     protected abstract fun createCall(): LiveData<ApiResponse<RequestType>>
 }
-
-

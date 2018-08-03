@@ -1,58 +1,75 @@
 package com.droidfeed.ui.module.newsletter
 
 import android.arch.lifecycle.MutableLiveData
-import android.databinding.ObservableField
-import com.droidfeed.data.api.mailchimp.MailchimpError
-import com.droidfeed.data.api.mailchimp.MailchimpErrorType
+import com.droidfeed.data.api.mailchimp.Error
+import com.droidfeed.data.api.mailchimp.ErrorAdapter
+import com.droidfeed.data.api.mailchimp.ErrorType
 import com.droidfeed.data.api.mailchimp.Subscriber
 import com.droidfeed.data.api.mailchimp.SubscriptionStatus
-import com.droidfeed.data.api.mailchimp.service.NewsletterService
+import com.droidfeed.data.repo.NewsletterRepo
 import com.droidfeed.ui.common.BaseViewModel
 import com.droidfeed.ui.common.DataState
-import com.droidfeed.ui.common.Event
+import com.droidfeed.util.event.Event
+import com.squareup.moshi.Moshi
 import kotlinx.coroutines.experimental.launch
 import javax.inject.Inject
 
-/**
- * Created by Dogan Gulcan on 4/15/18.
- */
 class NewsletterViewModel @Inject constructor(
-    private val newsletterService: NewsletterService
+    private val newsletterRepo: NewsletterRepo
 ) : BaseViewModel() {
 
-    companion object {
-        const val NEWSLETTER_LIST_ID = "b45d2a62b0"
-    }
-
     val signUpEvent = MutableLiveData<Event<DataState>>()
-    val userEmail = ObservableField<String>("")
 
+    /**
+     * Sign up given email to DroidFeed newsletter.
+     *
+     * @param email
+     */
     fun signUp(email: String) = launch {
-        signUpEvent.value = Event(DataState.Loading())
-        val subscriber =
-            Subscriber(email, SubscriptionStatus.SUBSCRIBED)
-        val call = newsletterService.addSubscriber(NEWSLETTER_LIST_ID, subscriber)
+        val subscriber = Subscriber(email, SubscriptionStatus.SUBSCRIBED)
+
+        signUpEvent.postValue(Event(DataState.Loading()))
+
+        val call = newsletterRepo.addSubscriberToNewsletter(subscriber)
 
         call.await().let { response ->
             if (response.isSuccessful) {
                 signUpEvent.postValue(Event(DataState.Success<Any>()))
-
             } else {
                 when (response.code()) {
                     400 -> {
-                        if (response.body() is MailchimpError) {
-//                            response.body().
-                            signUpEvent.postValue(
-                                Event(DataState.Error(data = MailchimpErrorType.MEMBER_ALREADY_EXIST))
-                            )
+                        val errorBody = response.errorBody()?.string()
+                        val mcError = parseMailchimpError(errorBody)
+
+                        when {
+                            mcError != null -> handleMailChimpError(mcError)
+                            else -> signUpEvent.postValue(Event(DataState.Error<Any>()))
                         }
                     }
 
-                    else -> signUpEvent.value = Event(DataState.Error<Any>())
+                    else -> signUpEvent.postValue(Event(DataState.Error<Any>()))
                 }
             }
         }
     }
 
+    private fun parseMailchimpError(errorBody: String?): Error? {
+        val moshi = Moshi.Builder()
+            .add(ErrorAdapter())
+            .build()
 
+        val jsonAdapter = moshi.adapter<Error>(Error::class.java)
+        return jsonAdapter.fromJson(errorBody)
+    }
+
+    private fun handleMailChimpError(error: Error) {
+        when (error.type) {
+            ErrorType.MEMBER_ALREADY_EXIST -> {
+                signUpEvent.postValue(Event(DataState.Error(data = ErrorType.MEMBER_ALREADY_EXIST)))
+            }
+            ErrorType.INVALID_RESOURCE -> {
+                signUpEvent.postValue(Event(DataState.Error(data = ErrorType.INVALID_RESOURCE)))
+            }
+        }
+    }
 }

@@ -1,16 +1,18 @@
 package com.droidfeed.ui.module.feed
 
 import android.arch.lifecycle.Observer
-import android.arch.lifecycle.ViewModelProvider
 import android.arch.lifecycle.ViewModelProviders
 import android.content.Intent
 import android.content.SharedPreferences
-import android.databinding.ObservableBoolean
 import android.graphics.Color
 import android.os.Bundle
 import android.support.design.widget.Snackbar
 import android.support.v7.widget.DefaultItemAnimator
-import android.view.*
+import android.view.LayoutInflater
+import android.view.Menu
+import android.view.MenuInflater
+import android.view.View
+import android.view.ViewGroup
 import com.droidfeed.R
 import com.droidfeed.data.model.Article
 import com.droidfeed.databinding.FragmentArticlesBinding
@@ -24,7 +26,6 @@ import com.droidfeed.util.CustomTab
 import com.droidfeed.util.extention.isOnline
 import com.droidfeed.util.shareCount
 import javax.inject.Inject
-
 
 /**
  * Fragment responsible for news feed.
@@ -46,12 +47,9 @@ class FeedFragment : BaseFragment() {
         }
     }
 
-    private val isEmptyFeed = ObservableBoolean(false)
-    private val isEmptyBookmarked = ObservableBoolean(false)
-
+    lateinit var viewModel: FeedViewModel
     private lateinit var binding: FragmentArticlesBinding
     private lateinit var adapter: UiModelAdapter
-    private var viewModel: FeedViewModel? = null
     private val feedType by lazy {
         arguments?.getString(EXTRA_FEED_TYPE)?.let { FeedType.valueOf(it) }
     }
@@ -63,9 +61,6 @@ class FeedFragment : BaseFragment() {
             }
         }
     }
-
-    @Inject
-    lateinit var viewModelFactory: ViewModelProvider.Factory
 
     @Inject
     lateinit var customTab: CustomTab
@@ -94,13 +89,12 @@ class FeedFragment : BaseFragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
-
-        if (viewModel == null) {
+        if (!::viewModel.isInitialized) {
             viewModel = ViewModelProviders
                 .of(this, viewModelFactory)
                 .get(FeedViewModel::class.java)
 
-            feedType?.let { viewModel!!.setFeedType(it) }
+            feedType?.let { viewModel.setFeedType(it) }
         }
 
         init()
@@ -109,32 +103,24 @@ class FeedFragment : BaseFragment() {
 
     private fun init() {
         val layoutManager = activity?.let { WrapContentLinearLayoutManager(it) }
-        adapter = UiModelAdapter(dataInsertedCallback, layoutManager)
+
+        if (!::adapter.isInitialized) {
+            adapter = UiModelAdapter(dataInsertedCallback, layoutManager)
+        }
 
         binding.apply {
             newsRecyclerView.layoutManager = layoutManager
 
             (newsRecyclerView.itemAnimator as DefaultItemAnimator).supportsChangeAnimations = false
             newsRecyclerView.swapAdapter(adapter, true)
-            swipeRefreshArticles.setOnRefreshListener { this@FeedFragment.viewModel?.onRefreshArticles() }
+            swipeRefreshArticles.setOnRefreshListener { this@FeedFragment.viewModel.onRefreshArticles() }
 
             viewModel = this@FeedFragment.viewModel
-            isEmptyBookmarked = isEmptyBookmarked
-            isEmptyFeed = isEmptyFeed
         }
     }
 
     private fun initDataObservables() {
-        viewModel?.apply {
-
-            noSourceSelected.observe(this@FeedFragment, Observer {
-                it?.let { isEmptyFeed.set(it) }
-            })
-
-            noBookmarkedArticle.observe(this@FeedFragment, Observer {
-                it?.let { isEmptyBookmarked.set(it) }
-            })
-
+        viewModel.apply {
             rssUiModelData.observe(this@FeedFragment, Observer {
                 adapter.addUiModels(it as Collection<BaseUiModelAlias>)
             })
@@ -187,7 +173,7 @@ class FeedFragment : BaseFragment() {
             )
                 .setActionTextColor(Color.YELLOW)
                 .setAction(R.string.undo) {
-                    viewModel!!.toggleBookmark(article)
+                    viewModel.toggleBookmark(article)
                 }
 
                 .show()
@@ -200,7 +186,7 @@ class FeedFragment : BaseFragment() {
                 getString(R.string.error_obtaining_feed)
             } else {
                 getString(R.string.info_no_internet) + " " +
-                        getString(R.string.can_not_refresh)
+                    getString(R.string.can_not_refresh)
             }
 
             Snackbar.make(
@@ -214,5 +200,4 @@ class FeedFragment : BaseFragment() {
     internal fun scrollToTop() {
         binding.newsRecyclerView.smoothScrollToPosition(0)
     }
-
 }

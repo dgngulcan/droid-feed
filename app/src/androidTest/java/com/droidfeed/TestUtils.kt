@@ -5,11 +5,6 @@ import android.arch.lifecycle.Observer
 import java.util.concurrent.CountDownLatch
 import java.util.concurrent.TimeUnit
 
-/**
- * Created by Dogan Gulcan on 1/30/18.
- */
-
-
 fun <T> LiveData<T>.blockingObserve(): T? {
     var value: T? = null
     val latch = CountDownLatch(1)

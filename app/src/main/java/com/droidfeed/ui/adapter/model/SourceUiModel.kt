@@ -12,8 +12,6 @@ import com.droidfeed.ui.common.BaseUiModel
 
 /**
  * UI model for feed sources.
- *
- * Created by Dogan Gulcan on 11/9/17.
  */
 class SourceUiModel(
     private val source: Source,
@@ -38,5 +36,4 @@ class SourceUiModel(
     override fun getViewType(): Int = UiModelType.SOURCE.ordinal
 
     override fun getData(): Diffable = source
-
 }

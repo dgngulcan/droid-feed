@@ -1,33 +1,26 @@
 package com.droidfeed.ui.module.newsletter
 
 import android.annotation.SuppressLint
-import android.arch.lifecycle.ViewModelProvider
 import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
-import android.text.Editable
-import android.util.Patterns
+import android.support.design.widget.Snackbar
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.droidfeed.R
-import com.droidfeed.data.api.mailchimp.MailchimpErrorType
+import com.droidfeed.data.api.mailchimp.ErrorType
 import com.droidfeed.databinding.FragmentNewsletterBinding
 import com.droidfeed.ui.common.BaseFragment
 import com.droidfeed.ui.common.DataState
-import com.droidfeed.ui.common.EventObserver
-import javax.inject.Inject
+import com.droidfeed.util.event.EventObserver
+import com.droidfeed.util.extention.hideKeyboard
+import com.droidfeed.util.extention.toggleVisibility
 
-/**
- * Created by Dogan Gulcan on 4/15/18.
- */
 @SuppressLint("ValidFragment")
 class NewsletterFragment : BaseFragment() {
 
     private lateinit var binding: FragmentNewsletterBinding
     private lateinit var viewModel: NewsletterViewModel
-
-    @Inject
-    lateinit var viewModelFactory: ViewModelProvider.Factory
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -44,50 +37,79 @@ class NewsletterFragment : BaseFragment() {
         super.onActivityCreated(savedInstanceState)
 
         viewModel = ViewModelProviders
-            .of(
-                this,
-                viewModelFactory
-            )
+            .of(this, viewModelFactory)
             .get(NewsletterViewModel::class.java)
 
         init()
     }
 
     private fun init() {
-        binding.btnImIn.setOnClickListener { onSignUp(binding.edtEmail.text) }
+        binding.btnImIn.setOnClickListener {
+            val email = binding.edtEmail.text.toString()
+            val isValidEmail = android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()
+
+            when {
+                email.isBlank() -> {
+                    binding.textInputLayout.error = getString(R.string.error_empty_email)
+                }
+                !isValidEmail -> {
+                    binding.textInputLayout.error = getString(R.string.error_email_format)
+                }
+                else -> {
+                    it.hideKeyboard()
+                    viewModel.signUp(email)
+                    binding.textInputLayout.error = null
+                }
+            }
+        }
 
         viewModel.signUpEvent.observe(this, EventObserver { state ->
             when (state) {
+                is DataState.Loading -> onLoading()
                 is DataState.Success<*> -> onSignUpSuccess()
                 is DataState.Error<*> -> onSignUpError(state)
             }
         })
     }
 
-    private fun onSignUpError(state: DataState.Error<*>) {
-        if (state.data is MailchimpErrorType) {
-            when (state.data) {
-                MailchimpErrorType.MEMBER_ALREADY_EXIST -> {
-                }
-            }
+    private fun onLoading() {
+        binding.apply {
+            btnImIn.visibility = View.GONE
+            txtAlreadySubscriber.visibility = View.GONE
+            progressBar.visibility = View.VISIBLE
         }
-
     }
 
     private fun onSignUpSuccess() {
-
-
-    }
-
-    /**
-     * Handles sign up event.
-     */
-    private fun onSignUp(email: Editable) {
-        when {
-            email.isBlank() -> binding.textInputLayout.error = getString(R.string.error_empty_email)
-            Patterns.EMAIL_ADDRESS.matcher(email).matches() -> viewModel.signUp(email.toString())
-            else -> binding.textInputLayout.error = getString(R.string.error_email_format)
+        binding.apply {
+            progressBar.visibility = View.GONE
+            btnImIn.visibility = View.GONE
+            textInputLayout.visibility = View.GONE
+            txtSubscribed.visibility = View.VISIBLE
         }
     }
 
+    private fun onSignUpError(state: DataState.Error<*>) {
+        binding.apply {
+            btnImIn.visibility = View.VISIBLE
+            txtAlreadySubscriber.toggleVisibility(false)
+            progressBar.visibility = View.GONE
+        }
+
+        if (state.data is ErrorType) {
+            when (state.data) {
+                ErrorType.MEMBER_ALREADY_EXIST -> {
+                    binding.txtAlreadySubscriber.toggleVisibility(true)
+                }
+
+                ErrorType.INVALID_RESOURCE -> {
+                    Snackbar.make(
+                        binding.btnImIn,
+                        getString(R.string.error_api_generic),
+                        Snackbar.LENGTH_SHORT
+                    ).show()
+                }
+            }
+        }
+    }
 }

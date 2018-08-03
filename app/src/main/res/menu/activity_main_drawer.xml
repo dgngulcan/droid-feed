@@ -18,7 +18,7 @@
             android:title="@string/nav_newsletter" />
         <item
             android:id="@+id/nav_contribute"
-            android:icon="@drawable/ic_human_greeting"
+            android:icon="@drawable/ic_human_greeting_black_24dp"
             android:title="@string/nav_contribute" />
         <item
             android:id="@+id/nav_about"

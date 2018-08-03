@@ -50,6 +50,10 @@ class DatabaseModule {
             appDatabase?.sourceDao()?.insertSources(
                 listOf(
                     Source(
+                        "Android Dialogs",
+                        "https://www.youtube.com/feeds/videos.xml?channel_id=UCMEmNnHT69aZuaOrE-dF6ug"
+                    ),
+                    Source(
                         "AndroidPub",
                         "https://android.jlelse.eu/feed"
                     ),
@@ -72,6 +76,10 @@ class DatabaseModule {
                     Source(
                         "Android Developers Blog",
                         "https://www.blogger.com/feeds/6755709643044947179/posts/default?alt=rss&max-results=25"
+                    ),
+                    Source(
+                        "Kotlin Academy",
+                        "https://blog.kotlin-academy.com/feed"
                     ),
                     Source(
                         "Fragmented",

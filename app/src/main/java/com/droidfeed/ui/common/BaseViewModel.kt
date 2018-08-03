@@ -3,10 +3,6 @@ package com.droidfeed.ui.common
 import android.arch.lifecycle.ViewModel
 import android.os.SystemClock
 
-
-/**
- * Created by Dogan Gulcan on 9/12/17.
- */
 abstract class BaseViewModel : ViewModel() {
 
     private var mLastClickTime: Long = 0
@@ -23,6 +19,4 @@ abstract class BaseViewModel : ViewModel() {
                 true
             }
         }
-
-
 }
