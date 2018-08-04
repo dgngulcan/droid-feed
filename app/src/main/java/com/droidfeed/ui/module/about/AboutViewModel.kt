@@ -26,28 +26,28 @@ class AboutViewModel @Inject constructor() : BaseViewModel() {
     val licenceUiModels by lazy { getLibrariesUiModels() }
 
     fun openContributionPage() {
-        if (userCanClick) openLinkEvent.setValue(BuildConfig.DROIDFEED_GITHUB_URL)
+        if (canClick) openLinkEvent.setValue(BuildConfig.DROIDFEED_GITHUB_URL)
     }
 
     fun openPlayStore() {
-        if (userCanClick) rateAppEvent.setValue(rateAppIntent)
+        if (canClick) rateAppEvent.setValue(rateAppIntent)
     }
 
     fun contactEmail() {
-        if (userCanClick) contactDevEvent.setValue(contactIntent)
+        if (canClick) contactDevEvent.setValue(contactIntent)
     }
 
     fun shareApp() {
-        if (userCanClick) shareAppEvent.setValue(shareIntent)
+        if (canClick) shareAppEvent.setValue(shareIntent)
     }
 
     fun openPrivacyPolicy() {
-        if (userCanClick) openLinkEvent.setValue(BuildConfig.DROIDFEED_PRIVACY_POLICY)
+        if (canClick) openLinkEvent.setValue(BuildConfig.DROIDFEED_PRIVACY_POLICY)
     }
 
     private val libraryClickListener = object : UiModelClickListener<Licence> {
         override fun onClick(model: Licence) {
-            if (userCanClick) openLinkEvent.setValue(model.url)
+            if (canClick) openLinkEvent.setValue(model.url)
         }
     }
 
