@@ -28,11 +28,12 @@ class NewsletterRepo @Inject constructor(
      */
     fun addSubscriberToNewsletter(subscriber: Subscriber): LiveData<Event<DataState>> {
         val callLiveData = MutableLiveData<Event<DataState>>()
-        val listId = remoteConfig.getString("mc_newsletter_list_id")
 
         callLiveData.value = Event(DataState.Loading())
 
         launch {
+            val listId = remoteConfig.getString("mc_newsletter_list_id")
+
             val call = newsletterService.addSubscriber(listId, subscriber)
             call.await().let { response ->
                 if (response.isSuccessful) {
@@ -41,7 +42,7 @@ class NewsletterRepo @Inject constructor(
                     when (response.code()) {
                         400 -> {
                             val errorBody = response.errorBody()?.string()
-                            val mcError = errorBody?.let { parseMailchimpError(it) }
+                            val mcError = errorBody?.let { parseError(it) }
 
                             when {
                                 mcError != null -> postError(mcError, callLiveData)
@@ -58,7 +59,7 @@ class NewsletterRepo @Inject constructor(
         return callLiveData
     }
 
-    private fun parseMailchimpError(errorBody: String): Error? {
+    private fun parseError(errorBody: String): Error? {
         val moshi = Moshi.Builder()
             .add(ErrorAdapter())
             .build()
