@@ -69,4 +69,8 @@
   <string name="legal">Legal</string>
   <string name="privacy_policy">Privacy Policy</string>
 
+
+  <string name="content_article_image">image of the article</string>
+  <string name="content_app_logo">DroidFeed logo</string>
+
 </resources>

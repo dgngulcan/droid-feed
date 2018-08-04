@@ -1,6 +1,7 @@
 package com.droidfeed.di
 
 import android.content.Context
+import android.content.SharedPreferences
 import com.droidfeed.App
 import com.droidfeed.di.api.ApiModule
 import dagger.Module
@@ -19,6 +20,6 @@ class AppModule {
 
     @Provides
     @Singleton
-    fun provideSharedPrefs(app: App) =
+    fun provideSharedPrefs(app: App): SharedPreferences =
         app.getSharedPreferences("df_sharedpreferences", Context.MODE_PRIVATE)
 }

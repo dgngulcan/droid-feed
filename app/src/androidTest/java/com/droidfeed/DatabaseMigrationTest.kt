@@ -51,7 +51,7 @@ class DatabaseMigrationTest {
     @UiThreadTest
     fun testMigrationFrom1To2_containsCorrectData() {
         // Create the database in version 1
-        var db = testHelper.createDatabase(TEST_DB_NAME, 1)
+        val db = testHelper.createDatabase(TEST_DB_NAME, 1)
         db.close()
 
         testHelper.runMigrationsAndValidate(

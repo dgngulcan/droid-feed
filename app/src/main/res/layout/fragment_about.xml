@@ -27,6 +27,7 @@
         android:layout_width="96dp"
         android:layout_height="96dp"
         android:layout_marginTop="@dimen/spacing_large"
+        android:contentDescription="@string/content_app_logo"
         android:scaleType="centerInside"
         tools:src="@drawable/df_icon_512" />
 
