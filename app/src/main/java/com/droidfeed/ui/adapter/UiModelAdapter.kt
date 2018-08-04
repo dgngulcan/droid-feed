@@ -9,6 +9,7 @@ import com.droidfeed.ui.common.BaseUiModel
 import com.droidfeed.util.logStackTrace
 import kotlinx.coroutines.experimental.android.UI
 import kotlinx.coroutines.experimental.async
+import kotlinx.coroutines.experimental.launch
 
 /**
  * Generic [RecyclerView.Adapter] for [BaseUiModel]s.
@@ -37,7 +38,7 @@ class UiModelAdapter constructor(
                 position in 0..(itemCount - 1) && itemCount > 0 -> uiModels[position].getViewType()
                 else -> 0
             }
-        } catch (e: Exception) {
+        } catch (e: IndexOutOfBoundsException) {
             logStackTrace(e)
             0
         }
@@ -45,7 +46,7 @@ class UiModelAdapter constructor(
     @Synchronized
     fun addUiModels(newUiModels: Collection<BaseUiModelAlias>?) {
         newUiModels?.let {
-            async(UI) {
+            launch(UI) {
                 val oldItems = async { ArrayList(uiModels) }
 
                 val diffResult = async {
@@ -61,7 +62,7 @@ class UiModelAdapter constructor(
                     dispatchUpdates(it)
 
                     uiModels.clear()
-                    uiModels.addAll(uiModels)
+                    uiModels.addAll(newUiModels)
                     updateViewTypes(uiModels)
 
                     dataInsertedCallback?.onUpdated()

@@ -7,6 +7,7 @@ import android.net.ConnectivityManager
 import com.droidfeed.util.logConsole
 import com.droidfeed.util.logStackTrace
 import org.xmlpull.v1.XmlPullParser
+import org.xmlpull.v1.XmlPullParserException
 import java.util.Random
 
 /**
@@ -20,6 +21,9 @@ fun Context.isOnline(): Boolean {
     return activeNetwork != null && activeNetwork.isConnectedOrConnecting
 }
 
+/**
+ * Starts an activity if the activity can be resolved.
+ */
 fun Intent.startActivity(activity: Activity) {
     if (this.resolveActivity(activity.packageManager) != null) {
         activity.startActivity(this)
@@ -28,6 +32,9 @@ fun Intent.startActivity(activity: Activity) {
     }
 }
 
+/**
+ * Return a random integer.
+ */
 fun ClosedRange<Int>.random() = Random().nextInt(endInclusive - start) + start
 
 /**
@@ -36,16 +43,20 @@ fun ClosedRange<Int>.random() = Random().nextInt(endInclusive - start) + start
 fun XmlPullParser.skip() {
     when {
         eventType != XmlPullParser.START_TAG -> return
-        else -> try {
-            var depth = 1
-            while (depth != 0) {
-                when (next()) {
-                    XmlPullParser.END_TAG -> depth--
-                    XmlPullParser.START_TAG -> depth++
-                }
+        else -> skipTag()
+    }
+}
+
+private fun XmlPullParser.skipTag() {
+    try {
+        var depth = 1
+        while (depth != 0) {
+            when (next()) {
+                XmlPullParser.END_TAG -> depth--
+                XmlPullParser.START_TAG -> depth++
             }
-        } catch (e: Exception) {
-            logStackTrace(e)
         }
+    } catch (e: XmlPullParserException) {
+        logStackTrace(e)
     }
 }
