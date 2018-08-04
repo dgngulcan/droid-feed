@@ -90,11 +90,13 @@ data class Article(
     override fun isSame(item: Diffable): Boolean = this.link.contentEquals((item as Article).link)
 
     override fun isContentSame(item: Diffable): Boolean {
-        item as Article
+        return if (item is Article) {
+            val content1 = this.bookmarked == item.bookmarked
+            val content2 = this.link.contentEquals(item.link)
 
-        val content1 = this.bookmarked == item.bookmarked
-        val content2 = this.link.contentEquals(item.link)
-
-        return content1 && content2
+            content1 && content2
+        } else {
+            false
+        }
     }
 }

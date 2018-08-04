@@ -68,6 +68,7 @@ class FixAppBarLayoutBehavior(
     ) {
         if (type == ViewCompat.TYPE_NON_TOUCH) {
             val currOffset = topAndBottomOffset
+
             if (dy < 0 && currOffset == 0 || dy > 0 && currOffset == -child.totalScrollRange) {
                 ViewCompat.stopNestedScroll(target, ViewCompat.TYPE_NON_TOUCH)
             }

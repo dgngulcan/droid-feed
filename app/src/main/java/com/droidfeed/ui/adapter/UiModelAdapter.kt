@@ -12,8 +12,6 @@ import kotlinx.coroutines.experimental.async
 
 /**
  * Generic [RecyclerView.Adapter] for [BaseUiModel]s.
- *
- * Created by Dogan Gulcan on 11/2/17.
  */
 @Suppress("UNCHECKED_CAST")
 class UiModelAdapter constructor(
@@ -45,10 +43,10 @@ class UiModelAdapter constructor(
         }
 
     @Synchronized
-    fun addUiModels(uiModels: Collection<BaseUiModelAlias>?) {
-        uiModels?.let {
+    fun addUiModels(newUiModels: Collection<BaseUiModelAlias>?) {
+        newUiModels?.let {
             async(UI) {
-                val oldItems = async { ArrayList(this@UiModelAdapter.uiModels) }
+                val oldItems = async { ArrayList(uiModels) }
 
                 val diffResult = async {
                     DiffUtil.calculateDiff(
@@ -62,9 +60,9 @@ class UiModelAdapter constructor(
                 diffResult.await().let {
                     dispatchUpdates(it)
 
-                    this@UiModelAdapter.uiModels.clear()
-                    this@UiModelAdapter.uiModels.addAll(uiModels)
-                    updateViewTypes(this@UiModelAdapter.uiModels)
+                    uiModels.clear()
+                    uiModels.addAll(uiModels)
+                    updateViewTypes(uiModels)
 
                     dataInsertedCallback?.onUpdated()
                 }
@@ -74,7 +72,7 @@ class UiModelAdapter constructor(
 
     private fun dispatchUpdates(it: DiffUtil.DiffResult) {
         val recyclerViewState = layoutManager?.onSaveInstanceState()
-        it.dispatchUpdatesTo(this@UiModelAdapter)
+        it.dispatchUpdatesTo(this)
         layoutManager?.onRestoreInstanceState(recyclerViewState)
     }
 

@@ -73,25 +73,28 @@ class FeedRepo @Inject constructor(
     }
 
     private fun shouldFetchFeed(data: List<Article>?): Boolean {
-        if (data != null && data.isNotEmpty()) {
+        return if (data != null && data.isNotEmpty()) {
             val latestCreationDate = if (data.isNotEmpty()) data.first().pubDate else ""
-
-            return if (latestCreationDate.isNotBlank()) {
-                latestCreationDate.let {
-                    dateTimeUtils.getTimeStampFromDate(
-                        it,
-                        DateTimeUtils.DateFormat.RSS.format
-                    )?.let {
-                        val currentMillis = System.currentTimeMillis()
-                        val timeDifference = currentMillis - it
-                        timeDifference > NETWORK_FETCH_DIMINISHING_IN_MILLIS || timeDifference < 0
-                    }
-                } != false
-            } else {
-                return true
-            }
+            isCacheExpired(latestCreationDate)
         } else {
-            return true
+            true
+        }
+    }
+
+    private fun isCacheExpired(latestCreationDate: String): Boolean {
+        return if (latestCreationDate.isNotBlank()) {
+            latestCreationDate.let {
+                dateTimeUtils.getTimeStampFromDate(
+                    it,
+                    DateTimeUtils.DateFormat.RSS.format
+                )?.let {
+                    val currentMillis = System.currentTimeMillis()
+                    val timeDifference = currentMillis - it
+                    timeDifference > NETWORK_FETCH_DIMINISHING_IN_MILLIS || timeDifference < 0
+                }
+            } != false
+        } else {
+            true
         }
     }
 

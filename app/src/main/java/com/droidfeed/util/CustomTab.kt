@@ -66,12 +66,6 @@ class CustomTab @Inject constructor(val activity: Activity) {
         CustomTabsClient.bindCustomTabsService(activity, chromePackage, connection)
     }
 
-    /**
-     * Launches a customized tab with animation.
-     *
-     * @param client
-     * @param url
-     */
     private fun launchCustomTab(
         client: CustomTabsClient,
         url: String

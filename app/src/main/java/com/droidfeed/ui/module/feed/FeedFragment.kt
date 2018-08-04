@@ -11,7 +11,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.droidfeed.R
-import com.droidfeed.databinding.FragmentArticlesBinding
+import com.droidfeed.databinding.FragmentFeedBinding
 import com.droidfeed.ui.adapter.BaseUiModelAlias
 import com.droidfeed.ui.adapter.DataInsertedCallback
 import com.droidfeed.ui.adapter.UiModelAdapter
@@ -31,7 +31,7 @@ import javax.inject.Inject
 open class FeedFragment : BaseFragment() {
 
     protected lateinit var viewModel: FeedViewModel
-    protected lateinit var binding: FragmentArticlesBinding
+    protected lateinit var binding: FragmentFeedBinding
     private lateinit var adapter: UiModelAdapter
 
     private val dataInsertedCallback = object : DataInsertedCallback {
@@ -60,7 +60,7 @@ open class FeedFragment : BaseFragment() {
         savedInstanceState: Bundle?
     ): View? {
         super.onCreateView(inflater, container, savedInstanceState)
-        binding = FragmentArticlesBinding.inflate(inflater, container, false)
+        binding = FragmentFeedBinding.inflate(inflater, container, false)
         return binding.root
     }
 
