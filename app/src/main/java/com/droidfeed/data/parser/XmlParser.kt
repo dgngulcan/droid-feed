@@ -3,9 +3,6 @@ package com.droidfeed.data.parser
 import com.droidfeed.data.model.Article
 import org.xmlpull.v1.XmlPullParser
 
-/**
- * Created by Dogan Gulcan on 7/14/18.
- */
 abstract class XmlParser {
 
     abstract fun parseArticles(parser: XmlPullParser): List<Article>
@@ -15,5 +12,4 @@ abstract class XmlParser {
         parser.nextTag()
         return link
     }
-
 }

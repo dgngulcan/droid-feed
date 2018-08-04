@@ -97,5 +97,4 @@ class DatabaseModule {
     @Provides
     @Singleton
     fun providesSourceDao(database: AppDatabase) = database.sourceDao()
-
 }

@@ -7,8 +7,6 @@ import com.droidfeed.ui.adapter.diff.Diffable
 
 /**
  * Base UI model to be used with [UiModelAdapter]
- *
- * Created by Dogan Gulcan on 11/2/17.
  */
 abstract class BaseUiModel<T : RecyclerView.ViewHolder> {
 
@@ -19,5 +17,4 @@ abstract class BaseUiModel<T : RecyclerView.ViewHolder> {
     abstract fun getViewType(): Int
 
     abstract fun getData(): Diffable
-
 }

@@ -5,5 +5,3 @@ data class Error(
     val status: Int,
     val detail: String
 )
-
-

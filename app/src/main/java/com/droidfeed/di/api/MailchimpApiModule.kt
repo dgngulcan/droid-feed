@@ -38,10 +38,6 @@ class MailchimpApiModule {
     @Named("mailchimp-retrofit")
     @Singleton
     fun provideMailChimpRetrofit(@Named("mailchimp-http-client") httpClient: OkHttpClient): Retrofit {
-//        val moshi = Moshi.Builder()
-//            .add(KotlinJsonAdapterFactory())
-//            .build()
-
         return Retrofit.Builder()
             .baseUrl("https://us12.api.mailchimp.com/3.0/")
             .addConverterFactory(MoshiConverterFactory.create())

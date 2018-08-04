@@ -5,10 +5,6 @@ import android.arch.persistence.room.RoomDatabase
 import com.droidfeed.data.model.Article
 import com.droidfeed.data.model.Source
 
-
-/**
- * Created by Dogan Gulcan on 9/30/17.
- */
 @Database(entities = [(Source::class), (Article::class)], version = 2)
 abstract class AppDatabase : RoomDatabase() {
 
@@ -21,7 +17,4 @@ abstract class AppDatabase : RoomDatabase() {
     abstract fun rssDao(): RssDao
 
     abstract fun sourceDao(): SourceDao
-
 }
-
-
