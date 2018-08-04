@@ -16,21 +16,17 @@ import com.droidfeed.ui.adapter.UiModelType
 import com.droidfeed.ui.adapter.model.ArticleUiModel
 import com.droidfeed.ui.common.BaseViewModel
 import com.droidfeed.ui.common.SingleLiveEvent
-import com.droidfeed.util.AnalyticsUtil
 import kotlinx.coroutines.experimental.CommonPool
 import kotlinx.coroutines.experimental.launch
 import javax.inject.Inject
 
 /**
- * [ViewModel] of [FeedFragment].
- *
- * Created by Dogan Gulcan on 9/22/17.
+ * [ViewModel] for feed screens.
  */
 @Suppress("UNCHECKED_CAST")
 class FeedViewModel @Inject constructor(
     sourceRepo: SourceRepo,
-    private val rssRepo: FeedRepo,
-    private val analytics: AnalyticsUtil
+    private val rssRepo: FeedRepo
 ) : BaseViewModel() {
 
     val isLoading = ObservableBoolean()
@@ -50,7 +46,7 @@ class FeedViewModel @Inject constructor(
         Transformations.switchMap(
             refreshToggle
         ) {
-            loadArticles(feedType)
+            loadFeed(feedType)
         }
 
     val rssUiModelData: LiveData<List<ArticleUiModel>> =
@@ -62,7 +58,7 @@ class FeedViewModel @Inject constructor(
     /**
      * Sets feed type for the ViewModel. After type is set, the data is refreshed.
      */
-    fun setFeedType(feedType: FeedType) {
+    fun load(feedType: FeedType) {
         this.feedType = feedType
         refreshToggle.value = true // initial loading
     }
@@ -75,16 +71,16 @@ class FeedViewModel @Inject constructor(
             sourceList
         }
 
-    private fun loadArticles(feedType: FeedType): LiveData<Resource<List<Article>>> =
+    private fun loadFeed(feedType: FeedType): LiveData<Resource<List<Article>>> =
         when (feedType) {
-            FeedType.ALL -> rssRepo.getAllFeed(sources)
+            FeedType.NEWS -> rssRepo.getAllFeed(sources)
             FeedType.BOOKMARKS -> rssRepo.getBookmarkedArticles()
         }
 
     private fun handleResponseData(response: Resource<List<Article>>): LiveData<List<ArticleUiModel>> {
         response.data?.let { articleList ->
             launch(CommonPool) {
-                val articles = if (feedType == FeedType.ALL) {
+                val articles = if (feedType == FeedType.NEWS) {
                     filterActiveArticles(articleList)
                 } else {
                     isBookmarkEmpty.set(articleList.isEmpty())
@@ -151,24 +147,21 @@ class FeedViewModel @Inject constructor(
     private val articleClickCallback by lazy {
         object : ArticleClickListener {
             override fun onItemClick(article: Article) {
-                if (userCanClick) {
+                if (canClick) {
                     articleOpenDetail.setValue(article)
-                    analytics.logArticleClick()
                 }
             }
 
             override fun onShareClick(article: Article) {
-                if (userCanClick) {
+                if (canClick) {
                     articleShareEvent.setValue(article.getShareIntent())
-                    analytics.logShare()
                 }
             }
 
             override fun onBookmarkClick(article: Article) {
-                if (userCanClick) {
+                if (canClick) {
                     toggleBookmark(article)
                     articleBookmarkEvent.setValue(true)
-                    analytics.logBookmark(article.bookmarked == 1)
                 }
             }
         }
