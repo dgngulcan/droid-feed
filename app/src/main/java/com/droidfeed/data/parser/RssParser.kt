@@ -109,8 +109,9 @@ class RssParser @Inject constructor(private var dateTimeUtils: DateTimeUtils) : 
         return when {
             doc.hasAttr("img") -> {
                 val img = doc.select("img").first()
+                val imgAttributeName = "abs:src"
                 when {
-                    img.hasAttr("abs:src") -> img.attr("abs:src")
+                    img.hasAttr(imgAttributeName) -> img.attr(imgAttributeName)
                     else -> ""
                 }
             }

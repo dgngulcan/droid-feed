@@ -35,9 +35,9 @@ class DFViewModelFactory @Inject constructor(
         try {
             @Suppress("UNCHECKED_CAST")
             return creator.get() as T
-        } catch (e: RuntimeException) {
+        } catch (e: IllegalArgumentException) {
             logStackTrace(e)
-            throw RuntimeException()
+            throw IllegalArgumentException()
         }
     }
 }

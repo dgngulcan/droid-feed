@@ -18,6 +18,9 @@ import com.droidfeed.ui.module.feed.ArticleClickListener
 import com.droidfeed.util.ObservableColorMatrix
 import com.droidfeed.util.glide.GlideApp
 
+/**
+ * ViewHolder to display article cards.
+ */
 abstract class ArticleViewHolder(private val root: View) : RecyclerView.ViewHolder(root) {
 
     companion object {
