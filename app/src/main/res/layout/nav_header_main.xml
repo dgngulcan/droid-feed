@@ -14,7 +14,7 @@
     android:theme="@style/ThemeOverlay.AppCompat.Dark">
 
     <ImageView
-      imageResource="@{drawerImage}"
+      imageResource="@{safeUnbox(drawerImage)}"
       android:layout_width="match_parent"
       android:layout_height="match_parent"
       android:contentDescription="@string/nav_header_desc"
