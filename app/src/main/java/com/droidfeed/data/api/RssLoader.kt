@@ -50,4 +50,3 @@ class RssLoader @Inject constructor(
         return fetchResponse as MutableLiveData<ApiResponse<List<Article>>>
     }
 }
-

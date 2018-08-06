@@ -7,6 +7,9 @@ import java.lang.Exception
 
 private const val TAG = "DroidFeed"
 
+/**
+ * Exception logger.
+ */
 fun logStackTrace(exception: Exception, message: String = "Exception") {
     if (BuildConfig.DEBUG) {
         Log.e(TAG, message, exception)
@@ -16,6 +19,9 @@ fun logStackTrace(exception: Exception, message: String = "Exception") {
     }
 }
 
+/**
+ * Debug console logger.
+ */
 fun logConsole(message: String) {
     if (BuildConfig.DEBUG) {
         Log.e(TAG, message)

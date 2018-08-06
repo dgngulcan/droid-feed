@@ -9,11 +9,10 @@ import com.droidfeed.ui.common.BaseUiModel
 import com.droidfeed.util.logStackTrace
 import kotlinx.coroutines.experimental.android.UI
 import kotlinx.coroutines.experimental.async
+import kotlinx.coroutines.experimental.launch
 
 /**
  * Generic [RecyclerView.Adapter] for [BaseUiModel]s.
- *
- * Created by Dogan Gulcan on 11/2/17.
  */
 @Suppress("UNCHECKED_CAST")
 class UiModelAdapter constructor(
@@ -39,16 +38,16 @@ class UiModelAdapter constructor(
                 position in 0..(itemCount - 1) && itemCount > 0 -> uiModels[position].getViewType()
                 else -> 0
             }
-        } catch (e: Exception) {
+        } catch (e: IndexOutOfBoundsException) {
             logStackTrace(e)
             0
         }
 
     @Synchronized
-    fun addUiModels(uiModels: Collection<BaseUiModelAlias>?) {
-        uiModels?.let {
-            async(UI) {
-                val oldItems = async { ArrayList(this@UiModelAdapter.uiModels) }
+    fun addUiModels(newUiModels: Collection<BaseUiModelAlias>?) {
+        newUiModels?.let {
+            launch(UI) {
+                val oldItems = async { ArrayList(uiModels) }
 
                 val diffResult = async {
                     DiffUtil.calculateDiff(
@@ -62,9 +61,9 @@ class UiModelAdapter constructor(
                 diffResult.await().let {
                     dispatchUpdates(it)
 
-                    this@UiModelAdapter.uiModels.clear()
-                    this@UiModelAdapter.uiModels.addAll(uiModels)
-                    updateViewTypes(this@UiModelAdapter.uiModels)
+                    uiModels.clear()
+                    uiModels.addAll(newUiModels)
+                    updateViewTypes(uiModels)
 
                     dataInsertedCallback?.onUpdated()
                 }
@@ -74,7 +73,7 @@ class UiModelAdapter constructor(
 
     private fun dispatchUpdates(it: DiffUtil.DiffResult) {
         val recyclerViewState = layoutManager?.onSaveInstanceState()
-        it.dispatchUpdatesTo(this@UiModelAdapter)
+        it.dispatchUpdatesTo(this)
         layoutManager?.onRestoreInstanceState(recyclerViewState)
     }
 

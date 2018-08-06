@@ -42,9 +42,6 @@ class DatabaseModule {
         return appDatabase
     }
 
-    /**
-     * Inserts default sources to the database.
-     */
     private fun insertSources(appDatabase: AppDatabase?) {
         launch {
             appDatabase?.sourceDao()?.insertSources(
@@ -97,5 +94,4 @@ class DatabaseModule {
     @Provides
     @Singleton
     fun providesSourceDao(database: AppDatabase) = database.sourceDao()
-
 }

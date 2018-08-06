@@ -2,7 +2,6 @@ package com.droidfeed.util
 
 import java.text.ParseException
 import java.text.SimpleDateFormat
-import java.util.Date
 import java.util.Locale
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -20,14 +19,12 @@ class DateTimeUtils @Inject constructor() {
         date: String,
         simpleDateFormat: SimpleDateFormat
     ): Long? {
-        var mDate: Date? = null
-
-        try {
-            mDate = simpleDateFormat.parse(date)
+        return try {
+            val mDate = simpleDateFormat.parse(date)
+            mDate?.time
         } catch (e: ParseException) {
             logStackTrace(e)
-        } finally {
-            return mDate?.time
+            0L
         }
     }
 }

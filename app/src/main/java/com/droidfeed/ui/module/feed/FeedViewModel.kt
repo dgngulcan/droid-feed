@@ -55,14 +55,6 @@ class FeedViewModel @Inject constructor(
             handleResponseData(response)
         }
 
-    /**
-     * Sets feed type for the ViewModel. After type is set, the data is refreshed.
-     */
-    fun load(feedType: FeedType) {
-        this.feedType = feedType
-        refreshToggle.value = true // initial loading
-    }
-
     val sources: LiveData<List<Source>> =
         Transformations.map(sourceRepo.sources) { sourceList ->
             val activeSources = sourceList.filter { it.isActive }
@@ -70,6 +62,14 @@ class FeedViewModel @Inject constructor(
             isLoading.set(!activeSources.isEmpty())
             sourceList
         }
+
+    /**
+     * Sets feed type for the ViewModel. After type is set, the data is refreshed.
+     */
+    fun load(feedType: FeedType) {
+        this.feedType = feedType
+        refreshToggle.value = true // initial loading
+    }
 
     private fun loadFeed(feedType: FeedType): LiveData<Resource<List<Article>>> =
         when (feedType) {

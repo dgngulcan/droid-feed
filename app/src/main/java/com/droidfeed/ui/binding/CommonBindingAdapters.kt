@@ -8,11 +8,8 @@ import android.webkit.WebView
 import android.widget.ImageView
 import android.widget.TextView
 import com.droidfeed.util.extention.loadImage
-import java.util.*
-
-/**
- * Created by Dogan Gulcan on 9/30/17.
- */
+import java.util.Calendar
+import java.util.TimeZone
 
 @BindingAdapter("imageResource")
 fun loadImage(imageView: ImageView, url: Any) {
@@ -22,7 +19,6 @@ fun loadImage(imageView: ImageView, url: Any) {
 @BindingAdapter("avdImageResource")
 fun avdImageResource(imageView: ImageView, avdImageResource: Int) {
     imageView.setImageResource(avdImageResource)
-//    if (isClickedRecently) imageView.drawable?.let { (it as? AnimatedVectorDrawable)?.start() }
 }
 
 @BindingAdapter("visibilityToggle")
@@ -45,7 +41,8 @@ fun loadHtml(webView: WebView, htmlContent: String) {
 @BindingAdapter("relativeDate")
 fun setRelativeDate(view: TextView, timeStamp: Long) {
     view.text = DateUtils.getRelativeTimeSpanString(
-            timeStamp,
-            Calendar.getInstance(TimeZone.getDefault()).timeInMillis,
-            android.text.format.DateUtils.SECOND_IN_MILLIS)
+        timeStamp,
+        Calendar.getInstance(TimeZone.getDefault()).timeInMillis,
+        android.text.format.DateUtils.SECOND_IN_MILLIS
+    )
 }

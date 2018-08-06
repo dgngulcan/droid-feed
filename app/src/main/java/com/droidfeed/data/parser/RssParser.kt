@@ -8,6 +8,7 @@ import com.droidfeed.util.extention.skip
 import com.droidfeed.util.logStackTrace
 import org.jsoup.Jsoup
 import org.xmlpull.v1.XmlPullParser
+import org.xmlpull.v1.XmlPullParserException
 import java.net.URLDecoder
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -30,7 +31,7 @@ class RssParser @Inject constructor(private var dateTimeUtils: DateTimeUtils) : 
                     else -> parser.skip()
                 }
             }
-        } catch (ignored: Exception) {
+        } catch (ignored: XmlPullParserException) {
             logStackTrace(ignored)
         }
 
@@ -105,10 +106,16 @@ class RssParser @Inject constructor(private var dateTimeUtils: DateTimeUtils) : 
     private fun getImageFromDescription(descText: String): String {
         val doc = Jsoup.parse(descText)
 
-        return try {
-            doc.select("img").first().attr("abs:src")
-        } catch (e: NullPointerException) {
-            ""
+        return when {
+            doc.hasAttr("img") -> {
+                val img = doc.select("img").first()
+                val imgAttributeName = "abs:src"
+                when {
+                    img.hasAttr(imgAttributeName) -> img.attr(imgAttributeName)
+                    else -> ""
+                }
+            }
+            else -> ""
         }
     }
 
@@ -116,20 +123,21 @@ class RssParser @Inject constructor(private var dateTimeUtils: DateTimeUtils) : 
         val doc = Jsoup.parse(contentText)
         val content = Content()
 
-        try {
-            val frame = doc.select("iframe")?.first()?.toString()
+        val frame = doc.select("iframe")?.first()?.toString()
 
-            content.contentImage =
-                if (frame != null && !frame.isBlank() && frame.contains("image=")) {
-                    val subFrame = frame.indexOf("image=") + 6
-                    URLDecoder.decode(
-                        frame.subSequence(subFrame, frame.indexOf("&", subFrame))
-                            .toString()
-                    )
-                } else {
-                    doc.select("img").first().attr("abs:src")
-                }
-        } catch (ignored: NullPointerException) {
+        content.contentImage = if (frame != null && !frame.isBlank() && frame.contains("image=")) {
+            val subFrame = frame.indexOf("image=") + 6
+            URLDecoder.decode(
+                frame.subSequence(
+                    subFrame,
+                    frame.indexOf("&", subFrame)
+                ).toString(),
+                "UTF-8"
+            )
+        } else if (doc.hasAttr("img")) {
+            doc.select("img").first().attr("abs:src")
+        } else {
+            ""
         }
 
         return content

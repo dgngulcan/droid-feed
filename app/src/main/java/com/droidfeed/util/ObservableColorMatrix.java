@@ -28,11 +28,7 @@ public class ObservableColorMatrix extends ColorMatrix {
 
     private float saturation = 1f;
 
-    public ObservableColorMatrix() {
-        super();
-    }
-
-    public float getSaturation() {
+    private float getSaturation() {
         return saturation;
     }
 

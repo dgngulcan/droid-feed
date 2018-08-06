@@ -7,15 +7,11 @@ import android.arch.persistence.room.Ignore
 import android.arch.persistence.room.PrimaryKey
 import android.content.Intent
 import android.databinding.ObservableInt
-import android.os.Parcelable
 import com.droidfeed.R
 import com.droidfeed.data.db.AppDatabase
 import com.droidfeed.ui.adapter.UiModelType
 import com.droidfeed.ui.adapter.diff.Diffable
-import kotlinx.android.parcel.IgnoredOnParcel
-import kotlinx.android.parcel.Parcelize
 
-@Parcelize
 @Entity(tableName = AppDatabase.RSS_TABLE_NAME)
 data class Article(
     @PrimaryKey
@@ -49,9 +45,8 @@ data class Article(
     @Ignore
     var layoutType: UiModelType = UiModelType.ARTICLE_SMALL
 
-) : Diffable, Comparable<Article>, Parcelable {
+) : Diffable, Comparable<Article> {
 
-    @IgnoredOnParcel
     @Transient
     @ColumnInfo(name = "bookmarked")
     var bookmarked: Int = 0
@@ -65,12 +60,10 @@ data class Article(
             }
         }
 
-    @IgnoredOnParcel
     @Transient
     @Ignore
     val bookmarkObservable = ObservableInt(R.drawable.avd_bookmark_negative)
 
-    @IgnoredOnParcel
     @Transient
     @ColumnInfo(name = "contentImage")
     var image: String = ""
@@ -90,11 +83,13 @@ data class Article(
     override fun isSame(item: Diffable): Boolean = this.link.contentEquals((item as Article).link)
 
     override fun isContentSame(item: Diffable): Boolean {
-        item as Article
+        return if (item is Article) {
+            val content1 = this.bookmarked == item.bookmarked
+            val content2 = this.link.contentEquals(item.link)
 
-        val content1 = this.bookmarked == item.bookmarked
-        val content2 = this.link.contentEquals(item.link)
-
-        return content1 && content2
+            content1 && content2
+        } else {
+            false
+        }
     }
 }
