@@ -1,6 +1,7 @@
 package com.droidfeed.ui.module.newsletter
 
 import android.annotation.SuppressLint
+import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
 import android.support.design.widget.Snackbar
@@ -8,11 +9,10 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.droidfeed.R
+import com.droidfeed.data.DataStatus
 import com.droidfeed.data.api.mailchimp.ErrorType
 import com.droidfeed.databinding.FragmentNewsletterBinding
 import com.droidfeed.ui.common.BaseFragment
-import com.droidfeed.ui.common.DataState
-import com.droidfeed.util.event.EventObserver
 import com.droidfeed.util.extention.hideKeyboard
 import com.droidfeed.util.extention.toggleVisibility
 
@@ -63,11 +63,11 @@ class NewsletterFragment : BaseFragment() {
             }
         }
 
-        viewModel.signUpEvent.observe(this, EventObserver { state ->
-            when (state) {
-                is DataState.Loading -> onLoading()
-                is DataState.Success<*> -> onSignUpSuccess()
-                is DataState.Error<*> -> onSignUpError(state)
+        viewModel.signUpEvent.observe(this, Observer { resource ->
+            when (resource?.dataState) {
+                is DataStatus.Loading -> onLoading()
+                is DataStatus.Success -> onSignUpSuccess()
+                is DataStatus.Error<*> -> onSignUpError(resource.dataState as DataStatus.Error<*>)
             }
         })
     }
@@ -89,7 +89,7 @@ class NewsletterFragment : BaseFragment() {
         }
     }
 
-    private fun onSignUpError(state: DataState.Error<*>) {
+    private fun onSignUpError(state: DataStatus.Error<*>) {
         binding.apply {
             btnImIn.visibility = View.VISIBLE
             txtAlreadySubscriber.toggleVisibility(false)

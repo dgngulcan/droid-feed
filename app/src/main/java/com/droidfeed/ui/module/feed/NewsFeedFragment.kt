@@ -9,7 +9,7 @@ class NewsFeedFragment : FeedFragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        viewModel.load(FeedType.NEWS)
+        viewModel.refresh()
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {

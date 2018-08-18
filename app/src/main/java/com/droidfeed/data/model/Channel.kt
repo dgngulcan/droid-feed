@@ -11,4 +11,5 @@ data class Channel(
 
     @ColumnInfo(name = "channel_link")
     var link: String = ""
+
 )

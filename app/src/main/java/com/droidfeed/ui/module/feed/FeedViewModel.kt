@@ -6,14 +6,13 @@ import android.arch.lifecycle.Transformations
 import android.arch.lifecycle.ViewModel
 import android.content.Intent
 import android.databinding.ObservableBoolean
-import com.droidfeed.data.Resource
-import com.droidfeed.data.Status
-import com.droidfeed.data.model.Article
+import com.droidfeed.data.DataResource
+import com.droidfeed.data.model.Post
 import com.droidfeed.data.model.Source
-import com.droidfeed.data.repo.FeedRepo
+import com.droidfeed.data.repo.PostRepo
 import com.droidfeed.data.repo.SourceRepo
 import com.droidfeed.ui.adapter.UiModelType
-import com.droidfeed.ui.adapter.model.ArticleUiModel
+import com.droidfeed.ui.adapter.model.PostUIModel
 import com.droidfeed.ui.common.BaseViewModel
 import com.droidfeed.ui.common.SingleLiveEvent
 import kotlinx.coroutines.experimental.CommonPool
@@ -26,7 +25,7 @@ import javax.inject.Inject
 @Suppress("UNCHECKED_CAST")
 class FeedViewModel @Inject constructor(
     sourceRepo: SourceRepo,
-    private val rssRepo: FeedRepo
+    private val rssRepo: PostRepo
 ) : BaseViewModel() {
 
     val isLoading = ObservableBoolean()
@@ -34,22 +33,22 @@ class FeedViewModel @Inject constructor(
     val isBookmarkEmpty = ObservableBoolean()
     val loadingFailedEvent = SingleLiveEvent<Boolean>()
     val articleBookmarkEvent = SingleLiveEvent<Boolean>()
-    val articleOpenDetail = SingleLiveEvent<Article>()
-    val articleOnUnBookmark = SingleLiveEvent<Article>()
+    val articleOpenDetail = SingleLiveEvent<Post>()
+    val articleOnUnBookmark = SingleLiveEvent<Post>()
     val articleShareEvent = SingleLiveEvent<Intent>()
 
-    private val result = MutableLiveData<List<ArticleUiModel>>()
+    private val result = MutableLiveData<List<PostUIModel>>()
     private val refreshToggle = MutableLiveData<Boolean>()
     private lateinit var feedType: FeedType
 
-    private val rssResponses: LiveData<Resource<List<Article>>> =
+    private val rssResponses: LiveData<DataResource<List<Post>>> =
         Transformations.switchMap(
             refreshToggle
         ) {
             loadFeed(feedType)
         }
 
-    val rssUiModelData: LiveData<List<ArticleUiModel>> =
+    val rssUiModelData: LiveData<List<PostUIModel>> =
         Transformations.switchMap(rssResponses) { response ->
             handleResponseStates(response)
             handleResponseData(response)
@@ -71,13 +70,13 @@ class FeedViewModel @Inject constructor(
         refreshToggle.value = true // initial loading
     }
 
-    private fun loadFeed(feedType: FeedType): LiveData<Resource<List<Article>>> =
-        when (feedType) {
-            FeedType.NEWS -> rssRepo.getAllFeed(sources)
-            FeedType.BOOKMARKS -> rssRepo.getBookmarkedArticles()
-        }
+    private fun loadFeed(feedType: FeedType): LiveData<DataResource<List<Post>>> = MutableLiveData()
+//        when (feedType) {
+//            FeedType.NEWS -> rssRepo.refresh(sources)
+//            FeedType.BOOKMARKS -> rssRepo.getBookmarkedArticles()
+//}
 
-    private fun handleResponseData(response: Resource<List<Article>>): LiveData<List<ArticleUiModel>> {
+    private fun handleResponseData(response: DataResource<List<Post>>): LiveData<List<PostUIModel>> {
         response.data?.let { articleList ->
             launch(CommonPool) {
                 val articles = if (feedType == FeedType.NEWS) {
@@ -100,16 +99,16 @@ class FeedViewModel @Inject constructor(
         return result
     }
 
-    private fun createUiModel(article: Article, counter: Int): ArticleUiModel {
+    private fun createUiModel(article: Post, counter: Int): PostUIModel {
         article.layoutType = if (counter % 5 == 0 && article.image.isNotBlank()) {
-            UiModelType.ARTICLE_LARGE
+            UiModelType.POST_LARGE
         } else {
-            UiModelType.ARTICLE_SMALL
+            UiModelType.POST_SMALL
         }
-        return ArticleUiModel(article, articleClickCallback)
+        return PostUIModel(article, articleClickCallback)
     }
 
-    private fun filterActiveArticles(articles: List<Article>): List<Article> =
+    private fun filterActiveArticles(articles: List<Post>): List<Post> =
         articles.filter { article ->
             var isActive = false
             sources.value?.forEach {
@@ -121,44 +120,44 @@ class FeedViewModel @Inject constructor(
             isActive
         }
 
-    private fun handleResponseStates(response: Resource<List<Article>>) {
-        when (response.status) {
-            Status.LOADING -> {
-                rssUiModelData.value?.let {
-                    if (it.isEmpty()) {
-                        isLoading.set(true)
-                    }
-                }
-                loadingFailedEvent.setValue(false)
-            }
-
-            Status.SUCCESS -> {
-                isLoading.set(false)
-                loadingFailedEvent.setValue(false)
-            }
-
-            Status.ERROR -> {
-                isLoading.set(false)
-                if (loadingFailedEvent.value == false) loadingFailedEvent.setValue(true)
-            }
-        }
+    private fun handleResponseStates(response: DataResource<List<Post>>) {
+//        when (response.dataState) {
+//            Status.LOADING -> {
+//                rssUiModelData.value?.let {
+//                    if (it.isEmpty()) {
+//                        isLoading.set(true)
+//                    }
+//                }
+//                loadingFailedEvent.setValue(false)
+//            }
+//
+//            Status.SUCCESS -> {
+//                isLoading.set(false)
+//                loadingFailedEvent.setValue(false)
+//            }
+//
+//            Status.ERROR -> {
+//                isLoading.set(false)
+//                if (loadingFailedEvent.value == false) loadingFailedEvent.setValue(true)
+//            }
+//        }
     }
 
     private val articleClickCallback by lazy {
         object : ArticleClickListener {
-            override fun onItemClick(article: Article) {
+            override fun onItemClick(article: Post) {
                 if (canClick) {
                     articleOpenDetail.setValue(article)
                 }
             }
 
-            override fun onShareClick(article: Article) {
+            override fun onShareClick(article: Post) {
                 if (canClick) {
                     articleShareEvent.setValue(article.getShareIntent())
                 }
             }
 
-            override fun onBookmarkClick(article: Article) {
+            override fun onBookmarkClick(article: Post) {
                 if (canClick) {
                     toggleBookmark(article)
                     articleBookmarkEvent.setValue(true)
@@ -167,7 +166,7 @@ class FeedViewModel @Inject constructor(
         }
     }
 
-    fun toggleBookmark(article: Article) {
+    fun toggleBookmark(article: Post) {
         if (article.bookmarked == 1) {
             article.bookmarked = 0
             articleOnUnBookmark.setValue(article)
@@ -175,7 +174,7 @@ class FeedViewModel @Inject constructor(
             article.bookmarked = 1
         }
 
-        rssRepo.updateArticle(article)
+//        rssRepo.updateArticle(article)
     }
 
     fun onRefreshArticles() {

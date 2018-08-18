@@ -1,8 +1,9 @@
 package com.droidfeed.data.parser
 
-import com.droidfeed.data.model.Article
 import com.droidfeed.data.model.Channel
 import com.droidfeed.data.model.Content
+import com.droidfeed.data.model.Post
+import com.droidfeed.data.model.Source
 import com.droidfeed.util.DateTimeUtils
 import com.droidfeed.util.extention.skip
 import com.droidfeed.util.logStackTrace
@@ -16,8 +17,8 @@ import javax.inject.Singleton
 @Singleton
 class RssParser @Inject constructor(private var dateTimeUtils: DateTimeUtils) : XmlParser() {
 
-    override fun parseArticles(parser: XmlPullParser): List<Article> {
-        val articles = mutableListOf<Article>()
+    override fun parseArticles(parser: XmlPullParser, source: Source): List<Post> {
+        val articles = mutableListOf<Post>()
 
         try {
             parser.require(XmlPullParser.START_TAG, null, "rss")
@@ -27,7 +28,7 @@ class RssParser @Inject constructor(private var dateTimeUtils: DateTimeUtils) : 
                 }
 
                 when (parser.name) {
-                    "channel" -> articles.addAll(parseChannel(parser))
+                    "channel" -> articles.addAll(parseChannel(parser, source))
                     else -> parser.skip()
                 }
             }
@@ -38,9 +39,9 @@ class RssParser @Inject constructor(private var dateTimeUtils: DateTimeUtils) : 
         return articles
     }
 
-    private fun parseChannel(parser: XmlPullParser): List<Article> {
+    private fun parseChannel(parser: XmlPullParser, source: Source): List<Post> {
         val rssChannel = Channel()
-        val articles = mutableListOf<Article>()
+        val articles = mutableListOf<Post>()
 
         while (parser.next() != XmlPullParser.END_TAG) {
             if (parser.eventType != XmlPullParser.START_TAG) {
@@ -74,8 +75,8 @@ class RssParser @Inject constructor(private var dateTimeUtils: DateTimeUtils) : 
         return channelImage
     }
 
-    private fun readArticle(parser: XmlPullParser, rssChannel: Channel): Article {
-        val article = Article()
+    private fun readArticle(parser: XmlPullParser, rssChannel: Channel): Post {
+        val article = Post()
 
         while (parser.next() != XmlPullParser.END_TAG) {
             if (parser.eventType != XmlPullParser.START_TAG) {

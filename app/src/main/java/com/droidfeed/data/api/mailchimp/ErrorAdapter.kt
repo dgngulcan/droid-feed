@@ -11,7 +11,7 @@ internal class ErrorAdapter {
     fun fromJson(errorJson: ErrorJson): Error {
         val errorType = when (errorJson.title) {
             "Member Exists" -> ErrorType.MEMBER_ALREADY_EXIST
-            "Invalid Resource" -> ErrorType.INVALID_RESOURCE
+            "Invalid DataResource" -> ErrorType.INVALID_RESOURCE
             else -> throw JsonDataException("unknown suit: $errorJson.title")
         }
 

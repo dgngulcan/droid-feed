@@ -45,7 +45,7 @@ class UiModelAdapter constructor(
 
     @Synchronized
     fun addUiModels(newUiModels: Collection<BaseUiModelAlias>?) {
-        newUiModels?.let {
+        newUiModels?.let { _ ->
             launch(UI) {
                 val oldItems = async { ArrayList(uiModels) }
 

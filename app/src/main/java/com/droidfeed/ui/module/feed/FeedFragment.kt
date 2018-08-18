@@ -2,6 +2,7 @@ package com.droidfeed.ui.module.feed
 
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
+import android.arch.paging.PagedList
 import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
@@ -11,17 +12,17 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.droidfeed.R
+import com.droidfeed.data.DataStatus
 import com.droidfeed.databinding.FragmentFeedBinding
 import com.droidfeed.ui.adapter.BaseUiModelAlias
-import com.droidfeed.ui.adapter.DataInsertedCallback
-import com.droidfeed.ui.adapter.UiModelAdapter
+import com.droidfeed.ui.adapter.UiModelPaginatedAdapter
 import com.droidfeed.ui.common.BaseFragment
 import com.droidfeed.ui.common.WrapContentLinearLayoutManager
 import com.droidfeed.util.AnalyticsUtil
 import com.droidfeed.util.AppRateHelper
 import com.droidfeed.util.CustomTab
 import com.droidfeed.util.extention.isOnline
-import com.droidfeed.util.shareCount
+import kotlinx.android.synthetic.main.fragment_feed.*
 import javax.inject.Inject
 
 /**
@@ -30,17 +31,9 @@ import javax.inject.Inject
  */
 open class FeedFragment : BaseFragment() {
 
-    protected lateinit var viewModel: FeedViewModel
+    protected lateinit var viewModel: FeedViewModel2
     protected lateinit var binding: FragmentFeedBinding
-    private lateinit var adapter: UiModelAdapter
-
-    private val dataInsertedCallback = object : DataInsertedCallback {
-        override fun onUpdated() {
-            if (binding.swipeRefreshArticles.isRefreshing) {
-                binding.swipeRefreshArticles.isRefreshing = false
-            }
-        }
-    }
+    private lateinit var adapter: UiModelPaginatedAdapter
 
     @Inject
     lateinit var customTab: CustomTab
@@ -70,7 +63,7 @@ open class FeedFragment : BaseFragment() {
         if (!::viewModel.isInitialized) {
             viewModel = ViewModelProviders
                 .of(this, viewModelFactory)
-                .get(FeedViewModel::class.java)
+                .get(FeedViewModel2::class.java)
         }
 
         init()
@@ -80,8 +73,10 @@ open class FeedFragment : BaseFragment() {
     private fun init() {
         val layoutManager = activity?.let { WrapContentLinearLayoutManager(it) }
 
+        viewModel.setFeedType(FeedType.NEWS)
+
         if (!::adapter.isInitialized) {
-            adapter = UiModelAdapter(dataInsertedCallback, layoutManager)
+            adapter = UiModelPaginatedAdapter(R.layout.list_item_placeholder_post)
         }
 
         binding.apply {
@@ -89,39 +84,41 @@ open class FeedFragment : BaseFragment() {
 
             (newsRecyclerView.itemAnimator as DefaultItemAnimator).supportsChangeAnimations = false
             newsRecyclerView.swapAdapter(adapter, true)
-            swipeRefreshArticles.setOnRefreshListener { this@FeedFragment.viewModel.onRefreshArticles() }
 
-            viewModel = this@FeedFragment.viewModel
+            swipeRefreshArticles.setOnRefreshListener {
+                this@FeedFragment.viewModel.refresh()
+            }
         }
     }
 
     private fun initDataObservables() {
-        viewModel.apply {
-            rssUiModelData.observe(this@FeedFragment, Observer {
-                adapter.addUiModels(it as Collection<BaseUiModelAlias>)
-            })
+        viewModel.posts.observe(this, Observer { pagedList ->
+            pagedList?.let { list ->
+                // todo check if list is empty and reflect on view
+                adapter.submitList(list as PagedList<BaseUiModelAlias>)
+            }
+        })
 
-            articleOpenDetail.observe(this@FeedFragment, Observer {
-                it?.let {
-                    customTab.showTab(it.link)
-                    analytics.logArticleClick()
+        viewModel.networkState.observe(this, Observer {
+            when (it) {
+                DataStatus.Success -> {
+                    if (swipeRefreshArticles.isRefreshing) {
+                        swipeRefreshArticles.isRefreshing = false
+                    }
                 }
-            })
+                DataStatus.Loading -> {
+                }
+                DataStatus.Error<Any>() -> {
+                    if (swipeRefreshArticles.isRefreshing) {
+                        swipeRefreshArticles.isRefreshing = false
+                    }
+                }
+            }
+        })
 
-            articleShareEvent.observe(this@FeedFragment, Observer {
-                sharedPrefs.shareCount += 1
-                startActivityForResult(it, REQUEST_CODE_SHARE)
-                analytics.logShare()
-            })
-
-            articleBookmarkEvent.observe(this@FeedFragment, Observer {
-                appRateHelper.checkAppRatePrompt(binding.root)
-            })
-
-            loadingFailedEvent.observe(this@FeedFragment, Observer {
-                showLoadFailedSnackbar(it)
-            })
-        }
+        viewModel.articleBookmarkEvent.observe(this, Observer {
+            appRateHelper.checkAppRatePrompt(binding.root)
+        })
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {

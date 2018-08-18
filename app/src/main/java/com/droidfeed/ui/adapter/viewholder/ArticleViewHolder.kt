@@ -13,7 +13,7 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.load.engine.GlideException
 import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.target.Target
-import com.droidfeed.data.model.Article
+import com.droidfeed.data.model.Post
 import com.droidfeed.ui.module.feed.ArticleClickListener
 import com.droidfeed.util.ObservableColorMatrix
 import com.droidfeed.util.glide.GlideApp
@@ -33,11 +33,11 @@ abstract class ArticleViewHolder(private val root: View) : RecyclerView.ViewHold
      * @param article
      * @param articleClickListener
      */
-    abstract fun bind(article: Article, articleClickListener: ArticleClickListener)
+    abstract fun bind(article: Post, articleClickListener: ArticleClickListener)
 
     protected fun bindImage(
         imageView: ImageView,
-        article: Article
+        article: Post
     ) {
         GlideApp.with(root.context)
             .load(article.image)

@@ -94,7 +94,8 @@ class MainActivity : BaseActivity() {
     }
 
     private fun initFilterDrawer() {
-        val adapter = UiModelAdapter()
+        val layoutManager = LinearLayoutManager(this)
+        val adapter = UiModelAdapter(layoutManager = layoutManager)
 
         viewModel.sourceUiModelData.observe(this, Observer {
             adapter.addUiModels(it as Collection<BaseUiModelAlias>)
@@ -104,7 +105,7 @@ class MainActivity : BaseActivity() {
             .supportsChangeAnimations = false
         binding.filterRecycler.adapter = adapter
         binding.filterRecycler.overScrollMode = View.OVER_SCROLL_NEVER
-        binding.filterRecycler.layoutManager = LinearLayoutManager(this)
+        binding.filterRecycler.layoutManager = layoutManager
     }
 
     private fun initObservers() {

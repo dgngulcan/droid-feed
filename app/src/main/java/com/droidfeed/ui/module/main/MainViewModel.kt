@@ -5,7 +5,6 @@ import android.arch.lifecycle.MutableLiveData
 import android.arch.lifecycle.Transformations
 import com.droidfeed.R
 import com.droidfeed.data.model.Source
-import com.droidfeed.data.repo.FeedRepo
 import com.droidfeed.data.repo.SourceRepo
 import com.droidfeed.ui.adapter.UiModelClickListener
 import com.droidfeed.ui.adapter.model.SourceUiModel
@@ -14,8 +13,7 @@ import com.droidfeed.util.extention.random
 import javax.inject.Inject
 
 class MainViewModel @Inject constructor(
-    sourceRepo: SourceRepo,
-    rssRepo: FeedRepo
+    sourceRepo: SourceRepo
 ) : BaseViewModel() {
 
     private val result = MutableLiveData<List<SourceUiModel>>()
@@ -39,7 +37,7 @@ class MainViewModel @Inject constructor(
             sourceRepo.updateSource(model)
 
             if (!model.isActive) {
-                rssRepo.clearSource(model)
+//                rssRepo.clearSource(model)
             }
         }
     }

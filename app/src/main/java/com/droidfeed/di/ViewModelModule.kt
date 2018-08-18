@@ -6,6 +6,7 @@ import com.droidfeed.ui.common.DFViewModelFactory
 import com.droidfeed.ui.module.about.AboutViewModel
 import com.droidfeed.ui.module.contribute.ContributeViewModel
 import com.droidfeed.ui.module.feed.FeedViewModel
+import com.droidfeed.ui.module.feed.FeedViewModel2
 import com.droidfeed.ui.module.main.MainViewModel
 import com.droidfeed.ui.module.newsletter.NewsletterViewModel
 import dagger.Binds
@@ -24,6 +25,11 @@ abstract class ViewModelModule {
     @IntoMap
     @ViewModelKey(FeedViewModel::class)
     abstract fun bindFeedViewModel(viewModel: FeedViewModel): ViewModel
+
+    @Binds
+    @IntoMap
+    @ViewModelKey(FeedViewModel2::class)
+    abstract fun bindFeedViewModel2(viewModel: FeedViewModel2): ViewModel
 
     @Binds
     @IntoMap

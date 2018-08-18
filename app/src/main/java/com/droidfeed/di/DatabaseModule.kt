@@ -47,38 +47,47 @@ class DatabaseModule {
             appDatabase?.sourceDao()?.insertSources(
                 listOf(
                     Source(
+                        1,
                         "Android Dialogs",
                         "https://www.youtube.com/feeds/videos.xml?channel_id=UCMEmNnHT69aZuaOrE-dF6ug"
                     ),
                     Source(
+                        2,
                         "AndroidPub",
                         "https://android.jlelse.eu/feed"
                     ),
                     Source(
+                        3,
                         "ProAndroidDev",
                         "https://proandroiddev.com/feed"
                     ),
                     Source(
+                        4,
                         "Google Developers",
                         "https://medium.com/feed/google-developers"
                     ),
                     Source(
+                        5,
                         "Android Snacks",
                         "https://rss.simplecast.com/podcasts/3213/rss"
                     ),
                     Source(
+                        6,
                         "AndroidDev",
                         "http://twitrss.me/twitter_user_to_rss/?user=AndroidDev"
                     ),
                     Source(
+                        7,
                         "Android Developers Blog",
                         "https://www.blogger.com/feeds/6755709643044947179/posts/default?alt=rss&max-results=25"
                     ),
                     Source(
+                        8,
                         "Kotlin Academy",
                         "https://blog.kotlin-academy.com/feed"
                     ),
                     Source(
+                        9,
                         "Fragmented",
                         "http://fragmentedpodcast.com/feed"
                     )
@@ -89,7 +98,7 @@ class DatabaseModule {
 
     @Provides
     @Singleton
-    fun providesRssDao(database: AppDatabase) = database.rssDao()
+    fun providesRssDao(database: AppDatabase) = database.postDao()
 
     @Provides
     @Singleton

@@ -8,14 +8,14 @@ import android.support.v4.content.ContextCompat
 import android.view.LayoutInflater
 import android.view.View
 import com.droidfeed.R
-import com.droidfeed.data.db.RssDao
+import com.droidfeed.data.db.PostDao
 import com.droidfeed.util.glide.GlideApp
 import kotlinx.coroutines.experimental.launch
 import javax.inject.Inject
 
 class AppRateHelper @Inject constructor(
     val sharedPrefs: SharedPreferences,
-    val rssDao: RssDao
+    val rssDao: PostDao
 ) {
 
     /**
