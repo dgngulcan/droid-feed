@@ -30,7 +30,7 @@ data class Post(
     var link: String = "",
 
     @ColumnInfo(name = "source_id")
-    var sourceId: Int = 0,
+    var sourceId: Int? = null,
 
     @ColumnInfo(name = "pub_date")
     var pubDate: String = "",

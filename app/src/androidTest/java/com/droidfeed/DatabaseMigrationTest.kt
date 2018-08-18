@@ -10,7 +10,8 @@ import com.droidfeed.data.db.AppDatabase
 import com.droidfeed.data.db.MIGRATION_1_2
 import com.droidfeed.data.db.MIGRATION_2_3
 import org.junit.After
-import org.junit.Assert
+import org.junit.Assert.assertEquals
+import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -58,12 +59,13 @@ class DatabaseMigrationTest {
 
     @Test
     fun testMigrationFrom1To3_containsCorrectData() {
-        val db = mMigrationTestHelper.createDatabase(TEST_DB_NAME, 1)
-        db.execSQL(
-            "INSERT INTO `rss`  (bookmarked, contentImage, link, pub_date, pub_date_timestamp, title, author, content_raw, channel_title, channel_image_url, channel_link, content_image, content)" +
-                " VALUES ('1', 'content image', 'https://post.link.test', 'somedate', '123132', 'title' ,'author', '', 'best channel title', 'http://image.url','https://channel.link.test', 'image', '' );"
-        )
-        db.close()
+        mMigrationTestHelper.createDatabase(TEST_DB_NAME, 1).apply {
+            execSQL(
+                "INSERT INTO `rss`  (bookmarked, contentImage, link, pub_date, pub_date_timestamp, title, author, content_raw, channel_title, channel_image_url, channel_link, content_image, content)" +
+                    " VALUES ('1', 'content image', 'https://post.link.test', 'somedate', '123132', 'title' ,'author', '', 'best channel title', 'http://image.url','https://channel.link.test', 'image', '' );"
+            )
+            close()
+        }
 
         mMigrationTestHelper.runMigrationsAndValidate(
             TEST_DB_NAME, 3,
@@ -73,17 +75,19 @@ class DatabaseMigrationTest {
         )
         val posts = getMigratedRoomDatabase().postDao().getAllPostsLiveData().blockingObserve() ?: emptyList()
 
-        Assert.assertEquals("https://post.link.test", posts[0].link)
-        Assert.assertEquals("https://channel.link.test", posts[0].channel.link)
-        Assert.assertEquals(true, posts[0].bookmarked)
+        assertEquals("https://post.link.test", posts[0].link)
+        assertEquals("https://channel.link.test", posts[0].channel.link)
+        assertEquals(1, posts[0].bookmarked)
     }
 
     @Test
     fun testMigrationFrom2To3_correctData() {
-        val db = mMigrationTestHelper.createDatabase(TEST_DB_NAME, 2)
-        db.execSQL("INSERT INTO `source` (url, name, is_active) VALUES ('https://some.url','source name', '0') ;")
-        db.execSQL("INSERT INTO `rss`  (bookmarked, contentImage, link,  channel_link) VALUES ('1', 'image', 'https://post.link.test', 'https://some.url');")
-        db.close()
+        mMigrationTestHelper.createDatabase(TEST_DB_NAME, 2).apply {
+            execSQL("INSERT INTO `source` (url, name, is_active) VALUES ('https://some.url','source name', '0') ;")
+            execSQL("INSERT INTO `source` (url, name, is_active) VALUES ('https://some.url2','source name2', '1') ;")
+            execSQL("INSERT INTO `rss`  (bookmarked,content, content_image, channel_image_url,channel_title, content_raw, author, title, pub_date_timestamp, pub_date, contentImage, link,  channel_link) VALUES ('1','', '', '', '', '', 'author', 'ptitle', 'pub_date_timestamp', 'pub date', 'image', 'https://post.link.test', 'https://some.url2');")
+            close()
+        }
 
         mMigrationTestHelper.runMigrationsAndValidate(
             TEST_DB_NAME, 3,
@@ -92,29 +96,35 @@ class DatabaseMigrationTest {
             MIGRATION_2_3
         )
 
-        val db2 = mSqliteTestDbHelper.writableDatabase
-        db2.execSQL("INSERT INTO `source` (id, url, name, is_active) VALUES ('2','https://some.url2','source name2', '1') ;")
-        db2.close()
+        mSqliteTestDbHelper.writableDatabase.apply {
+            execSQL("INSERT INTO `source` (id, url, name, is_active) VALUES ('3','https://some.url3','source name3', '1') ;")
+            close()
+        }
 
         val sources = getMigratedRoomDatabase().sourceDao().getSources().blockingObserve() ?: emptyList()
 
-        Assert.assertTrue((sources).size == 2)
+        assertTrue((sources).size == 3)
 
-        Assert.assertEquals("https://some.url", sources[0].url)
-        Assert.assertEquals("source name", sources[0].name)
-        Assert.assertEquals(false, sources[0].isActive)
-        Assert.assertEquals(1, sources[0].id)
+        assertEquals("https://some.url", sources[0].url)
+        assertEquals("source name", sources[0].name)
+        assertEquals(false, sources[0].isActive)
+        assertEquals(1, sources[0].id)
 
-        Assert.assertEquals("https://some.url2", sources[1].url)
-        Assert.assertEquals("source name2", sources[1].name)
-        Assert.assertEquals(true, sources[1].isActive)
-        Assert.assertEquals(2, sources[1].id)
+        assertEquals("https://some.url2", sources[1].url)
+        assertEquals("source name2", sources[1].name)
+        assertEquals(true, sources[1].isActive)
+        assertEquals(2, sources[1].id)
+
+        assertEquals("https://some.url3", sources[2].url)
+        assertEquals("source name3", sources[2].name)
+        assertEquals(true, sources[2].isActive)
+        assertEquals(3, sources[2].id)
 
         val posts = getMigratedRoomDatabase().postDao().getAllPostsLiveData().blockingObserve() ?: emptyList()
-        Assert.assertEquals("https://post.link.test", posts[0].link)
-        Assert.assertEquals("https://some.url", posts[0].channel.link)
-        Assert.assertEquals(1, posts[0].sourceId)
-        Assert.assertEquals(true, posts[0].bookmarked)
+        assertEquals("https://post.link.test", posts[0].link)
+        assertEquals("https://some.url2", posts[0].channel.link)
+        assertEquals(2, posts[0].sourceId)
+        assertEquals(1, posts[0].bookmarked)
     }
 
     private fun getMigratedRoomDatabase(): com.droidfeed.data.db.AppDatabase {
