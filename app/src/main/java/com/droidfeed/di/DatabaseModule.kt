@@ -6,6 +6,7 @@ import android.arch.persistence.room.RoomDatabase
 import com.droidfeed.App
 import com.droidfeed.data.db.AppDatabase
 import com.droidfeed.data.db.MIGRATION_1_2
+import com.droidfeed.data.db.MIGRATION_2_3
 import com.droidfeed.data.model.Source
 import dagger.Module
 import dagger.Provides
@@ -26,18 +27,18 @@ class DatabaseModule {
             app,
             AppDatabase::class.java,
             AppDatabase.APP_DATABASE_NAME
-        )
-            .addMigrations(MIGRATION_1_2)
-            .addCallback(object : RoomDatabase.Callback() {
-                override fun onCreate(db: SupportSQLiteDatabase) {
-                    insertSources(appDatabase)
-                }
+        ).addMigrations(
+            MIGRATION_1_2,
+            MIGRATION_2_3
+        ).addCallback(object : RoomDatabase.Callback() {
+            override fun onCreate(db: SupportSQLiteDatabase) {
+                insertSources(appDatabase)
+            }
 
-                override fun onOpen(db: SupportSQLiteDatabase) {
-                    insertSources(appDatabase)
-                }
-            })
-            .build()
+            override fun onOpen(db: SupportSQLiteDatabase) {
+                insertSources(appDatabase)
+            }
+        }).build()
 
         return appDatabase
     }
