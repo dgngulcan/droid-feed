@@ -21,9 +21,7 @@ class MainViewModel @Inject constructor(
     val navigationHeaderImage = MutableLiveData<Int>()
 
     val sourceUiModelData: LiveData<List<SourceUiModel>> =
-        Transformations.switchMap(
-            sourceRepo.sources
-        ) { sourceList ->
+        Transformations.switchMap(sourceRepo.sources) { sourceList ->
             result.value = sourceList.map {
                 SourceUiModel(it, sourceClickListener)
             }
@@ -35,10 +33,6 @@ class MainViewModel @Inject constructor(
             model.isActive = !model.isActive
 
             sourceRepo.updateSource(model)
-
-            if (!model.isActive) {
-//                rssRepo.clearSource(model)
-            }
         }
     }
 
