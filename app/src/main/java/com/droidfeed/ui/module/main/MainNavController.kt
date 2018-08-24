@@ -5,7 +5,6 @@ import com.droidfeed.R
 import com.droidfeed.di.MainScope
 import com.droidfeed.ui.module.about.AboutFragment
 import com.droidfeed.ui.module.contribute.ContributeFragment
-import com.droidfeed.ui.module.feed.BookmarksFragment
 import com.droidfeed.ui.module.feed.FeedFragment
 import com.droidfeed.ui.module.feed.NewsFeedFragment
 import com.droidfeed.ui.module.newsletter.NewsletterFragment
