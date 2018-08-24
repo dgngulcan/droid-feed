@@ -16,11 +16,7 @@ import com.droidfeed.data.parser.NewsXmlParser
 import com.droidfeed.ui.adapter.model.PostUIModel
 import kotlinx.coroutines.experimental.android.UI
 import kotlinx.coroutines.experimental.launch
-import okhttp3.Call
-import okhttp3.Callback
-import okhttp3.OkHttpClient
-import okhttp3.Request
-import okhttp3.Response
+import okhttp3.*
 import java.io.IOException
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -64,12 +60,7 @@ class PostRepo @Inject constructor(
 
     fun updatePost(post: Post) = launch { postDao.updateArticle(post) }
 
-    /**
-     * Pulls posts from given sources and saves them to the database once they are pulled.
-     *
-     * @param sources list of sources to pull posts from
-     */
-    fun refresh(sources: LiveData<List<Source>>): LiveData<DataStatus> {
+    private fun refresh(sources: LiveData<List<Source>>): LiveData<DataStatus> {
         val networkState = MutableLiveData<DataStatus>()
         val articleResources = MediatorLiveData<DataResource<List<Post>>>()
 
@@ -100,7 +91,8 @@ class PostRepo @Inject constructor(
             .enqueue(object : Callback {
                 override fun onResponse(call: Call, response: Response) {
                     if (response.isSuccessful) {
-                        val posts = response.body()?.string()?.let { rssXmlParser.parse(it,source) }
+                        val posts =
+                            response.body()?.string()?.let { rssXmlParser.parse(it, source) }
                         fetchResponse.postValue(DataResource.success(posts))
                     }
                 }
@@ -111,6 +103,27 @@ class PostRepo @Inject constructor(
             })
 
         return fetchResponse as MutableLiveData<DataResource<List<Post>>>
+    }
+
+    fun getBookmarkedPosts(
+        createUiModels: (List<Post>) -> List<PostUIModel>
+    ): Listing<PostUIModel> {
+
+        val pagedList = LivePagedListBuilder(
+            postDao.getBookmarkedPosts().mapByPage { it ->
+                createUiModels(it)
+            },
+            pagedListConfig
+        ).build()
+
+        val dummyStatus = MutableLiveData<DataStatus>()
+        dummyStatus.postValue(DataStatus.Success)
+
+        return Listing<PostUIModel>(pagedList = pagedList,
+            networkState = dummyStatus,
+            refresh = {},
+            retry = {}
+        )
     }
 
     private fun savePostsToDB(posts: List<Post>) = launch { postDao.insertArticles(posts) }
