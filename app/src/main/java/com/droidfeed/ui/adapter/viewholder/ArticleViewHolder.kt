@@ -5,7 +5,7 @@ import android.animation.AnimatorListenerAdapter
 import android.animation.ObjectAnimator
 import android.graphics.ColorMatrixColorFilter
 import android.graphics.drawable.Drawable
-import android.support.v7.widget.RecyclerView
+import androidx.recyclerview.widget.RecyclerView
 import android.view.View
 import android.widget.ImageView
 import com.bumptech.glide.load.DataSource
@@ -13,7 +13,7 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.load.engine.GlideException
 import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.target.Target
-import com.droidfeed.data.model.Article
+import com.droidfeed.data.model.Post
 import com.droidfeed.ui.module.feed.ArticleClickListener
 import com.droidfeed.util.ObservableColorMatrix
 import com.droidfeed.util.glide.GlideApp
@@ -21,7 +21,7 @@ import com.droidfeed.util.glide.GlideApp
 /**
  * ViewHolder to display article cards.
  */
-abstract class ArticleViewHolder(private val root: View) : RecyclerView.ViewHolder(root) {
+abstract class ArticleViewHolder(private val root: View) : androidx.recyclerview.widget.RecyclerView.ViewHolder(root) {
 
     companion object {
         private const val SATURATION_DURATION = 2000L
@@ -33,11 +33,11 @@ abstract class ArticleViewHolder(private val root: View) : RecyclerView.ViewHold
      * @param article
      * @param articleClickListener
      */
-    abstract fun bind(article: Article, articleClickListener: ArticleClickListener)
+    abstract fun bind(article: Post, articleClickListener: ArticleClickListener)
 
     protected fun bindImage(
         imageView: ImageView,
-        article: Article
+        article: Post
     ) {
         GlideApp.with(root.context)
             .load(article.image)

@@ -1,9 +1,8 @@
 package com.droidfeed.ui.adapter
 
-import android.support.v4.util.SparseArrayCompat
-import android.support.v7.util.DiffUtil
-import android.support.v7.widget.RecyclerView
 import android.view.ViewGroup
+import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.RecyclerView
 import com.droidfeed.ui.adapter.diff.UiModelDiffCallback
 import com.droidfeed.ui.common.BaseUiModel
 import com.droidfeed.util.logStackTrace
@@ -17,16 +16,22 @@ import kotlinx.coroutines.experimental.launch
 @Suppress("UNCHECKED_CAST")
 class UiModelAdapter constructor(
     private val dataInsertedCallback: DataInsertedCallback? = null,
-    val layoutManager: RecyclerView.LayoutManager? = null
-) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+    val layoutManager: androidx.recyclerview.widget.RecyclerView.LayoutManager? = null
+) : androidx.recyclerview.widget.RecyclerView.Adapter<androidx.recyclerview.widget.RecyclerView.ViewHolder>() {
 
     private val uiModels = ArrayList<BaseUiModelAlias>()
-    private val viewTypes = SparseArrayCompat<BaseUiModelAlias>()
+    private val viewTypes = androidx.collection.SparseArrayCompat<BaseUiModelAlias>()
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder =
-        viewTypes.get(viewType).getViewHolder(parent) as RecyclerView.ViewHolder
+    override fun onCreateViewHolder(
+        parent: ViewGroup,
+        viewType: Int
+    ): androidx.recyclerview.widget.RecyclerView.ViewHolder =
+        viewTypes.get(viewType)?.getViewHolder(parent) as androidx.recyclerview.widget.RecyclerView.ViewHolder
 
-    override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
+    override fun onBindViewHolder(
+        holder: androidx.recyclerview.widget.RecyclerView.ViewHolder,
+        position: Int
+    ) {
         uiModels[position].bindViewHolder(holder)
     }
 
@@ -45,7 +50,7 @@ class UiModelAdapter constructor(
 
     @Synchronized
     fun addUiModels(newUiModels: Collection<BaseUiModelAlias>?) {
-        newUiModels?.let {
+        newUiModels?.let { _ ->
             launch(UI) {
                 val oldItems = async { ArrayList(uiModels) }
 
@@ -84,4 +89,4 @@ class UiModelAdapter constructor(
     }
 }
 
-typealias BaseUiModelAlias = BaseUiModel<in RecyclerView.ViewHolder>
+typealias BaseUiModelAlias = BaseUiModel<in androidx.recyclerview.widget.RecyclerView.ViewHolder>

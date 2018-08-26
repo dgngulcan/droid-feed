@@ -1,11 +1,10 @@
 package com.droidfeed.ui.module.main
 
-import android.arch.lifecycle.LiveData
-import android.arch.lifecycle.MutableLiveData
-import android.arch.lifecycle.Transformations
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.Transformations
 import com.droidfeed.R
 import com.droidfeed.data.model.Source
-import com.droidfeed.data.repo.FeedRepo
 import com.droidfeed.data.repo.SourceRepo
 import com.droidfeed.ui.adapter.UiModelClickListener
 import com.droidfeed.ui.adapter.model.SourceUiModel
@@ -14,8 +13,7 @@ import com.droidfeed.util.extention.random
 import javax.inject.Inject
 
 class MainViewModel @Inject constructor(
-    sourceRepo: SourceRepo,
-    rssRepo: FeedRepo
+    sourceRepo: SourceRepo
 ) : BaseViewModel() {
 
     private val result = MutableLiveData<List<SourceUiModel>>()
@@ -23,9 +21,7 @@ class MainViewModel @Inject constructor(
     val navigationHeaderImage = MutableLiveData<Int>()
 
     val sourceUiModelData: LiveData<List<SourceUiModel>> =
-        Transformations.switchMap(
-            sourceRepo.sources
-        ) { sourceList ->
+        Transformations.switchMap(sourceRepo.sources) { sourceList ->
             result.value = sourceList.map {
                 SourceUiModel(it, sourceClickListener)
             }
@@ -37,10 +33,6 @@ class MainViewModel @Inject constructor(
             model.isActive = !model.isActive
 
             sourceRepo.updateSource(model)
-
-            if (!model.isActive) {
-                rssRepo.clearSource(model)
-            }
         }
     }
 

@@ -10,7 +10,7 @@
 
   </data>
 
-  <android.support.v4.widget.NestedScrollView
+  <androidx.core.widget.NestedScrollView
     android:id="@+id/nestedScrollView"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
@@ -135,7 +135,7 @@
         android:paddingEnd="16dp"
         android:text="@string/libraries_desc" />
 
-      <android.support.v7.widget.RecyclerView
+      <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -144,5 +144,5 @@
         android:paddingBottom="32dp" />
 
     </LinearLayout>
-  </android.support.v4.widget.NestedScrollView>
+  </androidx.core.widget.NestedScrollView>
 </layout>

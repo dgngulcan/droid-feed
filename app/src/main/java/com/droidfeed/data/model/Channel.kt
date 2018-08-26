@@ -1,6 +1,6 @@
 package com.droidfeed.data.model
 
-import android.arch.persistence.room.ColumnInfo
+import androidx.room.ColumnInfo
 
 data class Channel(
     @ColumnInfo(name = "channel_title")
@@ -11,4 +11,5 @@ data class Channel(
 
     @ColumnInfo(name = "channel_link")
     var link: String = ""
+
 )

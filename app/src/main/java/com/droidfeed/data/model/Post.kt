@@ -1,22 +1,36 @@
 package com.droidfeed.data.model
 
-import android.arch.persistence.room.ColumnInfo
-import android.arch.persistence.room.Embedded
-import android.arch.persistence.room.Entity
-import android.arch.persistence.room.Ignore
-import android.arch.persistence.room.PrimaryKey
+import androidx.room.ColumnInfo
+import androidx.room.Embedded
+import androidx.room.Entity
+import androidx.room.ForeignKey
+import androidx.room.ForeignKey.CASCADE
+import androidx.room.Ignore
+import androidx.room.PrimaryKey
 import android.content.Intent
-import android.databinding.ObservableInt
+import androidx.databinding.ObservableInt
 import com.droidfeed.R
 import com.droidfeed.data.db.AppDatabase
 import com.droidfeed.ui.adapter.UiModelType
 import com.droidfeed.ui.adapter.diff.Diffable
 
-@Entity(tableName = AppDatabase.RSS_TABLE_NAME)
-data class Article(
+@Entity(
+    tableName = AppDatabase.POST_TABLE_NAME,
+    foreignKeys = [ForeignKey(
+        entity = Source::class,
+        parentColumns = ["id"],
+        childColumns = ["source_id"],
+        onDelete = CASCADE
+    )]
+)
+
+data class Post(
     @PrimaryKey
     @ColumnInfo(name = "link")
     var link: String = "",
+
+    @ColumnInfo(name = "source_id")
+    var sourceId: Int? = null,
 
     @ColumnInfo(name = "pub_date")
     var pubDate: String = "",
@@ -43,9 +57,9 @@ data class Article(
     var hasFadedIn: Boolean = false,
 
     @Ignore
-    var layoutType: UiModelType = UiModelType.ARTICLE_SMALL
+    var layoutType: UiModelType = UiModelType.POST_SMALL
 
-) : Diffable, Comparable<Article> {
+) : Diffable, Comparable<Post> {
 
     @Transient
     @ColumnInfo(name = "bookmarked")
@@ -65,7 +79,7 @@ data class Article(
     val bookmarkObservable = ObservableInt(R.drawable.avd_bookmark_negative)
 
     @Transient
-    @ColumnInfo(name = "contentImage")
+    @Ignore
     var image: String = ""
         get() = if (content.contentImage.isBlank()) channel.imageUrl else content.contentImage
 
@@ -77,13 +91,13 @@ data class Article(
         return sendIntent
     }
 
-    override fun compareTo(other: Article): Int =
+    override fun compareTo(other: Post): Int =
         compareValuesBy(this, other) { it.pubDateTimestamp }
 
-    override fun isSame(item: Diffable): Boolean = this.link.contentEquals((item as Article).link)
+    override fun isSame(item: Diffable): Boolean = this.link.contentEquals((item as Post).link)
 
     override fun isContentSame(item: Diffable): Boolean {
-        return if (item is Article) {
+        return if (item is Post) {
             val content1 = this.bookmarked == item.bookmarked
             val content2 = this.link.contentEquals(item.link)
 

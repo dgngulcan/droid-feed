@@ -3,4 +3,4 @@ package com.droidfeed.ui.module.feed
 /**
  * Types of feeds.
  */
-enum class FeedType { NEWS, BOOKMARKS }
+enum class FeedType { POSTS, BOOKMARKS }

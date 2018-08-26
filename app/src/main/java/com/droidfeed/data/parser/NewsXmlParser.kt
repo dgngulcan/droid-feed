@@ -1,7 +1,8 @@
 package com.droidfeed.data.parser
 
 import android.util.Xml
-import com.droidfeed.data.model.Article
+import com.droidfeed.data.model.Post
+import com.droidfeed.data.model.Source
 import com.droidfeed.util.logStackTrace
 import org.xmlpull.v1.XmlPullParser
 import org.xmlpull.v1.XmlPullParserException
@@ -21,7 +22,7 @@ class NewsXmlParser @Inject constructor(
      * @param xml as string
      * @return list of articles
      */
-    fun parse(xml: String): List<Article> {
+    fun parse(xml: String, source: Source): List<Post> {
         val inputStream = StringReader(xml)
 
         inputStream.use {
@@ -36,8 +37,8 @@ class NewsXmlParser @Inject constructor(
             }
 
             return when (parser.name) {
-                "rss" -> rssParser.parseArticles(parser)
-                "feed" -> feedParser.parseArticles(parser)
+                "rss" -> rssParser.parsePosts(parser, source)
+                "feed" -> feedParser.parsePosts(parser, source)
                 else -> listOf()
             }
         }
