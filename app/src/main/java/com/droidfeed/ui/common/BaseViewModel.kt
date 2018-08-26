@@ -1,6 +1,6 @@
 package com.droidfeed.ui.common
 
-import android.arch.lifecycle.ViewModel
+import androidx.lifecycle.ViewModel
 import android.os.SystemClock
 
 abstract class BaseViewModel : ViewModel() {

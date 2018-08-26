@@ -1,7 +1,7 @@
 package com.droidfeed.data.db
 
-import android.arch.persistence.db.SupportSQLiteDatabase
-import android.arch.persistence.room.migration.Migration
+import androidx.sqlite.db.SupportSQLiteDatabase
+import androidx.room.migration.Migration
 import com.droidfeed.data.db.AppDatabase.Companion.POST_TABLE_NAME
 import com.droidfeed.data.db.AppDatabase.Companion.SOURCE_TABLE_NAME
 

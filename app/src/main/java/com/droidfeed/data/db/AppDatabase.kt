@@ -1,7 +1,7 @@
 package com.droidfeed.data.db
 
-import android.arch.persistence.room.Database
-import android.arch.persistence.room.RoomDatabase
+import androidx.room.Database
+import androidx.room.RoomDatabase
 import com.droidfeed.data.model.Post
 import com.droidfeed.data.model.Source
 

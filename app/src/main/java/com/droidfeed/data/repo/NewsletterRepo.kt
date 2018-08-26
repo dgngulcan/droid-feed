@@ -1,7 +1,7 @@
 package com.droidfeed.data.repo
 
-import android.arch.lifecycle.LiveData
-import android.arch.lifecycle.MutableLiveData
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import com.droidfeed.data.DataResource
 import com.droidfeed.data.api.mailchimp.Error
 import com.droidfeed.data.api.mailchimp.ErrorAdapter

@@ -1,6 +1,6 @@
 package com.droidfeed.data.api
 
-import android.arch.lifecycle.MutableLiveData
+import androidx.lifecycle.MutableLiveData
 import com.droidfeed.data.model.Post
 import com.droidfeed.data.parser.NewsXmlParser
 import kotlinx.coroutines.experimental.android.UI

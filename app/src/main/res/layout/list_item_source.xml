@@ -14,7 +14,7 @@
 
   </data>
 
-  <android.support.constraint.ConstraintLayout
+  <androidx.constraintlayout.widget.ConstraintLayout
     style="@/SelectableItemBackground"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -38,6 +38,6 @@
       android:text="@{source.name}"
       tools:text="Title of an awesome publisher" />
 
-  </android.support.constraint.ConstraintLayout>
+  </androidx.constraintlayout.widget.ConstraintLayout>
 
 </layout>

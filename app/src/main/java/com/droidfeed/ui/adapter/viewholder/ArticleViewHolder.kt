@@ -5,7 +5,7 @@ import android.animation.AnimatorListenerAdapter
 import android.animation.ObjectAnimator
 import android.graphics.ColorMatrixColorFilter
 import android.graphics.drawable.Drawable
-import android.support.v7.widget.RecyclerView
+import androidx.recyclerview.widget.RecyclerView
 import android.view.View
 import android.widget.ImageView
 import com.bumptech.glide.load.DataSource
@@ -21,7 +21,7 @@ import com.droidfeed.util.glide.GlideApp
 /**
  * ViewHolder to display article cards.
  */
-abstract class ArticleViewHolder(private val root: View) : RecyclerView.ViewHolder(root) {
+abstract class ArticleViewHolder(private val root: View) : androidx.recyclerview.widget.RecyclerView.ViewHolder(root) {
 
     companion object {
         private const val SATURATION_DURATION = 2000L

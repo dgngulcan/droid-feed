@@ -1,8 +1,8 @@
 package com.droidfeed.data.db
 
-import android.arch.lifecycle.LiveData
-import android.arch.paging.DataSource
-import android.arch.persistence.room.*
+import androidx.lifecycle.LiveData
+import androidx.paging.DataSource
+import androidx.room.*
 import com.droidfeed.data.model.Post
 
 @Dao

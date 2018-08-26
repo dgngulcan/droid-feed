@@ -37,8 +37,8 @@ class NewsXmlParser @Inject constructor(
             }
 
             return when (parser.name) {
-                "rss" -> rssParser.parseArticles(parser,source)
-                "feed" -> feedParser.parseArticles(parser,source)
+                "rss" -> rssParser.parsePosts(parser, source)
+                "feed" -> feedParser.parsePosts(parser, source)
                 else -> listOf()
             }
         }

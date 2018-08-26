@@ -1,10 +1,10 @@
 package com.droidfeed.util.behavior
 
 import android.content.Context
-import android.support.annotation.Keep
-import android.support.design.widget.AppBarLayout
-import android.support.design.widget.CoordinatorLayout
-import android.support.v4.view.ViewCompat
+import androidx.annotation.Keep
+import com.google.android.material.appbar.AppBarLayout
+import androidx.coordinatorlayout.widget.CoordinatorLayout
+import androidx.core.view.ViewCompat
 import android.util.AttributeSet
 import android.view.View
 
@@ -25,7 +25,7 @@ class FixAppBarLayoutBehavior(
     AppBarLayout.Behavior(context, attrs) {
 
     override fun onNestedScroll(
-        coordinatorLayout: CoordinatorLayout,
+        coordinatorLayout: androidx.coordinatorlayout.widget.CoordinatorLayout,
         child: AppBarLayout,
         target: View,
         dxConsumed: Int,
@@ -48,7 +48,7 @@ class FixAppBarLayoutBehavior(
     }
 
     override fun onNestedPreScroll(
-        coordinatorLayout: CoordinatorLayout,
+        coordinatorLayout: androidx.coordinatorlayout.widget.CoordinatorLayout,
         child: AppBarLayout,
         target: View,
         dx: Int,

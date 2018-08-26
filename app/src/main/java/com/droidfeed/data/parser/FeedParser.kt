@@ -14,8 +14,8 @@ import javax.inject.Singleton
 @Singleton
 class FeedParser @Inject constructor(private var dateTimeUtils: DateTimeUtils) : XmlParser() {
 
-    override fun parseArticles(parser: XmlPullParser, source: Source): List<Post> {
-        val articles = mutableListOf<Post>()
+    override fun parsePosts(parser: XmlPullParser, source: Source): List<Post> {
+        val posts = mutableListOf<Post>()
 
         try {
             parser.require(XmlPullParser.START_TAG, null, "feed")
@@ -25,7 +25,7 @@ class FeedParser @Inject constructor(private var dateTimeUtils: DateTimeUtils) :
                 }
 
                 when (parser.name) {
-                    "entry" -> articles.add(parseArticle(parser))
+                    "entry" -> posts.add(parsePost(parser, source))
                     else -> parser.skip()
                 }
             }
@@ -33,11 +33,13 @@ class FeedParser @Inject constructor(private var dateTimeUtils: DateTimeUtils) :
             logStackTrace(ignored)
         }
 
-        return articles
+        return posts
     }
 
-    private fun parseArticle(parser: XmlPullParser): Post {
+    private fun parsePost(parser: XmlPullParser, source: Source): Post {
         val post = Post()
+
+        post.sourceId = source.id
 
         while (parser.next() != XmlPullParser.END_TAG) {
             if (parser.eventType != XmlPullParser.START_TAG) {
@@ -49,7 +51,7 @@ class FeedParser @Inject constructor(private var dateTimeUtils: DateTimeUtils) :
                 "title" -> post.title = parser.nextText()
                 "link" -> post.link = parseLink(parser)
                 "updated" -> post.pubDateTimestamp = getPublishDate(parser.nextText())
-                "media:group" -> post.content = parseMediaIntoArticle(parser)
+                "media:group" -> post.content = parseMediaIntoPost(parser)
                 else -> parser.skip()
             }
         }
@@ -74,7 +76,7 @@ class FeedParser @Inject constructor(private var dateTimeUtils: DateTimeUtils) :
         return channel
     }
 
-    private fun parseMediaIntoArticle(parser: XmlPullParser): Content {
+    private fun parseMediaIntoPost(parser: XmlPullParser): Content {
         val content = Content()
 
         while (parser.next() != XmlPullParser.END_TAG) {

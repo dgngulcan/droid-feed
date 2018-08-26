@@ -1,15 +1,15 @@
 package com.droidfeed.ui.module.main
 
-import android.arch.lifecycle.Observer
-import android.arch.lifecycle.ViewModelProviders
-import android.databinding.DataBindingUtil
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProviders
+import androidx.databinding.DataBindingUtil
 import android.os.Bundle
-import android.support.design.widget.NavigationView
-import android.support.v4.view.GravityCompat
-import android.support.v4.widget.DrawerLayout
-import android.support.v7.app.ActionBarDrawerToggle
-import android.support.v7.widget.DefaultItemAnimator
-import android.support.v7.widget.LinearLayoutManager
+import com.google.android.material.navigation.NavigationView
+import androidx.core.view.GravityCompat
+import androidx.drawerlayout.widget.DrawerLayout
+import androidx.appcompat.app.ActionBarDrawerToggle
+import androidx.recyclerview.widget.DefaultItemAnimator
+import androidx.recyclerview.widget.LinearLayoutManager
 import android.view.MenuItem
 import android.view.View
 import com.droidfeed.R
@@ -81,7 +81,7 @@ class MainActivity : BaseActivity() {
         toggle.isDrawerSlideAnimationEnabled = false
         toggle.syncState()
 
-        binding.drawerLayout.addDrawerListener(object : DrawerLayout.SimpleDrawerListener() {
+        binding.drawerLayout.addDrawerListener(object : androidx.drawerlayout.widget.DrawerLayout.SimpleDrawerListener() {
             override fun onDrawerClosed(drawerView: View) {
                 super.onDrawerClosed(drawerView)
                 viewModel.shuffleHeaderImage()
@@ -94,14 +94,14 @@ class MainActivity : BaseActivity() {
     }
 
     private fun initFilterDrawer() {
-        val layoutManager = LinearLayoutManager(this)
+        val layoutManager = androidx.recyclerview.widget.LinearLayoutManager(this)
         val adapter = UiModelAdapter(layoutManager = layoutManager)
 
         viewModel.sourceUiModelData.observe(this, Observer {
             adapter.addUiModels(it as Collection<BaseUiModelAlias>)
         })
 
-        (binding.filterRecycler.itemAnimator as DefaultItemAnimator)
+        (binding.filterRecycler.itemAnimator as androidx.recyclerview.widget.DefaultItemAnimator)
             .supportsChangeAnimations = false
         binding.filterRecycler.adapter = adapter
         binding.filterRecycler.overScrollMode = View.OVER_SCROLL_NEVER

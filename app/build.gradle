@@ -7,9 +7,9 @@ apply plugin: 'io.fabric'
 ext.app = [
         'version'            : '1.2.0',
         'version_code'       : 10,
-        'compile_sdk_version': 27,
+        'compile_sdk_version': 28,
         'min_sdk_version'    : 21,
-        'target_sdk_version' : 27
+        'target_sdk_version' : 28
 ]
 
 android {
@@ -21,7 +21,7 @@ android {
         targetSdkVersion project.app.target_sdk_version
         versionName project.app.version
         versionCode project.app.version_code
-        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
         buildConfigField 'String', "DROIDFEED_GITHUB_URL", "\"https://github.com/dgngulcan/droid-feed\""
         buildConfigField 'String', "DROIDFEED_PRIVACY_POLICY", "\"https://app.termly.io/document/privacy-policy/ab750f11-7f6d-499d-aafb-57697bd8aba0\""
@@ -49,7 +49,9 @@ android {
         }
     }
 
-    dataBinding.enabled = true
+    dataBinding {
+        enabled = true
+    }
 
     dexOptions {
         javaMaxHeapSize "4g"
@@ -77,26 +79,26 @@ androidExtensions {
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
-    debugImplementation 'com.amitshekhar.android:debug-db:1.0.4'
+
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$versions.kotlin"
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$versions.kotlin_coroutines"
+
+    implementation "com.google.android.material:material:$versions.material"
+
     implementation "androidx.core:core-ktx:$versions.android_ktx"
 
-    implementation "com.android.support:support-fragment:$versions.support_lib"
-    implementation "com.android.support:appcompat-v7:$versions.support_lib"
-    implementation "com.android.support:support-dynamic-animation:$versions.support_lib"
-    implementation "com.android.support:design:$versions.support_lib"
-    implementation "com.android.support:cardview-v7:$versions.support_lib"
-    implementation "com.android.support:customtabs:$versions.support_lib"
-    implementation "com.android.support.constraint:constraint-layout:$versions.constraint_layout"
+    implementation "androidx.fragment:fragment:$versions.fragment"
+    implementation "androidx.appcompat:appcompat:$versions.appcompat"
+    implementation "androidx.browser:browser:1.0.0-rc01"
+    implementation "androidx.constraintlayout:constraintlayout:$versions.constraint_layout"
 
-    implementation "android.arch.lifecycle:runtime:$versions.arch_lifecycle"
-    implementation "android.arch.lifecycle:extensions:$versions.arch_lifecycle"
-    kapt "android.arch.lifecycle:compiler:$versions.arch_lifecycle"
+    implementation "androidx.lifecycle:lifecycle-runtime:$versions.arch_lifecycle"
+    implementation "androidx.lifecycle:lifecycle-extensions:$versions.arch_lifecycle"
+    kapt "androidx.lifecycle:lifecycle-compiler:$versions.arch_lifecycle"
 
-    implementation "android.arch.paging:runtime:$versions.arch_paging"
-    implementation "android.arch.persistence.room:runtime:$versions.arch_room"
-    kapt "android.arch.persistence.room:compiler:$versions.arch_room"
+    implementation "androidx.paging:paging-runtime:$versions.arch_paging"
+    implementation "androidx.room:room-runtime:$versions.arch_room"
+    kapt "androidx.room:room-compiler:$versions.arch_room"
 
     implementation "com.google.dagger:dagger:$versions.dagger"
     implementation "com.google.dagger:dagger-android:$versions.dagger"
@@ -111,7 +113,6 @@ dependencies {
     implementation "com.squareup.retrofit2:converter-moshi:$versions.retrofit"
     implementation "com.squareup.okhttp3:okhttp:$versions.okHttp"
     implementation "com.squareup.okhttp3:logging-interceptor:$versions.okHttp"
-    implementation "com.jakewharton.retrofit:retrofit2-kotlin-coroutines-experimental-adapter:$versions.retrofit_coroutines_adapter"
 
     implementation "com.crashlytics.sdk.android:crashlytics:$versions.crashlytics"
 
@@ -121,10 +122,10 @@ dependencies {
     implementation "org.jsoup:jsoup:$versions.jSoup"
 
     testImplementation 'junit:junit:4.12'
-    androidTestImplementation "com.android.support.test:runner:$versions.support_test_runner"
-    androidTestImplementation "com.android.support.test.espresso:espresso-core:$versions.support_test_espresso"
-    androidTestImplementation "android.arch.persistence.room:testing:$versions.arch_room"
-    androidTestImplementation "android.arch.core:core-testing:$versions.arch_lifecycle"
+    androidTestImplementation "androidx.test:runner:$versions.test_runner"
+    androidTestImplementation "androidx.test.espresso:espresso-core:$versions.test_espresso"
+    androidTestImplementation "androidx.room:room-testing:$versions.arch_room"
+    androidTestImplementation "androidx.arch.core:core-testing:$versions.test_arch"
 
     testImplementation "org.mockito:mockito-core:$versions.mockito"
     androidTestImplementation "org.mockito:mockito-android:$versions.mockito"

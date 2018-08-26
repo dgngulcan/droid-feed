@@ -1,6 +1,6 @@
 package com.droidfeed.data.api.mailchimp
 
-import android.support.annotation.Keep
+import androidx.annotation.Keep
 import com.squareup.moshi.FromJson
 import com.squareup.moshi.JsonDataException
 

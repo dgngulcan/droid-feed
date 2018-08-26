@@ -1,7 +1,7 @@
 package com.droidfeed.ui.module.about
 
-import android.arch.lifecycle.LiveData
-import android.arch.lifecycle.MutableLiveData
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import android.content.Intent
 import com.droidfeed.BuildConfig
 import com.droidfeed.data.model.Licence

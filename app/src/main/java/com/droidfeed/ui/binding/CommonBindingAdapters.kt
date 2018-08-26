@@ -1,7 +1,7 @@
 package com.droidfeed.ui.binding
 
-import android.databinding.BindingAdapter
-import android.support.v4.widget.ContentLoadingProgressBar
+import androidx.databinding.BindingAdapter
+import androidx.core.widget.ContentLoadingProgressBar
 import android.text.format.DateUtils
 import android.view.View
 import android.webkit.WebView

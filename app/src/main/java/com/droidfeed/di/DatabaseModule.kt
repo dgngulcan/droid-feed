@@ -1,8 +1,8 @@
 package com.droidfeed.di
 
-import android.arch.persistence.db.SupportSQLiteDatabase
-import android.arch.persistence.room.Room
-import android.arch.persistence.room.RoomDatabase
+import androidx.sqlite.db.SupportSQLiteDatabase
+import androidx.room.Room
+import androidx.room.RoomDatabase
 import com.droidfeed.App
 import com.droidfeed.data.db.AppDatabase
 import com.droidfeed.data.db.MIGRATION_1_2
@@ -75,7 +75,7 @@ class DatabaseModule {
                     Source(
                         6,
                         "AndroidDev",
-                        "http://twitrss.me/twitter_user_to_rss/?user=AndroidDev"
+                        "https://twitrss.me/twitter_user_to_rss/?user=AndroidDev"
                     ),
                     Source(
                         7,
@@ -90,7 +90,7 @@ class DatabaseModule {
                     Source(
                         9,
                         "Fragmented",
-                        "http://fragmentedpodcast.com/feed"
+                        "https://fragmentedpodcast.com/feed"
                     )
                 )
             )

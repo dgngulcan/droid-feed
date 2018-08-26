@@ -1,12 +1,12 @@
 package com.droidfeed.ui.module.feed
 
-import android.arch.lifecycle.LiveData
-import android.arch.lifecycle.MutableLiveData
-import android.arch.lifecycle.Transformations.map
-import android.arch.lifecycle.Transformations.switchMap
-import android.arch.lifecycle.ViewModel
-import android.arch.paging.PagedList
 import android.content.Intent
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.Transformations.map
+import androidx.lifecycle.Transformations.switchMap
+import androidx.lifecycle.ViewModel
+import androidx.paging.PagedList
 import com.droidfeed.data.model.Post
 import com.droidfeed.data.repo.PostRepo
 import com.droidfeed.data.repo.SourceRepo

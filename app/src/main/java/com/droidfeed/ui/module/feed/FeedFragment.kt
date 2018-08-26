@@ -1,14 +1,14 @@
 package com.droidfeed.ui.module.feed
 
-import android.arch.lifecycle.Observer
-import android.arch.lifecycle.ViewModelProviders
-import android.arch.paging.PagedList
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProviders
+import androidx.paging.PagedList
 import android.content.Intent
 import android.content.SharedPreferences
 import android.graphics.Color
 import android.os.Bundle
-import android.support.design.widget.Snackbar
-import android.support.v7.widget.DefaultItemAnimator
+import com.google.android.material.snackbar.Snackbar
+import androidx.recyclerview.widget.DefaultItemAnimator
 import android.view.*
 import com.droidfeed.R
 import com.droidfeed.data.DataStatus
@@ -71,7 +71,7 @@ class FeedFragment : BaseFragment() {
         viewModel.setFeedType(FeedType.POSTS)
 
         if (!::adapter.isInitialized) {
-            adapter = UiModelPaginatedAdapter(R.layout.list_item_placeholder_post)
+            adapter = UiModelPaginatedAdapter()
         }
 
 
@@ -79,7 +79,7 @@ class FeedFragment : BaseFragment() {
             val layoutManager = activity?.let { WrapContentLinearLayoutManager(it) }
             newsRecyclerView.layoutManager = layoutManager
 
-            (newsRecyclerView.itemAnimator as DefaultItemAnimator).supportsChangeAnimations = false
+            (newsRecyclerView.itemAnimator as androidx.recyclerview.widget.DefaultItemAnimator).supportsChangeAnimations = false
             newsRecyclerView.swapAdapter(adapter, true)
 
             swipeRefreshArticles.setOnRefreshListener {
@@ -129,6 +129,7 @@ class FeedFragment : BaseFragment() {
 
         viewModel.articleUnBookmarkEvent.observe(this, Observer { article ->
             article?.let {
+                // todo check if bookmark fragment
                 showBookmarkUndoSnackbar(it)
                 analytics.logBookmark(it.bookmarked == 1)
             }

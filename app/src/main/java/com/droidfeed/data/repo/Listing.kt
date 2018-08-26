@@ -16,8 +16,8 @@
 
 package com.droidfeed.data.repo
 
-import android.arch.lifecycle.LiveData
-import android.arch.paging.PagedList
+import androidx.lifecycle.LiveData
+import androidx.paging.PagedList
 import com.droidfeed.data.DataStatus
 
 /**

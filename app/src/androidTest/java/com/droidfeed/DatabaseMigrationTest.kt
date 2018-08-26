@@ -1,11 +1,11 @@
 package com.droidfeed
 
-import android.arch.core.executor.testing.InstantTaskExecutorRule
-import android.arch.persistence.db.framework.FrameworkSQLiteOpenHelperFactory
-import android.arch.persistence.room.Room
-import android.arch.persistence.room.testing.MigrationTestHelper
-import android.support.test.InstrumentationRegistry
-import android.support.test.runner.AndroidJUnit4
+import androidx.arch.core.executor.testing.InstantTaskExecutorRule
+import androidx.sqlite.db.framework.FrameworkSQLiteOpenHelperFactory
+import androidx.room.Room
+import androidx.room.testing.MigrationTestHelper
+import androidx.test.InstrumentationRegistry
+import androidx.test.runner.AndroidJUnit4
 import com.droidfeed.data.db.AppDatabase
 import com.droidfeed.data.db.MIGRATION_1_2
 import com.droidfeed.data.db.MIGRATION_2_3

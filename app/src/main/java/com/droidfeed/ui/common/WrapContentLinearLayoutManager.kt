@@ -1,13 +1,13 @@
 package com.droidfeed.ui.common
 
 import android.content.Context
-import android.support.v7.widget.LinearLayoutManager
-import android.support.v7.widget.RecyclerView
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.droidfeed.util.logStackTrace
 
-class WrapContentLinearLayoutManager(context: Context) : LinearLayoutManager(context) {
+class WrapContentLinearLayoutManager(context: Context) : androidx.recyclerview.widget.LinearLayoutManager(context) {
 
-    override fun onLayoutChildren(recycler: RecyclerView.Recycler?, state: RecyclerView.State?) {
+    override fun onLayoutChildren(recycler: androidx.recyclerview.widget.RecyclerView.Recycler?, state: androidx.recyclerview.widget.RecyclerView.State?) {
         try {
             super.onLayoutChildren(recycler, state)
         } catch (e: IndexOutOfBoundsException) {

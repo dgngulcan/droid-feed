@@ -1,10 +1,10 @@
 package com.droidfeed.ui.adapter.viewholder
 
-import android.support.v7.widget.RecyclerView
+import androidx.recyclerview.widget.RecyclerView
 import com.droidfeed.databinding.ListItemPlaceholderPostBinding
 
 class PostDummyViewHolder(
     binding: ListItemPlaceholderPostBinding
-) : RecyclerView.ViewHolder(binding.root) {
+) : androidx.recyclerview.widget.RecyclerView.ViewHolder(binding.root) {
 
 }

@@ -1,8 +1,8 @@
 package com.droidfeed.ui.module.newsletter
 
-import android.arch.lifecycle.LiveData
-import android.arch.lifecycle.MutableLiveData
-import android.arch.lifecycle.Transformations
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.Transformations
 import com.droidfeed.data.DataResource
 import com.droidfeed.data.api.mailchimp.Subscriber
 import com.droidfeed.data.api.mailchimp.SubscriptionStatus

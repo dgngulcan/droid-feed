@@ -1,13 +1,12 @@
 package com.droidfeed.ui.adapter
 
-import android.arch.paging.PagedList
-import android.arch.paging.PagedListAdapter
-import android.support.annotation.LayoutRes
-import android.support.v4.util.SparseArrayCompat
-import android.support.v7.util.DiffUtil
-import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.collection.SparseArrayCompat
+import androidx.paging.PagedList
+import androidx.paging.PagedListAdapter
+import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.RecyclerView
 import com.droidfeed.databinding.ListItemPlaceholderPostBinding
 import com.droidfeed.ui.adapter.viewholder.PostDummyViewHolder
 import com.droidfeed.ui.common.BaseUiModel
@@ -18,17 +17,21 @@ import kotlinx.coroutines.experimental.launch
  * Generic [RecyclerView.Adapter] for [BaseUiModel]s.
  */
 @Suppress("UNCHECKED_CAST")
-class UiModelPaginatedAdapter(
-    @LayoutRes private val placeHolderResId: Int
-) : PagedListAdapter<BaseUiModelAlias, RecyclerView.ViewHolder>(diffCallback) {
+class UiModelPaginatedAdapter
+    : PagedListAdapter<BaseUiModelAlias, RecyclerView.ViewHolder>(
+    diffCallback
+) {
 
     private val viewTypes = SparseArrayCompat<BaseUiModelAlias>()
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
+    override fun onCreateViewHolder(
+        parent: ViewGroup,
+        viewType: Int
+    ): androidx.recyclerview.widget.RecyclerView.ViewHolder {
         val uiModelType = UiModelType.values()[viewType]
 
         return when (uiModelType) {
-            UiModelType.PLACEHOLDER -> { // TODO find an elegant way
+            UiModelType.PLACEHOLDER -> { // TODO find a better way
                 PostDummyViewHolder(
                     ListItemPlaceholderPostBinding.inflate(
                         LayoutInflater.from(parent.context),
@@ -37,11 +40,14 @@ class UiModelPaginatedAdapter(
                     )
                 )
             }
-            else -> viewTypes.get(viewType).getViewHolder(parent) as RecyclerView.ViewHolder
+            else -> viewTypes.get(viewType)?.getViewHolder(parent) as RecyclerView.ViewHolder
         }
     }
 
-    override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
+    override fun onBindViewHolder(
+        holder: RecyclerView.ViewHolder,
+        position: Int
+    ) {
         val uiModel = getItem(position)
         uiModel?.bindViewHolder(holder)
     }
@@ -94,7 +100,10 @@ class UiModelPaginatedAdapter(
             ): Boolean =
                 oldConcert == newConcert
 
-            override fun getChangePayload(oldItem: BaseUiModelAlias, newItem: BaseUiModelAlias): Any? {
+            override fun getChangePayload(
+                oldItem: BaseUiModelAlias,
+                newItem: BaseUiModelAlias
+            ): Any? {
                 return newItem.getData()
             }
         }

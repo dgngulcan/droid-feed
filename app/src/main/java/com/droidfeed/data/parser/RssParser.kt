@@ -17,8 +17,8 @@ import javax.inject.Singleton
 @Singleton
 class RssParser @Inject constructor(private var dateTimeUtils: DateTimeUtils) : XmlParser() {
 
-    override fun parseArticles(parser: XmlPullParser, source: Source): List<Post> {
-        val articles = mutableListOf<Post>()
+    override fun parsePosts(parser: XmlPullParser, source: Source): List<Post> {
+        val posts = mutableListOf<Post>()
 
         try {
             parser.require(XmlPullParser.START_TAG, null, "rss")
@@ -28,20 +28,20 @@ class RssParser @Inject constructor(private var dateTimeUtils: DateTimeUtils) : 
                 }
 
                 when (parser.name) {
-                    "channel" -> articles.addAll(parseChannel(parser, source))
+                    "channel" -> posts.addAll(parseChannel(parser, source))
                     else -> parser.skip()
                 }
             }
-        } catch (ignored: XmlPullParserException) {
-            logStackTrace(ignored)
+        } catch (e: XmlPullParserException) {
+            logStackTrace(e)
         }
 
-        return articles
+        return posts
     }
 
     private fun parseChannel(parser: XmlPullParser, source: Source): List<Post> {
         val rssChannel = Channel()
-        val articles = mutableListOf<Post>()
+        val posts = mutableListOf<Post>()
 
         while (parser.next() != XmlPullParser.END_TAG) {
             if (parser.eventType != XmlPullParser.START_TAG) {
@@ -49,7 +49,7 @@ class RssParser @Inject constructor(private var dateTimeUtils: DateTimeUtils) : 
             }
 
             when (parser.name) {
-                "item" -> articles.add(readArticle(parser, rssChannel))
+                "item" -> posts.add(readPost(parser, rssChannel, source))
                 "title" -> rssChannel.title = parser.nextText()
                 "atom:link" -> rssChannel.link = parseLink(parser)
                 "image" -> rssChannel.imageUrl = parseChannelImage(parser)
@@ -57,7 +57,7 @@ class RssParser @Inject constructor(private var dateTimeUtils: DateTimeUtils) : 
             }
         }
 
-        return articles
+        return posts
     }
 
     private fun parseChannelImage(parser: XmlPullParser): String {
@@ -75,30 +75,32 @@ class RssParser @Inject constructor(private var dateTimeUtils: DateTimeUtils) : 
         return channelImage
     }
 
-    private fun readArticle(parser: XmlPullParser, rssChannel: Channel): Post {
-        val article = Post()
+    private fun readPost(parser: XmlPullParser, channel: Channel, source: Source): Post {
+        val post = Post()
+
+        post.sourceId = source.id
 
         while (parser.next() != XmlPullParser.END_TAG) {
             if (parser.eventType != XmlPullParser.START_TAG) {
                 continue
             }
 
-            article.channel = rssChannel
+            post.channel = channel
 
             when (parser.name) {
-                "title" -> article.title = parser.nextText()
-                "dc:creator" -> article.author = parser.nextText()
-                "link" -> article.link = parser.nextText()
-                "pubDate" -> article.pubDateTimestamp = getPublishDate(parser.nextText())
-                "content:encoded" -> article.content = parseArticleContent(parser.nextText())
-                "description" -> article.content.contentImage =
-                    getImageFromDescription(parser.nextText())
+                "title" -> post.title = parser.nextText()
+                "dc:creator" -> post.author = parser.nextText()
+                "link" -> post.link = parser.nextText()
+                "pubDate" -> post.pubDateTimestamp = getPublishDate(parser.nextText())
+                "content:encoded" -> post.content = parsePostContent(parser.nextText())
+                "description" -> post.content.contentImage =
+                        getImageFromDescription(parser.nextText())
 
                 else -> parser.skip()
             }
         }
 
-        return article
+        return post
     }
 
     private fun getPublishDate(rawDate: String) =
@@ -120,7 +122,7 @@ class RssParser @Inject constructor(private var dateTimeUtils: DateTimeUtils) : 
         }
     }
 
-    private fun parseArticleContent(contentText: String): Content {
+    private fun parsePostContent(contentText: String): Content {
         val doc = Jsoup.parse(contentText)
         val content = Content()
 

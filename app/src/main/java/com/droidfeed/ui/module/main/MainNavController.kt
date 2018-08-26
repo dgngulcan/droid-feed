@@ -1,6 +1,6 @@
 package com.droidfeed.ui.module.main
 
-import android.support.v4.app.Fragment
+import androidx.fragment.app.Fragment
 import com.droidfeed.R
 import com.droidfeed.di.MainScope
 import com.droidfeed.ui.module.about.AboutFragment
@@ -51,7 +51,7 @@ class MainNavController @Inject constructor(val activity: MainActivity) {
         changeFragment(newsletterFragment)
     }
 
-    private fun changeFragment(fragment: Fragment) {
+    private fun changeFragment(fragment: androidx.fragment.app.Fragment) {
         fragmentManager.beginTransaction()
             .setCustomAnimations(
                 android.R.animator.fade_in,
