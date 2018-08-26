@@ -1,10 +1,10 @@
 package com.droidfeed.ui.module.about
 
 import android.annotation.SuppressLint
-import android.arch.lifecycle.Observer
-import android.arch.lifecycle.ViewModelProviders
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProviders
 import android.os.Bundle
-import android.support.v7.widget.LinearLayoutManager
+import androidx.recyclerview.widget.LinearLayoutManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -56,7 +56,7 @@ class AboutFragment : BaseFragment() {
             .load(R.drawable.df_blinking)
             .into(binding.imgAppLogo)
 
-        binding.recyclerView.layoutManager = LinearLayoutManager(activity)
+        binding.recyclerView.layoutManager = androidx.recyclerview.widget.LinearLayoutManager(activity)
         binding.recyclerView.adapter = adapter
         binding.recyclerView.isNestedScrollingEnabled = false
     }

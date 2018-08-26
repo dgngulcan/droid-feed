@@ -1,12 +1,12 @@
 package com.droidfeed.ui.module.feed
 
-import com.droidfeed.data.model.Article
+import com.droidfeed.data.model.Post
 
 interface ArticleClickListener {
 
-    fun onItemClick(article: Article)
+    fun onItemClick(article: Post)
 
-    fun onShareClick(article: Article)
+    fun onShareClick(article: Post)
 
-    fun onBookmarkClick(article: Article)
+    fun onBookmarkClick(article: Post)
 }

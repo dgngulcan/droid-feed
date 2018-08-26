@@ -11,14 +11,12 @@ import javax.inject.Singleton
  */
 @Singleton
 class SourceRepo @Inject constructor(
-    private val sourceDao: SourceDao
+        private val sourceDao: SourceDao
 ) {
 
     val sources by lazy { sourceDao.getSources() }
 
-    fun updateSource(source: Source) {
-        launch {
-            sourceDao.updateSource(source)
-        }
+    fun updateSource(source: Source) = launch {
+        sourceDao.updateSource(source)
     }
 }

@@ -1,46 +1,35 @@
 package com.droidfeed.ui.module.feed
 
-import android.arch.lifecycle.Observer
-import android.arch.lifecycle.ViewModelProviders
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProviders
+import androidx.paging.PagedList
 import android.content.Intent
 import android.content.SharedPreferences
+import android.graphics.Color
 import android.os.Bundle
-import android.support.design.widget.Snackbar
-import android.support.v7.widget.DefaultItemAnimator
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import com.google.android.material.snackbar.Snackbar
+import androidx.recyclerview.widget.DefaultItemAnimator
+import android.view.*
 import com.droidfeed.R
+import com.droidfeed.data.DataStatus
+import com.droidfeed.data.model.Post
 import com.droidfeed.databinding.FragmentFeedBinding
 import com.droidfeed.ui.adapter.BaseUiModelAlias
-import com.droidfeed.ui.adapter.DataInsertedCallback
-import com.droidfeed.ui.adapter.UiModelAdapter
+import com.droidfeed.ui.adapter.UiModelPaginatedAdapter
 import com.droidfeed.ui.common.BaseFragment
 import com.droidfeed.ui.common.WrapContentLinearLayoutManager
 import com.droidfeed.util.AnalyticsUtil
 import com.droidfeed.util.AppRateHelper
 import com.droidfeed.util.CustomTab
-import com.droidfeed.util.extention.isOnline
 import com.droidfeed.util.shareCount
+import kotlinx.android.synthetic.main.fragment_feed.*
 import javax.inject.Inject
 
-/**
- * Base feed fragment responsible displaying articles.
- * @see [BookmarksFragment], [NewsFeedFragment]
- */
-open class FeedFragment : BaseFragment() {
+class FeedFragment : BaseFragment() {
 
-    protected lateinit var viewModel: FeedViewModel
-    protected lateinit var binding: FragmentFeedBinding
-    private lateinit var adapter: UiModelAdapter
-
-    private val dataInsertedCallback = object : DataInsertedCallback {
-        override fun onUpdated() {
-            if (binding.swipeRefreshArticles.isRefreshing) {
-                binding.swipeRefreshArticles.isRefreshing = false
-            }
-        }
-    }
+    private lateinit var viewModel: FeedViewModel
+    private lateinit var binding: FragmentFeedBinding
+    private lateinit var adapter: UiModelPaginatedAdapter
 
     @Inject
     lateinit var customTab: CustomTab
@@ -66,6 +55,7 @@ open class FeedFragment : BaseFragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
+        setHasOptionsMenu(true)
 
         if (!::viewModel.isInitialized) {
             viewModel = ViewModelProviders
@@ -78,75 +68,113 @@ open class FeedFragment : BaseFragment() {
     }
 
     private fun init() {
-        val layoutManager = activity?.let { WrapContentLinearLayoutManager(it) }
+        viewModel.setFeedType(FeedType.POSTS)
 
         if (!::adapter.isInitialized) {
-            adapter = UiModelAdapter(dataInsertedCallback, layoutManager)
+            adapter = UiModelPaginatedAdapter()
         }
 
+
         binding.apply {
+            val layoutManager = activity?.let { WrapContentLinearLayoutManager(it) }
             newsRecyclerView.layoutManager = layoutManager
 
-            (newsRecyclerView.itemAnimator as DefaultItemAnimator).supportsChangeAnimations = false
+            (newsRecyclerView.itemAnimator as androidx.recyclerview.widget.DefaultItemAnimator).supportsChangeAnimations = false
             newsRecyclerView.swapAdapter(adapter, true)
-            swipeRefreshArticles.setOnRefreshListener { this@FeedFragment.viewModel.onRefreshArticles() }
 
-            viewModel = this@FeedFragment.viewModel
+            swipeRefreshArticles.setOnRefreshListener {
+                this@FeedFragment.viewModel.refresh()
+            }
         }
     }
 
     private fun initDataObservables() {
-        viewModel.apply {
-            rssUiModelData.observe(this@FeedFragment, Observer {
-                adapter.addUiModels(it as Collection<BaseUiModelAlias>)
-            })
+        viewModel.posts.observe(this, Observer { pagedList ->
+            pagedList?.let { list ->
+                adapter.submitList(list as PagedList<BaseUiModelAlias>)
+            }
+        })
 
-            articleOpenDetail.observe(this@FeedFragment, Observer {
-                it?.let {
-                    customTab.showTab(it.link)
-                    analytics.logArticleClick()
+        viewModel.networkState.observe(this, Observer {
+            when (it) {
+                DataStatus.Success -> {
+                    if (swipeRefreshArticles.isRefreshing) {
+                        swipeRefreshArticles.isRefreshing = false
+                    }
                 }
-            })
+                DataStatus.Loading -> {
+                }
+                DataStatus.Error<Any>() -> {
+                    if (swipeRefreshArticles.isRefreshing) {
+                        swipeRefreshArticles.isRefreshing = false
+                    }
+                }
+            }
+        })
 
-            articleShareEvent.observe(this@FeedFragment, Observer {
-                sharedPrefs.shareCount += 1
-                startActivityForResult(it, REQUEST_CODE_SHARE)
-                analytics.logShare()
-            })
+        viewModel.articleBookmarkEvent.observe(this, Observer {
+            appRateHelper.checkAppRatePrompt(binding.root)
+        })
 
-            articleBookmarkEvent.observe(this@FeedFragment, Observer {
-                appRateHelper.checkAppRatePrompt(binding.root)
-            })
+        viewModel.articleOpenDetail.observe(this, Observer {
+            it?.let { post -> customTab.showTab(post.link) }
+            analytics.logPostClick()
+        })
 
-            loadingFailedEvent.observe(this@FeedFragment, Observer {
-                showLoadFailedSnackbar(it)
-            })
+        viewModel.articleShareEvent.observe(this, Observer {
+            sharedPrefs.shareCount += 1
+            startActivityForResult(it, REQUEST_CODE_SHARE)
+            analytics.logPostShare()
+        })
+
+        viewModel.articleUnBookmarkEvent.observe(this, Observer { article ->
+            article?.let {
+                // todo check if bookmark fragment
+                showBookmarkUndoSnackbar(it)
+                analytics.logBookmark(it.bookmarked == 1)
+            }
+        })
+
+        viewModel.sources.observe(this, Observer { sources ->
+            val activeSource = sources?.firstOrNull { it.isActive }
+            binding.txtEmptySource.visibility = if (activeSource != null) {
+                View.GONE
+            } else {
+                View.VISIBLE
+            }
+        })
+    }
+
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        activity?.menuInflater?.inflate(R.menu.fragment_news_options, menu)
+        super.onCreateOptionsMenu(menu, inflater)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
+        when (item?.itemId) {
+            R.id.action_bookmarks -> {
+                viewModel.setFeedType(FeedType.BOOKMARKS)
+            }
         }
+        return super.onOptionsItemSelected(item)
+    }
+
+    private fun showBookmarkUndoSnackbar(post: Post) {
+        Snackbar.make(
+            binding.root,
+            R.string.info_bookmark_removed,
+            Snackbar.LENGTH_LONG
+        )
+            .setActionTextColor(Color.YELLOW)
+            .setAction(R.string.undo) { viewModel.toggleBookmark(post) }
+            .show()
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         when (requestCode) {
-            REQUEST_CODE_SHARE -> {
-                appRateHelper.checkAppRatePrompt(binding.root)
-            }
-        }
-    }
-
-    private fun showLoadFailedSnackbar(it: Boolean?) {
-        if (it == true) {
-            val snackBarText = if (activity?.isOnline() == true) {
-                getString(R.string.error_obtaining_feed)
-            } else {
-                getString(R.string.info_no_internet) + " " +
-                    getString(R.string.can_not_refresh)
-            }
-
-            Snackbar.make(
-                binding.root,
-                snackBarText,
-                Snackbar.LENGTH_LONG
-            ).show()
+            REQUEST_CODE_SHARE -> appRateHelper.checkAppRatePrompt(binding.root)
         }
     }
 

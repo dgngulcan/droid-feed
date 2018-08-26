@@ -1,28 +1,30 @@
 buildscript {
 
     ext.versions = [
-            'android_ktx'                : '0.3',
-            'arch_lifecycle'             : '1.1.1',
-            'arch_room'                  : '1.1.1',
-            'crashlytics'                : '2.9.4',
-            'kotlin'                     : '1.2.51',
-            'kotlin_coroutines'          : '0.23.4',
-            'support_lib'                : '27.1.1',
-            'constraint_layout'          : '1.1.2',
-            'glide'                      : '4.3.1',
-            'retrofit'                   : '2.4.0',
-            'retrofit_coroutines_adapter': '1.0.0',
-            'okHttp'                     : '3.9.0',
-            'gradle_build'               : '3.1.0-beta1',
-            'dagger'                     : '2.16',
-            'mockito'                    : '2.19.1',
-            'fabric_gradle'              : '1.25.4',
-            'firebase_core'              : '16.0.1',
-            'firebase_config'            : '16.0.0',
-            'play_services'              : '4.0.1',
-            'jSoup'                      : '1.11.2',
-            'support_test_runner'        : '1.0.2',
-            'support_test_espresso'      : '3.0.2'
+            'android_ktx'      : '1.0.0-rc01',
+            'appcompat'        : '1.0.0-rc01',
+            'arch_lifecycle'   : '2.0.0-rc01',
+            'arch_room'        : '2.0.0-rc01',
+            'arch_paging'      : '2.0.0-rc01',
+            'constraint_layout': '2.0.0-alpha2',
+            'crashlytics'      : '2.9.4',
+            'dagger'           : '2.16',
+            'fragment'         : '1.0.0-rc01',
+            'fabric_gradle'    : '1.25.4',
+            'firebase_core'    : '16.0.1',
+            'firebase_config'  : '16.0.0',
+            'material'         : '1.0.0-rc01',
+            'glide'            : '4.8.0',
+            'kotlin'           : '1.2.61',
+            'kotlin_coroutines': '0.23.4',
+            'retrofit'         : '2.4.0',
+            'okHttp'           : '3.9.0',
+            'mockito'          : '2.19.1',
+            'play_services'    : '4.0.1',
+            'jSoup'            : '1.11.2',
+            'test_arch'        : '2.0.0-rc01',
+            'test_espresso'    : '3.1.0-alpha4',
+            'test_runner'      : '1.1.0-alpha4'
     ]
 
     repositories {
@@ -32,7 +34,7 @@ buildscript {
     }
 
     dependencies {
-        classpath 'com.android.tools.build:gradle:3.1.3'
+        classpath 'com.android.tools.build:gradle:3.2.0-beta05'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$versions.kotlin"
         classpath "org.jetbrains.kotlin:kotlin-android-extensions:$versions.kotlin"
         classpath "io.fabric.tools:gradle:$versions.fabric_gradle"

@@ -1,14 +1,13 @@
 package com.droidfeed.data.repo
 
-import android.arch.lifecycle.LiveData
-import android.arch.lifecycle.MutableLiveData
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import com.droidfeed.data.DataResource
 import com.droidfeed.data.api.mailchimp.Error
 import com.droidfeed.data.api.mailchimp.ErrorAdapter
 import com.droidfeed.data.api.mailchimp.ErrorType
 import com.droidfeed.data.api.mailchimp.Subscriber
 import com.droidfeed.data.api.mailchimp.service.NewsletterService
-import com.droidfeed.ui.common.DataState
-import com.droidfeed.util.event.Event
 import com.google.firebase.remoteconfig.FirebaseRemoteConfig
 import com.squareup.moshi.Moshi
 import kotlinx.coroutines.experimental.launch
@@ -26,10 +25,10 @@ class NewsletterRepo @Inject constructor(
      *
      * @param subscriber
      */
-    fun addSubscriberToNewsletter(subscriber: Subscriber): LiveData<Event<DataState>> {
-        val callLiveData = MutableLiveData<Event<DataState>>()
+    fun addSubscriberToNewsletter(subscriber: Subscriber): LiveData<DataResource<Any>> {
+        val callLiveData = MutableLiveData<DataResource<Any>>()
 
-        callLiveData.value = Event(DataState.Loading())
+        callLiveData.value = DataResource.loading()
 
         launch {
             val listId = remoteConfig.getString("mc_newsletter_list_id")
@@ -37,7 +36,7 @@ class NewsletterRepo @Inject constructor(
             val call = newsletterService.addSubscriber(listId, subscriber)
             call.await().let { response ->
                 if (response.isSuccessful) {
-                    callLiveData.postValue(Event(DataState.Success<Any>()))
+                    callLiveData.postValue(DataResource.success(Any()))
                 } else {
                     when (response.code()) {
                         400 -> {
@@ -46,11 +45,11 @@ class NewsletterRepo @Inject constructor(
 
                             when {
                                 mcError != null -> postError(mcError, callLiveData)
-                                else -> callLiveData.postValue(Event(DataState.Error<Any>()))
+                                else -> callLiveData.postValue(DataResource.error(mcError))
                             }
                         }
 
-                        else -> callLiveData.postValue(Event(DataState.Error<Any>()))
+                        else -> callLiveData.postValue(DataResource.error())
                     }
                 }
             }
@@ -70,14 +69,14 @@ class NewsletterRepo @Inject constructor(
 
     private fun postError(
         error: Error,
-        callLiveData: MutableLiveData<Event<DataState>>
+        callLiveData: MutableLiveData<DataResource<Any>>
     ) {
         when (error.type) {
             ErrorType.MEMBER_ALREADY_EXIST -> {
-                callLiveData.postValue(Event(DataState.Error(data = ErrorType.MEMBER_ALREADY_EXIST)))
+                callLiveData.postValue(DataResource.error(data = ErrorType.MEMBER_ALREADY_EXIST))
             }
             ErrorType.INVALID_RESOURCE -> {
-                callLiveData.postValue(Event(DataState.Error(data = ErrorType.INVALID_RESOURCE)))
+                callLiveData.postValue(DataResource.error(data = ErrorType.INVALID_RESOURCE))
             }
         }
     }
