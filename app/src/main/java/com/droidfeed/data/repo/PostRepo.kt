@@ -27,7 +27,7 @@ import javax.inject.Singleton
 @Singleton
 class PostRepo @Inject constructor(
     private val okHttpClient: OkHttpClient,
-    val xmlParser: NewsXmlParser,
+   private val xmlParser: NewsXmlParser,
     private val postDao: PostDao
 ) {
 
@@ -44,6 +44,8 @@ class PostRepo @Inject constructor(
 
         val refreshTrigger = MutableLiveData<Unit>()
         val networkState = switchMap(refreshTrigger) { refresh(sources) }
+
+        refresh(sources)
 
         return Listing<PostUIModel>(
             pagedList = pagedList,

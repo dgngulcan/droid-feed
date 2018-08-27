@@ -68,7 +68,6 @@ class FeedFragment : BaseFragment() {
     }
 
     private fun init() {
-        viewModel.setFeedType(FeedType.POSTS)
 
         if (!::adapter.isInitialized) {
             adapter = UiModelPaginatedAdapter()
@@ -142,6 +141,8 @@ class FeedFragment : BaseFragment() {
             } else {
                 View.VISIBLE
             }
+            viewModel.setFeedType(FeedType.POSTS)
+
         })
     }
 

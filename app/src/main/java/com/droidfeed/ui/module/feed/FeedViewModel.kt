@@ -5,7 +5,6 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Transformations.map
 import androidx.lifecycle.Transformations.switchMap
-import androidx.lifecycle.ViewModel
 import androidx.paging.PagedList
 import com.droidfeed.data.model.Post
 import com.droidfeed.data.repo.PostRepo
@@ -15,19 +14,19 @@ import com.droidfeed.ui.common.BaseViewModel
 import com.droidfeed.ui.common.SingleLiveEvent
 import javax.inject.Inject
 
-/**
- * [ViewModel] for feed screens.
- */
-@Suppress("UNCHECKED_CAST")
+@Suppress("UNCHECKED_CAST", "WHEN_ENUM_CAN_BE_NULL_IN_JAVA")
 class FeedViewModel @Inject constructor(
     sourceRepo: SourceRepo,
     private val feedRepo: PostRepo
 ) : BaseViewModel() {
 
     private val feedType = MutableLiveData<FeedType>()
+    val sources = sourceRepo.sources
+
     private val repoResult = map(feedType) { type ->
         when (type) {
             FeedType.POSTS -> {
+
                 feedRepo.getAllPosts(sources) { createUiModels(it) }
             }
             FeedType.BOOKMARKS -> {
@@ -38,7 +37,6 @@ class FeedViewModel @Inject constructor(
 
     val networkState = switchMap(repoResult) { it.networkState }!!
     val posts: LiveData<PagedList<PostUIModel>> = switchMap(repoResult) { it.pagedList }
-    val sources = sourceRepo.sources
 
     val articleBookmarkEvent = SingleLiveEvent<Boolean>()
     val articleOpenDetail = SingleLiveEvent<Post>()
@@ -72,7 +70,9 @@ class FeedViewModel @Inject constructor(
     }
 
     fun setFeedType(feedType: FeedType) {
-        this.feedType.value = feedType
+        if (this.feedType.value != feedType) {
+            this.feedType.value = feedType
+        }
     }
 
     fun refresh() {
@@ -89,4 +89,5 @@ class FeedViewModel @Inject constructor(
 
         feedRepo.updatePost(article)
     }
+
 }
