@@ -2,7 +2,7 @@
 <resources>
   <color name="colorPrimary">#000000</color>
   <color name="colorPrimaryDark">#000000</color>
-  <color name="colorAccent">#000000</color>
+  <color name="colorAccent">#f5a623</color>
 
   <color name="lightGrey">#878787</color>
   <color name="darkGrey">#212121</color>
@@ -10,7 +10,7 @@
 
   <color name="navBarColor">#70000000</color>
   <color name="statusBarColor">#90000000</color>
-  <color name="darkThemeRippleColor">#90ffffff</color>
+  <color name="gray">#4a4a4a</color>
 
   <color name="yellow">#ffc66d</color>
   <color name="green">#3b8686</color>

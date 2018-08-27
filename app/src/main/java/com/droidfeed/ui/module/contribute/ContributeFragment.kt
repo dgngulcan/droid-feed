@@ -1,11 +1,11 @@
 package com.droidfeed.ui.module.contribute
 
-import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProviders
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProviders
 import com.droidfeed.databinding.FragmentContributeBinding
 import com.droidfeed.ui.common.BaseFragment
 import com.droidfeed.util.CustomTab

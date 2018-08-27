@@ -77,7 +77,7 @@
         android:drawablePadding="@dimen/spacing_large"
         android:drawableStart="@drawable/ic_github_black_24dp"
         android:onClick="@{()->viewModel.openContributionPage()}"
-        android:text="@string/contribute_on_github" />
+        android:text="@string/view_on_github" />
 
       <TextView
         android:id="@+id/btnRateApp"

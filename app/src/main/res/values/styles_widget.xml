@@ -37,13 +37,32 @@
         <item name="android:padding">16dp</item>
     </style>
 
+
+    <style name="DF" />
+
+    <style name="DF.TitleStyleDark">
+        <item name="android:textSize">30sp</item>
+        <item name="android:fontFamily">@font/poppins_medium</item>
+        <item name="android:textColor">@android:color/white</item>
+    </style>
+
+    <style name="DF.BodyStyleDark" parent="@android:style/TextAppearance.Material.Body2">
+        <item name="android:textSize">14sp</item>
+        <item name="android:textColor">@android:color/white</item>
+    </style>
+
+    <style name="DF.ButtonStyle" parent="@style/Widget.MaterialComponents.Button">
+        <item name="android:textAllCaps">false</item>
+        <item name="android:textIsSelectable">false</item>
+        <item name="android:fontFamily">@font/poppins_medium</item>
+        <item name="android:textColor">@android:color/white</item>
+    </style>
+
     <style name="CardStyle">
         <item name="cardCornerRadius">@dimen/card_corner_radius</item>
         <item name="android:foreground">?android:attr/selectableItemBackground</item>
         <item name="android:layout_margin">@dimen/spacing_small</item>
         <item name="android:stateListAnimator">@animator/raise</item>
-        <!--<item name="android:focusable">false</item>-->
-        <!--<item name="android:focusableInTouchMode">false</item>-->
     </style>
 
 </resources>
