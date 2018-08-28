@@ -9,6 +9,9 @@ import androidx.lifecycle.ViewModelProviders
 import com.droidfeed.databinding.FragmentContributeBinding
 import com.droidfeed.ui.common.BaseFragment
 import com.droidfeed.util.CustomTab
+import kotlinx.coroutines.experimental.android.UI
+import kotlinx.coroutines.experimental.delay
+import kotlinx.coroutines.experimental.launch
 import javax.inject.Inject
 
 /**
@@ -41,7 +44,15 @@ class ContributeFragment : BaseFragment() {
 
         binding.viewModel = viewModel
 
+        init()
         initObservables()
+    }
+
+    private fun init() {
+        launch(UI) {
+            delay(500)
+            binding.animView.playAnimation()
+        }
     }
 
     private fun initObservables() {
