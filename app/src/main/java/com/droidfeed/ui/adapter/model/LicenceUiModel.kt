@@ -12,7 +12,7 @@ import com.droidfeed.ui.common.BaseUiModel
 
 class LicenceUiModel(
     private val licence: Licence,
-    private val licenceClickListener: UiModelClickListener<Licence>
+    private val listener: ()->Unit
 ) : BaseUiModel<LicenceViewHolder>() {
 
     override fun getViewHolder(parent: ViewGroup): LicenceViewHolder {
@@ -26,7 +26,7 @@ class LicenceUiModel(
     }
 
     override fun bindViewHolder(viewHolder: LicenceViewHolder) {
-        viewHolder.bind(licence, licenceClickListener)
+        viewHolder.bind(licence, listener)
     }
 
     override fun getViewType(): Int = UiModelType.LICENCE.ordinal

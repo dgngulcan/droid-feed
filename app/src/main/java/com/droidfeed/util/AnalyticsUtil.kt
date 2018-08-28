@@ -18,6 +18,12 @@ class AnalyticsUtil @Inject constructor(private val analytics: FirebaseAnalytics
         analytics.logEvent(FirebaseAnalytics.Event.SHARE, bundle)
     }
 
+    fun logAppShare() {
+        val bundle = Bundle()
+        bundle.putString("content", "app")
+        analytics.logEvent(FirebaseAnalytics.Event.SHARE, bundle)
+    }
+
     fun logPostClick() {
         analytics.logEvent(FirebaseAnalytics.Event.VIEW_ITEM, null)
     }

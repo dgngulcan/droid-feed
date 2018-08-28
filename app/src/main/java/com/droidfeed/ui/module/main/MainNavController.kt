@@ -1,6 +1,5 @@
 package com.droidfeed.ui.module.main
 
-import androidx.fragment.app.Fragment
 import com.droidfeed.R
 import com.droidfeed.di.MainScope
 import com.droidfeed.ui.module.about.AboutFragment

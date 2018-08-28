@@ -80,7 +80,7 @@ class UiModelPaginatedAdapter
     }
 
     companion object {
-        val diffCallback = object :
+        private val diffCallback = object :
             DiffUtil.ItemCallback<BaseUiModelAlias>() {
 
             override fun areItemsTheSame(

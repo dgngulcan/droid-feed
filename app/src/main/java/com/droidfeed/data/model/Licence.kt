@@ -5,7 +5,8 @@ import com.droidfeed.ui.adapter.diff.Diffable
 data class Licence(
     var name: String,
     var description: String,
-    var url: String
+    var url: String,
+    var licenceUrl: String = ""
 ) : Diffable {
 
     override fun isSame(item: Diffable): Boolean {

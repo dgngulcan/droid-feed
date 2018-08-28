@@ -29,21 +29,22 @@
     <string name="error_obtaining_feed">Couldn\'t retrieve the feed!</string>
 
     <string name="title_contribution_invite">You are invited to be a contributor.</string>
-    <string name="help_us_desc">Join us to advance DroidFeed\'s mission of empowering Android developer.  \n\nDroidFeed is an open source app, and you can improve it any time.\n\nCheck out our GitHub page to see how you can contribute.
+    <string name="help_us_desc">Join us to advance DroidFeed\'s mission of empowering Android developer.\n\nDroidFeed is an open source app, and you can improve it any time.\n\nCheck out our GitHub page to see how you can contribute.
   </string>
     <string name="send_feedback">Send Feedback</string>
     <string name="undo">Undo</string>
     <string name="view_on_github">View on Github</string>
     <string name="filter">Filter</string>
     <string name="sources">Sources</string>
-    <string name="libraries">Libraries</string>
+    <string name="libraries_used">Libraries Used</string>
     <string name="libraries_desc">DroidFeed is made with the awesome libraries listed below.</string>
     <string name="later">Later</string>
     <string name="never_show">Never show</string>
     <string name="sure">Sure</string>
     <string name="share">Share</string>
-    <string name="rate_app">Rate App</string>
-    <string name="contact">Contact</string>
+    <string name="share_app">Share this App</string>
+    <string name="rate_app">Rate the App</string>
+    <string name="contact_us">Contact Us</string>
     <string name="licences">Licences</string>
     <string name="dashed_text">- %s</string>
     <string name="send_with">Send with</string>

@@ -1,148 +1,91 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-  xmlns:tools="http://schemas.android.com/tools">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
-  <data>
+    <data>
 
-    <variable
-      name="viewModel"
-      type="com.droidfeed.ui.module.about.AboutViewModel" />
+        <variable
+            name="viewModel"
+            type="com.droidfeed.ui.module.about.AboutViewModel" />
 
-  </data>
+    </data>
 
-  <androidx.core.widget.NestedScrollView
-    android:id="@+id/nestedScrollView"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent">
-
-    <LinearLayout
-      android:layout_width="match_parent"
-      android:layout_height="match_parent"
-      android:descendantFocusability="blocksDescendants"
-      android:gravity="center_horizontal"
-      android:orientation="vertical">
-
-      <ImageView
-        android:id="@+id/imgAppLogo"
-        android:layout_width="96dp"
-        android:layout_height="96dp"
-        android:layout_marginTop="@dimen/spacing_large"
-        android:contentDescription="@string/content_app_logo"
-        android:scaleType="centerInside"
-        tools:src="@drawable/df_icon_512" />
-
-      <TextView
-        style="@style/TextAppearance.AppCompat.Title"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/spacing_small"
-        android:text="@string/app_name" />
-
-      <TextView
-        android:id="@+id/txtVersion"
-        style="@style/TextAppearance.AppCompat.Caption"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@{viewModel.appVersion}"
-        tools:text="1.0.3" />
-
-      <TextView
-        style="@style/TextAppearance.AppCompat.Body1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="@dimen/spacing_medium"
-        android:layout_marginStart="@dimen/spacing_medium"
-        android:layout_marginTop="@dimen/spacing_medium"
-        android:gravity="center"
-        android:text="@string/about_page_copy" />
-
-      <TextView
-        style="@style/TextAppearance.AppCompat.Caption"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/spacing_small"
-        android:gravity="center"
-        android:text="@string/made_in_brooklyn" />
-
-      <TextView
-        style="@style/GroupTitleStyle"
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/spacing_small"
-        android:text="@string/nav_about" />
+        android:layout_height="match_parent"
+        android:background="@color/pink">
 
-      <TextView
-        android:id="@+id/btnGithub"
-        style="@style/ButtonRowStyle"
-        android:drawablePadding="@dimen/spacing_large"
-        android:drawableStart="@drawable/ic_github_black_24dp"
-        android:onClick="@{()->viewModel.openContributionPage()}"
-        android:text="@string/view_on_github" />
+        <TextView
+            android:id="@+id/textView"
+            style="@style/DF.ButtonRowDark"
+            android:onClick="@{()->viewModel.openLibraries()}"
+            android:text="@string/libraries_used"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
-      <TextView
-        android:id="@+id/btnRateApp"
-        style="@style/ButtonRowStyle"
-        android:drawablePadding="24dp"
-        android:drawableStart="@drawable/ic_star_black_24dp"
-        android:onClick="@{()->viewModel.openPlayStore()}"
-        android:text="@string/rate_app" />
+        <TextView
+            android:id="@+id/textView8"
+            style="@style/DF.ButtonRowDark"
+            android:onClick="@{()->viewModel.contactEmail()}"
+            android:text="@string/contact_us"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textView" />
 
-      <TextView
-        android:id="@+id/btnContact"
-        style="@style/ButtonRowStyle"
-        android:drawablePadding="24dp"
-        android:drawableStart="@drawable/ic_email_black_24dp"
-        android:onClick="@{()->viewModel.contactEmail()}"
-        android:text="@string/contact" />
+        <TextView
+            android:id="@+id/textView9"
+            style="@style/DF.ButtonRowDark"
+            android:onClick="@{()->viewModel.shareApp()}"
+            android:text="@string/share_app"
+            app:layout_constraintEnd_toEndOf="parent"
 
-      <TextView
-        android:id="@+id/btnShare"
-        style="@style/ButtonRowStyle"
-        android:drawablePadding="@dimen/spacing_large"
-        android:drawableStart="@drawable/ic_share_black_24dp"
-        android:onClick="@{()->viewModel.shareApp()}"
-        android:text="@string/share" />
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textView8" />
 
-      <TextView
-        style="@style/GroupTitleStyle"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:text="@string/legal" />
+        <TextView
+            android:id="@+id/textView10"
+            style="@style/DF.ButtonRowDark"
+            android:onClick="@{()->viewModel.openPlayStore()}"
+            android:text="@string/rate_app"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textView9" />
 
+        <TextView
+            android:id="@+id/textView11"
+            style="@style/DF.ButtonRowDark"
+            android:onClick="@{()->viewModel.openPrivacyPolicy()}"
+            android:text="@string/privacy_policy"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textView10" />
 
-      <TextView
-        android:id="@+id/btnPrivacyPolicy"
-        style="@style/ButtonRowStyle"
-        android:drawablePadding="@dimen/spacing_large"
-        android:drawableStart="@drawable/ic_script_black_24dp"
-        android:onClick="@{()->viewModel.openPrivacyPolicy()}"
-        android:text="@string/privacy_policy" />
+        <TextView
+            android:id="@+id/txtAppVersion"
+            style="@style/TextAppearance.AppCompat.Body1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="48dp"
+            android:layout_marginTop="8dp"
+            app:layout_constraintStart_toStartOf="@+id/textView11"
+            app:layout_constraintTop_toBottomOf="@+id/textView11"
+            tools:text="v2.0" />
 
-      <TextView
-        style="@style/GroupTitleStyle"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:text="@string/libraries" />
+        <com.airbnb.lottie.LottieAnimationView
+            android:id="@+id/animView"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginTop="56dp"
+            android:layout_marginBottom="32dp"
+            android:scaleType="centerInside"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textView11"
+            app:lottie_rawRes="@raw/letter_anim"
+            tools:src="@drawable/ic_cat" />
 
-      <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        style="@style/TextAppearance.AppCompat.Caption"
-        android:paddingStart="16dp"
-        android:paddingBottom="16dp"
-        android:paddingEnd="16dp"
-        android:text="@string/libraries_desc" />
-
-      <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recyclerView"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:clipToPadding="false"
-        android:descendantFocusability="blocksDescendants"
-        android:paddingBottom="32dp" />
-
-    </LinearLayout>
-  </androidx.core.widget.NestedScrollView>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

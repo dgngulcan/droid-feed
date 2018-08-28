@@ -51,7 +51,7 @@ class MainViewModel @Inject constructor(
             R.drawable.ic_keyboard,
             R.drawable.ic_merge,
             R.drawable.ic_office_desk,
-            R.drawable.ic_plant,
+//            R.drawable.ic_plant,
             R.drawable.ic_tea
         )
 

@@ -1,21 +1,18 @@
 package com.droidfeed.ui.module.about
 
 import android.annotation.SuppressLint
-import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProviders
 import android.os.Bundle
-import androidx.recyclerview.widget.LinearLayoutManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.droidfeed.R
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProviders
+import com.droidfeed.BuildConfig
 import com.droidfeed.databinding.FragmentAboutBinding
-import com.droidfeed.ui.adapter.BaseUiModelAlias
-import com.droidfeed.ui.adapter.UiModelAdapter
 import com.droidfeed.ui.common.BaseFragment
+import com.droidfeed.util.AnalyticsUtil
 import com.droidfeed.util.CustomTab
 import com.droidfeed.util.extention.startActivity
-import com.droidfeed.util.glide.GlideApp
 import javax.inject.Inject
 
 @SuppressLint("ValidFragment")
@@ -25,10 +22,11 @@ class AboutFragment : BaseFragment() {
     private lateinit var binding: FragmentAboutBinding
     private lateinit var viewModel: AboutViewModel
 
-    private val adapter: UiModelAdapter by lazy { UiModelAdapter() }
-
     @Inject
     lateinit var customTab: CustomTab
+
+    @Inject
+    lateinit var analytics: AnalyticsUtil
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -52,21 +50,11 @@ class AboutFragment : BaseFragment() {
     }
 
     private fun init() {
-        GlideApp.with(this)
-            .load(R.drawable.df_blinking)
-            .into(binding.imgAppLogo)
-
-        binding.recyclerView.layoutManager = androidx.recyclerview.widget.LinearLayoutManager(activity)
-        binding.recyclerView.adapter = adapter
-        binding.recyclerView.isNestedScrollingEnabled = false
+        binding.txtAppVersion.text = BuildConfig.VERSION_NAME
     }
 
     @Suppress("UNCHECKED_CAST")
     private fun initObservers() {
-        viewModel.licenceUiModels.observe(this, Observer {
-            adapter.addUiModels(it as Collection<BaseUiModelAlias>)
-        })
-
         viewModel.rateAppEvent.observe(this, Observer {
             activity?.let { it1 -> it?.startActivity(it1) }
         })
@@ -76,11 +64,30 @@ class AboutFragment : BaseFragment() {
         })
 
         viewModel.shareAppEvent.observe(this, Observer {
-            activity?.let { it1 -> it?.startActivity(it1) }
+            activity?.let { it1 ->
+                it?.startActivity(it1)
+                analytics.logAppShare()
+            }
         })
 
         viewModel.openLinkEvent.observe(this, Observer {
             it?.let { it1 -> customTab.showTab(it1) }
         })
+
+        viewModel.openLibrariesEvent.observe(this, Observer {
+            showLicencesDialog()
+        })
+    }
+
+    private fun showLicencesDialog() {
+        val ft = fragmentManager?.beginTransaction()
+        val prev = fragmentManager?.findFragmentByTag("dialog")
+        if (prev != null) {
+            ft?.remove(prev)
+        }
+        ft?.addToBackStack(null)
+
+        val newFragment = LicencesFragment()
+        newFragment.show(ft, "dialog")
     }
 }
