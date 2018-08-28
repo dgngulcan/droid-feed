@@ -84,7 +84,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textView11"
-            app:lottie_rawRes="@raw/letter_anim"
+            app:lottie_rawRes="@raw/notebook_anim"
             tools:src="@drawable/ic_cat" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>

@@ -13,6 +13,9 @@ import com.droidfeed.ui.common.BaseFragment
 import com.droidfeed.util.AnalyticsUtil
 import com.droidfeed.util.CustomTab
 import com.droidfeed.util.extention.startActivity
+import kotlinx.coroutines.experimental.android.UI
+import kotlinx.coroutines.experimental.delay
+import kotlinx.coroutines.experimental.launch
 import javax.inject.Inject
 
 @SuppressLint("ValidFragment")
@@ -51,6 +54,11 @@ class AboutFragment : BaseFragment() {
 
     private fun init() {
         binding.txtAppVersion.text = BuildConfig.VERSION_NAME
+
+        launch(UI) {
+            delay(500)
+            binding.animView.playAnimation()
+        }
     }
 
     @Suppress("UNCHECKED_CAST")
