@@ -15,6 +15,7 @@ buildscript {
             'firebase_config'  : '16.0.0',
             'material'         : '1.0.0-rc01',
             'glide'            : '4.8.0',
+            'lottie'           : '2.6.0-beta19',
             'kotlin'           : '1.2.61',
             'kotlin_coroutines': '0.23.4',
             'retrofit'         : '2.4.0',
