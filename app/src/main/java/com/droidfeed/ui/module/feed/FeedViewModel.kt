@@ -26,7 +26,6 @@ class FeedViewModel @Inject constructor(
     private val repoResult = map(feedType) { type ->
         when (type) {
             FeedType.POSTS -> {
-
                 feedRepo.getAllPosts(sources) { createUiModels(it) }
             }
             FeedType.BOOKMARKS -> {

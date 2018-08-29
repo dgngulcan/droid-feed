@@ -1,15 +1,18 @@
 package com.droidfeed.ui.module.feed
 
-import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProviders
-import androidx.paging.PagedList
 import android.content.Intent
 import android.content.SharedPreferences
 import android.graphics.Color
 import android.os.Bundle
-import com.google.android.material.snackbar.Snackbar
-import androidx.recyclerview.widget.DefaultItemAnimator
-import android.view.*
+import android.view.LayoutInflater
+import android.view.Menu
+import android.view.MenuInflater
+import android.view.MenuItem
+import android.view.View
+import android.view.ViewGroup
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProviders
+import androidx.paging.PagedList
 import com.droidfeed.R
 import com.droidfeed.data.DataStatus
 import com.droidfeed.data.model.Post
@@ -22,6 +25,7 @@ import com.droidfeed.util.AnalyticsUtil
 import com.droidfeed.util.AppRateHelper
 import com.droidfeed.util.CustomTab
 import com.droidfeed.util.shareCount
+import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.fragment_feed.*
 import javax.inject.Inject
 
@@ -78,7 +82,8 @@ class FeedFragment : BaseFragment() {
             val layoutManager = activity?.let { WrapContentLinearLayoutManager(it) }
             newsRecyclerView.layoutManager = layoutManager
 
-            (newsRecyclerView.itemAnimator as androidx.recyclerview.widget.DefaultItemAnimator).supportsChangeAnimations = false
+            (newsRecyclerView.itemAnimator as androidx.recyclerview.widget.DefaultItemAnimator).supportsChangeAnimations =
+                false
             newsRecyclerView.swapAdapter(adapter, true)
 
             swipeRefreshArticles.setOnRefreshListener {
@@ -141,11 +146,10 @@ class FeedFragment : BaseFragment() {
             } else {
                 View.VISIBLE
             }
-            viewModel.setFeedType(FeedType.POSTS)
 
+            viewModel.setFeedType(FeedType.POSTS)
         })
     }
-
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         activity?.menuInflater?.inflate(R.menu.fragment_news_options, menu)
