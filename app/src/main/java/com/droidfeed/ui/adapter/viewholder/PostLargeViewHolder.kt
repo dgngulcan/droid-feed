@@ -5,9 +5,9 @@ import com.droidfeed.databinding.ListItemPostLargeBinding
 import com.droidfeed.ui.module.feed.ArticleClickListener
 
 /**
- * [ArticleViewHolder] for the large article cards.
+ * [PostViewHolder] for the large article cards.
  */
-class ArticleLargeViewHolder(val binding: ListItemPostLargeBinding) : ArticleViewHolder(binding.root) {
+class PostLargeViewHolder(val binding: ListItemPostLargeBinding) : PostViewHolder(binding.root) {
 
     override fun bind(post: Post, articleClickListener: ArticleClickListener) {
         binding.postClickListener = articleClickListener

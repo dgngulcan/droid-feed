@@ -5,11 +5,11 @@ import com.droidfeed.databinding.ListItemPostSmallBinding
 import com.droidfeed.ui.module.feed.ArticleClickListener
 
 /**
- * [ArticleViewHolder] for the small article cards.
+ * [PostViewHolder] for the small article cards.
  *
  * @param binding
  */
-class ArticleSmallViewHolder(private val binding: ListItemPostSmallBinding) : ArticleViewHolder(binding.root) {
+class PostSmallViewHolder(private val binding: ListItemPostSmallBinding) : PostViewHolder(binding.root) {
 
     override fun bind(post: Post, articleClickListener: ArticleClickListener) {
         binding.articleClickListener = articleClickListener

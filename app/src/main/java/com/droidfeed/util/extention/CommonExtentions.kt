@@ -4,11 +4,17 @@ import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.net.ConnectivityManager
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.Observer
 import com.droidfeed.util.logConsole
 import com.droidfeed.util.logStackTrace
+import kotlinx.coroutines.experimental.android.UI
+import kotlinx.coroutines.experimental.launch
 import org.xmlpull.v1.XmlPullParser
 import org.xmlpull.v1.XmlPullParserException
 import java.util.Random
+import java.util.concurrent.CountDownLatch
+import java.util.concurrent.TimeUnit
 
 /**
  * Checks if the device has internet access.
@@ -59,4 +65,18 @@ private fun XmlPullParser.skipTag() {
     } catch (e: XmlPullParserException) {
         logStackTrace(e)
     }
+}
+
+fun <T> LiveData<T>.blockingObserve(): T? {
+    var value: T? = null
+    val latch = CountDownLatch(1)
+    val innerObserver = Observer<T> {
+        value = it
+        latch.countDown()
+    }
+
+    launch(UI) { observeForever(innerObserver) }
+    latch.await(2, TimeUnit.SECONDS)
+
+    return value
 }

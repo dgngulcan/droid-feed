@@ -22,7 +22,7 @@ import com.droidfeed.util.glide.roundCorners
 /**
  * ViewHolder to display article cards.
  */
-abstract class ArticleViewHolder(private val root: View) : androidx.recyclerview.widget.RecyclerView.ViewHolder(root) {
+abstract class PostViewHolder(private val root: View) : androidx.recyclerview.widget.RecyclerView.ViewHolder(root) {
 
     companion object {
         private const val SATURATION_DURATION = 2000L

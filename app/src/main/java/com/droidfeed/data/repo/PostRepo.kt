@@ -12,6 +12,7 @@ import com.droidfeed.data.model.Post
 import com.droidfeed.data.model.Source
 import com.droidfeed.data.parser.NewsXmlParser
 import com.droidfeed.ui.adapter.model.PostUIModel
+import com.droidfeed.util.extention.blockingObserve
 import com.droidfeed.util.logStackTrace
 import kotlinx.coroutines.experimental.launch
 import okhttp3.OkHttpClient
@@ -27,7 +28,7 @@ import javax.inject.Singleton
 @Singleton
 class PostRepo @Inject constructor(
     private val okHttpClient: OkHttpClient,
-   private val xmlParser: NewsXmlParser,
+    private val xmlParser: NewsXmlParser,
     private val postDao: PostDao
 ) {
 
@@ -45,17 +46,13 @@ class PostRepo @Inject constructor(
         val refreshTrigger = MutableLiveData<Unit>()
         val networkState = switchMap(refreshTrigger) { refresh(sources) }
 
-        refresh(sources)
-
         return Listing<PostUIModel>(
             pagedList = pagedList,
             networkState = networkState,
             refresh = {
                 refreshTrigger.value = null
             },
-            retry = {
-
-            }
+            retry = {}
         )
     }
 
@@ -65,9 +62,8 @@ class PostRepo @Inject constructor(
         val networkState = MutableLiveData<DataStatus>()
 
         launch {
-            sources.value?.forEach { source ->
+            sources.blockingObserve()?.forEach { source ->
                 val result = fetch(source)
-
                 result.data
                     ?.takeIf { it.isNotEmpty() }
                     ?.let { savePostsToDB(it) }

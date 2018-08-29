@@ -105,13 +105,18 @@ class FeedFragment : BaseFragment() {
                     if (swipeRefreshArticles.isRefreshing) {
                         swipeRefreshArticles.isRefreshing = false
                     }
+                    binding.progressBar.visibility = View.GONE
                 }
                 DataStatus.Loading -> {
+                    if (adapter.itemCount == 0) {
+                        binding.progressBar.visibility = View.VISIBLE
+                    }
                 }
                 DataStatus.Error<Any>() -> {
                     if (swipeRefreshArticles.isRefreshing) {
                         swipeRefreshArticles.isRefreshing = false
                     }
+                    binding.progressBar.visibility = View.GONE
                 }
             }
         })
@@ -147,8 +152,13 @@ class FeedFragment : BaseFragment() {
                 View.VISIBLE
             }
 
-            viewModel.setFeedType(FeedType.POSTS)
+            // TODO: find a better way to load initial
+            if (adapter.itemCount == 0) {
+                viewModel.refresh()
+            }
         })
+
+        viewModel.setFeedType(FeedType.POSTS)
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
