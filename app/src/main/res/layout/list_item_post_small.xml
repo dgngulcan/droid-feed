@@ -15,7 +15,7 @@
 
     </data>
 
-    <com.google.android.material.card.MaterialCardView
+    <androidx.cardview.widget.CardView
         style="@style/CardStyle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -23,11 +23,12 @@
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:background="@drawable/border_shape">
 
             <TextView
                 android:id="@+id/txtTitle"
-                style="@style/NewsTitleTextStyle"
+                style="@style/DF.TitleStyleLight.List"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/spacing_medium"
@@ -36,87 +37,70 @@
                 android:ellipsize="end"
                 android:maxLines="3"
                 android:text="@{rssItem.title}"
-                app:layout_constraintEnd_toStartOf="@+id/imgArticle"
+                app:layout_constraintEnd_toStartOf="@+id/imgPost"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_goneMarginEnd="16dp"
                 tools:text="This Is A Click Bait Title of A News That Is About To Get So Long to Test What Is Going to Happen If The Title Is Long" />
 
             <TextView
-                android:id="@+id/txtSource"
-                style="@style/NewsSourceTextStyle"
+                android:id="@+id/txtDate"
+                style="@style/TextAppearance.MaterialComponents.Caption"
+                publisher="@{rssItem.channel.title}"
+                timestamp="@{rssItem.pubDateTimestamp}"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/spacing_medium"
-                android:layout_marginTop="@dimen/spacing_small"
-                android:layout_marginEnd="@dimen/spacing_medium"
-                android:text="@{rssItem.channel.title}"
-                app:layout_constraintEnd_toStartOf="@+id/imgBookmark"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/txtTitle"
-                tools:text="Source" />
-
-            <TextView
-                android:id="@+id/txtDate"
-                style="@style/TextAppearance.AppCompat.Caption"
-                relativeDate="@{rssItem.pubDateTimestamp}"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="16dp"
-                app:layout_constraintBottom_toBottomOf="parent"
+                android:layout_marginEnd="8dp"
+                app:layout_constraintBottom_toBottomOf="@+id/imgBookmark"
+                app:layout_constraintEnd_toStartOf="@+id/imgPost"
                 app:layout_constraintStart_toStartOf="@+id/txtTitle"
+                app:layout_constraintTop_toTopOf="@+id/imgBookmark"
                 app:layout_goneMarginBottom="8dp"
-                tools:text="3 hours ago" />
+                tools:text="Publisher - 3 hours ago" />
 
             <ImageView
-                android:id="@+id/imgArticle"
-                android:layout_width="88dp"
-                android:layout_height="88dp"
-                android:layout_marginTop="@dimen/spacing_medium"
-                android:layout_marginEnd="@dimen/spacing_medium"
+                android:id="@+id/imgPost"
+                android:layout_width="95dp"
+                android:layout_height="95dp"
+                android:layout_marginTop="@dimen/card_border_width"
+                android:layout_marginEnd="@dimen/card_border_width"
                 android:contentDescription="@string/content_article_image"
-                android:scaleType="centerCrop"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 tools:srcCompat="@mipmap/ic_launcher" />
 
             <ImageView
                 android:id="@+id/imgShare"
-                style="BorderlessImageButton"
-                android:layout_width="48dp"
-                android:layout_height="48dp"
+                style="@style/BorderlessImageButton"
+                android:layout_width="36dp"
+                android:layout_height="36dp"
                 android:layout_marginTop="@dimen/spacing_small"
                 android:layout_marginEnd="@dimen/spacing_small"
                 android:layout_marginBottom="@dimen/spacing_small"
-                android:adjustViewBounds="false"
-                android:background="?selectableItemBackground"
                 android:contentDescription="@string/content_desc_share_button"
                 android:cropToPadding="false"
                 android:onClick="@{()->articleClickListener.onShareClick(rssItem)}"
-                android:scaleType="centerInside"
-                android:src="@drawable/ic_share_black_24dp"
+                android:src="@drawable/ic_share_accent_24dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/imgArticle" />
+                app:layout_constraintTop_toBottomOf="@+id/imgPost" />
 
             <ImageView
                 android:id="@+id/imgBookmark"
-                style="BorderlessImageButton"
+                style="@style/BorderlessImageButton"
                 avdImageResource="@{rssItem.bookmarkObservable}"
-                android:layout_width="48dp"
-                android:layout_height="48dp"
-                android:adjustViewBounds="false"
-                android:background="?android:attr/selectableItemBackground"
+                android:layout_width="36dp"
+                android:layout_height="36dp"
+                android:layout_marginEnd="8dp"
                 android:contentDescription="@string/content_desc_bookmark_button"
                 android:cropToPadding="false"
                 android:onClick="@{()->articleClickListener.onBookmarkClick(rssItem)}"
-                android:scaleType="centerInside"
                 app:layout_constraintEnd_toStartOf="@+id/imgShare"
                 app:layout_constraintTop_toTopOf="@+id/imgShare"
-                tools:src="@drawable/ic_bookmark_black_24dp" />
+                tools:src="@drawable/ic_bookmark_accent_24dp" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
-    </com.google.android.material.card.MaterialCardView>
+    </androidx.cardview.widget.CardView>
 
 </layout>

@@ -6,14 +6,12 @@ import android.content.Context.ACTIVITY_SERVICE
 import com.bumptech.glide.GlideBuilder
 import com.bumptech.glide.annotation.GlideModule
 import com.bumptech.glide.load.DecodeFormat
+import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.bumptech.glide.module.AppGlideModule
 import com.bumptech.glide.request.RequestOptions
 
-/**
- * Created by Dogan Gulcan on 11/8/17.
- */
 @GlideModule
-class DroidGlideModule : AppGlideModule() {
+class DFGlideModule : AppGlideModule() {
 
     override fun applyOptions(context: Context, builder: GlideBuilder) {
         val activityManager = context.getSystemService(ACTIVITY_SERVICE) as ActivityManager
@@ -31,3 +29,11 @@ class DroidGlideModule : AppGlideModule() {
 
     override fun isManifestParsingEnabled(): Boolean = false
 }
+
+/**
+ * Adds [RoundedCorners] transformation while handling DP to PX conversion.
+ *
+ * @param cornerRadius as DP
+ */
+fun <T> GlideRequest<T>.roundCorners(cornerRadius: Int) =
+    apply(RequestOptions().transform(RoundedCorners(cornerRadius)))

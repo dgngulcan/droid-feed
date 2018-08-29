@@ -68,15 +68,15 @@ data class Post(
             field = value
 
             if (value == 1) {
-                bookmarkObservable.set(R.drawable.avd_bookmark_positive)
+                bookmarkObservable.set(R.drawable.ic_bookmark_accent_24dp)
             } else {
-                bookmarkObservable.set(R.drawable.avd_bookmark_negative)
+                bookmarkObservable.set(R.drawable.ic_bookmark_border_accent_24dp)
             }
         }
 
     @Transient
     @Ignore
-    val bookmarkObservable = ObservableInt(R.drawable.avd_bookmark_negative)
+    val bookmarkObservable = ObservableInt(R.drawable.ic_bookmark_border_accent_24dp)
 
     @Transient
     @Ignore

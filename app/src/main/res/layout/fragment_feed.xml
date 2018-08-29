@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:background="@android:color/white"
     xmlns:tools="http://schemas.android.com/tools">
 
     <RelativeLayout

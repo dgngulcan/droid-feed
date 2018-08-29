@@ -1,12 +1,13 @@
 package com.droidfeed.ui.binding
 
-import androidx.databinding.BindingAdapter
-import androidx.core.widget.ContentLoadingProgressBar
 import android.text.format.DateUtils
 import android.view.View
 import android.webkit.WebView
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.core.widget.ContentLoadingProgressBar
+import androidx.databinding.BindingAdapter
+import com.droidfeed.R
 import com.droidfeed.util.extention.loadImage
 import java.util.Calendar
 import java.util.TimeZone
@@ -45,4 +46,15 @@ fun setRelativeDate(view: TextView, timeStamp: Long) {
         Calendar.getInstance(TimeZone.getDefault()).timeInMillis,
         android.text.format.DateUtils.SECOND_IN_MILLIS
     )
+}
+
+@BindingAdapter(value = ["publisher", "timestamp"], requireAll = true)
+fun setRelativeDate(view: TextView, publisher: String, timestamp: Long) {
+    val date = DateUtils.getRelativeTimeSpanString(
+        timestamp,
+        Calendar.getInstance(TimeZone.getDefault()).timeInMillis,
+        android.text.format.DateUtils.SECOND_IN_MILLIS
+    )
+
+    view.text = view.context.getString(R.string.publisher_time, publisher, date.toString())
 }

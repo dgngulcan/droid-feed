@@ -46,7 +46,7 @@
     <string name="rate_app">Rate the App</string>
     <string name="contact_us">Contact Us</string>
     <string name="licences">Licences</string>
-    <string name="dashed_text">- %s</string>
+    <string name="publisher_time">%1$s &#8226; %2$s</string>
     <string name="send_with">Send with</string>
     <string name="yes">Yes</string>
 

@@ -3,8 +3,8 @@ package com.droidfeed.ui.adapter.model
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import com.droidfeed.data.model.Post
-import com.droidfeed.databinding.ListItemArticleLargeBinding
-import com.droidfeed.databinding.ListItemArticleSmallBinding
+import com.droidfeed.databinding.ListItemPostLargeBinding
+import com.droidfeed.databinding.ListItemPostSmallBinding
 import com.droidfeed.ui.adapter.UiModelType
 import com.droidfeed.ui.adapter.diff.Diffable
 import com.droidfeed.ui.adapter.viewholder.ArticleLargeViewHolder
@@ -21,7 +21,7 @@ data class PostUIModel(
     override fun getViewHolder(parent: ViewGroup): ArticleViewHolder =
         when (post.layoutType) {
             UiModelType.POST_SMALL -> ArticleSmallViewHolder(
-                ListItemArticleSmallBinding.inflate(
+                ListItemPostSmallBinding.inflate(
                     LayoutInflater.from(parent.context),
                     parent,
                     false
@@ -29,7 +29,7 @@ data class PostUIModel(
             )
 
             else -> ArticleLargeViewHolder(
-                ListItemArticleLargeBinding.inflate(
+                ListItemPostLargeBinding.inflate(
                     LayoutInflater.from(parent.context),
                     parent,
                     false

@@ -1,7 +1,7 @@
 package com.droidfeed.ui.adapter.viewholder
 
 import com.droidfeed.data.model.Post
-import com.droidfeed.databinding.ListItemArticleSmallBinding
+import com.droidfeed.databinding.ListItemPostSmallBinding
 import com.droidfeed.ui.module.feed.ArticleClickListener
 
 /**
@@ -9,13 +9,13 @@ import com.droidfeed.ui.module.feed.ArticleClickListener
  *
  * @param binding
  */
-class ArticleSmallViewHolder(private val binding: ListItemArticleSmallBinding) : ArticleViewHolder(binding.root) {
+class ArticleSmallViewHolder(private val binding: ListItemPostSmallBinding) : ArticleViewHolder(binding.root) {
 
-    override fun bind(article: Post, articleClickListener: ArticleClickListener) {
+    override fun bind(post: Post, articleClickListener: ArticleClickListener) {
         binding.articleClickListener = articleClickListener
-        binding.rssItem = article
+        binding.rssItem = post
         binding.executePendingBindings()
 
-        bindImage(binding.imgArticle, article)
+        bindImage(binding.imgPost, post)
     }
 }

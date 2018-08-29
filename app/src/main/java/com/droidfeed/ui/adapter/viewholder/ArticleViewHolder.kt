@@ -5,7 +5,6 @@ import android.animation.AnimatorListenerAdapter
 import android.animation.ObjectAnimator
 import android.graphics.ColorMatrixColorFilter
 import android.graphics.drawable.Drawable
-import androidx.recyclerview.widget.RecyclerView
 import android.view.View
 import android.widget.ImageView
 import com.bumptech.glide.load.DataSource
@@ -13,10 +12,12 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.load.engine.GlideException
 import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.target.Target
+import com.droidfeed.R
 import com.droidfeed.data.model.Post
 import com.droidfeed.ui.module.feed.ArticleClickListener
 import com.droidfeed.util.ObservableColorMatrix
 import com.droidfeed.util.glide.GlideApp
+import com.droidfeed.util.glide.roundCorners
 
 /**
  * ViewHolder to display article cards.
@@ -28,19 +29,19 @@ abstract class ArticleViewHolder(private val root: View) : androidx.recyclerview
     }
 
     /**
-     * Binds the article to the ViewHolder.
+     * Binds the post to the ViewHolder.
      *
-     * @param article
+     * @param post
      * @param articleClickListener
      */
-    abstract fun bind(article: Post, articleClickListener: ArticleClickListener)
+    abstract fun bind(post: Post, articleClickListener: ArticleClickListener)
 
     protected fun bindImage(
         imageView: ImageView,
-        article: Post
+        post: Post
     ) {
         GlideApp.with(root.context)
-            .load(article.image)
+            .load(post.image)
             .listener(object : RequestListener<Drawable> {
                 override fun onResourceReady(
                     resource: Drawable?,
@@ -49,7 +50,7 @@ abstract class ArticleViewHolder(private val root: View) : androidx.recyclerview
                     dataSource: DataSource?,
                     isFirstResource: Boolean
                 ): Boolean {
-                    if (!article.hasFadedIn) {
+                    if (!post.hasFadedIn) {
 
                         imageView.setHasTransientState(true)
                         val cm = ObservableColorMatrix()
@@ -67,7 +68,7 @@ abstract class ArticleViewHolder(private val root: View) : androidx.recyclerview
                             }
                         })
                         saturation.start()
-                        article.hasFadedIn = true
+                        post.hasFadedIn = true
                     }
                     return false
                 }
@@ -81,6 +82,7 @@ abstract class ArticleViewHolder(private val root: View) : androidx.recyclerview
             })
             .diskCacheStrategy(DiskCacheStrategy.DATA)
             .centerCrop()
+            .roundCorners(imageView.resources.getDimension(R.dimen.card_corner_radius).toInt())
             .into(imageView)
     }
 }
