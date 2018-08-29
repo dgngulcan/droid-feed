@@ -60,8 +60,8 @@
 
             <ImageView
                 android:id="@+id/imgPost"
-                android:layout_width="95dp"
-                android:layout_height="95dp"
+                android:layout_width="96dp"
+                android:layout_height="96dp"
                 android:layout_marginTop="@dimen/card_border_width"
                 android:layout_marginEnd="@dimen/card_border_width"
                 android:contentDescription="@string/content_article_image"
@@ -75,7 +75,7 @@
                 android:layout_width="36dp"
                 android:layout_height="36dp"
                 android:layout_marginTop="@dimen/spacing_small"
-                android:layout_marginEnd="@dimen/spacing_small"
+                android:layout_marginEnd="10dp"
                 android:layout_marginBottom="@dimen/spacing_small"
                 android:contentDescription="@string/content_desc_share_button"
                 android:cropToPadding="false"

@@ -44,7 +44,7 @@ fun setRelativeDate(view: TextView, timeStamp: Long) {
     view.text = DateUtils.getRelativeTimeSpanString(
         timeStamp,
         Calendar.getInstance(TimeZone.getDefault()).timeInMillis,
-        android.text.format.DateUtils.SECOND_IN_MILLIS
+        DateUtils.SECOND_IN_MILLIS
     )
 }
 
@@ -53,7 +53,8 @@ fun setRelativeDate(view: TextView, publisher: String, timestamp: Long) {
     val date = DateUtils.getRelativeTimeSpanString(
         timestamp,
         Calendar.getInstance(TimeZone.getDefault()).timeInMillis,
-        android.text.format.DateUtils.SECOND_IN_MILLIS
+        android.text.format.DateUtils.SECOND_IN_MILLIS,
+        DateUtils.FORMAT_ABBREV_ALL
     )
 
     view.text = view.context.getString(R.string.publisher_time, publisher, date.toString())
