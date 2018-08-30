@@ -1,18 +1,18 @@
 buildscript {
 
     ext.versions = [
-            'android_ktx'      : '1.0.0-rc01',
+            'android_ktx'      : '1.0.0-rc02',
             'appcompat'        : '1.0.0-rc01',
             'arch_lifecycle'   : '2.0.0-rc01',
             'arch_room'        : '2.0.0-rc01',
             'arch_paging'      : '2.0.0-rc01',
             'browser'          : '1.0.0-rc01',
             'constraint_layout': '2.0.0-alpha2',
-            'crashlytics'      : '2.9.4',
+            'crashlytics'      : '2.9.5',
             'dagger'           : '2.16',
             'fragment'         : '1.0.0-rc01',
             'fabric_gradle'    : '1.25.4',
-            'firebase_core'    : '16.0.1',
+            'firebase_core'    : '16.0.3',
             'firebase_config'  : '16.0.0',
             'material'         : '1.0.0-rc01',
             'glide'            : '4.8.0',

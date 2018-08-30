@@ -2,7 +2,6 @@
 <layout>
 
     <androidx.drawerlayout.widget.DrawerLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
         xmlns:tools="http://schemas.android.com/tools"
         android:id="@+id/drawer_layout"
         android:layout_width="match_parent"
@@ -19,19 +18,11 @@
             android:fitsSystemWindows="true" />
 
         <com.google.android.material.navigation.NavigationView
-            android:id="@+id/navView"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_gravity="start"
-            android:fitsSystemWindows="true"
-            app:menu="@menu/activity_main_drawer" />
-
-        <com.google.android.material.navigation.NavigationView
             android:id="@+id/filterView"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_gravity="end"
-            android:background="@color/darkGrey"
+            android:background="@color/colorAccent"
             android:fitsSystemWindows="true">
 
             <LinearLayout
@@ -40,8 +31,9 @@
                 android:orientation="vertical">
 
                 <TextView
-                    style="@style/GroupTitleStyle"
+                    style="@style/DF.TitleStyle"
                     android:layout_width="match_parent"
+                    android:layout_marginLeft="16dp"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/spacing_xxlarge"
                     android:text="@string/sources" />
@@ -50,7 +42,6 @@
                     android:id="@+id/filterRecycler"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent" />
-
 
             </LinearLayout>
         </com.google.android.material.navigation.NavigationView>

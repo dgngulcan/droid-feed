@@ -1,10 +1,13 @@
 package com.droidfeed.ui.common
 
 import android.annotation.SuppressLint
-import androidx.lifecycle.ViewModelProvider
+import android.graphics.Color
+import android.os.Build
 import android.os.Bundle
-import androidx.fragment.app.Fragment
+import android.view.View
+import android.view.WindowManager
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.ViewModelProvider
 import dagger.android.AndroidInjection
 import dagger.android.DispatchingAndroidInjector
 import dagger.android.support.HasSupportFragmentInjector
@@ -24,5 +27,28 @@ abstract class BaseActivity : AppCompatActivity(), HasSupportFragmentInjector {
         super.onCreate(savedInstanceState)
     }
 
-    override fun supportFragmentInjector(): DispatchingAndroidInjector<androidx.fragment.app.Fragment> = fragmentInjector
+    /**
+     * Makes statusbar transparent.
+     */
+    protected fun setupTransparentStatusbar() {
+        window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS)
+        window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
+        window.statusBarColor = Color.TRANSPARENT
+        window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+    }
+
+    protected fun darkStatusbarTheme() {
+        window.decorView.systemUiVisibility = 0
+    }
+
+    protected fun lightStatusbarTheme() {
+        if (isMarshmallow()) {
+            window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR
+        }
+    }
+
+    fun isMarshmallow() = Build.VERSION.SDK_INT >= Build.VERSION_CODES.M
+
+    override fun supportFragmentInjector(): DispatchingAndroidInjector<androidx.fragment.app.Fragment> =
+        fragmentInjector
 }

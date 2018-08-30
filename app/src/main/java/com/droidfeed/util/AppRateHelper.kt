@@ -3,19 +3,19 @@ package com.droidfeed.util
 import android.app.AlertDialog
 import android.content.Context
 import android.content.SharedPreferences
-import com.google.android.material.snackbar.Snackbar
-import androidx.core.content.ContextCompat
 import android.view.LayoutInflater
 import android.view.View
+import androidx.core.content.ContextCompat
 import com.droidfeed.R
 import com.droidfeed.data.db.PostDao
 import com.droidfeed.util.glide.GlideApp
+import com.google.android.material.snackbar.Snackbar
 import kotlinx.coroutines.experimental.launch
 import javax.inject.Inject
 
 class AppRateHelper @Inject constructor(
-    val sharedPrefs: SharedPreferences,
-    val rssDao: PostDao
+    private val sharedPrefs: SharedPreferences,
+    private val postDao: PostDao
 ) {
 
     /**
@@ -24,13 +24,14 @@ class AppRateHelper @Inject constructor(
     internal fun checkAppRatePrompt(view: View) {
         if (sharedPrefs.appRatePrompt) {
             launch {
-                val bookmarkCount = rssDao.getBookmarkedItemCount()
+                val bookmarkCount = postDao.getBookmarkedItemCount()
 
                 if (sharedPrefs.appOpenCount > sharedPrefs.appRatePromptIndex &&
                     (bookmarkCount > sharedPrefs.appRatePromptIndex ||
                         sharedPrefs.shareCount > sharedPrefs.appRatePromptIndex)
                 ) {
-                    showRateSnackbar(view)
+
+//                    showRateSnackbar(view)
                 }
             }
         }

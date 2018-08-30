@@ -17,7 +17,7 @@
 
         <TextView
             android:id="@+id/textView2"
-            style="@style/DF.TitleStyleDark"
+            style="@style/DF.TitleStyle"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="32dp"
@@ -31,7 +31,7 @@
 
         <TextView
             android:id="@+id/textView"
-            style="@style/DF.BodyStyleDark"
+            style="@style/DF.BodyStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:paddingStart="@dimen/spacing_xlarge"
@@ -45,7 +45,7 @@
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btnGithub"
-            style="@style/DF.ButtonStyle"
+            style="@style/DF.Button.Raised"
             android:layout_width="180dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
