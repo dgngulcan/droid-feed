@@ -6,6 +6,7 @@ buildscript {
             'arch_lifecycle'   : '2.0.0-rc01',
             'arch_room'        : '2.0.0-rc01',
             'arch_paging'      : '2.0.0-rc01',
+            'browser'          : '1.0.0-rc01',
             'constraint_layout': '2.0.0-alpha2',
             'crashlytics'      : '2.9.4',
             'dagger'           : '2.16',

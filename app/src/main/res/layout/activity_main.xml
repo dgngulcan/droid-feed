@@ -15,6 +15,7 @@
             layout="@layout/activity_main_app_bar"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:layout_marginBottom="56dp"
             android:fitsSystemWindows="true" />
 
         <com.google.android.material.navigation.NavigationView

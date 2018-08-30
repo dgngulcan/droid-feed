@@ -89,7 +89,7 @@ dependencies {
 
     implementation "androidx.fragment:fragment:$versions.fragment"
     implementation "androidx.appcompat:appcompat:$versions.appcompat"
-    implementation "androidx.browser:browser:1.0.0-rc01"
+    implementation "androidx.browser:browser:$versions.browser"
     implementation "androidx.constraintlayout:constraintlayout:$versions.constraint_layout"
 
     implementation "androidx.lifecycle:lifecycle-runtime:$versions.arch_lifecycle"

@@ -8,6 +8,8 @@
     <style name="BorderlessImageButton">
         <item name="android:clickable">true</item>
         <item name="android:focusable">true</item>
+        <item name="android:layout_height">36dp</item>
+        <item name="android:layout_width">36dp</item>
         <item name="android:scaleType">centerInside</item>
         <item name="android:background">?selectableItemBackground</item>
     </style>
@@ -23,7 +25,6 @@
         <item name="android:textAllCaps">true</item>
         <item name="android:padding">16dp</item>
     </style>
-
 
     <style name="DF" />
 

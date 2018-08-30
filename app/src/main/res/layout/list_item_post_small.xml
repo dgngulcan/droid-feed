@@ -42,7 +42,7 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_goneMarginEnd="16dp"
-                tools:text="This Is A Click Bait Title of A News That Is About To Get So Long to Test What Is Going to Happen If The Title Is Long" />
+                tools:text="This Is A Click Bait Title of😂 A News That Is About To Get So Long to Test What Is Going to Happen If The Title Is Long" />
 
             <TextView
                 android:id="@+id/txtDate"
@@ -73,13 +73,10 @@
             <ImageView
                 android:id="@+id/imgShare"
                 style="@style/BorderlessImageButton"
-                android:layout_width="36dp"
-                android:layout_height="36dp"
                 android:layout_marginTop="@dimen/spacing_small"
                 android:layout_marginEnd="10dp"
                 android:layout_marginBottom="@dimen/spacing_small"
                 android:contentDescription="@string/content_desc_share_button"
-                android:cropToPadding="false"
                 android:onClick="@{()->articleClickListener.onShareClick(rssItem)}"
                 android:src="@drawable/ic_share_accent_24dp"
                 app:layout_constraintBottom_toBottomOf="parent"
@@ -90,11 +87,8 @@
                 android:id="@+id/imgBookmark"
                 style="@style/BorderlessImageButton"
                 avdImageResource="@{rssItem.bookmarkObservable}"
-                android:layout_width="36dp"
-                android:layout_height="36dp"
                 android:layout_marginEnd="8dp"
                 android:contentDescription="@string/content_desc_bookmark_button"
-                android:cropToPadding="false"
                 android:onClick="@{()->articleClickListener.onBookmarkClick(rssItem)}"
                 app:layout_constraintEnd_toStartOf="@+id/imgShare"
                 app:layout_constraintTop_toTopOf="@+id/imgShare"
