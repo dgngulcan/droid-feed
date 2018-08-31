@@ -11,11 +11,11 @@
 
         <variable
             name="postClickListener"
-            type="com.droidfeed.ui.module.feed.ArticleClickListener" />
+            type="com.droidfeed.ui.module.feed.PostClickListener" />
 
     </data>
 
-    <com.google.android.material.card.MaterialCardView
+    <androidx.cardview.widget.CardView
         style="@style/CardStyle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -24,7 +24,9 @@
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+
+            android:background="@drawable/border_shape">
 
             <TextView
                 android:id="@+id/txtTitle"
@@ -44,16 +46,17 @@
                 tools:text="This Is A Click Bait Title of A News" />
 
             <TextView
-                android:id="@+id/txtSource"
-                style="@style/NewsSourceTextStyle"
+                android:id="@+id/txtDate"
+                style="@style/TextAppearance.MaterialComponents.Caption"
+                publisher="@{post.channel.title}"
+                timestamp="@{post.pubDateTimestamp}"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/spacing_medium"
-                android:text="@{post.channel.title}"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/txtTitle"
-                tools:text="Source - 3 hours ago" />
+                app:layout_constraintBottom_toBottomOf="@+id/imgBookmark"
+                app:layout_constraintStart_toStartOf="@+id/txtTitle"
+                app:layout_constraintTop_toTopOf="@+id/imgBookmark"
+                app:layout_goneMarginBottom="8dp"
+                tools:text="Publisher - 3 hours ago" />
 
 
             <ImageView
@@ -67,20 +70,14 @@
                 app:layout_constraintTop_toTopOf="parent"
                 tools:srcCompat="@mipmap/ic_launcher" />
 
+
             <ImageView
                 android:id="@+id/imgShare"
-                style="BorderlessImageButton"
-                android:layout_width="36dp"
-                android:layout_height="36dp"
-                android:layout_marginTop="8dp"
-                android:layout_marginEnd="@dimen/spacing_small"
+                style="@style/BorderlessImageButton"
+                android:layout_marginEnd="10dp"
                 android:layout_marginBottom="@dimen/spacing_small"
-                android:adjustViewBounds="false"
-                android:background="?selectableItemBackground"
                 android:contentDescription="@string/content_desc_share_button"
-                android:cropToPadding="false"
                 android:onClick="@{()->postClickListener.onShareClick(post)}"
-                android:scaleType="centerInside"
                 android:src="@drawable/ic_share_accent_24dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -88,22 +85,18 @@
 
             <ImageView
                 android:id="@+id/imgBookmark"
-                style="BorderlessImageButton"
+                style="@style/BorderlessImageButton"
                 avdImageResource="@{post.bookmarkObservable}"
-                android:layout_width="36dp"
-                android:layout_height="36dp"
-                android:adjustViewBounds="false"
-                android:background="?android:attr/selectableItemBackground"
+                android:layout_marginEnd="8dp"
                 android:contentDescription="@string/content_desc_bookmark_button"
-                android:cropToPadding="false"
                 android:onClick="@{()->postClickListener.onBookmarkClick(post)}"
-                android:scaleType="centerInside"
                 app:layout_constraintEnd_toStartOf="@+id/imgShare"
                 app:layout_constraintTop_toTopOf="@+id/imgShare"
                 tools:src="@drawable/ic_bookmark_accent_24dp" />
 
+
         </androidx.constraintlayout.widget.ConstraintLayout>
 
-    </com.google.android.material.card.MaterialCardView>
+    </androidx.cardview.widget.CardView>
 
 </layout>

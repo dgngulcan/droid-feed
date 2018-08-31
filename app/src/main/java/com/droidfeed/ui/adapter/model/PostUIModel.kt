@@ -11,11 +11,11 @@ import com.droidfeed.ui.adapter.viewholder.PostLargeViewHolder
 import com.droidfeed.ui.adapter.viewholder.PostSmallViewHolder
 import com.droidfeed.ui.adapter.viewholder.PostViewHolder
 import com.droidfeed.ui.common.BaseUiModel
-import com.droidfeed.ui.module.feed.ArticleClickListener
+import com.droidfeed.ui.module.feed.PostClickListener
 
 data class PostUIModel(
     private val post: Post,
-    private val onRssClickListener: ArticleClickListener
+    private val onRssClickListener: PostClickListener
 ) : BaseUiModel<PostViewHolder>() {
 
     override fun getViewHolder(parent: ViewGroup): PostViewHolder =

@@ -6,12 +6,12 @@
     <data>
 
         <variable
-            name="rssItem"
+            name="post"
             type="com.droidfeed.data.model.Post" />
 
         <variable
-            name="articleClickListener"
-            type="com.droidfeed.ui.module.feed.ArticleClickListener" />
+            name="postClickListener"
+            type="com.droidfeed.ui.module.feed.PostClickListener" />
 
     </data>
 
@@ -19,13 +19,13 @@
         style="@style/CardStyle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:onClick="@{()->articleClickListener.onItemClick(rssItem)}">
+        android:onClick="@{()->postClickListener.onItemClick(post)}">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/containerContent"
+            android:background="@drawable/border_shape"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@drawable/border_shape">
+            android:layout_height="wrap_content">
 
             <TextView
                 android:id="@+id/txtTitle"
@@ -37,18 +37,18 @@
                 android:layout_marginEnd="@dimen/spacing_medium"
                 android:ellipsize="end"
                 android:maxLines="3"
-                android:text="@{rssItem.title}"
+                android:text="@{post.title}"
                 app:layout_constraintEnd_toStartOf="@+id/imgPost"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_goneMarginEnd="16dp"
-                tools:text="This Is A Click Bait Title of😂 A News That Is About To Get So Long to Test What Is Going to Happen If The Title Is Long" />
+                tools:text="This Is A Click Bait Title of A News That Is About To Get So Long to Test What Is Going to Happen If The Title Is Long" />
 
             <TextView
                 android:id="@+id/txtDate"
                 style="@style/TextAppearance.MaterialComponents.Caption"
-                publisher="@{rssItem.channel.title}"
-                timestamp="@{rssItem.pubDateTimestamp}"
+                publisher="@{post.channel.title}"
+                timestamp="@{post.pubDateTimestamp}"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="8dp"
@@ -77,7 +77,7 @@
                 android:layout_marginEnd="10dp"
                 android:layout_marginBottom="@dimen/spacing_small"
                 android:contentDescription="@string/content_desc_share_button"
-                android:onClick="@{()->articleClickListener.onShareClick(rssItem)}"
+                android:onClick="@{()->postClickListener.onShareClick(post)}"
                 android:src="@drawable/ic_share_accent_24dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -86,10 +86,10 @@
             <ImageView
                 android:id="@+id/imgBookmark"
                 style="@style/BorderlessImageButton"
-                avdImageResource="@{rssItem.bookmarkObservable}"
+                avdImageResource="@{post.bookmarkObservable}"
                 android:layout_marginEnd="8dp"
                 android:contentDescription="@string/content_desc_bookmark_button"
-                android:onClick="@{()->articleClickListener.onBookmarkClick(rssItem)}"
+                android:onClick="@{()->postClickListener.onBookmarkClick(post)}"
                 app:layout_constraintEnd_toStartOf="@+id/imgShare"
                 app:layout_constraintTop_toTopOf="@+id/imgShare"
                 tools:src="@drawable/ic_bookmark_accent_24dp" />

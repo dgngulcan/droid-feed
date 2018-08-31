@@ -14,7 +14,7 @@ import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.target.Target
 import com.droidfeed.R
 import com.droidfeed.data.model.Post
-import com.droidfeed.ui.module.feed.ArticleClickListener
+import com.droidfeed.ui.module.feed.PostClickListener
 import com.droidfeed.util.ObservableColorMatrix
 import com.droidfeed.util.glide.GlideApp
 import com.droidfeed.util.glide.roundCorners
@@ -32,9 +32,9 @@ abstract class PostViewHolder(private val root: View) : androidx.recyclerview.wi
      * Binds the post to the ViewHolder.
      *
      * @param post
-     * @param articleClickListener
+     * @param postClickListener
      */
-    abstract fun bind(post: Post, articleClickListener: ArticleClickListener)
+    abstract fun bind(post: Post, postClickListener: PostClickListener)
 
     protected fun bindImage(
         imageView: ImageView,
@@ -80,7 +80,7 @@ abstract class PostViewHolder(private val root: View) : androidx.recyclerview.wi
                     isFirstResource: Boolean
                 ): Boolean = false
             })
-            .diskCacheStrategy(DiskCacheStrategy.DATA)
+            .diskCacheStrategy(DiskCacheStrategy.RESOURCE)
             .centerCrop()
             .roundCorners(imageView.resources.getDimension(R.dimen.card_corner_radius).toInt())
             .into(imageView)

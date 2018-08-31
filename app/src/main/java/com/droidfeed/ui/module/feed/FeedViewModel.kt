@@ -46,7 +46,7 @@ class FeedViewModel @Inject constructor(
         posts.map { PostUIModel(it, articleClickCallback) }
 
     private val articleClickCallback by lazy {
-        object : ArticleClickListener {
+        object : PostClickListener {
             override fun onItemClick(article: Post) {
                 if (canClick) {
                     articleOpenDetail.setValue(article)
@@ -88,5 +88,4 @@ class FeedViewModel @Inject constructor(
 
         feedRepo.updatePost(article)
     }
-
 }
