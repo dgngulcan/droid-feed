@@ -75,5 +75,6 @@
     <string name="info_subs_confirmed">Thanks! Please check your inbox for a confirmation.</string>
     <string name="empty_source_title">Uh oh! There’s no post\nbecause no source is selected.</string>
     <string name="empty_source_content">Click on the filter icon at the top right\ncorner to select sources.</string>
+    <string name="empty_bookmark_title">Hi! Your bookmarked posts\nwill show up here.</string>
 
 </resources>

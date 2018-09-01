@@ -96,6 +96,12 @@ class FeedFragment : BaseFragment() {
         viewModel.posts.observe(this, Observer { pagedList ->
             pagedList?.let { list ->
                 adapter.submitList(list as PagedList<BaseUiModelAlias>)
+
+                binding.containerEmptyBookmark.visibility = if (list.size == 0 && !swipeRefreshArticles.isEnabled) {
+                    View.VISIBLE
+                } else {
+                    View.GONE
+                }
             }
         })
 
