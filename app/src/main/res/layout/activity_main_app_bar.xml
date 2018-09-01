@@ -14,6 +14,7 @@
             android:id="@+id/appBar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            app:elevation="0dp"
             android:fitsSystemWindows="false"
             android:minHeight="56dp"
             android:theme="@style/AppTheme.AppBarOverlay">

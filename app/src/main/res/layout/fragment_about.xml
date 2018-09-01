@@ -19,6 +19,7 @@
         <TextView
             android:id="@+id/textView"
             style="@style/DF.ButtonRowDark"
+            android:layout_marginTop="32dp"
             android:onClick="@{()->viewModel.openLibraries()}"
             android:text="@string/libraries_used"
             app:layout_constraintEnd_toEndOf="parent"
@@ -58,26 +59,24 @@
             style="@style/DF.ButtonRowDark"
             android:onClick="@{()->viewModel.openPrivacyPolicy()}"
             android:text="@string/privacy_policy"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textView10" />
 
         <TextView
             android:id="@+id/txtAppVersion"
-            style="@style/TextAppearance.AppCompat.Body1"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="8dp"
-            android:layout_marginBottom="8dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
+            style="@style/TextAppearance.AppCompat.Caption"
+            android:layout_width="24dp"
+            android:layout_height="17dp"
+            android:layout_marginStart="48dp"
+            android:layout_marginTop="8dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textView11"
             tools:text="v2.0" />
 
         <com.airbnb.lottie.LottieAnimationView
             android:id="@+id/animView"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            android:layout_marginTop="56dp"
+            android:layout_marginTop="48dp"
             android:layout_marginBottom="32dp"
             android:scaleType="centerInside"
             app:layout_constraintBottom_toBottomOf="parent"

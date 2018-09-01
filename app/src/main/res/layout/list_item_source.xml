@@ -28,6 +28,7 @@
             style="@style/DF.Button.Text"
             android:layout_width="match_parent"
             android:layout_height="48dp"
+            android:clickable="false"
             android:enabled="@{source.isEnabled()}"
             android:gravity="center_vertical"
             android:paddingStart="@dimen/spacing_medium"

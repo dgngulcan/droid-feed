@@ -11,13 +11,23 @@
     tools:visibility="visible">
 
     <Button
-        android:id="@+id/btnNavSubscribe"
+        android:id="@+id/btnNavHome"
+        style="@style/DF.Button.Menu.Text"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="@string/nav_home"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <Button
+        android:id="@+id/btnNavNewsletter"
         style="@style/DF.Button.Menu.Text"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:text="@string/nav_newsletter"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/btnNavHome" />
 
     <Button
         android:id="@+id/btnNavContribute"
@@ -27,7 +37,7 @@
         android:text="@string/nav_contribute"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/btnNavSubscribe" />
+        app:layout_constraintTop_toBottomOf="@+id/btnNavNewsletter" />
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/btnNavAbout"

@@ -70,5 +70,6 @@
 
     <string name="content_article_image">image of the article</string>
     <string name="content_app_logo">DroidFeed logo</string>
+    <string name="nav_home">Home</string>
 
 </resources>

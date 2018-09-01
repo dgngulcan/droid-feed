@@ -29,7 +29,7 @@
                     style="@style/DF.TitleStyle"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="16dp"
+                    android:layout_marginStart="16dp"
                     android:layout_marginTop="@dimen/spacing_xxlarge"
                     android:text="@string/sources" />
 
