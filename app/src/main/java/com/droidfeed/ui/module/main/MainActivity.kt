@@ -202,11 +202,8 @@ class MainActivity : BaseActivity() {
 
     private fun toggleMenu(showMenu: Boolean) {
         binding.appbar.menu.visibility = if (showMenu) View.VISIBLE else View.GONE
-
-        if (showMenu && navController.isFeedFragment()) {
-            toggleFilterMenu(!showMenu)
-            toggleBookmarksMenu(!showMenu)
-        }
+        toggleFilterMenu(!showMenu && navController.isFeedFragment())
+        toggleBookmarksMenu(!showMenu && navController.isFeedFragment())
     }
 
     private fun animateMenuColor(color: Int) {

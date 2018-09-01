@@ -40,7 +40,7 @@ class AppRateHelper @Inject constructor(
     private fun showRateSnackbar(view: View) {
         Snackbar.make(view, R.string.do_you_like_droidfeed, 7000)
             .setAction(R.string.yes) {
-                buildRateAppDialog(view.context).show()
+//                buildRateAppDialog(view.context).show()
             }
             .setActionTextColor(
                 ContextCompat.getColor(
@@ -61,23 +61,6 @@ class AppRateHelper @Inject constructor(
         sharedPrefs.appRatePromptIndex += APP_RATE_PROMPT_INDEX * multiplier
     }
 
-    private fun buildRateAppDialog(context: Context): AlertDialog.Builder {
-        val view = LayoutInflater.from(context).inflate(R.layout.dialog_rate_app, null)
-
-        GlideApp.with(context)
-            .load(R.drawable.df_blinking)
-            .into(view.findViewById(R.id.imgAppLogo))
-
-        return AlertDialog.Builder(context)
-            .setView(view)
-            .setPositiveButton(R.string.sure) { _, _ ->
-                context.startActivity(rateAppIntent)
-            }
-            .setNegativeButton(R.string.later, null)
-            .setNeutralButton(R.string.never_show) { _, _ ->
-                sharedPrefs.appRatePrompt = false
-            }
-    }
 }
 
 internal const val APP_RATE_PROMPT_INDEX = 3
