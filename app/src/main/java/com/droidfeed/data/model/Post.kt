@@ -1,14 +1,9 @@
 package com.droidfeed.data.model
 
-import androidx.room.ColumnInfo
-import androidx.room.Embedded
-import androidx.room.Entity
-import androidx.room.ForeignKey
-import androidx.room.ForeignKey.CASCADE
-import androidx.room.Ignore
-import androidx.room.PrimaryKey
 import android.content.Intent
 import androidx.databinding.ObservableInt
+import androidx.room.*
+import androidx.room.ForeignKey.CASCADE
 import com.droidfeed.R
 import com.droidfeed.data.db.AppDatabase
 import com.droidfeed.ui.adapter.UiModelType
@@ -23,7 +18,6 @@ import com.droidfeed.ui.adapter.diff.Diffable
         onDelete = CASCADE
     )]
 )
-
 data class Post(
     @PrimaryKey
     @ColumnInfo(name = "link")

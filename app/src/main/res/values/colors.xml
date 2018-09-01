@@ -11,7 +11,8 @@
 
     <color name="gray">#4A4A4A</color>
     <color name="grayLight">#878787</color>
-    <color name="grayDark">#212121</color>
+    <color name="grayDark1">#2b2b2b</color>
+    <color name="grayDark2">#212121</color>
     <color name="yellow">#FFC66d</color>
     <color name="green">#3B8686</color>
     <color name="pink">#E24971</color>

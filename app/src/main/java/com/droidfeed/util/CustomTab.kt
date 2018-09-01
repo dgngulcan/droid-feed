@@ -4,14 +4,14 @@ import android.app.Activity
 import android.content.ComponentName
 import android.content.pm.PackageManager
 import android.net.Uri
+import android.webkit.URLUtil
 import androidx.browser.customtabs.CustomTabsClient
 import androidx.browser.customtabs.CustomTabsIntent
 import androidx.browser.customtabs.CustomTabsServiceConnection
-import com.google.android.material.snackbar.Snackbar
 import androidx.core.content.ContextCompat
-import android.webkit.URLUtil
 import com.droidfeed.R
 import com.droidfeed.util.extention.isOnline
+import com.google.android.material.snackbar.Snackbar
 import javax.inject.Inject
 
 class CustomTab @Inject constructor(val activity: Activity) {
@@ -77,7 +77,7 @@ class CustomTab @Inject constructor(val activity: Activity) {
             setToolbarColor(
                 ContextCompat.getColor(
                     activity,
-                    R.color.colorPrimary
+                    R.color.colorAccent
                 )
             )
 

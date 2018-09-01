@@ -4,12 +4,7 @@ import android.content.Intent
 import android.content.SharedPreferences
 import android.graphics.Color
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.Menu
-import android.view.MenuInflater
-import android.view.MenuItem
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.paging.PagedList
@@ -21,9 +16,11 @@ import com.droidfeed.ui.adapter.BaseUiModelAlias
 import com.droidfeed.ui.adapter.UiModelPaginatedAdapter
 import com.droidfeed.ui.common.BaseFragment
 import com.droidfeed.ui.common.WrapContentLinearLayoutManager
+import com.droidfeed.ui.module.main.MainViewModel
 import com.droidfeed.util.AnalyticsUtil
 import com.droidfeed.util.AppRateHelper
 import com.droidfeed.util.CustomTab
+import com.droidfeed.util.event.EventObserver
 import com.droidfeed.util.shareCount
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.fragment_feed.*
@@ -32,6 +29,7 @@ import javax.inject.Inject
 class FeedFragment : BaseFragment() {
 
     private lateinit var viewModel: FeedViewModel
+    private lateinit var mainViewModel: MainViewModel
     private lateinit var binding: FragmentFeedBinding
     private lateinit var adapter: UiModelPaginatedAdapter
 
@@ -59,12 +57,16 @@ class FeedFragment : BaseFragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        setHasOptionsMenu(true)
 
         if (!::viewModel.isInitialized) {
             viewModel = ViewModelProviders
                 .of(this, viewModelFactory)
                 .get(FeedViewModel::class.java)
+        }
+        if (!::mainViewModel.isInitialized) {
+            mainViewModel = ViewModelProviders
+                .of(activity!!)
+                .get(MainViewModel::class.java)
         }
 
         init()
@@ -72,18 +74,16 @@ class FeedFragment : BaseFragment() {
     }
 
     private fun init() {
-
         if (!::adapter.isInitialized) {
             adapter = UiModelPaginatedAdapter()
         }
-
 
         binding.apply {
             val layoutManager = activity?.let { WrapContentLinearLayoutManager(it) }
             newsRecyclerView.layoutManager = layoutManager
 
             (newsRecyclerView.itemAnimator as androidx.recyclerview.widget.DefaultItemAnimator).supportsChangeAnimations =
-                false
+                    false
             newsRecyclerView.swapAdapter(adapter, true)
 
             swipeRefreshArticles.setOnRefreshListener {
@@ -156,6 +156,11 @@ class FeedFragment : BaseFragment() {
             if (adapter.itemCount == 0) {
                 viewModel.refresh()
             }
+        })
+
+        mainViewModel.bookmarksEvent.observe(this, EventObserver { isEnabled ->
+            val feedType = if (isEnabled) FeedType.BOOKMARKS else FeedType.POSTS
+            viewModel.setFeedType(feedType)
         })
 
         viewModel.setFeedType(FeedType.POSTS)
