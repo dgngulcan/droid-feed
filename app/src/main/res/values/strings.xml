@@ -1,6 +1,8 @@
 <resources>
 
-    <string name="app_name">droidfeed</string>
+    <string name="app_name">DroidFeed</string>
+    <string name="app_name_lower">droidfeed</string>
+
     <string name="app_version">v%1$s</string>
 
     <string name="error_invalid_article_url">Article URL is invalid</string>

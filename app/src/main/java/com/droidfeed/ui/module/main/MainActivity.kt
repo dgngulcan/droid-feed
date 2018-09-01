@@ -106,7 +106,7 @@ class MainActivity : BaseActivity() {
         binding.appbar.containerToolbar.btnNavHome.setOnClickListener {
             highlightSelectedMenuButton(it)
             navController.openFeedFragment()
-            binding.appbar.txtTitle.text = getString(R.string.app_name)
+            binding.appbar.txtTitle.text = getString(R.string.app_name_lower)
             onMenuItemSelected(transparentColor)
             toggleFilterMenu(true)
             toggleBookmarksMenu(true)

@@ -5,8 +5,8 @@ apply plugin: 'kotlin-kapt'
 apply plugin: 'io.fabric'
 
 ext.app = [
-        'version'            : '1.2.0',
-        'version_code'       : 10,
+        'version'            : '2.0.0',
+        'version_code'       : 11,
         'compile_sdk_version': 28,
         'min_sdk_version'    : 21,
         'target_sdk_version' : 28
