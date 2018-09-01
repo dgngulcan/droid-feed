@@ -146,7 +146,7 @@ class FeedFragment : BaseFragment() {
 
         viewModel.sources.observe(this, Observer { sources ->
             val activeSource = sources?.firstOrNull { it.isActive }
-            binding.txtEmptySource.visibility = if (activeSource != null) {
+            binding.containerEmptySource.visibility = if (activeSource != null) {
                 View.GONE
             } else {
                 View.VISIBLE

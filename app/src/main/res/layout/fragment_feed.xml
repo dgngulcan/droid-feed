@@ -36,47 +36,77 @@
             app:layout_constraintTop_toTopOf="parent"
             tools:visibility="visible" />
 
-        <TextView
-            android:id="@+id/txtEmptyBookmark"
-            style="@style/Base.TextAppearance.AppCompat.Subhead"
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/containerEmptySource"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_centerHorizontal="true"
             android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
             android:layout_marginEnd="8dp"
             android:layout_marginBottom="8dp"
-            android:drawableTop="@drawable/ic_state_empty_book"
-            android:drawablePadding="@dimen/spacing_large"
-            android:gravity="center"
-            android:padding="@dimen/spacing_medium"
-            android:text="@string/empty_screen_bookmark"
-            android:textColor="@color/secondaryTextColor"
-            android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:visibility="visible" />
+            app:layout_constraintTop_toTopOf="parent">
 
-        <TextView
-            android:id="@+id/txtEmptySource"
-            style="@style/Base.TextAppearance.AppCompat.Subhead"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerHorizontal="true"
-            android:layout_marginTop="8dp"
-            android:layout_marginBottom="8dp"
-            android:drawableTop="@drawable/ic_state_empty_filter"
-            android:drawablePadding="@dimen/spacing_large"
-            android:gravity="center"
-            android:padding="@dimen/spacing_medium"
-            android:text="@string/empty_screen_feed"
-            android:textColor="@color/secondaryTextColor"
-            android:visibility="gone"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:visibility="visible" />
+            <ImageView
+                android:id="@+id/imgBookshelf"
+                android:layout_width="250dp"
+                android:layout_height="wrap_content"
+                android:adjustViewBounds="true"
+                android:src="@drawable/bookshelf"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/textView"
+                style="@style/DF.TitleStyleLight.List"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="32dp"
+                android:gravity="center_horizontal"
+                android:textSize="14sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/imgBookshelf"
+                android:text="@string/empty_source_title" />
+
+            <TextView
+                style="@style/DF.BodyStyle"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:fontFamily="sans-serif"
+                android:gravity="center_horizontal"
+                android:textColor="@color/grayLight"
+                android:textSize="12sp"
+                android:textStyle="normal"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/textView"
+                android:text="@string/empty_source_content" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <!--<TextView-->
+        <!--android:id="@+id/txtEmptySource"-->
+        <!--style="@style/Base.TextAppearance.AppCompat.Subhead"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_centerHorizontal="true"-->
+        <!--android:layout_marginTop="8dp"-->
+        <!--android:layout_marginBottom="8dp"-->
+        <!--android:drawableTop="@drawable/ic_state_empty_filter"-->
+        <!--android:drawablePadding="@dimen/spacing_large"-->
+        <!--android:gravity="center"-->
+        <!--android:padding="@dimen/spacing_medium"-->
+        <!--android:text="@string/empty_screen_feed"-->
+        <!--android:textColor="@color/secondaryTextColor"-->
+        <!--android:visibility="gone"-->
+        <!--app:layout_constraintBottom_toBottomOf="parent"-->
+        <!--app:layout_constraintTop_toTopOf="parent"-->
+        <!--tools:visibility="visible" />-->
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

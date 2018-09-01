@@ -58,8 +58,7 @@
     <string name="newsletter_email_exist">You are already a subscriber.\nSee you in your inbox.</string>
     <string name="newsletter_subscribed">Successfully subscribed!\nSee you in your inbox.</string>
 
-    <string name="empty_screen_feed">No sources selected. To select sources, swipe from the right to open filter drawer.
-  </string>
+
     <string name="empty_screen_bookmark">You haven\'t bookmarked anything yet.</string>
 
     <string name="dialog_rate_app">We ❤️ you too!\nPlease rate us on Play Store.</string>
@@ -74,5 +73,7 @@
     <string name="content_app_logo">DroidFeed logo</string>
     <string name="nav_home">Home</string>
     <string name="info_subs_confirmed">Thanks! Please check your inbox for a confirmation.</string>
+    <string name="empty_source_title">Uh oh! There’s no post\nbecause no source is selected.</string>
+    <string name="empty_source_content">Click on the filter icon at the top right\ncorner to select sources.</string>
 
 </resources>
