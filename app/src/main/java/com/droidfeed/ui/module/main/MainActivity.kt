@@ -4,9 +4,7 @@ import android.animation.ArgbEvaluator
 import android.animation.LayoutTransition
 import android.animation.ObjectAnimator
 import android.animation.ValueAnimator
-import android.content.res.ColorStateList
 import android.graphics.drawable.ColorDrawable
-import android.graphics.drawable.Drawable
 import android.graphics.drawable.TransitionDrawable
 import android.os.Bundle
 import android.view.View
@@ -42,7 +40,6 @@ class MainActivity : BaseActivity() {
         )
     }
     private val accentColor by lazy { ContextCompat.getColor(this, R.color.colorAccent) }
-    private val accentColorDark by lazy { ContextCompat.getColor(this, R.color.colorAccentDark) }
     private val pinkColor by lazy { ContextCompat.getColor(this, R.color.pink) }
     private val blueColor by lazy { ContextCompat.getColor(this, R.color.blue) }
     private val grayColor by lazy { ContextCompat.getColor(this, R.color.gray) }
@@ -112,6 +109,8 @@ class MainActivity : BaseActivity() {
             navController.openFeedFragment()
             binding.appbar.txtTitle.text = getString(R.string.app_name)
             onMenuItemSelected(transparentColor)
+            toggleFilterMenu(true)
+            toggleBookmarksMenu(true)
         }
 
         binding.appbar.containerToolbar.btnNavNewsletter.setOnClickListener {
@@ -119,6 +118,8 @@ class MainActivity : BaseActivity() {
             navController.openNewsletterFragment()
             binding.appbar.txtTitle.text = getString(R.string.nav_newsletter)
             onMenuItemSelected(blueColor)
+            toggleFilterMenu(false)
+            toggleBookmarksMenu(false)
         }
 
         binding.appbar.containerToolbar.btnNavContribute.setOnClickListener {
@@ -126,6 +127,8 @@ class MainActivity : BaseActivity() {
             navController.openContributeFragment()
             binding.appbar.txtTitle.text = getString(R.string.nav_contribute)
             onMenuItemSelected(grayColor)
+            toggleFilterMenu(false)
+            toggleBookmarksMenu(false)
         }
 
         binding.appbar.containerToolbar.btnNavAbout.setOnClickListener {
@@ -133,15 +136,16 @@ class MainActivity : BaseActivity() {
             navController.openAboutFragment()
             binding.appbar.txtTitle.text = getString(R.string.nav_about)
             onMenuItemSelected(pinkColor)
+            toggleFilterMenu(false)
+            toggleBookmarksMenu(false)
         }
     }
 
     private fun highlightSelectedMenuButton(it: View?) {
-        it?.isActivated=true
+        it?.isActivated = true
         previousMenuButton?.isActivated = false
         previousMenuButton = it
     }
-
 
     private fun onMenuItemSelected(color: Int) {
         toggleMenu(false)
@@ -158,7 +162,7 @@ class MainActivity : BaseActivity() {
     }
 
     private fun toggleBookmarksMenu(show: Boolean) {
-        binding.appbar.containerToolbar.btnBookmarks.visibility = if (show) View.VISIBLE else View.GONE
+       binding.appbar.containerToolbar.btnBookmarks.visibility = if (show) View.VISIBLE else View.GONE
     }
 
     private fun animateMenu(it: View) {
@@ -262,6 +266,8 @@ class MainActivity : BaseActivity() {
         when {
             binding.drawerLayout.isDrawerOpen(GravityCompat.END) ->
                 binding.drawerLayout.closeDrawer(GravityCompat.END)
+            binding.appbar.btnMenu.isSelected -> animateMenu(binding.appbar.btnMenu)
+
             else -> super.onBackPressed()
         }
     }
