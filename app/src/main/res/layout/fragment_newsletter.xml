@@ -55,6 +55,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/spacing_xlarge"
             android:layout_marginTop="@dimen/spacing_xlarge"
+            android:textColorHint="#eaffffff"
             android:layout_marginEnd="@dimen/spacing_xlarge"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -77,8 +78,7 @@
                 android:hint="@string/your_email"
                 android:inputType="textEmailAddress"
                 android:maxLines="1"
-                android:textColor="@android:color/white"
-                android:textColorHint="#eaffffff" />
+                android:textColor="@android:color/white" />
 
         </com.google.android.material.textfield.TextInputLayout>
 
