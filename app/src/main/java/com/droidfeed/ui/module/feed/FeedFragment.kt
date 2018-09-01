@@ -161,6 +161,7 @@ class FeedFragment : BaseFragment() {
         mainViewModel.bookmarksEvent.observe(this, EventObserver { isEnabled ->
             val feedType = if (isEnabled) FeedType.BOOKMARKS else FeedType.POSTS
             viewModel.setFeedType(feedType)
+            swipeRefreshArticles.isEnabled = !isEnabled
         })
 
         viewModel.setFeedType(FeedType.POSTS)

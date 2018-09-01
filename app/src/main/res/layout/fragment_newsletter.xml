@@ -6,13 +6,14 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:animateLayoutChanges="true">
+        android:animateLayoutChanges="true"
+        android:background="@color/blue">
 
         <TextView
             android:id="@+id/textView2"
-            style="@style/Base.TextAppearance.AppCompat.Headline"
+            style="@style/DF.TitleStyle"
             android:layout_width="0dp"
-            android:layout_height="61dp"
+            android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/spacing_xlarge"
             android:layout_marginTop="40dp"
             android:layout_marginEnd="@dimen/spacing_xlarge"
@@ -23,11 +24,11 @@
 
         <TextView
             android:id="@+id/textView5"
-            style="@style/Base.TextAppearance.AppCompat.Body1"
+            style="@style/DF.BodyStyle"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/spacing_medium"
-            android:drawableStart="@drawable/ic_email_black_24dp"
+            android:drawableStart="@drawable/ic_email_white_24dp"
             android:drawablePadding="@dimen/spacing_large"
             android:gravity="center_vertical"
             android:text="@string/newsletter_desc1"
@@ -37,11 +38,11 @@
 
         <TextView
             android:id="@+id/textView6"
-            style="@style/Base.TextAppearance.AppCompat.Body1"
+            style="@style/DF.BodyStyle"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/spacing_small"
-            android:drawableStart="@drawable/ic_newspaper_black_24dp"
+            android:drawableStart="@drawable/ic_newspaper_white_24dp"
             android:drawablePadding="@dimen/spacing_large"
             android:text="@string/newsletter_desc2"
             app:layout_constraintEnd_toEndOf="@+id/textView2"
@@ -75,56 +76,52 @@
                 android:layout_height="wrap_content"
                 android:hint="@string/your_email"
                 android:inputType="textEmailAddress"
-                android:maxLines="1" />
+                android:maxLines="1"
+                android:textColor="@android:color/white"
+                android:textColorHint="#eaffffff" />
 
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btnImIn"
-            style="@style/DF.Button.Raised"
-            android:layout_width="120dp"
+            style="@style/DF.Button.Flat"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             android:layout_marginEnd="@dimen/spacing_xlarge"
-            android:padding="@dimen/spacing_medium"
-            android:text="@string/im_in"
+            android:text="@string/sign_me_up"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textInputLayout" />
 
         <TextView
-            android:id="@+id/txtAlreadySubscriber"
-            style="@style/Base.TextAppearance.AppCompat.Subhead"
-            android:layout_width="wrap_content"
+            android:id="@+id/txtSubscriptionConfirmation"
+            style="@style/DF.BodyStyle"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="32dp"
-            android:layout_marginTop="36dp"
-            android:layout_marginEnd="32dp"
+            android:layout_marginTop="24dp"
             android:gravity="center"
-            android:text="@string/newsletter_email_exist"
+            android:paddingStart="32dp"
+            android:paddingEnd="32dp"
+            android:text="@string/info_subs_confirmed"
+            android:textColor="#85ff00"
             android:visibility="gone"
-
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/btnImIn"
-            tools:visibility="visible" />
-
-        <TextView
-            android:id="@+id/txtSubscribed"
-            style="@style/Base.TextAppearance.AppCompat.Headline"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="32dp"
-            android:layout_marginTop="36dp"
-            android:layout_marginEnd="32dp"
-            android:drawableTop="@drawable/ic_clipboard_green_76dp"
-            android:drawablePadding="8dp"
-            android:gravity="center"
-            android:text="@string/newsletter_subscribed"
-            android:visibility="gone"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textView6"
             tools:visibility="visible" />
+
+        <com.airbnb.lottie.LottieAnimationView
+            android:id="@+id/animView"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginTop="48dp"
+            android:layout_marginBottom="56dp"
+            android:minHeight="150dp"
+            android:scaleType="centerInside"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textInputLayout"
+            app:lottie_rawRes="@raw/letter_anim"
+            tools:src="@drawable/ic_cat" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

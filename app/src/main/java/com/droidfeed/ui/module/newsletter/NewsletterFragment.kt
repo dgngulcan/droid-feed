@@ -1,20 +1,25 @@
 package com.droidfeed.ui.module.newsletter
 
 import android.annotation.SuppressLint
-import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProviders
+import android.content.res.ColorStateList
 import android.os.Bundle
-import com.google.android.material.snackbar.Snackbar
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProviders
 import com.droidfeed.R
 import com.droidfeed.data.DataStatus
 import com.droidfeed.data.api.mailchimp.ErrorType
 import com.droidfeed.databinding.FragmentNewsletterBinding
 import com.droidfeed.ui.common.BaseFragment
 import com.droidfeed.util.extention.hideKeyboard
-import com.droidfeed.util.extention.toggleVisibility
+import com.google.android.material.snackbar.Snackbar
+import kotlinx.android.synthetic.main.fragment_newsletter.*
+import kotlinx.coroutines.experimental.android.UI
+import kotlinx.coroutines.experimental.delay
+import kotlinx.coroutines.experimental.launch
 
 @SuppressLint("ValidFragment")
 class NewsletterFragment : BaseFragment() {
@@ -63,6 +68,14 @@ class NewsletterFragment : BaseFragment() {
             }
         }
 
+        binding.textInputLayout.setErrorTextColor(
+            ColorStateList.valueOf(
+                ContextCompat.getColor(
+                    activity!!,
+                    R.color.redError
+                )
+            )
+        )
         viewModel.signUpEvent.observe(this, Observer { resource ->
             when (resource?.dataState) {
                 is DataStatus.Loading -> onLoading()
@@ -70,12 +83,17 @@ class NewsletterFragment : BaseFragment() {
                 is DataStatus.Error<*> -> onSignUpError(resource.dataState as DataStatus.Error<*>)
             }
         })
+
+        launch(UI) {
+            delay(500)
+            binding.animView.playAnimation()
+        }
     }
 
     private fun onLoading() {
         binding.apply {
             btnImIn.visibility = View.GONE
-            txtAlreadySubscriber.visibility = View.GONE
+            binding.textInputLayout.error = null
             progressBar.visibility = View.VISIBLE
         }
     }
@@ -85,21 +103,21 @@ class NewsletterFragment : BaseFragment() {
             progressBar.visibility = View.GONE
             btnImIn.visibility = View.GONE
             textInputLayout.visibility = View.GONE
-            txtSubscribed.visibility = View.VISIBLE
+            txtSubscriptionConfirmation.visibility = View.VISIBLE
         }
     }
 
     private fun onSignUpError(state: DataStatus.Error<*>) {
         binding.apply {
             btnImIn.visibility = View.VISIBLE
-            txtAlreadySubscriber.toggleVisibility(false)
+            binding.textInputLayout.error = null
             progressBar.visibility = View.GONE
         }
 
         if (state.data is ErrorType) {
             when (state.data) {
                 ErrorType.MEMBER_ALREADY_EXIST -> {
-                    binding.txtAlreadySubscriber.toggleVisibility(true)
+                    binding.textInputLayout.error = getString(R.string.newsletter_email_exist)
                 }
 
                 ErrorType.INVALID_RESOURCE -> {

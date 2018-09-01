@@ -23,7 +23,6 @@
                 android:id="@+id/containerToolbar"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:animateLayoutChanges="true"
                 android:fitsSystemWindows="false"
                 app:layout_collapseMode="pin"
                 app:layout_scrollFlags="scroll"

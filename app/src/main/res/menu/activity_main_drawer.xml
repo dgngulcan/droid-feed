@@ -14,7 +14,7 @@
             android:title="@string/nav_bookmarks" />
         <item
             android:id="@+id/nav_newsletter"
-            android:icon="@drawable/ic_newspaper_black_24dp"
+            android:icon="@drawable/ic_newspaper_white_24dp"
             android:title="@string/nav_newsletter" />
         <item
             android:id="@+id/nav_contribute"

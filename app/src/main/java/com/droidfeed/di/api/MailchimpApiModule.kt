@@ -3,6 +3,7 @@ package com.droidfeed.di.api
 import com.droidfeed.data.api.AuthenticationInterceptor
 import com.droidfeed.data.api.mailchimp.service.NewsletterService
 import com.google.firebase.remoteconfig.FirebaseRemoteConfig
+import com.jakewharton.retrofit2.adapter.kotlin.coroutines.experimental.CoroutineCallAdapterFactory
 import dagger.Module
 import dagger.Provides
 import okhttp3.OkHttpClient
@@ -40,6 +41,7 @@ class MailchimpApiModule {
         return Retrofit.Builder()
             .baseUrl("https://us12.api.mailchimp.com/3.0/")
             .addConverterFactory(MoshiConverterFactory.create())
+            .addCallAdapterFactory(CoroutineCallAdapterFactory())
             .client(httpClient)
             .build()
     }

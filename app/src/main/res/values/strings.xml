@@ -51,9 +51,10 @@
     <string name="send_with">Send with</string>
     <string name="yes">Yes</string>
 
-    <string name="newsletter_headline">Free weekly hand-picked Android dev news</string>
-    <string name="newsletter_desc1">Sent out weekly. No spam ever</string>
-    <string name="newsletter_desc2">Top news, articles, and podcasts of the week delivered to your inbox</string>
+    <string name="newsletter_headline">Become a better developer with our newsletter.</string>
+    <string name="newsletter_desc1">Sent out weekly. No spam ever.</string>
+    <string name="newsletter_desc2">Top news, articles, podcasts, and job postings delivered to your inbox.
+</string>
     <string name="newsletter_email_exist">You are already a subscriber.\nSee you in your inbox.</string>
     <string name="newsletter_subscribed">Successfully subscribed!\nSee you in your inbox.</string>
 
@@ -64,7 +65,7 @@
     <string name="dialog_rate_app">We ❤️ you too!\nPlease rate us on Play Store.</string>
     <string name="do_you_like_droidfeed">Do you like using DroidFeed?</string>
     <string name="your_email">Your e-mail</string>
-    <string name="im_in">I\'m in</string>
+    <string name="sign_me_up">Sign Me Up</string>
     <string name="legal">Legal</string>
     <string name="privacy_policy">Privacy Policy</string>
 
@@ -72,5 +73,6 @@
     <string name="content_article_image">image of the article</string>
     <string name="content_app_logo">DroidFeed logo</string>
     <string name="nav_home">Home</string>
+    <string name="info_subs_confirmed">Thanks! Please check your inbox for a confirmation.</string>
 
 </resources>
