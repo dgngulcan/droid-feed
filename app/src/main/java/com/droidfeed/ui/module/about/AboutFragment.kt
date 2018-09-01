@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.droidfeed.BuildConfig
+import com.droidfeed.R
 import com.droidfeed.databinding.FragmentAboutBinding
 import com.droidfeed.ui.common.BaseFragment
 import com.droidfeed.util.AnalyticsUtil
@@ -53,7 +54,7 @@ class AboutFragment : BaseFragment() {
     }
 
     private fun init() {
-        binding.txtAppVersion.text = BuildConfig.VERSION_NAME
+        binding.txtAppVersion.text = getString(R.string.app_version, BuildConfig.VERSION_NAME)
 
         launch(UI) {
             delay(500)
