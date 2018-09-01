@@ -88,7 +88,6 @@ class MainActivity : BaseActivity() {
         layoutTransition.enableTransitionType(LayoutTransition.CHANGING)
 
         binding.appbar.containerToolbar.background = menuTransDrawable
-        navController.openFeedFragment()
 
         binding.appbar.containerToolbar.btnFilter.setOnClickListener {
             binding.drawerLayout.openDrawer(GravityCompat.END)
@@ -111,6 +110,9 @@ class MainActivity : BaseActivity() {
             onMenuItemSelected(transparentColor)
             toggleFilterMenu(true)
             toggleBookmarksMenu(true)
+            if (isMarshmallow()) {
+                lightStatusbarTheme()
+            }
         }
 
         binding.appbar.containerToolbar.btnNavNewsletter.setOnClickListener {
@@ -120,6 +122,9 @@ class MainActivity : BaseActivity() {
             onMenuItemSelected(blueColor)
             toggleFilterMenu(false)
             toggleBookmarksMenu(false)
+            if (isMarshmallow()) {
+                darkStatusbarTheme()
+            }
         }
 
         binding.appbar.containerToolbar.btnNavContribute.setOnClickListener {
@@ -129,6 +134,9 @@ class MainActivity : BaseActivity() {
             onMenuItemSelected(grayColor)
             toggleFilterMenu(false)
             toggleBookmarksMenu(false)
+            if (isMarshmallow()) {
+                darkStatusbarTheme()
+            }
         }
 
         binding.appbar.containerToolbar.btnNavAbout.setOnClickListener {
@@ -138,7 +146,12 @@ class MainActivity : BaseActivity() {
             onMenuItemSelected(pinkColor)
             toggleFilterMenu(false)
             toggleBookmarksMenu(false)
+            if (isMarshmallow()) {
+                darkStatusbarTheme()
+            }
         }
+
+        binding.appbar.containerToolbar.btnNavHome.performClick()
     }
 
     private fun highlightSelectedMenuButton(it: View?) {
@@ -154,15 +167,22 @@ class MainActivity : BaseActivity() {
         animateTitleColor(binding.appbar.btnMenu.isSelected)
         currentMenuColor = color
         animateMenuColor(color)
-
     }
 
     private fun toggleFilterMenu(show: Boolean) {
-        binding.appbar.containerToolbar.btnFilter.visibility = if (show) View.VISIBLE else View.GONE
+        binding.appbar.containerToolbar.btnFilter.visibility = if (show) {
+            if (!binding.appbar.containerToolbar.btnBookmarks.isSelected) {
+                View.VISIBLE
+            } else {
+                View.GONE
+            }
+        } else {
+            View.GONE
+        }
     }
 
     private fun toggleBookmarksMenu(show: Boolean) {
-       binding.appbar.containerToolbar.btnBookmarks.visibility = if (show) View.VISIBLE else View.GONE
+        binding.appbar.containerToolbar.btnBookmarks.visibility = if (show) View.VISIBLE else View.GONE
     }
 
     private fun animateMenu(it: View) {
@@ -182,6 +202,11 @@ class MainActivity : BaseActivity() {
 
     private fun toggleMenu(showMenu: Boolean) {
         binding.appbar.menu.visibility = if (showMenu) View.VISIBLE else View.GONE
+
+        if (showMenu && navController.isFeedFragment()) {
+            toggleFilterMenu(!showMenu)
+            toggleBookmarksMenu(!showMenu)
+        }
     }
 
     private fun animateMenuColor(color: Int) {
@@ -207,9 +232,8 @@ class MainActivity : BaseActivity() {
             binding.appbar.btnMenu.resumeAnimation()
         }
 
-        val optionsMenuVisibility = if (it.isSelected) View.GONE else View.VISIBLE
-        binding.appbar.containerToolbar.btnFilter.visibility = optionsMenuVisibility
-        binding.appbar.containerToolbar.btnBookmarks.visibility = optionsMenuVisibility
+//        toggleFilterMenu(!it.isSelected)
+//        toggleBookmarksMenu(!it.isSelected)
     }
 
     private fun animateTitleColor(active: Boolean) {
