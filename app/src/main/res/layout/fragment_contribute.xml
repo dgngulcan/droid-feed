@@ -45,7 +45,7 @@
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btnGithub"
-            style="@style/DF.Button.Raised"
+            style="@style/DF.Button.Flat"
             android:layout_width="180dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"

@@ -9,8 +9,7 @@ import androidx.core.widget.ContentLoadingProgressBar
 import androidx.databinding.BindingAdapter
 import com.droidfeed.R
 import com.droidfeed.util.extention.loadImage
-import java.util.Calendar
-import java.util.TimeZone
+import java.util.*
 
 @BindingAdapter("imageResource")
 fun loadImage(imageView: ImageView, url: Any) {
@@ -40,7 +39,7 @@ fun loadHtml(webView: WebView, htmlContent: String) {
 }
 
 @BindingAdapter("relativeDate")
-fun setRelativeDate(view: TextView, timeStamp: Long) {
+fun setRelativeTime(view: TextView, timeStamp: Long) {
     view.text = DateUtils.getRelativeTimeSpanString(
         timeStamp,
         Calendar.getInstance(TimeZone.getDefault()).timeInMillis,
@@ -49,13 +48,17 @@ fun setRelativeDate(view: TextView, timeStamp: Long) {
 }
 
 @BindingAdapter(value = ["publisher", "timestamp"], requireAll = true)
-fun setRelativeDate(view: TextView, publisher: String, timestamp: Long) {
-    val date = DateUtils.getRelativeTimeSpanString(
-        timestamp,
-        Calendar.getInstance(TimeZone.getDefault()).timeInMillis,
-        android.text.format.DateUtils.SECOND_IN_MILLIS,
-        DateUtils.FORMAT_ABBREV_ALL
-    )
+fun setRelativeDate(view: TextView, publisher: String?, timestamp: Long?) {
+    val date = if (timestamp == null) {
+        ""
+    } else {
+        DateUtils.getRelativeTimeSpanString(
+            timestamp,
+            Calendar.getInstance(TimeZone.getDefault()).timeInMillis,
+            android.text.format.DateUtils.SECOND_IN_MILLIS,
+            DateUtils.FORMAT_ABBREV_ALL
+        )
+    }
 
-    view.text = view.context.getString(R.string.publisher_time, publisher, date.toString())
+    view.text = view.context.getString(R.string.publisher_time, publisher ?: "", date.toString())
 }

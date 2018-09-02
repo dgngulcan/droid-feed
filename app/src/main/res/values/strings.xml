@@ -21,7 +21,7 @@
     <string name="made_in_brooklyn">Made in Brooklyn, NY</string>
     <string name="about_page_copy">Your hub for the latest Android Development news and thoughts.</string>
 
-    <string name="info_no_internet">Network is not available.</string>
+    <string name="info_no_internet">Couldn\'t connect the internet.</string>
     <string name="info_bookmark_removed">Bookmark is removed</string>
 
     <string name="can_not_refresh">Can\'t refresh.</string>
@@ -39,7 +39,7 @@
     <string name="view_on_github">View on Github</string>
     <string name="filter">Filter</string>
     <string name="sources">Sources</string>
-    <string name="libraries_used">Libraries Used</string>
+    <string name="attributions_licences">Attributions and Libraries</string>
     <string name="libraries_desc">DroidFeed is made with the awesome libraries listed below.</string>
     <string name="later">Later</string>
     <string name="never_show">Never show</string>

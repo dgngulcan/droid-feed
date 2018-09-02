@@ -77,7 +77,7 @@ class CustomTab @Inject constructor(val activity: Activity) {
             setToolbarColor(
                 ContextCompat.getColor(
                     activity,
-                    R.color.colorAccent
+                    android.R.color.white
                 )
             )
 

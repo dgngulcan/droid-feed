@@ -21,6 +21,7 @@ import com.droidfeed.util.AnalyticsUtil
 import com.droidfeed.util.AppRateHelper
 import com.droidfeed.util.CustomTab
 import com.droidfeed.util.event.EventObserver
+import com.droidfeed.util.extention.isOnline
 import com.droidfeed.util.shareCount
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.fragment_feed.*
@@ -87,7 +88,12 @@ class FeedFragment : BaseFragment() {
             newsRecyclerView.swapAdapter(adapter, true)
 
             swipeRefreshArticles.setOnRefreshListener {
-                this@FeedFragment.viewModel.refresh()
+                if (context?.isOnline() == true) {
+                    this@FeedFragment.viewModel.refresh()
+                } else {
+                    swipeRefreshArticles.isRefreshing = false
+                    Snackbar.make(swipeRefreshArticles, R.string.info_no_internet, Snackbar.LENGTH_LONG).show()
+                }
             }
         }
     }

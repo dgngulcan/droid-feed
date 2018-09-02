@@ -155,8 +155,8 @@ class MainActivity : BaseActivity() {
     }
 
     private fun highlightSelectedMenuButton(it: View?) {
-        it?.isActivated = true
-        previousMenuButton?.isActivated = false
+        it?.isSelected = true
+        previousMenuButton?.isSelected = false
         previousMenuButton = it
     }
 
@@ -228,9 +228,6 @@ class MainActivity : BaseActivity() {
             binding.appbar.btnMenu.speed = -1f
             binding.appbar.btnMenu.resumeAnimation()
         }
-
-//        toggleFilterMenu(!it.isSelected)
-//        toggleBookmarksMenu(!it.isSelected)
     }
 
     private fun animateTitleColor(active: Boolean) {

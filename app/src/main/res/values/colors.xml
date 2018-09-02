@@ -9,6 +9,7 @@
     <color name="statusBarColor">#FFFFFF</color>
 
     <color name="secondaryTextColor">#70000000</color>
+    <color name="transparentWhite">#70ffffff</color>
 
     <color name="gray">#4A4A4A</color>
     <color name="grayLight">#878787</color>

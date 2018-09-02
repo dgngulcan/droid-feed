@@ -16,47 +16,63 @@
         android:layout_height="match_parent"
         android:background="@color/pink">
 
-        <TextView
+        <com.google.android.material.button.MaterialButton
             android:id="@+id/textView"
-            style="@style/DF.ButtonRowDark"
-            android:layout_marginTop="32dp"
+            style="@style/DF.Button.Menu.Text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="56dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="16dp"
             android:onClick="@{()->viewModel.openLibraries()}"
-            android:text="@string/libraries_used"
+            android:text="@string/attributions_licences"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <TextView
+        <com.google.android.material.button.MaterialButton
             android:id="@+id/textView8"
-            style="@style/DF.ButtonRowDark"
+            style="@style/DF.Button.Menu.Text"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="16dp"
             android:onClick="@{()->viewModel.contactEmail()}"
             android:text="@string/contact_us"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintStart_toStartOf="@+id/textView"
             app:layout_constraintTop_toBottomOf="@+id/textView" />
 
-        <TextView
+        <com.google.android.material.button.MaterialButton
             android:id="@+id/textView9"
-            style="@style/DF.ButtonRowDark"
+            style="@style/DF.Button.Menu.Text"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="16dp"
             android:onClick="@{()->viewModel.shareApp()}"
             android:text="@string/share_app"
             app:layout_constraintEnd_toEndOf="parent"
-
-            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintStart_toStartOf="@+id/textView8"
             app:layout_constraintTop_toBottomOf="@+id/textView8" />
 
-        <TextView
+        <com.google.android.material.button.MaterialButton
             android:id="@+id/textView10"
-            style="@style/DF.ButtonRowDark"
+            style="@style/DF.Button.Menu.Text"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="16dp"
             android:onClick="@{()->viewModel.openPlayStore()}"
             android:text="@string/rate_app"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintStart_toStartOf="@+id/textView9"
             app:layout_constraintTop_toBottomOf="@+id/textView9" />
 
-        <TextView
+        <com.google.android.material.button.MaterialButton
             android:id="@+id/textView11"
-            style="@style/DF.ButtonRowDark"
+            style="@style/DF.Button.Menu.Text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="56dp"
+            android:layout_marginEnd="16dp"
             android:onClick="@{()->viewModel.openPrivacyPolicy()}"
             android:text="@string/privacy_policy"
             app:layout_constraintTop_toBottomOf="@+id/textView10" />
@@ -64,11 +80,12 @@
         <TextView
             android:id="@+id/txtAppVersion"
             style="@style/TextAppearance.AppCompat.Caption"
-            android:layout_width="24dp"
-            android:layout_height="17dp"
-            android:layout_marginStart="48dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
-            app:layout_constraintStart_toStartOf="parent"
+            android:textColor="@color/transparentWhite"
+            app:layout_constraintStart_toStartOf="@+id/textView11"
             app:layout_constraintTop_toBottomOf="@+id/textView11"
             tools:text="v2.0" />
 
