@@ -1,8 +1,14 @@
 package com.droidfeed.ui.adapter
 
 /**
- * Types of the UI models. @see [UiModelAdapter]
+ * Types of the UI models.
  *
- * Created by Dogan Gulcan on 11/2/17.
+ * @see [UiModelAdapter]
  */
-enum class UiModelType { ARTICLE_SMALL, ARTICLE_LARGE, LICENCE, SOURCE }
+enum class UiModelType {
+    POST_SMALL,
+    POST_LARGE,
+    LICENCE,
+    SOURCE,
+    PLACEHOLDER
+}

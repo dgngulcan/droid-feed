@@ -3,37 +3,97 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
-    <android.support.design.widget.CoordinatorLayout
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
+        android:id="@+id/containerView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context="com.droidfeed.ui.module.main.MainActivity">
+        android:animateLayoutChanges="true"
+        android:fitsSystemWindows="false">
 
-        <android.support.design.widget.AppBarLayout
-            android:id="@+id/app_bar"
+        <com.google.android.material.appbar.AppBarLayout
+            android:id="@+id/appBar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:fitsSystemWindows="false"
+            android:minHeight="56dp"
             android:theme="@style/AppTheme.AppBarOverlay"
-            app:layout_behavior="com.droidfeed.util.behavior.FixAppBarLayoutBehavior"
-            tools:context="com.droidfeed.ui.module.main.MainActivity">
+            app:elevation="0dp"
+            app:layout_behavior="com.droidfeed.util.behavior.FixAppBarLayoutBehavior">
 
-            <android.support.v7.widget.Toolbar
-                android:id="@+id/toolbar"
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/containerToolbar"
                 android:layout_width="match_parent"
-                android:layout_height="?attr/actionBarSize"
-                android:background="?attr/colorPrimary"
-                app:layout_collapseMode="pin"
-                app:layout_scrollFlags="scroll|enterAlways"
-                app:popupTheme="@style/AppTheme.PopupOverlay" />
+                android:layout_height="match_parent"
+                tools:background="@color/gray">
 
-        </android.support.design.widget.AppBarLayout>
+                <com.airbnb.lottie.LottieAnimationView
+                    android:id="@+id/btnMenu"
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:layout_marginStart="8dp"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:padding="8dp"
+                    android:scaleType="centerInside"
+                    app:layout_constraintBottom_toBottomOf="@+id/txtTitle"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="@+id/txtTitle"
+                    app:lottie_rawRes="@raw/menu_to_close_anim"
+                    tools:src="@drawable/ic_cat" />
 
+                <TextView
+                    android:id="@+id/txtTitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="56dp"
+                    android:fontFamily="@font/poppins_semibold"
+                    android:gravity="center_vertical"
+                    android:paddingStart="8dp"
+                    android:paddingTop="6dp"
+                    android:paddingEnd="8dp"
+                    android:text="@string/app_name"
+                    android:textColor="@color/grayDark1"
+                    android:textSize="30sp"
+                    app:layout_constraintStart_toEndOf="@+id/btnMenu" />
 
-        <include
-            android:id="@+id/content"
-            layout="@layout/activity_main_content"
-            android:fitsSystemWindows="true"
+                <ImageView
+                    android:id="@+id/btnBookmarks"
+                    style="@style/DF.Button.Icon"
+                    android:layout_marginEnd="56dp"
+                    android:background="@drawable/sl_menu_bookmark_bg_drawable"
+                    android:src="@drawable/sl_menu_bookmark_drawable"
+                    app:layout_constraintBottom_toBottomOf="@+id/btnFilter"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="@+id/btnFilter" />
+
+                <ImageView
+                    android:id="@+id/btnFilter"
+                    style="@style/DF.Button.Icon"
+                    android:layout_marginEnd="8dp"
+                    android:src="@drawable/ic_filter_list_accent_24dp"
+                    app:layout_constraintBottom_toBottomOf="@+id/txtTitle"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="@+id/txtTitle" />
+
+                <include
+                    android:id="@+id/menu"
+                    layout="@layout/menu_main"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginEnd="16dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="@+id/txtTitle"
+                    app:layout_constraintTop_toBottomOf="@+id/txtTitle" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </com.google.android.material.appbar.AppBarLayout>
+
+        <FrameLayout
+            android:id="@+id/fragmentContainer"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
             app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 
-    </android.support.design.widget.CoordinatorLayout>
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
 </layout>

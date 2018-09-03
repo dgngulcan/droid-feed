@@ -1,18 +1,15 @@
 package com.droidfeed.ui.binding
 
-import android.databinding.BindingAdapter
-import android.support.v4.widget.ContentLoadingProgressBar
 import android.text.format.DateUtils
 import android.view.View
 import android.webkit.WebView
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.core.widget.ContentLoadingProgressBar
+import androidx.databinding.BindingAdapter
+import com.droidfeed.R
 import com.droidfeed.util.extention.loadImage
 import java.util.*
-
-/**
- * Created by Dogan Gulcan on 9/30/17.
- */
 
 @BindingAdapter("imageResource")
 fun loadImage(imageView: ImageView, url: Any) {
@@ -22,7 +19,6 @@ fun loadImage(imageView: ImageView, url: Any) {
 @BindingAdapter("avdImageResource")
 fun avdImageResource(imageView: ImageView, avdImageResource: Int) {
     imageView.setImageResource(avdImageResource)
-//    if (isClickedRecently) imageView.drawable?.let { (it as? AnimatedVectorDrawable)?.start() }
 }
 
 @BindingAdapter("visibilityToggle")
@@ -43,9 +39,26 @@ fun loadHtml(webView: WebView, htmlContent: String) {
 }
 
 @BindingAdapter("relativeDate")
-fun setRelativeDate(view: TextView, timeStamp: Long) {
+fun setRelativeTime(view: TextView, timeStamp: Long) {
     view.text = DateUtils.getRelativeTimeSpanString(
-            timeStamp,
+        timeStamp,
+        Calendar.getInstance(TimeZone.getDefault()).timeInMillis,
+        DateUtils.SECOND_IN_MILLIS
+    )
+}
+
+@BindingAdapter(value = ["publisher", "timestamp"], requireAll = true)
+fun setRelativeDate(view: TextView, publisher: String?, timestamp: Long?) {
+    val date = if (timestamp == null) {
+        ""
+    } else {
+        DateUtils.getRelativeTimeSpanString(
+            timestamp,
             Calendar.getInstance(TimeZone.getDefault()).timeInMillis,
-            android.text.format.DateUtils.SECOND_IN_MILLIS)
+            android.text.format.DateUtils.SECOND_IN_MILLIS,
+            DateUtils.FORMAT_ABBREV_ALL
+        )
+    }
+
+    view.text = view.context.getString(R.string.publisher_time, publisher ?: "", date.toString())
 }

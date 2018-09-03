@@ -1,18 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-  <color name="colorPrimary">#000000</color>
-  <color name="colorPrimaryDark">#000000</color>
-  <color name="colorAccent">#000000</color>
+    <color name="colorPrimary">#FFFFFF</color>
+    <color name="colorPrimaryDark">#FFFFFF</color>
+    <color name="colorAccent">#F5A623</color>
+    <color name="colorAccentDark">#EC8A28</color>
+    <color name="colorAccentLight">#F1B363</color>
+    <color name="appBackground">#FFFFFF</color>
+    <color name="statusBarColor">#FFFFFF</color>
 
-  <color name="lightGrey">#878787</color>
-  <color name="darkGrey">#212121</color>
-  <color name="secondaryTextColor">#70000000</color>
+    <color name="secondaryTextColor">#70000000</color>
+    <color name="transparentWhite">#70ffffff</color>
 
-  <color name="navBarColor">#70000000</color>
-  <color name="statusBarColor">#90000000</color>
-  <color name="darkThemeRippleColor">#90ffffff</color>
-
-  <color name="yellow">#ffc66d</color>
-  <color name="green">#3b8686</color>
+    <color name="gray">#4A4A4A</color>
+    <color name="grayLight">#878787</color>
+    <color name="grayDark1">#2b2b2b</color>
+    <color name="grayDark2">#212121</color>
+    <color name="yellow">#FFC66d</color>
+    <color name="green">#3B8686</color>
+    <color name="pink">#E24971</color>
+    <color name="blue">#2D7FDF</color>
+    <color name="redError">#FFA9A9</color>
 
 </resources>

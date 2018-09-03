@@ -1,12 +1,12 @@
 package com.droidfeed.util.behavior
 
 import android.content.Context
-import android.support.annotation.Keep
-import android.support.design.widget.AppBarLayout
-import android.support.design.widget.CoordinatorLayout
-import android.support.v4.view.ViewCompat
 import android.util.AttributeSet
 import android.view.View
+import androidx.annotation.Keep
+import androidx.core.view.ViewCompat
+import com.google.android.material.appbar.AppBarLayout
+
 
 /**
  * Workaround AppBarLayout.Behavior for https://issuetracker.google.com/66996774
@@ -17,15 +17,15 @@ import android.view.View
  *
  * Kotlinised by Erik Huizinga (github: @erikhuizinga).
  */
+@Suppress("unused")
 @Keep
 class FixAppBarLayoutBehavior(
     context: Context?,
     attrs: AttributeSet?
-) :
-    AppBarLayout.Behavior(context, attrs) {
+) : AppBarLayout.Behavior(context, attrs) {
 
     override fun onNestedScroll(
-        coordinatorLayout: CoordinatorLayout,
+        coordinatorLayout: androidx.coordinatorlayout.widget.CoordinatorLayout,
         child: AppBarLayout,
         target: View,
         dxConsumed: Int,
@@ -48,7 +48,7 @@ class FixAppBarLayoutBehavior(
     }
 
     override fun onNestedPreScroll(
-        coordinatorLayout: CoordinatorLayout,
+        coordinatorLayout: androidx.coordinatorlayout.widget.CoordinatorLayout,
         child: AppBarLayout,
         target: View,
         dx: Int,
@@ -68,9 +68,11 @@ class FixAppBarLayoutBehavior(
     ) {
         if (type == ViewCompat.TYPE_NON_TOUCH) {
             val currOffset = topAndBottomOffset
+
             if (dy < 0 && currOffset == 0 || dy > 0 && currOffset == -child.totalScrollRange) {
                 ViewCompat.stopNestedScroll(target, ViewCompat.TYPE_NON_TOUCH)
             }
         }
     }
+
 }

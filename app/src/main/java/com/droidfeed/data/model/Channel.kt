@@ -1,10 +1,7 @@
 package com.droidfeed.data.model
 
-import android.arch.persistence.room.ColumnInfo
-import android.os.Parcelable
-import kotlinx.android.parcel.Parcelize
+import androidx.room.ColumnInfo
 
-@Parcelize
 data class Channel(
     @ColumnInfo(name = "channel_title")
     var title: String = "",
@@ -14,4 +11,5 @@ data class Channel(
 
     @ColumnInfo(name = "channel_link")
     var link: String = ""
-) : Parcelable
+
+)

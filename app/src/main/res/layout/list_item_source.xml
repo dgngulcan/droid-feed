@@ -14,29 +14,28 @@
 
     </data>
 
-    <android.support.constraint.ConstraintLayout
-        style="@/SelectableItemBackground"
+    <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:clickable="true"
-        android:foreground="?attr/selectableItemBackground"
+        android:focusable="true"
+        android:background="?attr/selectableItemBackground"
         android:onClick="@{()->clickListener.onClick(source)}"
         android:theme="@style/Base.ThemeOverlay.AppCompat.Dark">
 
         <TextView
             android:id="@+id/textView3"
-            style="@style/Base.TextAppearance.AppCompat.SearchResult.Subtitle"
+            style="@style/DF.Button.Text"
             android:layout_width="match_parent"
             android:layout_height="48dp"
-            android:ellipsize="end"
+            android:clickable="false"
             android:enabled="@{source.isEnabled()}"
             android:gravity="center_vertical"
-            android:maxLines="1"
-            android:paddingEnd="@dimen/spacing_medium"
             android:paddingStart="@dimen/spacing_medium"
+            android:paddingEnd="@dimen/spacing_medium"
             android:text="@{source.name}"
             tools:text="Title of an awesome publisher" />
 
-    </android.support.constraint.ConstraintLayout>
+    </FrameLayout>
 
 </layout>

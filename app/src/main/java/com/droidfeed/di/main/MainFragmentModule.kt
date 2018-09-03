@@ -1,6 +1,7 @@
 package com.droidfeed.di.main
 
 import com.droidfeed.ui.module.about.AboutFragment
+import com.droidfeed.ui.module.about.LicencesActivity
 import com.droidfeed.ui.module.contribute.ContributeFragment
 import com.droidfeed.ui.module.feed.FeedFragment
 import com.droidfeed.ui.module.newsletter.NewsletterFragment

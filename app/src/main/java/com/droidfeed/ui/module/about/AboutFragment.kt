@@ -1,31 +1,30 @@
 package com.droidfeed.ui.module.about
 
 import android.annotation.SuppressLint
-import android.arch.lifecycle.Observer
-import android.arch.lifecycle.ViewModelProviders
+import android.content.Intent
 import android.os.Bundle
-import android.support.v7.widget.LinearLayoutManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProviders
+import com.droidfeed.BuildConfig
 import com.droidfeed.R
 import com.droidfeed.databinding.FragmentAboutBinding
-import com.droidfeed.ui.adapter.BaseUiModelAlias
-import com.droidfeed.ui.adapter.UiModelAdapter
 import com.droidfeed.ui.common.BaseFragment
 import com.droidfeed.util.CustomTab
 import com.droidfeed.util.extention.startActivity
-import com.droidfeed.util.glide.GlideApp
+import kotlinx.coroutines.experimental.android.UI
+import kotlinx.coroutines.experimental.delay
+import kotlinx.coroutines.experimental.launch
 import javax.inject.Inject
 
 @SuppressLint("ValidFragment")
 
-class AboutFragment : BaseFragment() {
+class AboutFragment : BaseFragment("about") {
 
     private lateinit var binding: FragmentAboutBinding
     private lateinit var viewModel: AboutViewModel
-
-    private val adapter: UiModelAdapter by lazy { UiModelAdapter() }
 
     @Inject
     lateinit var customTab: CustomTab
@@ -52,23 +51,22 @@ class AboutFragment : BaseFragment() {
     }
 
     private fun init() {
-        GlideApp.with(this)
-            .load(R.drawable.df_blinking)
-            .into(binding.imgAppLogo)
+        binding.txtAppVersion.text = getString(R.string.app_version, BuildConfig.VERSION_NAME)
 
-        binding.recyclerView.layoutManager = LinearLayoutManager(activity)
-        binding.recyclerView.adapter = adapter
-        binding.recyclerView.isNestedScrollingEnabled = false
+        launch(UI) {
+            binding.animView.frame = 0
+            delay(500)
+            binding.animView.resumeAnimation()
+        }
     }
 
     @Suppress("UNCHECKED_CAST")
     private fun initObservers() {
-        viewModel.licenceUiModels.observe(this, Observer {
-            adapter.addUiModels(it as Collection<BaseUiModelAlias>)
-        })
-
         viewModel.rateAppEvent.observe(this, Observer {
-            activity?.let { it1 -> it?.startActivity(it1) }
+            activity?.let { it1 ->
+                it?.startActivity(it1)
+                analytics.logAppRateClick()
+            }
         })
 
         viewModel.contactDevEvent.observe(this, Observer {
@@ -76,11 +74,19 @@ class AboutFragment : BaseFragment() {
         })
 
         viewModel.shareAppEvent.observe(this, Observer {
-            activity?.let { it1 -> it?.startActivity(it1) }
+            activity?.let { it1 ->
+                it?.startActivity(it1)
+                analytics.logShare("app")
+            }
         })
 
         viewModel.openLinkEvent.observe(this, Observer {
             it?.let { it1 -> customTab.showTab(it1) }
         })
+
+        viewModel.openLibrariesEvent.observe(this, Observer {
+            startActivity(Intent(context, LicencesActivity::class.java))
+        })
     }
+
 }

@@ -1,21 +1,21 @@
 package com.droidfeed.ui.common
 
-import android.arch.lifecycle.ViewModel
+import androidx.lifecycle.ViewModel
 import android.os.SystemClock
 
 abstract class BaseViewModel : ViewModel() {
 
-    private var mLastClickTime: Long = 0
+    private var lastClickTime: Long = 0
 
     /**
      * To prevent click spams.
      */
-    var userCanClick: Boolean = true
+    var canClick: Boolean = true
         get() {
-            return if (SystemClock.elapsedRealtime() - mLastClickTime < 300) {
+            return if (SystemClock.elapsedRealtime() - lastClickTime < 250) {
                 false
             } else {
-                mLastClickTime = SystemClock.elapsedRealtime()
+                lastClickTime = SystemClock.elapsedRealtime()
                 true
             }
         }

@@ -1,18 +1,24 @@
 package com.droidfeed.ui.common
 
-import android.arch.lifecycle.ViewModelProvider
 import android.content.Context
-import android.support.v4.app.Fragment
+import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProvider
+import com.droidfeed.util.AnalyticsUtil
 import dagger.android.support.AndroidSupportInjection
 import javax.inject.Inject
 
-abstract class BaseFragment : Fragment() {
+abstract class BaseFragment(val viewTag: String) : Fragment() {
 
     @Inject
     lateinit var viewModelFactory: ViewModelProvider.Factory
 
+    @Inject
+    lateinit var analytics: AnalyticsUtil
+
     override fun onAttach(context: Context?) {
         AndroidSupportInjection.inject(this)
         super.onAttach(context)
+
+        analytics.logScreenView(viewTag)
     }
 }

@@ -1,21 +1,17 @@
 package com.droidfeed.util
 
-import android.app.AlertDialog
-import android.content.Context
 import android.content.SharedPreferences
-import android.support.design.widget.Snackbar
-import android.support.v4.content.ContextCompat
-import android.view.LayoutInflater
 import android.view.View
+import androidx.core.content.ContextCompat
 import com.droidfeed.R
-import com.droidfeed.data.db.RssDao
-import com.droidfeed.util.glide.GlideApp
+import com.droidfeed.data.db.PostDao
+import com.google.android.material.snackbar.Snackbar
 import kotlinx.coroutines.experimental.launch
 import javax.inject.Inject
 
 class AppRateHelper @Inject constructor(
-    val sharedPrefs: SharedPreferences,
-    val rssDao: RssDao
+    private val sharedPrefs: SharedPreferences,
+    private val postDao: PostDao
 ) {
 
     /**
@@ -24,13 +20,14 @@ class AppRateHelper @Inject constructor(
     internal fun checkAppRatePrompt(view: View) {
         if (sharedPrefs.appRatePrompt) {
             launch {
-                val bookmarkCount = rssDao.getBookmarkedItemCount()
+                val bookmarkCount = postDao.getBookmarkedItemCount()
 
                 if (sharedPrefs.appOpenCount > sharedPrefs.appRatePromptIndex &&
                     (bookmarkCount > sharedPrefs.appRatePromptIndex ||
-                        sharedPrefs.shareCount > sharedPrefs.appRatePromptIndex)
+                            sharedPrefs.shareCount > sharedPrefs.appRatePromptIndex)
                 ) {
-                    showRateSnackbar(view)
+
+//                    showRateSnackbar(view)
                 }
             }
         }
@@ -39,7 +36,7 @@ class AppRateHelper @Inject constructor(
     private fun showRateSnackbar(view: View) {
         Snackbar.make(view, R.string.do_you_like_droidfeed, 7000)
             .setAction(R.string.yes) {
-                buildRateAppDialog(view.context).show()
+                //                buildRateAppDialog(view.context).show()
             }
             .setActionTextColor(
                 ContextCompat.getColor(
@@ -60,23 +57,6 @@ class AppRateHelper @Inject constructor(
         sharedPrefs.appRatePromptIndex += APP_RATE_PROMPT_INDEX * multiplier
     }
 
-    private fun buildRateAppDialog(context: Context): AlertDialog.Builder {
-        val view = LayoutInflater.from(context).inflate(R.layout.dialog_rate_app, null)
-
-        GlideApp.with(context)
-            .load(R.drawable.df_blinking)
-            .into(view.findViewById(R.id.imgAppLogo))
-
-        return AlertDialog.Builder(context)
-            .setView(view)
-            .setPositiveButton(R.string.sure) { _, _ ->
-                context.startActivity(rateAppIntent)
-            }
-            .setNegativeButton(R.string.later, null)
-            .setNeutralButton(R.string.never_show) { _, _ ->
-                sharedPrefs.appRatePrompt = false
-            }
-    }
 }
 
 internal const val APP_RATE_PROMPT_INDEX = 3

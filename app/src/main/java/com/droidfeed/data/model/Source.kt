@@ -1,24 +1,26 @@
 package com.droidfeed.data.model
 
-import android.arch.persistence.room.ColumnInfo
-import android.arch.persistence.room.Entity
-import android.arch.persistence.room.Ignore
-import android.arch.persistence.room.PrimaryKey
-import android.databinding.ObservableBoolean
+import androidx.room.ColumnInfo
+import androidx.room.Entity
+import androidx.room.Ignore
+import androidx.room.PrimaryKey
+import androidx.databinding.ObservableBoolean
 import com.droidfeed.data.db.AppDatabase
 import com.droidfeed.ui.adapter.diff.Diffable
 
-/**
- * Created by Dogan Gulcan on 1/16/18.
- */
 @Entity(tableName = AppDatabase.SOURCE_TABLE_NAME)
 data class Source(
+
+    @PrimaryKey(autoGenerate = true)
+    @ColumnInfo(name = "id")
+    var id: Int,
+
     @ColumnInfo(name = "name")
     var name: String,
 
-    @PrimaryKey
     @ColumnInfo(name = "url")
     var url: String
+
 ) : Diffable {
 
     @ColumnInfo(name = "is_active")

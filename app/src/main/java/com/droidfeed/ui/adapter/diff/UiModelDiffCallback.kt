@@ -1,6 +1,6 @@
 package com.droidfeed.ui.adapter.diff
 
-import android.support.v7.util.DiffUtil
+import androidx.recyclerview.widget.DiffUtil
 import com.droidfeed.ui.adapter.BaseUiModelAlias
 
 /**
