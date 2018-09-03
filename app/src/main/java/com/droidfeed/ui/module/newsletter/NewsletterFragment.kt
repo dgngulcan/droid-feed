@@ -86,9 +86,8 @@ class NewsletterFragment : BaseFragment() {
 
         launch(UI) {
             binding.animView.frame = 0
-
             delay(500)
-            binding.animView.playAnimation()
+            binding.animView.resumeAnimation()
         }
     }
 

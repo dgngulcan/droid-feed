@@ -14,6 +14,7 @@ import androidx.databinding.DataBindingUtil
 import androidx.interpolator.view.animation.LinearOutSlowInInterpolator
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.droidfeed.R
 import com.droidfeed.databinding.ActivityMainBinding
 import com.droidfeed.ui.adapter.BaseUiModelAlias
@@ -207,27 +208,23 @@ class MainActivity : BaseActivity() {
     }
 
     private fun animateMenuColor(color: Int) {
-        val valueAnimator = ValueAnimator.ofArgb(previousMenuColor, color)
-        valueAnimator.interpolator = LinearOutSlowInInterpolator()
-        valueAnimator.duration = 300
-        valueAnimator.addUpdateListener { animator ->
-            window.statusBarColor = animator.animatedValue as Int
-            binding.appbar.containerToolbar.setBackgroundColor(animator.animatedValue as Int)
-        }
+        val valueAnimator = ValueAnimator.ofArgb(accentColor, color)
 
-        previousMenuColor = currentMenuColor
+        valueAnimator.apply {
+            interpolator = LinearOutSlowInInterpolator()
+            duration = 300
+            addUpdateListener { animator ->
+                window.statusBarColor = animator.animatedValue as Int
+                binding.appbar.containerToolbar.setBackgroundColor(animator.animatedValue as Int)
+            }
+        }
 
         valueAnimator.start()
     }
 
     private fun animateMenuButton(it: View) {
-        if (it.isSelected) {
-            binding.appbar.btnMenu.speed = 1f
-            binding.appbar.btnMenu.resumeAnimation()
-        } else {
-            binding.appbar.btnMenu.speed = -1f
-            binding.appbar.btnMenu.resumeAnimation()
-        }
+        binding.appbar.btnMenu.speed = if (it.isSelected) 1f else -1f
+        binding.appbar.btnMenu.resumeAnimation()
     }
 
     private fun animateTitleColor(active: Boolean) {
@@ -266,26 +263,25 @@ class MainActivity : BaseActivity() {
     }
 
     private fun initFilterDrawer() {
-        val layoutManager = androidx.recyclerview.widget.LinearLayoutManager(this)
-        val adapter = UiModelAdapter(layoutManager = layoutManager)
+        val linearLayoutManager = LinearLayoutManager(this)
+        val uiModelAdapter = UiModelAdapter(layoutManager = linearLayoutManager)
 
         viewModel.sourceUiModelData.observe(this, Observer {
-            adapter.addUiModels(it as Collection<BaseUiModelAlias>)
+            uiModelAdapter.addUiModels(it as Collection<BaseUiModelAlias>)
         })
 
-        (binding.filterRecycler.itemAnimator as androidx.recyclerview.widget.DefaultItemAnimator)
-            .supportsChangeAnimations = false
-        binding.filterRecycler.adapter = adapter
-        binding.filterRecycler.overScrollMode = View.OVER_SCROLL_NEVER
-        binding.filterRecycler.layoutManager = layoutManager
+        binding.filterRecycler.apply {
+            (itemAnimator as androidx.recyclerview.widget.DefaultItemAnimator).supportsChangeAnimations = false
+            adapter = uiModelAdapter
+            overScrollMode = View.OVER_SCROLL_NEVER
+            layoutManager = linearLayoutManager
+        }
     }
 
     override fun onBackPressed() {
         when {
-            binding.drawerLayout.isDrawerOpen(GravityCompat.END) ->
-                binding.drawerLayout.closeDrawer(GravityCompat.END)
+            binding.drawerLayout.isDrawerOpen(GravityCompat.END) -> binding.drawerLayout.closeDrawer(GravityCompat.END)
             binding.appbar.btnMenu.isSelected -> animateMenu(binding.appbar.btnMenu)
-
             else -> super.onBackPressed()
         }
     }
