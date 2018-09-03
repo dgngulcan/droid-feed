@@ -5,7 +5,6 @@ import android.view.View
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.droidfeed.R
-import com.droidfeed.data.model.Attribution
 import com.droidfeed.data.model.Licence
 import com.droidfeed.ui.adapter.BaseUiModelAlias
 import com.droidfeed.ui.adapter.UiModelAdapter
@@ -44,28 +43,6 @@ class LicencesActivity : BaseActivity() {
         btnBack.setOnClickListener {
             onBackPressed()
         }
-    }
-
-//    private fun getAttributionUiModels(): List<LicenceUiModel> {
-//        return getAttributions().map {
-//            LicenceUiModel(it) {
-//                customTab.showTab(it.url)
-//            }
-//        }
-//    }
-
-    private fun getAttributions(): List<Attribution> {
-        val attributions = mutableListOf<Attribution>()
-
-        attributions.add(
-            Attribution(
-                "Henrique Rossatto ",
-                "Hamburget Menu Icon",
-                listOf("https://www.lottiefiles.com/henriqrossatto")
-            )
-        )
-
-        return attributions
     }
 
     private fun getLibrariesUiModels(): List<LicenceUiModel> {
@@ -132,6 +109,14 @@ class LicencesActivity : BaseActivity() {
                 "Type-safe HTTP client for Android and Java by Square, Inc.",
                 "https://github.com/square/retrofit",
                 "https://raw.githubusercontent.com/square/retrofit/master/LICENSE.txt"
+            )
+        )
+        licences.add(
+            Licence(
+                "Henrique Rossatto",
+                "Hamburger Menu Icon",
+                "https://www.lottiefiles.com/henriqrossatto",
+                "https://creativecommons.org/licenses/by/4.0/"
             )
         )
 
