@@ -16,8 +16,8 @@ import kotlinx.coroutines.experimental.launch
 @Suppress("UNCHECKED_CAST")
 class UiModelAdapter constructor(
     private val dataInsertedCallback: DataInsertedCallback? = null,
-    val layoutManager: androidx.recyclerview.widget.RecyclerView.LayoutManager? = null
-) : androidx.recyclerview.widget.RecyclerView.Adapter<androidx.recyclerview.widget.RecyclerView.ViewHolder>() {
+    val layoutManager: RecyclerView.LayoutManager? = null
+) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     private val uiModels = ArrayList<BaseUiModelAlias>()
     private val viewTypes = androidx.collection.SparseArrayCompat<BaseUiModelAlias>()
@@ -25,11 +25,11 @@ class UiModelAdapter constructor(
     override fun onCreateViewHolder(
         parent: ViewGroup,
         viewType: Int
-    ): androidx.recyclerview.widget.RecyclerView.ViewHolder =
-        viewTypes.get(viewType)?.getViewHolder(parent) as androidx.recyclerview.widget.RecyclerView.ViewHolder
+    ): RecyclerView.ViewHolder =
+        viewTypes.get(viewType)?.getViewHolder(parent) as RecyclerView.ViewHolder
 
     override fun onBindViewHolder(
-        holder: androidx.recyclerview.widget.RecyclerView.ViewHolder,
+        holder: RecyclerView.ViewHolder,
         position: Int
     ) {
         uiModels[position].bindViewHolder(holder)
@@ -51,26 +51,33 @@ class UiModelAdapter constructor(
     @Synchronized
     fun addUiModels(newUiModels: Collection<BaseUiModelAlias>?) {
         newUiModels?.let { _ ->
-            launch(UI) {
-                val oldItems = async { ArrayList(uiModels) }
+            if (uiModels.isEmpty()) {
+                uiModels.addAll(newUiModels)
+                updateViewTypes(newUiModels as ArrayList<BaseUiModelAlias>)
+                notifyDataSetChanged()
 
-                val diffResult = async {
-                    DiffUtil.calculateDiff(
-                        UiModelDiffCallback(
-                            oldItems.await(),
-                            uiModels as List<BaseUiModelAlias>
+            } else {
+                launch(UI) {
+                    val oldItems = async { ArrayList(uiModels) }
+
+                    val diffResult = async {
+                        DiffUtil.calculateDiff(
+                            UiModelDiffCallback(
+                                oldItems.await(),
+                                uiModels as List<BaseUiModelAlias>
+                            )
                         )
-                    )
-                }
+                    }
 
-                diffResult.await().let {
-                    dispatchUpdates(it)
+                    diffResult.await().let {
+                        dispatchUpdates(it)
 
-                    uiModels.clear()
-                    uiModels.addAll(newUiModels)
-                    updateViewTypes(uiModels)
+                        uiModels.clear()
+                        uiModels.addAll(newUiModels)
+                        updateViewTypes(uiModels)
 
-                    dataInsertedCallback?.onUpdated()
+                        dataInsertedCallback?.onUpdated()
+                    }
                 }
             }
         }
@@ -89,4 +96,4 @@ class UiModelAdapter constructor(
     }
 }
 
-typealias BaseUiModelAlias = BaseUiModel<in androidx.recyclerview.widget.RecyclerView.ViewHolder>
+typealias BaseUiModelAlias = BaseUiModel<in RecyclerView.ViewHolder>

@@ -1,6 +1,7 @@
 package com.droidfeed.ui.module.about
 
 import android.annotation.SuppressLint
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -84,19 +85,9 @@ class AboutFragment : BaseFragment() {
         })
 
         viewModel.openLibrariesEvent.observe(this, Observer {
-            showLicencesDialog()
+            startActivity(Intent(context, LicencesActivity::class.java))
+
         })
     }
 
-    private fun showLicencesDialog() {
-        val ft = fragmentManager?.beginTransaction()
-        val prev = fragmentManager?.findFragmentByTag("dialog")
-        if (prev != null) {
-            ft?.remove(prev)
-        }
-        ft?.addToBackStack(null)
-
-        val newFragment = LicencesFragment()
-        newFragment.show(ft, "dialog")
-    }
 }

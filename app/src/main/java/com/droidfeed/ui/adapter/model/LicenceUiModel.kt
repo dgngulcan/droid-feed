@@ -12,7 +12,7 @@ import com.droidfeed.ui.common.BaseUiModel
 
 class LicenceUiModel(
     private val licence: Licence,
-    private val listener: ()->Unit
+    private val listener: (String)->Unit
 ) : BaseUiModel<LicenceViewHolder>() {
 
     override fun getViewHolder(parent: ViewGroup): LicenceViewHolder {

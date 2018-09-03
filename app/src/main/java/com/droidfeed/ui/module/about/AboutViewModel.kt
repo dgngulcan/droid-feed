@@ -17,10 +17,6 @@ class AboutViewModel @Inject constructor() : BaseViewModel() {
     val shareAppEvent = SingleLiveEvent<Intent>()
     val openLibrariesEvent = SingleLiveEvent<Unit>()
 
-    fun openContributionPage() {
-        if (canClick) openLinkEvent.setValue(BuildConfig.DROIDFEED_GITHUB_URL)
-    }
-
     fun openPlayStore() {
         if (canClick) rateAppEvent.setValue(rateAppIntent)
     }
@@ -37,7 +33,7 @@ class AboutViewModel @Inject constructor() : BaseViewModel() {
         if (canClick) openLinkEvent.setValue(BuildConfig.DROIDFEED_PRIVACY_POLICY)
     }
 
-    fun openLibraries() {
+    fun openLicences() {
         if (canClick) openLibrariesEvent.setValue(Unit)
     }
 }

@@ -4,6 +4,13 @@ import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.net.ConnectivityManager
+import android.text.Spannable
+import android.text.SpannableString
+import android.text.Spanned
+import android.text.style.ClickableSpan
+import android.text.style.ForegroundColorSpan
+import android.view.View
+import androidx.annotation.ColorInt
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Observer
 import com.droidfeed.util.logConsole
@@ -12,7 +19,7 @@ import kotlinx.coroutines.experimental.android.UI
 import kotlinx.coroutines.experimental.launch
 import org.xmlpull.v1.XmlPullParser
 import org.xmlpull.v1.XmlPullParserException
-import java.util.Random
+import java.util.*
 import java.util.concurrent.CountDownLatch
 import java.util.concurrent.TimeUnit
 
@@ -79,4 +86,34 @@ fun <T> LiveData<T>.blockingObserve(): T? {
     latch.await(2, TimeUnit.SECONDS)
 
     return value
+}
+
+
+fun String.getClickableSpanned(
+    toSpan: String,
+    @ColorInt color: Int = 0,
+    clickEvent: (View) -> Unit
+): SpannableString {
+    val signUpSpan = object : ClickableSpan() {
+        override fun onClick(widget: View) {
+            clickEvent.invoke(widget)
+        }
+    }
+
+    val spanStartIndex = this.indexOf(toSpan)
+    val spanEndIndex = spanStartIndex + toSpan.length
+    val span = SpannableString(this)
+    span.setSpan(
+        signUpSpan,
+        spanStartIndex,
+        spanEndIndex,
+        Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
+    )
+
+    if (color != 0) {
+        span.setSpan(ForegroundColorSpan(color), spanStartIndex, spanEndIndex, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+
+    }
+
+    return span
 }
