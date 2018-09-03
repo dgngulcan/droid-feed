@@ -1,8 +1,8 @@
 package com.droidfeed.di
 
-import androidx.sqlite.db.SupportSQLiteDatabase
 import androidx.room.Room
 import androidx.room.RoomDatabase
+import androidx.sqlite.db.SupportSQLiteDatabase
 import com.droidfeed.App
 import com.droidfeed.data.db.AppDatabase
 import com.droidfeed.data.db.MIGRATION_1_2
@@ -84,7 +84,7 @@ class DatabaseModule {
                     ),
                     Source(
                         8,
-                        "Kotlin Academy",
+                        "Kot. Academy",
                         "https://blog.kotlin-academy.com/feed"
                     ),
                     Source(

@@ -1,54 +1,69 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-  xmlns:tools="http://schemas.android.com/tools">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
-  <data>
+    <data>
 
-    <variable
-      name="licence"
-      type="com.droidfeed.data.model.Licence" />
+        <variable
+            name="licence"
+            type="com.droidfeed.data.model.Licence" />
 
-    <variable
-      name="licenceClickListener"
-      type="com.droidfeed.ui.adapter.UiModelClickListener" />
+    </data>
 
-  </data>
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="?attr/selectableItemBackground"
+        android:clickable="true"
+        android:focusable="true"
+        android:minHeight="76dp"
+        android:orientation="vertical"
+        tools:background="@color/gray">
 
-  <LinearLayout
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:background="?attr/selectableItemBackground"
-    android:clickable="true"
-    android:focusable="true"
-    android:minHeight="76dp"
-    android:onClick="@{()->licenceClickListener.onClick(licence)}"
-    android:orientation="vertical">
+        <TextView
+            android:id="@+id/title"
+            style="@style/DF.TitleStyle.List"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="@{licence.name}"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="Apachi licence 2" />
 
-    <TextView
-      android:id="@+id/title"
-      style="@style/Base.TextAppearance.AppCompat.Body2"
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
-      android:layout_marginBottom="@dimen/spacing_small"
-      android:layout_marginLeft="@dimen/spacing_medium"
-      android:layout_marginRight="@dimen/spacing_medium"
-      android:layout_marginTop="@dimen/spacing_small"
-      android:text="@{licence.name}"
-      tools:text="Apachi licence 2" />
+        <TextView
+            android:id="@+id/content"
+            style="@style/TextAppearance.MaterialComponents.Body1"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:textColor="@color/transparentWhite"
+            android:layout_marginTop="4dp"
+            android:ellipsize="end"
+            android:maxLines="2"
+            android:text="@{licence.description}"
+            android:layout_marginEnd="8dp"
+            app:layout_constraintEnd_toEndOf="@+id/title"
+            app:layout_constraintStart_toStartOf="@+id/title"
+            app:layout_constraintTop_toBottomOf="@+id/title"
+            tools:text="Description text could be long or small" />
 
-    <TextView
-      android:id="@+id/content"
-      style="@style/Base.TextAppearance.AppCompat.Caption"
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
-      android:layout_marginBottom="@dimen/spacing_medium"
-      android:layout_marginLeft="@dimen/spacing_medium"
-      android:layout_marginRight="@dimen/spacing_medium"
-      android:ellipsize="end"
-      android:maxLines="2"
-      android:text="@{licence.description}"
-      tools:text="Description text could be long or small" />
+        <TextView
+            android:id="@+id/spnLicence"
+            android:layout_width="wrap_content"
+            android:layout_height="24dp"
+            android:gravity="center_vertical"
+            android:layout_marginBottom="16dp"
+            style="@style/TextAppearance.MaterialComponents.Body2"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="@+id/content"
+            app:layout_constraintTop_toBottomOf="@+id/content"
+            tools:text="@string/licence" />
 
-  </LinearLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 </layout>

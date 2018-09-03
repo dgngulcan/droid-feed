@@ -1,14 +1,9 @@
 package com.droidfeed.data.model
 
-import androidx.room.ColumnInfo
-import androidx.room.Embedded
-import androidx.room.Entity
-import androidx.room.ForeignKey
-import androidx.room.ForeignKey.CASCADE
-import androidx.room.Ignore
-import androidx.room.PrimaryKey
 import android.content.Intent
 import androidx.databinding.ObservableInt
+import androidx.room.*
+import androidx.room.ForeignKey.CASCADE
 import com.droidfeed.R
 import com.droidfeed.data.db.AppDatabase
 import com.droidfeed.ui.adapter.UiModelType
@@ -23,7 +18,6 @@ import com.droidfeed.ui.adapter.diff.Diffable
         onDelete = CASCADE
     )]
 )
-
 data class Post(
     @PrimaryKey
     @ColumnInfo(name = "link")
@@ -68,15 +62,15 @@ data class Post(
             field = value
 
             if (value == 1) {
-                bookmarkObservable.set(R.drawable.avd_bookmark_positive)
+                bookmarkObservable.set(R.drawable.ic_bookmark_accent_24dp)
             } else {
-                bookmarkObservable.set(R.drawable.avd_bookmark_negative)
+                bookmarkObservable.set(R.drawable.ic_bookmark_border_accent_24dp)
             }
         }
 
     @Transient
     @Ignore
-    val bookmarkObservable = ObservableInt(R.drawable.avd_bookmark_negative)
+    val bookmarkObservable = ObservableInt(R.drawable.ic_bookmark_border_accent_24dp)
 
     @Transient
     @Ignore

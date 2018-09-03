@@ -17,7 +17,7 @@ class AnimUtils @Inject constructor(appContext: App) {
         AnimationUtils.loadInterpolator(appContext, android.R.interpolator.fast_out_linear_in)
     }
 
-    val getLinearOutSlowInInterpolator: Interpolator by lazy {
+    val linearOutSlowInInterpolator: Interpolator by lazy {
         AnimationUtils.loadInterpolator(appContext, android.R.interpolator.linear_out_slow_in)
     }
 }

@@ -1,43 +1,41 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-  xmlns:tools="http://schemas.android.com/tools">
+    xmlns:tools="http://schemas.android.com/tools">
 
-  <data>
+    <data>
 
-    <variable
-      name="source"
-      type="com.droidfeed.data.model.Source" />
+        <variable
+            name="source"
+            type="com.droidfeed.data.model.Source" />
 
-    <variable
-      name="clickListener"
-      type="com.droidfeed.ui.adapter.UiModelClickListener" />
+        <variable
+            name="clickListener"
+            type="com.droidfeed.ui.adapter.UiModelClickListener" />
 
-  </data>
+    </data>
 
-  <androidx.constraintlayout.widget.ConstraintLayout
-    style="@/SelectableItemBackground"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:clickable="true"
-    android:focusable="true"
-    android:foreground="?attr/selectableItemBackground"
-    android:onClick="@{()->clickListener.onClick(source)}"
-    android:theme="@style/Base.ThemeOverlay.AppCompat.Dark">
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:clickable="true"
+        android:focusable="true"
+        android:background="?attr/selectableItemBackground"
+        android:onClick="@{()->clickListener.onClick(source)}"
+        android:theme="@style/Base.ThemeOverlay.AppCompat.Dark">
 
-    <TextView
-      android:id="@+id/textView3"
-      style="@style/Base.TextAppearance.AppCompat.SearchResult.Subtitle"
-      android:layout_width="match_parent"
-      android:layout_height="48dp"
-      android:ellipsize="end"
-      android:enabled="@{source.isEnabled()}"
-      android:gravity="center_vertical"
-      android:maxLines="1"
-      android:paddingEnd="@dimen/spacing_medium"
-      android:paddingStart="@dimen/spacing_medium"
-      android:text="@{source.name}"
-      tools:text="Title of an awesome publisher" />
+        <TextView
+            android:id="@+id/textView3"
+            style="@style/DF.Button.Text"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:clickable="false"
+            android:enabled="@{source.isEnabled()}"
+            android:gravity="center_vertical"
+            android:paddingStart="@dimen/spacing_medium"
+            android:paddingEnd="@dimen/spacing_medium"
+            android:text="@{source.name}"
+            tools:text="Title of an awesome publisher" />
 
-  </androidx.constraintlayout.widget.ConstraintLayout>
+    </FrameLayout>
 
 </layout>

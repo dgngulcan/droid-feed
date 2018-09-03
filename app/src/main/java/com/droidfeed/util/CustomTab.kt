@@ -3,15 +3,17 @@ package com.droidfeed.util
 import android.app.Activity
 import android.content.ComponentName
 import android.content.pm.PackageManager
+import android.graphics.BitmapFactory
 import android.net.Uri
+import android.webkit.URLUtil
+import androidx.appcompat.content.res.AppCompatResources
 import androidx.browser.customtabs.CustomTabsClient
 import androidx.browser.customtabs.CustomTabsIntent
 import androidx.browser.customtabs.CustomTabsServiceConnection
-import com.google.android.material.snackbar.Snackbar
 import androidx.core.content.ContextCompat
-import android.webkit.URLUtil
+import androidx.core.graphics.drawable.toBitmap
 import com.droidfeed.R
-import com.droidfeed.util.extention.isOnline
+import com.google.android.material.snackbar.Snackbar
 import javax.inject.Inject
 
 class CustomTab @Inject constructor(val activity: Activity) {
@@ -20,64 +22,17 @@ class CustomTab @Inject constructor(val activity: Activity) {
         private const val CHROME_STABLE_PACKAGE = "com.android.chrome"
     }
 
-    /**
-     * Opens the given URL in custom tab.
-     *
-     * @param url
-     */
-    fun showTab(url: String) {
-        if (activity.isOnline()) {
-            if (URLUtil.isValidUrl(url)) {
-                if (isPackageAvailable(CHROME_STABLE_PACKAGE)) {
-                    bindCustomTabsService(url, CHROME_STABLE_PACKAGE)
-                } else {
-                    val builder = CustomTabsIntent.Builder()
-                    val customTabsIntent = builder.build()
-                    customTabsIntent.launchUrl(activity, Uri.parse(url))
-                }
-            } else {
-                Snackbar.make(
-                    activity.window.decorView.rootView,
-                    R.string.error_invalid_article_url,
-                    Snackbar.LENGTH_LONG
-                ).show()
-            }
-        } else {
-            Snackbar.make(
-                activity.window.decorView.rootView,
-                R.string.info_no_internet,
-                Snackbar.LENGTH_LONG
-            ).show()
-        }
-    }
+    private var tabClient: CustomTabsClient? = null
+    private val tabIntent: CustomTabsIntent by lazy {
+        CustomTabsIntent.Builder().apply {
 
-    private fun bindCustomTabsService(url: String, chromePackage: String) {
-        val connection = object : CustomTabsServiceConnection() {
-            override fun onCustomTabsServiceConnected(
-                componentName: ComponentName,
-                client: CustomTabsClient
-            ) {
-                launchCustomTab(client, url)
-            }
+            val icon = AppCompatResources.getDrawable(activity, R.drawable.ic_arrow_back_black_24dp)?.toBitmap()
+            icon?.let { setCloseButtonIcon(it) }
 
-            override fun onServiceDisconnected(name: ComponentName) {}
-        }
-
-        CustomTabsClient.bindCustomTabsService(activity, chromePackage, connection)
-    }
-
-    private fun launchCustomTab(
-        client: CustomTabsClient,
-        url: String
-    ) {
-        client.warmup(0L)
-        val builder = CustomTabsIntent.Builder()
-
-        builder.apply {
             setToolbarColor(
                 ContextCompat.getColor(
                     activity,
-                    R.color.colorPrimary
+                    android.R.color.white
                 )
             )
 
@@ -92,12 +47,56 @@ class CustomTab @Inject constructor(val activity: Activity) {
                 android.R.anim.fade_in,
                 android.R.anim.fade_out
             )
+
+        }.build()
+    }
+
+    /**
+     * Opens the given URL in custom tab.
+     *
+     * @param url
+     */
+    fun showTab(url: String) {
+        if (URLUtil.isValidUrl(url)) {
+            if (isPackageAvailable(CHROME_STABLE_PACKAGE)) {
+                bindCustomTabsService(url, CHROME_STABLE_PACKAGE)
+            } else {
+                val builder = CustomTabsIntent.Builder()
+                val customTabsIntent = builder.build()
+                customTabsIntent.launchUrl(activity, Uri.parse(url))
+            }
+        } else {
+            Snackbar.make(
+                activity.window.decorView,
+                R.string.error_invalid_article_url,
+                Snackbar.LENGTH_LONG
+            ).show()
+        }
+    }
+
+    private fun bindCustomTabsService(url: String, chromePackage: String) {
+        val connection = object : CustomTabsServiceConnection() {
+            override fun onCustomTabsServiceConnected(
+                componentName: ComponentName,
+                client: CustomTabsClient
+            ) {
+                tabClient = client
+                launchCustomTab(url)
+            }
+
+            override fun onServiceDisconnected(name: ComponentName) {
+                tabClient = null
+            }
         }
 
-        val customTabsIntent = builder.build()
-
-        customTabsIntent.launchUrl(activity, Uri.parse(url))
+        CustomTabsClient.bindCustomTabsService(activity, chromePackage, connection)
     }
+
+    private fun launchCustomTab(url: String) {
+        tabClient?.warmup(0L)
+        tabIntent.launchUrl(activity, Uri.parse(url))
+    }
+
 
     /**
      * Checks if the given package name is available on the device.

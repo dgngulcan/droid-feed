@@ -9,6 +9,7 @@ import androidx.paging.PagedList
 import com.droidfeed.data.model.Post
 import com.droidfeed.data.repo.PostRepo
 import com.droidfeed.data.repo.SourceRepo
+import com.droidfeed.ui.adapter.UiModelType
 import com.droidfeed.ui.adapter.model.PostUIModel
 import com.droidfeed.ui.common.BaseViewModel
 import com.droidfeed.ui.common.SingleLiveEvent
@@ -20,13 +21,12 @@ class FeedViewModel @Inject constructor(
     private val feedRepo: PostRepo
 ) : BaseViewModel() {
 
-    private val feedType = MutableLiveData<FeedType>()
+    val feedType = MutableLiveData<FeedType>()
     val sources = sourceRepo.sources
 
     private val repoResult = map(feedType) { type ->
         when (type) {
             FeedType.POSTS -> {
-
                 feedRepo.getAllPosts(sources) { createUiModels(it) }
             }
             FeedType.BOOKMARKS -> {
@@ -38,32 +38,35 @@ class FeedViewModel @Inject constructor(
     val networkState = switchMap(repoResult) { it.networkState }!!
     val posts: LiveData<PagedList<PostUIModel>> = switchMap(repoResult) { it.pagedList }
 
-    val articleBookmarkEvent = SingleLiveEvent<Boolean>()
-    val articleOpenDetail = SingleLiveEvent<Post>()
-    val articleUnBookmarkEvent = SingleLiveEvent<Post>()
-    val articleShareEvent = SingleLiveEvent<Intent>()
+    val postBookmarkEvent = SingleLiveEvent<Boolean>()
+    val postOpenDetail = SingleLiveEvent<Post>()
+    val postUnBookmarkEvent = SingleLiveEvent<Post>()
+    val postShareEvent = SingleLiveEvent<Intent>()
 
-    private fun createUiModels(posts: List<Post>) =
-        posts.map { PostUIModel(it, articleClickCallback) }
+    private fun createUiModels(posts: List<Post>): List<PostUIModel> {
+        if (posts.isNotEmpty()) {
+            posts[0].layoutType = UiModelType.POST_LARGE
+        }
+        return posts.map { PostUIModel(it, postClickCallback) }
+    }
 
-    private val articleClickCallback by lazy {
-        object : ArticleClickListener {
-            override fun onItemClick(article: Post) {
+    private val postClickCallback by lazy {
+        object : PostClickListener {
+            override fun onItemClick(post: Post) {
                 if (canClick) {
-                    articleOpenDetail.setValue(article)
+                    postOpenDetail.setValue(post)
                 }
             }
 
-            override fun onShareClick(article: Post) {
+            override fun onShareClick(post: Post) {
                 if (canClick) {
-                    articleShareEvent.setValue(article.getShareIntent())
+                    postShareEvent.setValue(post.getShareIntent())
                 }
             }
 
-            override fun onBookmarkClick(article: Post) {
+            override fun onBookmarkClick(post: Post) {
                 if (canClick) {
-                    toggleBookmark(article)
-                    articleBookmarkEvent.setValue(true)
+                    toggleBookmark(post)
                 }
             }
         }
@@ -82,12 +85,12 @@ class FeedViewModel @Inject constructor(
     fun toggleBookmark(article: Post) {
         if (article.bookmarked == 1) {
             article.bookmarked = 0
-            articleUnBookmarkEvent.setValue(article)
+            postUnBookmarkEvent.setValue(article)
         } else {
             article.bookmarked = 1
+            postBookmarkEvent.setValue(true)
         }
 
         feedRepo.updatePost(article)
     }
-
 }

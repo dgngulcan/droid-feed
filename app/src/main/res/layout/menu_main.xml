@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/containerMenu"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:paddingBottom="32dp"
+    android:visibility="gone"
+    tools:background="@color/gray"
+    tools:visibility="visible">
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btnNavHome"
+        style="@style/DF.Button.Menu.Text"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="@string/nav_home"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btnNavNewsletter"
+        style="@style/DF.Button.Menu.Text"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="@string/nav_newsletter"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/btnNavHome" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btnNavContribute"
+        style="@style/DF.Button.Menu.Text"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:text="@string/nav_contribute"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/btnNavNewsletter" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btnNavAbout"
+        style="@style/DF.Button.Menu.Text"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="@string/nav_about"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/btnNavContribute" />
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="post"
+            type="com.droidfeed.data.model.Post" />
+
+        <variable
+            name="postClickListener"
+            type="com.droidfeed.ui.module.feed.PostClickListener" />
+
+    </data>
+
+    <androidx.cardview.widget.CardView
+        style="@style/CardStyle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/border_shape"
+        android:onClick="@{()->postClickListener.onItemClick(post)}">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+
+            android:background="@drawable/border_shape">
+
+            <TextView
+                android:id="@+id/txtTitle"
+                style="@style/DF.TitleStyleLight.List"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/spacing_medium"
+                android:layout_marginTop="@dimen/spacing_small"
+                android:layout_marginEnd="@dimen/spacing_medium"
+                android:ellipsize="end"
+                android:maxLines="3"
+                android:text="@{post.title}"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/imgPost"
+                app:layout_goneMarginEnd="@dimen/spacing_medium"
+                tools:text="This Is A Click Bait Title of A News" />
+
+            <TextView
+                android:id="@+id/txtDate"
+                style="@style/TextAppearance.MaterialComponents.Caption"
+                publisher="@{post.channel.title}"
+                timestamp="@{post.pubDateTimestamp}"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                app:layout_constraintBottom_toBottomOf="@+id/imgBookmark"
+                app:layout_constraintStart_toStartOf="@+id/txtTitle"
+                app:layout_constraintTop_toTopOf="@+id/imgBookmark"
+                app:layout_goneMarginBottom="8dp"
+                tools:text="Publisher - 3 hours ago" />
+
+
+            <ImageView
+                android:id="@+id/imgPost"
+                android:layout_width="match_parent"
+                android:layout_height="160dp"
+                android:contentDescription="@string/content_article_image"
+                android:scaleType="centerCrop"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:srcCompat="@mipmap/ic_launcher" />
+
+
+            <ImageView
+                android:id="@+id/imgShare"
+                style="@style/BorderlessImageButton"
+                android:layout_marginEnd="10dp"
+                android:layout_marginBottom="@dimen/spacing_small"
+                android:contentDescription="@string/content_desc_share_button"
+                android:onClick="@{()->postClickListener.onShareClick(post)}"
+                android:src="@drawable/ic_share_accent_24dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/txtTitle" />
+
+            <ImageView
+                android:id="@+id/imgBookmark"
+                style="@style/BorderlessImageButton"
+                avdImageResource="@{post.bookmarkObservable}"
+                android:layout_marginEnd="8dp"
+                android:contentDescription="@string/content_desc_bookmark_button"
+                android:onClick="@{()->postClickListener.onBookmarkClick(post)}"
+                app:layout_constraintEnd_toStartOf="@+id/imgShare"
+                app:layout_constraintTop_toTopOf="@+id/imgShare"
+                tools:src="@drawable/ic_bookmark_accent_24dp" />
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </androidx.cardview.widget.CardView>
+
+</layout>

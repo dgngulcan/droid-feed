@@ -5,9 +5,9 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.droidfeed.util.logStackTrace
 
-class WrapContentLinearLayoutManager(context: Context) : androidx.recyclerview.widget.LinearLayoutManager(context) {
+class WrapContentLinearLayoutManager(context: Context) : LinearLayoutManager(context) {
 
-    override fun onLayoutChildren(recycler: androidx.recyclerview.widget.RecyclerView.Recycler?, state: androidx.recyclerview.widget.RecyclerView.State?) {
+    override fun onLayoutChildren(recycler: RecyclerView.Recycler?, state: RecyclerView.State?) {
         try {
             super.onLayoutChildren(recycler, state)
         } catch (e: IndexOutOfBoundsException) {

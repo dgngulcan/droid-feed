@@ -5,9 +5,6 @@ import com.droidfeed.util.CustomTab
 import dagger.Module
 import dagger.Provides
 
-/**
- * DI module for [MainActivity].
- */
 @Module
 class MainModule {
 

@@ -1,12 +1,12 @@
 package com.droidfeed.util.behavior
 
 import android.content.Context
-import androidx.annotation.Keep
-import com.google.android.material.appbar.AppBarLayout
-import androidx.coordinatorlayout.widget.CoordinatorLayout
-import androidx.core.view.ViewCompat
 import android.util.AttributeSet
 import android.view.View
+import androidx.annotation.Keep
+import androidx.core.view.ViewCompat
+import com.google.android.material.appbar.AppBarLayout
+
 
 /**
  * Workaround AppBarLayout.Behavior for https://issuetracker.google.com/66996774
@@ -17,12 +17,12 @@ import android.view.View
  *
  * Kotlinised by Erik Huizinga (github: @erikhuizinga).
  */
+@Suppress("unused")
 @Keep
 class FixAppBarLayoutBehavior(
     context: Context?,
     attrs: AttributeSet?
-) :
-    AppBarLayout.Behavior(context, attrs) {
+) : AppBarLayout.Behavior(context, attrs) {
 
     override fun onNestedScroll(
         coordinatorLayout: androidx.coordinatorlayout.widget.CoordinatorLayout,
@@ -74,4 +74,5 @@ class FixAppBarLayoutBehavior(
             }
         }
     }
+
 }

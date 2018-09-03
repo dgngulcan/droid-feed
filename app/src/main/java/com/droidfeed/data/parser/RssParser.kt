@@ -8,6 +8,7 @@ import com.droidfeed.util.DateTimeUtils
 import com.droidfeed.util.extention.skip
 import com.droidfeed.util.logStackTrace
 import org.jsoup.Jsoup
+import org.jsoup.nodes.Element
 import org.xmlpull.v1.XmlPullParser
 import org.xmlpull.v1.XmlPullParserException
 import java.net.URLDecoder
@@ -43,6 +44,8 @@ class RssParser @Inject constructor(private var dateTimeUtils: DateTimeUtils) : 
         val rssChannel = Channel()
         val posts = mutableListOf<Post>()
 
+        rssChannel.title = source.name
+
         while (parser.next() != XmlPullParser.END_TAG) {
             if (parser.eventType != XmlPullParser.START_TAG) {
                 continue
@@ -50,7 +53,7 @@ class RssParser @Inject constructor(private var dateTimeUtils: DateTimeUtils) : 
 
             when (parser.name) {
                 "item" -> posts.add(readPost(parser, rssChannel, source))
-                "title" -> rssChannel.title = parser.nextText()
+//                "title" -> rssChannel.title= getChannelTitle(parser)
                 "atom:link" -> rssChannel.link = parseLink(parser)
                 "image" -> rssChannel.imageUrl = parseChannelImage(parser)
                 else -> parser.skip()
@@ -92,9 +95,8 @@ class RssParser @Inject constructor(private var dateTimeUtils: DateTimeUtils) : 
                 "dc:creator" -> post.author = parser.nextText()
                 "link" -> post.link = parser.nextText()
                 "pubDate" -> post.pubDateTimestamp = getPublishDate(parser.nextText())
+                "description",
                 "content:encoded" -> post.content = parsePostContent(parser.nextText())
-                "description" -> post.content.contentImage =
-                        getImageFromDescription(parser.nextText())
 
                 else -> parser.skip()
             }
@@ -106,43 +108,46 @@ class RssParser @Inject constructor(private var dateTimeUtils: DateTimeUtils) : 
     private fun getPublishDate(rawDate: String) =
         dateTimeUtils.getTimeStampFromDate(rawDate, DateTimeUtils.DateFormat.RSS.format) ?: 0
 
-    private fun getImageFromDescription(descText: String): String {
-        val doc = Jsoup.parse(descText)
+    private fun parsePostContent(contentText: String): Content {
+        val doc = Jsoup.parse(contentText)
+        val content = Content()
 
+        val img = doc.selectFirst("img")
+        val iFrame = doc.selectFirst("iframe")
+
+        content.contentImage = when {
+            img != null -> getImageFromDescription(img)
+            iFrame != null -> getImageFromIFrame(iFrame.toString())
+            else -> ""
+        }
+
+        return content
+    }
+
+    private fun getImageFromIFrame(frame: String): String {
         return when {
-            doc.hasAttr("img") -> {
-                val img = doc.select("img").first()
-                val imgAttributeName = "abs:src"
-                when {
-                    img.hasAttr(imgAttributeName) -> img.attr(imgAttributeName)
-                    else -> ""
-                }
+            frame.contains("image=") -> {
+                val subFrame = frame.indexOf("image=") + 6
+                URLDecoder.decode(
+                    frame.subSequence(
+                        subFrame,
+                        frame.indexOf("&", subFrame)
+                    ).toString(),
+                    "UTF-8"
+                )
             }
             else -> ""
         }
     }
 
-    private fun parsePostContent(contentText: String): Content {
-        val doc = Jsoup.parse(contentText)
-        val content = Content()
-
-        val frame = doc.select("iframe")?.first()?.toString()
-
-        content.contentImage = if (frame != null && !frame.isBlank() && frame.contains("image=")) {
-            val subFrame = frame.indexOf("image=") + 6
-            URLDecoder.decode(
-                frame.subSequence(
-                    subFrame,
-                    frame.indexOf("&", subFrame)
-                ).toString(),
-                "UTF-8"
-            )
-        } else if (doc.hasAttr("img")) {
-            doc.select("img").first().attr("abs:src")
-        } else {
-            ""
+    private fun getImageFromDescription(doc: Element): String {
+        val img = doc.select("img").first()
+        val absSrc = "abs:src"
+        val src = "src"
+        return when {
+            img.hasAttr(absSrc) -> img.attr(absSrc)
+            img.hasAttr(src) -> img.attr(src)
+            else -> ""
         }
-
-        return content
     }
 }

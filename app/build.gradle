@@ -5,8 +5,8 @@ apply plugin: 'kotlin-kapt'
 apply plugin: 'io.fabric'
 
 ext.app = [
-        'version'            : '1.2.0',
-        'version_code'       : 10,
+        'version'            : '2.0.1',
+        'version_code'       : 12,
         'compile_sdk_version': 28,
         'min_sdk_version'    : 21,
         'target_sdk_version' : 28
@@ -89,7 +89,7 @@ dependencies {
 
     implementation "androidx.fragment:fragment:$versions.fragment"
     implementation "androidx.appcompat:appcompat:$versions.appcompat"
-    implementation "androidx.browser:browser:1.0.0-rc01"
+    implementation "androidx.browser:browser:$versions.browser"
     implementation "androidx.constraintlayout:constraintlayout:$versions.constraint_layout"
 
     implementation "androidx.lifecycle:lifecycle-runtime:$versions.arch_lifecycle"
@@ -115,6 +115,8 @@ dependencies {
     implementation "com.squareup.okhttp3:logging-interceptor:$versions.okHttp"
 
     implementation "com.crashlytics.sdk.android:crashlytics:$versions.crashlytics"
+
+    implementation "com.airbnb.android:lottie:$versions.lottie"
 
     implementation "com.google.firebase:firebase-core:$versions.firebase_core"
     implementation "com.google.firebase:firebase-config:$versions.firebase_config"

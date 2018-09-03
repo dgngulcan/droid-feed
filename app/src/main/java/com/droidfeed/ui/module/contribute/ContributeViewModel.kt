@@ -7,9 +7,9 @@ import javax.inject.Inject
 
 class ContributeViewModel @Inject constructor() : BaseViewModel() {
 
-    val contactDevEvent = SingleLiveEvent<String>()
+    val openRepositoryEvent = SingleLiveEvent<String>()
 
     fun openGithubPage() {
-        contactDevEvent.setValue(BuildConfig.DROIDFEED_GITHUB_URL)
+        openRepositoryEvent.setValue(BuildConfig.DROIDFEED_GITHUB_URL)
     }
 }

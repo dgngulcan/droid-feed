@@ -9,14 +9,17 @@ import com.droidfeed.ui.module.feed.FeedFragment
 import com.droidfeed.ui.module.newsletter.NewsletterFragment
 import javax.inject.Inject
 
+
 @MainScope
 class MainNavController @Inject constructor(val activity: MainActivity) {
 
     private val fragmentManager = activity.supportFragmentManager
     private val containerId = R.id.fragmentContainer
 
+    private var activeFragment: Fragment? = null
+
     private val feedFragment: FeedFragment by lazy {
-        FeedFragment()
+      FeedFragment()
     }
 
     private val aboutFragment: AboutFragment by lazy {
@@ -31,19 +34,15 @@ class MainNavController @Inject constructor(val activity: MainActivity) {
         ContributeFragment()
     }
 
-    fun openNewsFragment() {
+    fun openFeedFragment() {
         changeFragment(feedFragment)
-    }
-
-    fun openBookmarksFragment() {
-//        changeFragment(bookmarkFragment)
     }
 
     fun openAboutFragment() {
         changeFragment(aboutFragment)
     }
 
-    fun openHelpUsFragment() {
+    fun openContributeFragment() {
         changeFragment(contributeFragment)
     }
 
@@ -52,6 +51,8 @@ class MainNavController @Inject constructor(val activity: MainActivity) {
     }
 
     private fun changeFragment(fragment: androidx.fragment.app.Fragment) {
+        activeFragment = fragment
+
         fragmentManager.beginTransaction()
             .setCustomAnimations(
                 android.R.animator.fade_in,
@@ -59,6 +60,10 @@ class MainNavController @Inject constructor(val activity: MainActivity) {
             )
             .replace(containerId, fragment)
             .commitAllowingStateLoss()
+    }
+
+    fun isFeedFragment(): Boolean {
+        return activeFragment?.equals(feedFragment) ?: false
     }
 
     fun scrollToTop() {
