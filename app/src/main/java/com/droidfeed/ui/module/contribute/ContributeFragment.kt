@@ -50,6 +50,7 @@ class ContributeFragment : BaseFragment() {
 
     private fun init() {
         launch(UI) {
+            binding.animView.frame = 0
             delay(500)
             binding.animView.playAnimation()
         }

@@ -58,6 +58,7 @@ class AboutFragment : BaseFragment() {
         binding.txtAppVersion.text = getString(R.string.app_version, BuildConfig.VERSION_NAME)
 
         launch(UI) {
+            binding.animView.frame = 0
             delay(500)
             binding.animView.playAnimation()
         }
