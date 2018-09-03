@@ -34,7 +34,7 @@ class NewsletterRepo @Inject constructor(
             val listId = remoteConfig.getString("mc_newsletter_list_id")
 
             val call = newsletterService.addSubscriber(listId, subscriber)
-            call.await().let { response ->
+            call.execute().let { response ->
                 if (response.isSuccessful) {
                     callLiveData.postValue(DataResource.success(Any()))
                 } else {

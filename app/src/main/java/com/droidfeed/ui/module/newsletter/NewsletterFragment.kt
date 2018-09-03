@@ -15,8 +15,8 @@ import com.droidfeed.data.api.mailchimp.ErrorType
 import com.droidfeed.databinding.FragmentNewsletterBinding
 import com.droidfeed.ui.common.BaseFragment
 import com.droidfeed.util.extention.hideKeyboard
+import com.droidfeed.util.extention.isOnline
 import com.google.android.material.snackbar.Snackbar
-import kotlinx.android.synthetic.main.fragment_newsletter.*
 import kotlinx.coroutines.experimental.android.UI
 import kotlinx.coroutines.experimental.delay
 import kotlinx.coroutines.experimental.launch
@@ -40,7 +40,6 @@ class NewsletterFragment : BaseFragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-
         viewModel = ViewModelProviders
             .of(this, viewModelFactory)
             .get(NewsletterViewModel::class.java)
@@ -50,21 +49,25 @@ class NewsletterFragment : BaseFragment() {
 
     private fun init() {
         binding.btnImIn.setOnClickListener {
-            val email = binding.edtEmail.text.toString()
-            val isValidEmail = android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()
+            if (context?.isOnline() == true) {
+                val email = binding.edtEmail.text.toString()
+                val isValidEmail = android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()
 
-            when {
-                email.isBlank() -> {
-                    binding.textInputLayout.error = getString(R.string.error_empty_email)
+                when {
+                    email.isBlank() -> {
+                        binding.textInputLayout.error = getString(R.string.error_empty_email)
+                    }
+                    !isValidEmail -> {
+                        binding.textInputLayout.error = getString(R.string.error_email_format)
+                    }
+                    else -> {
+                        it.hideKeyboard()
+                        viewModel.signUp(email)
+                        binding.textInputLayout.error = null
+                    }
                 }
-                !isValidEmail -> {
-                    binding.textInputLayout.error = getString(R.string.error_email_format)
-                }
-                else -> {
-                    it.hideKeyboard()
-                    viewModel.signUp(email)
-                    binding.textInputLayout.error = null
-                }
+            } else {
+                Snackbar.make(binding.animView, R.string.info_no_internet, Snackbar.LENGTH_LONG).show()
             }
         }
 
@@ -76,6 +79,7 @@ class NewsletterFragment : BaseFragment() {
                 )
             )
         )
+
         viewModel.signUpEvent.observe(this, Observer { resource ->
             when (resource?.dataState) {
                 is DataStatus.Loading -> onLoading()

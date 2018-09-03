@@ -10,7 +10,6 @@ import androidx.browser.customtabs.CustomTabsIntent
 import androidx.browser.customtabs.CustomTabsServiceConnection
 import androidx.core.content.ContextCompat
 import com.droidfeed.R
-import com.droidfeed.util.extention.isOnline
 import com.google.android.material.snackbar.Snackbar
 import javax.inject.Inject
 
@@ -26,26 +25,18 @@ class CustomTab @Inject constructor(val activity: Activity) {
      * @param url
      */
     fun showTab(url: String) {
-        if (activity.isOnline()) {
-            if (URLUtil.isValidUrl(url)) {
-                if (isPackageAvailable(CHROME_STABLE_PACKAGE)) {
-                    bindCustomTabsService(url, CHROME_STABLE_PACKAGE)
-                } else {
-                    val builder = CustomTabsIntent.Builder()
-                    val customTabsIntent = builder.build()
-                    customTabsIntent.launchUrl(activity, Uri.parse(url))
-                }
+        if (URLUtil.isValidUrl(url)) {
+            if (isPackageAvailable(CHROME_STABLE_PACKAGE)) {
+                bindCustomTabsService(url, CHROME_STABLE_PACKAGE)
             } else {
-                Snackbar.make(
-                    activity.window.decorView.rootView,
-                    R.string.error_invalid_article_url,
-                    Snackbar.LENGTH_LONG
-                ).show()
+                val builder = CustomTabsIntent.Builder()
+                val customTabsIntent = builder.build()
+                customTabsIntent.launchUrl(activity, Uri.parse(url))
             }
         } else {
             Snackbar.make(
-                activity.window.decorView.rootView,
-                R.string.info_no_internet,
+                activity.window.decorView,
+                R.string.error_invalid_article_url,
                 Snackbar.LENGTH_LONG
             ).show()
         }
