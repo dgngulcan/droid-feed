@@ -8,10 +8,11 @@ import android.graphics.drawable.ColorDrawable
 import android.graphics.drawable.TransitionDrawable
 import android.os.Bundle
 import android.view.View
+import androidx.annotation.NonNull
+import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.core.content.ContextCompat
 import androidx.core.view.GravityCompat
 import androidx.databinding.DataBindingUtil
-import androidx.interpolator.view.animation.LinearOutSlowInInterpolator
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -20,6 +21,8 @@ import com.droidfeed.databinding.ActivityMainBinding
 import com.droidfeed.ui.adapter.BaseUiModelAlias
 import com.droidfeed.ui.adapter.UiModelAdapter
 import com.droidfeed.ui.common.BaseActivity
+import com.droidfeed.util.AnimUtils
+import com.google.android.material.appbar.AppBarLayout
 import kotlinx.android.synthetic.main.activity_main_app_bar.view.*
 import kotlinx.android.synthetic.main.menu_main.view.*
 import javax.inject.Inject
@@ -30,6 +33,9 @@ class MainActivity : BaseActivity() {
 
     @Inject
     lateinit var navController: MainNavController
+
+    @Inject
+    lateinit var animUtils: AnimUtils
 
     private lateinit var viewModel: MainViewModel
     private lateinit var binding: ActivityMainBinding
@@ -46,7 +52,6 @@ class MainActivity : BaseActivity() {
     private val grayColor by lazy { ContextCompat.getColor(this, R.color.gray) }
 
     private var currentMenuColor = 0
-    private var previousMenuColor = 0
     private var previousMenuButton: View? = null
 
     private val menuTransDrawable by lazy {
@@ -66,11 +71,23 @@ class MainActivity : BaseActivity() {
         super.onCreate(savedInstanceState)
         initBindings()
         init()
+        initAppbar()
         initFilterDrawer()
     }
 
     private fun initBindings() {
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
+    }
+
+    private fun initAppbar() {
+        val params = binding.appbar.appBar.layoutParams as CoordinatorLayout.LayoutParams
+        val behavior = params.behavior as AppBarLayout.Behavior
+
+        behavior.setDragCallback(object : AppBarLayout.Behavior.DragCallback() {
+            override fun canDrag(@NonNull appBarLayout: AppBarLayout): Boolean {
+                return false
+            }
+        })
     }
 
     private fun init() {
@@ -211,7 +228,7 @@ class MainActivity : BaseActivity() {
         val valueAnimator = ValueAnimator.ofArgb(accentColor, color)
 
         valueAnimator.apply {
-            interpolator = LinearOutSlowInInterpolator()
+            interpolator = animUtils.linearOutSlowInInterpolator
             duration = 300
             addUpdateListener { animator ->
                 window.statusBarColor = animator.animatedValue as Int
@@ -257,7 +274,7 @@ class MainActivity : BaseActivity() {
             toColor
         ).apply {
             setEvaluator(ArgbEvaluator())
-            interpolator = LinearOutSlowInInterpolator()
+            interpolator = animUtils.linearOutSlowInInterpolator
             duration = 300
         }.also { it.start() }
     }

@@ -4,7 +4,9 @@ import android.content.Intent
 import android.content.SharedPreferences
 import android.graphics.Color
 import android.os.Bundle
-import android.view.*
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.paging.PagedList
@@ -17,7 +19,6 @@ import com.droidfeed.ui.adapter.UiModelPaginatedAdapter
 import com.droidfeed.ui.common.BaseFragment
 import com.droidfeed.ui.common.WrapContentLinearLayoutManager
 import com.droidfeed.ui.module.main.MainViewModel
-import com.droidfeed.util.AnalyticsUtil
 import com.droidfeed.util.AppRateHelper
 import com.droidfeed.util.CustomTab
 import com.droidfeed.util.event.EventObserver
@@ -27,7 +28,7 @@ import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.fragment_feed.*
 import javax.inject.Inject
 
-class FeedFragment : BaseFragment() {
+class FeedFragment : BaseFragment("feed") {
 
     private lateinit var viewModel: FeedViewModel
     private lateinit var mainViewModel: MainViewModel
@@ -42,9 +43,6 @@ class FeedFragment : BaseFragment() {
 
     @Inject
     lateinit var appRateHelper: AppRateHelper
-
-    @Inject
-    lateinit var analytics: AnalyticsUtil
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -83,8 +81,8 @@ class FeedFragment : BaseFragment() {
             val layoutManager = activity?.let { WrapContentLinearLayoutManager(it) }
             newsRecyclerView.layoutManager = layoutManager
 
-            (newsRecyclerView.itemAnimator as androidx.recyclerview.widget.DefaultItemAnimator).supportsChangeAnimations =
-                    false
+            (newsRecyclerView.itemAnimator as androidx.recyclerview.widget.DefaultItemAnimator)
+                .supportsChangeAnimations = false
             newsRecyclerView.swapAdapter(adapter, true)
 
             swipeRefreshArticles.setOnRefreshListener {
@@ -133,26 +131,28 @@ class FeedFragment : BaseFragment() {
             }
         })
 
-        viewModel.articleBookmarkEvent.observe(this, Observer {
+        viewModel.postBookmarkEvent.observe(this, Observer {
             appRateHelper.checkAppRatePrompt(binding.root)
+            analytics.logBookmark(true)
         })
 
-        viewModel.articleOpenDetail.observe(this, Observer {
+        viewModel.postOpenDetail.observe(this, Observer {
             it?.let { post -> customTab.showTab(post.link) }
             analytics.logPostClick()
         })
 
-        viewModel.articleShareEvent.observe(this, Observer {
+        viewModel.postShareEvent.observe(this, Observer {
             sharedPrefs.shareCount += 1
             startActivityForResult(it, REQUEST_CODE_SHARE)
-            analytics.logPostShare()
+            analytics.logShare("post")
         })
 
-        viewModel.articleUnBookmarkEvent.observe(this, Observer { article ->
+        viewModel.postUnBookmarkEvent.observe(this, Observer { article ->
             article?.let {
-                // todo check if bookmark fragment
-                showBookmarkUndoSnackbar(it)
-                analytics.logBookmark(it.bookmarked == 1)
+                if (viewModel.feedType.value == FeedType.BOOKMARKS) {
+                    showBookmarkUndoSnackbar(it)
+                }
+                analytics.logBookmark(false)
             }
         })
 
@@ -164,33 +164,25 @@ class FeedFragment : BaseFragment() {
                 View.VISIBLE
             }
 
-            // TODO: find a better way to load initial
+            // initial refresh
             if (adapter.itemCount == 0) {
                 viewModel.refresh()
             }
         })
 
         mainViewModel.bookmarksEvent.observe(this, EventObserver { isEnabled ->
-            val feedType = if (isEnabled) FeedType.BOOKMARKS else FeedType.POSTS
+            val feedType = when {
+                isEnabled -> {
+                    analytics.logScreenView("bookmarks")
+                    FeedType.BOOKMARKS
+                }
+                else -> FeedType.POSTS
+            }
             viewModel.setFeedType(feedType)
             swipeRefreshArticles.isEnabled = !isEnabled
         })
 
         viewModel.setFeedType(FeedType.POSTS)
-    }
-
-    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        activity?.menuInflater?.inflate(R.menu.fragment_news_options, menu)
-        super.onCreateOptionsMenu(menu, inflater)
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
-        when (item?.itemId) {
-            R.id.action_bookmarks -> {
-                viewModel.setFeedType(FeedType.BOOKMARKS)
-            }
-        }
-        return super.onOptionsItemSelected(item)
     }
 
     private fun showBookmarkUndoSnackbar(post: Post) {

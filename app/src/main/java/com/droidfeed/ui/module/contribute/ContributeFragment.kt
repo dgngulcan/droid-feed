@@ -17,7 +17,7 @@ import javax.inject.Inject
 /**
  * Created by Dogan Gulcan on 12/16/17.
  */
-class ContributeFragment : BaseFragment() {
+class ContributeFragment : BaseFragment("contribute") {
 
     private lateinit var binding: FragmentContributeBinding
     private lateinit var viewModel: ContributeViewModel
@@ -57,8 +57,11 @@ class ContributeFragment : BaseFragment() {
     }
 
     private fun initObservables() {
-        viewModel.contactDevEvent.observe(this, Observer {
-            it?.let { it1 -> customTab.showTab(it1) }
+        viewModel.openRepositoryEvent.observe(this, Observer {
+            it?.let { it1 ->
+                customTab.showTab(it1)
+                analytics.logScreenView("df github repo")
+            }
         })
     }
 }

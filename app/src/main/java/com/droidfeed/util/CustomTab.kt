@@ -3,12 +3,15 @@ package com.droidfeed.util
 import android.app.Activity
 import android.content.ComponentName
 import android.content.pm.PackageManager
+import android.graphics.BitmapFactory
 import android.net.Uri
 import android.webkit.URLUtil
+import androidx.appcompat.content.res.AppCompatResources
 import androidx.browser.customtabs.CustomTabsClient
 import androidx.browser.customtabs.CustomTabsIntent
 import androidx.browser.customtabs.CustomTabsServiceConnection
 import androidx.core.content.ContextCompat
+import androidx.core.graphics.drawable.toBitmap
 import com.droidfeed.R
 import com.google.android.material.snackbar.Snackbar
 import javax.inject.Inject
@@ -17,6 +20,35 @@ class CustomTab @Inject constructor(val activity: Activity) {
 
     companion object {
         private const val CHROME_STABLE_PACKAGE = "com.android.chrome"
+    }
+
+    private var tabClient: CustomTabsClient? = null
+    private val tabIntent: CustomTabsIntent by lazy {
+        CustomTabsIntent.Builder().apply {
+
+            val icon = AppCompatResources.getDrawable(activity, R.drawable.ic_arrow_back_black_24dp)?.toBitmap()
+            icon?.let { setCloseButtonIcon(it) }
+
+            setToolbarColor(
+                ContextCompat.getColor(
+                    activity,
+                    android.R.color.white
+                )
+            )
+
+            setStartAnimations(
+                activity,
+                android.R.anim.fade_in,
+                android.R.anim.fade_out
+            )
+
+            setExitAnimations(
+                activity,
+                android.R.anim.fade_in,
+                android.R.anim.fade_out
+            )
+
+        }.build()
     }
 
     /**
@@ -48,47 +80,23 @@ class CustomTab @Inject constructor(val activity: Activity) {
                 componentName: ComponentName,
                 client: CustomTabsClient
             ) {
-                launchCustomTab(client, url)
+                tabClient = client
+                launchCustomTab(url)
             }
 
-            override fun onServiceDisconnected(name: ComponentName) {}
+            override fun onServiceDisconnected(name: ComponentName) {
+                tabClient = null
+            }
         }
 
         CustomTabsClient.bindCustomTabsService(activity, chromePackage, connection)
     }
 
-    private fun launchCustomTab(
-        client: CustomTabsClient,
-        url: String
-    ) {
-        client.warmup(0L)
-        val builder = CustomTabsIntent.Builder()
-
-        builder.apply {
-            setToolbarColor(
-                ContextCompat.getColor(
-                    activity,
-                    android.R.color.white
-                )
-            )
-
-            setStartAnimations(
-                activity,
-                android.R.anim.fade_in,
-                android.R.anim.fade_out
-            )
-
-            setExitAnimations(
-                activity,
-                android.R.anim.fade_in,
-                android.R.anim.fade_out
-            )
-        }
-
-        val customTabsIntent = builder.build()
-
-        customTabsIntent.launchUrl(activity, Uri.parse(url))
+    private fun launchCustomTab(url: String) {
+        tabClient?.warmup(0L)
+        tabIntent.launchUrl(activity, Uri.parse(url))
     }
+
 
     /**
      * Checks if the given package name is available on the device.

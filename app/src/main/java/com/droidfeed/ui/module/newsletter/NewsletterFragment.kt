@@ -22,7 +22,7 @@ import kotlinx.coroutines.experimental.delay
 import kotlinx.coroutines.experimental.launch
 
 @SuppressLint("ValidFragment")
-class NewsletterFragment : BaseFragment() {
+class NewsletterFragment : BaseFragment("newsletter") {
 
     private lateinit var binding: FragmentNewsletterBinding
     private lateinit var viewModel: NewsletterViewModel
@@ -64,6 +64,7 @@ class NewsletterFragment : BaseFragment() {
                         it.hideKeyboard()
                         viewModel.signUp(email)
                         binding.textInputLayout.error = null
+                        analytics.logNewsletterSignUp()
                     }
                 }
             } else {

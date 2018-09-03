@@ -2,11 +2,11 @@ package com.droidfeed.ui.module.about
 
 import android.content.Intent
 import com.droidfeed.BuildConfig
+import com.droidfeed.contactIntent
+import com.droidfeed.rateAppIntent
+import com.droidfeed.shareIntent
 import com.droidfeed.ui.common.BaseViewModel
 import com.droidfeed.ui.common.SingleLiveEvent
-import com.droidfeed.util.contactIntent
-import com.droidfeed.util.rateAppIntent
-import com.droidfeed.util.shareIntent
 import javax.inject.Inject
 
 class AboutViewModel @Inject constructor() : BaseViewModel() {

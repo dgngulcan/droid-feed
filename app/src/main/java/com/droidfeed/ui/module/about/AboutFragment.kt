@@ -12,7 +12,6 @@ import com.droidfeed.BuildConfig
 import com.droidfeed.R
 import com.droidfeed.databinding.FragmentAboutBinding
 import com.droidfeed.ui.common.BaseFragment
-import com.droidfeed.util.AnalyticsUtil
 import com.droidfeed.util.CustomTab
 import com.droidfeed.util.extention.startActivity
 import kotlinx.coroutines.experimental.android.UI
@@ -22,16 +21,13 @@ import javax.inject.Inject
 
 @SuppressLint("ValidFragment")
 
-class AboutFragment : BaseFragment() {
+class AboutFragment : BaseFragment("about") {
 
     private lateinit var binding: FragmentAboutBinding
     private lateinit var viewModel: AboutViewModel
 
     @Inject
     lateinit var customTab: CustomTab
-
-    @Inject
-    lateinit var analytics: AnalyticsUtil
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -67,7 +63,10 @@ class AboutFragment : BaseFragment() {
     @Suppress("UNCHECKED_CAST")
     private fun initObservers() {
         viewModel.rateAppEvent.observe(this, Observer {
-            activity?.let { it1 -> it?.startActivity(it1) }
+            activity?.let { it1 ->
+                it?.startActivity(it1)
+                analytics.logAppRateClick()
+            }
         })
 
         viewModel.contactDevEvent.observe(this, Observer {
@@ -77,7 +76,7 @@ class AboutFragment : BaseFragment() {
         viewModel.shareAppEvent.observe(this, Observer {
             activity?.let { it1 ->
                 it?.startActivity(it1)
-                analytics.logAppShare()
+                analytics.logShare("app")
             }
         })
 
@@ -87,7 +86,6 @@ class AboutFragment : BaseFragment() {
 
         viewModel.openLibrariesEvent.observe(this, Observer {
             startActivity(Intent(context, LicencesActivity::class.java))
-
         })
     }
 

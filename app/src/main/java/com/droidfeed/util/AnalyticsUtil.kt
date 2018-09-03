@@ -1,30 +1,50 @@
 package com.droidfeed.util
 
-import android.os.Bundle
+import androidx.core.os.bundleOf
 import com.google.firebase.analytics.FirebaseAnalytics
 import javax.inject.Inject
 
 class AnalyticsUtil @Inject constructor(private val analytics: FirebaseAnalytics) {
 
     fun logBookmark(isBookmarked: Boolean) {
-        val bundle = Bundle()
-        bundle.putBoolean("bookmarked", isBookmarked)
-        analytics.logEvent("bookmark", bundle)
+        analytics.logEvent(
+            "bookmark",
+            bundleOf(Pair("bookmarked", isBookmarked))
+        )
     }
 
-    fun logPostShare() {
-        val bundle = Bundle()
-        bundle.putString("content", "post")
-        analytics.logEvent(FirebaseAnalytics.Event.SHARE, bundle)
-    }
-
-    fun logAppShare() {
-        val bundle = Bundle()
-        bundle.putString("content", "app")
-        analytics.logEvent(FirebaseAnalytics.Event.SHARE, bundle)
+    fun logShare(content: String) {
+        analytics.logEvent(
+            FirebaseAnalytics.Event.SHARE,
+            bundleOf(Pair("content", content))
+        )
     }
 
     fun logPostClick() {
-        analytics.logEvent(FirebaseAnalytics.Event.VIEW_ITEM, null)
+        analytics.logEvent(
+            FirebaseAnalytics.Event.VIEW_ITEM,
+            bundleOf(Pair("post", "post"))
+        )
+    }
+
+    fun logScreenView(screenTag: String) {
+        analytics.logEvent(
+            FirebaseAnalytics.Event.VIEW_ITEM,
+            bundleOf(Pair("screen", screenTag))
+        )
+    }
+
+    fun logAppRateClick() {
+        analytics.logEvent(
+            FirebaseAnalytics.Event.VIEW_ITEM,
+            bundleOf(Pair("play store", "app page"))
+        )
+    }
+
+    fun logNewsletterSignUp() {
+        analytics.logEvent(
+            FirebaseAnalytics.Event.SIGN_UP,
+            bundleOf(Pair("newsletter", ""))
+        )
     }
 }

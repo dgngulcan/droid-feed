@@ -11,7 +11,6 @@ import com.droidfeed.data.db.PostDao
 import com.droidfeed.data.model.Post
 import com.droidfeed.data.model.Source
 import com.droidfeed.data.parser.NewsXmlParser
-import com.droidfeed.ui.adapter.UiModelType
 import com.droidfeed.ui.adapter.model.PostUIModel
 import com.droidfeed.util.extention.blockingObserve
 import com.droidfeed.util.logStackTrace
@@ -39,9 +38,6 @@ class PostRepo @Inject constructor(
     ): Listing<PostUIModel> {
         val pagedList = LivePagedListBuilder(
             postDao.getAllPosts().mapByPage {
-                if (it.isNotEmpty()) {
-                    it[0].layoutType = UiModelType.POST_LARGE
-                }
                 createUiModels(it)
             },
             pagedListConfig
@@ -125,12 +121,11 @@ class PostRepo @Inject constructor(
     private fun savePostsToDB(posts: List<Post>) = launch { postDao.insertArticles(posts) }
 
     companion object {
-        private const val PAGE_SIZE = 20
-        private const val ENABLE_PLACEHOLDERS = true
+        private const val PAGE_SIZE = 30
+        private const val ENABLE_PLACEHOLDERS = false
 
         private val pagedListConfig = PagedList.Config.Builder()
             .setPageSize(PAGE_SIZE)
-            .setInitialLoadSizeHint(PAGE_SIZE)
             .setEnablePlaceholders(ENABLE_PLACEHOLDERS)
             .build()
     }

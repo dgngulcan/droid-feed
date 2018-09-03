@@ -1,14 +1,10 @@
 package com.droidfeed.util
 
-import android.app.AlertDialog
-import android.content.Context
 import android.content.SharedPreferences
-import android.view.LayoutInflater
 import android.view.View
 import androidx.core.content.ContextCompat
 import com.droidfeed.R
 import com.droidfeed.data.db.PostDao
-import com.droidfeed.util.glide.GlideApp
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.coroutines.experimental.launch
 import javax.inject.Inject
@@ -28,7 +24,7 @@ class AppRateHelper @Inject constructor(
 
                 if (sharedPrefs.appOpenCount > sharedPrefs.appRatePromptIndex &&
                     (bookmarkCount > sharedPrefs.appRatePromptIndex ||
-                        sharedPrefs.shareCount > sharedPrefs.appRatePromptIndex)
+                            sharedPrefs.shareCount > sharedPrefs.appRatePromptIndex)
                 ) {
 
 //                    showRateSnackbar(view)
@@ -40,7 +36,7 @@ class AppRateHelper @Inject constructor(
     private fun showRateSnackbar(view: View) {
         Snackbar.make(view, R.string.do_you_like_droidfeed, 7000)
             .setAction(R.string.yes) {
-//                buildRateAppDialog(view.context).show()
+                //                buildRateAppDialog(view.context).show()
             }
             .setActionTextColor(
                 ContextCompat.getColor(

@@ -27,6 +27,8 @@ class LicencesActivity : BaseActivity() {
 
         super.onCreate(savedInstanceState)
 
+        analytics.logScreenView("licences")
+
         setContentView(R.layout.activity_licence)
         init()
     }
