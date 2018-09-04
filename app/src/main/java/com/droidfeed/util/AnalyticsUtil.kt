@@ -1,5 +1,6 @@
 package com.droidfeed.util
 
+import android.app.Activity
 import androidx.core.os.bundleOf
 import com.google.firebase.analytics.FirebaseAnalytics
 import javax.inject.Inject
@@ -27,11 +28,8 @@ class AnalyticsUtil @Inject constructor(private val analytics: FirebaseAnalytics
         )
     }
 
-    fun logScreenView(screenTag: String) {
-        analytics.logEvent(
-            FirebaseAnalytics.Event.VIEW_ITEM,
-            bundleOf(Pair("screen", screenTag))
-        )
+    fun logScreenView(activity: Activity, screenTag: String) {
+        analytics.setCurrentScreen(activity, screenTag, null)
     }
 
     fun logAppRateClick() {
