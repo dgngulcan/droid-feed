@@ -35,24 +35,25 @@ abstract class BaseActivity : AppCompatActivity(), HasSupportFragmentInjector {
     /**
      * Makes statusbar transparent.
      */
-    protected fun setupTransparentStatusbar() {
+    protected fun setupTransparentStatusBar() {
         window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS)
         window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
         window.statusBarColor = Color.TRANSPARENT
         window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
     }
 
-    protected fun darkStatusbarTheme() {
+    protected fun darkStatusBarTheme() {
         window.decorView.systemUiVisibility = 0
     }
 
-    protected fun lightStatusbarTheme() {
+    protected fun lightStatusBarTheme() {
         if (isMarshmallow()) {
             window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR
         }
     }
 
     fun isMarshmallow() = Build.VERSION.SDK_INT >= Build.VERSION_CODES.M
+    fun isOreo() = Build.VERSION.SDK_INT >= Build.VERSION_CODES.O
 
     override fun supportFragmentInjector(): DispatchingAndroidInjector<androidx.fragment.app.Fragment> =
         fragmentInjector

@@ -60,7 +60,6 @@ class ContributeFragment : BaseFragment("contribute") {
         viewModel.openRepositoryEvent.observe(this, Observer {
             it?.let { it1 ->
                 customTab.showTab(it1)
-                analytics.logScreenView("df github repo")
             }
         })
     }

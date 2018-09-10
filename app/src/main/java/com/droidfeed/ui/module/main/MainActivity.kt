@@ -8,8 +8,6 @@ import android.graphics.drawable.ColorDrawable
 import android.graphics.drawable.TransitionDrawable
 import android.os.Bundle
 import android.view.View
-import androidx.annotation.NonNull
-import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.core.content.ContextCompat
 import androidx.core.view.GravityCompat
 import androidx.databinding.DataBindingUtil
@@ -22,7 +20,6 @@ import com.droidfeed.ui.adapter.BaseUiModelAlias
 import com.droidfeed.ui.adapter.UiModelAdapter
 import com.droidfeed.ui.common.BaseActivity
 import com.droidfeed.util.AnimUtils
-import com.google.android.material.appbar.AppBarLayout
 import kotlinx.android.synthetic.main.activity_main_app_bar.view.*
 import kotlinx.android.synthetic.main.menu_main.view.*
 import javax.inject.Inject
@@ -50,8 +47,12 @@ class MainActivity : BaseActivity() {
     private val pinkColor by lazy { ContextCompat.getColor(this, R.color.pink) }
     private val blueColor by lazy { ContextCompat.getColor(this, R.color.blue) }
     private val grayColor by lazy { ContextCompat.getColor(this, R.color.gray) }
+    private val whiteColor by lazy { ContextCompat.getColor(this, android.R.color.white) }
+    private val blackColor by lazy { ContextCompat.getColor(this, android.R.color.black) }
+    private val grayDarkColor by lazy { ContextCompat.getColor(this, R.color.grayDark1) }
 
     private var currentMenuColor = 0
+    private var previousScreenColor = 0
     private var previousMenuButton: View? = null
 
     private val menuTransDrawable by lazy {
@@ -65,29 +66,17 @@ class MainActivity : BaseActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         if (isMarshmallow()) {
-            setupTransparentStatusbar()
-            lightStatusbarTheme()
+            setupTransparentStatusBar()
+            lightStatusBarTheme()
         }
         super.onCreate(savedInstanceState)
         initBindings()
         init()
-        initAppbar()
         initFilterDrawer()
     }
 
     private fun initBindings() {
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
-    }
-
-    private fun initAppbar() {
-        val params = binding.appbar.appBar.layoutParams as CoordinatorLayout.LayoutParams
-        val behavior = params.behavior as AppBarLayout.Behavior
-
-        behavior.setDragCallback(object : AppBarLayout.Behavior.DragCallback() {
-            override fun canDrag(@NonNull appBarLayout: AppBarLayout): Boolean {
-                return false
-            }
-        })
     }
 
     private fun init() {
@@ -125,11 +114,11 @@ class MainActivity : BaseActivity() {
             highlightSelectedMenuButton(it)
             navController.openFeedFragment()
             binding.appbar.txtTitle.text = getString(R.string.app_name_lower)
-            onMenuItemSelected(transparentColor)
+            onMenuItemSelected(whiteColor)
             toggleFilterMenu(true)
             toggleBookmarksMenu(true)
             if (isMarshmallow()) {
-                lightStatusbarTheme()
+                lightStatusBarTheme()
             }
         }
 
@@ -141,7 +130,7 @@ class MainActivity : BaseActivity() {
             toggleFilterMenu(false)
             toggleBookmarksMenu(false)
             if (isMarshmallow()) {
-                darkStatusbarTheme()
+                darkStatusBarTheme()
             }
         }
 
@@ -153,7 +142,7 @@ class MainActivity : BaseActivity() {
             toggleFilterMenu(false)
             toggleBookmarksMenu(false)
             if (isMarshmallow()) {
-                darkStatusbarTheme()
+                darkStatusBarTheme()
             }
         }
 
@@ -165,7 +154,7 @@ class MainActivity : BaseActivity() {
             toggleFilterMenu(false)
             toggleBookmarksMenu(false)
             if (isMarshmallow()) {
-                darkStatusbarTheme()
+                darkStatusBarTheme()
             }
         }
 
@@ -185,6 +174,12 @@ class MainActivity : BaseActivity() {
         animateTitleColor(binding.appbar.btnMenu.isSelected)
         currentMenuColor = color
         animateMenuColor(color)
+
+        if (color != whiteColor) {
+            animateNavigationBarColor(color)
+        }else{
+            animateNavigationBarColor(blackColor)
+        }
     }
 
     private fun toggleFilterMenu(show: Boolean) {
@@ -200,7 +195,8 @@ class MainActivity : BaseActivity() {
     }
 
     private fun toggleBookmarksMenu(show: Boolean) {
-        binding.appbar.containerToolbar.btnBookmarks.visibility = if (show) View.VISIBLE else View.GONE
+        binding.appbar.containerToolbar.btnBookmarks.visibility =
+                if (show) View.VISIBLE else View.GONE
     }
 
     private fun animateMenu(it: View) {
@@ -226,15 +222,36 @@ class MainActivity : BaseActivity() {
 
     private fun animateMenuColor(color: Int) {
         val valueAnimator = ValueAnimator.ofArgb(accentColor, color)
+        var animatorColor: Int
 
         valueAnimator.apply {
             interpolator = animUtils.linearOutSlowInInterpolator
             duration = 300
             addUpdateListener { animator ->
-                window.statusBarColor = animator.animatedValue as Int
-                binding.appbar.containerToolbar.setBackgroundColor(animator.animatedValue as Int)
+                animatorColor = animator.animatedValue as Int
+                window.statusBarColor = animatorColor
+                binding.appbar.containerToolbar.setBackgroundColor(animatorColor)
             }
         }
+
+        valueAnimator.start()
+    }
+
+    private fun animateNavigationBarColor(color: Int) {
+        val valueAnimator = ValueAnimator.ofArgb(previousScreenColor, color)
+        var animatorColor: Int
+
+        valueAnimator.apply {
+            interpolator = animUtils.linearOutSlowInInterpolator
+            duration = 300
+            addUpdateListener { animator ->
+                animatorColor = animator.animatedValue as Int
+                window.navigationBarColor = animatorColor
+
+            }
+        }
+
+        previousScreenColor = color
 
         valueAnimator.start()
     }
@@ -249,21 +266,21 @@ class MainActivity : BaseActivity() {
 
         val fromColor = if (active) {
             if (isFeedFragmentActive) {
-                ContextCompat.getColor(this, R.color.grayDark1)
+                grayDarkColor
             } else {
-                ContextCompat.getColor(this, android.R.color.white)
+                whiteColor
             }
         } else {
-            ContextCompat.getColor(this, android.R.color.white)
+            whiteColor
         }
 
         val toColor = if (active) {
-            ContextCompat.getColor(this, android.R.color.white)
+            whiteColor
         } else {
             if (isFeedFragmentActive) {
-                ContextCompat.getColor(this, R.color.grayDark1)
+                grayDarkColor
             } else {
-                ContextCompat.getColor(this, android.R.color.white)
+                whiteColor
             }
         }
 
@@ -288,7 +305,8 @@ class MainActivity : BaseActivity() {
         })
 
         binding.filterRecycler.apply {
-            (itemAnimator as androidx.recyclerview.widget.DefaultItemAnimator).supportsChangeAnimations = false
+            (itemAnimator as androidx.recyclerview.widget.DefaultItemAnimator).supportsChangeAnimations =
+                    false
             adapter = uiModelAdapter
             overScrollMode = View.OVER_SCROLL_NEVER
             layoutManager = linearLayoutManager
@@ -297,7 +315,9 @@ class MainActivity : BaseActivity() {
 
     override fun onBackPressed() {
         when {
-            binding.drawerLayout.isDrawerOpen(GravityCompat.END) -> binding.drawerLayout.closeDrawer(GravityCompat.END)
+            binding.drawerLayout.isDrawerOpen(GravityCompat.END) -> binding.drawerLayout.closeDrawer(
+                GravityCompat.END
+            )
             binding.appbar.btnMenu.isSelected -> animateMenu(binding.appbar.btnMenu)
             else -> super.onBackPressed()
         }
