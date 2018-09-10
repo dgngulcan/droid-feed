@@ -173,7 +173,6 @@ class FeedFragment : BaseFragment("feed") {
         mainViewModel.bookmarksEvent.observe(this, EventObserver { isEnabled ->
             val feedType = when {
                 isEnabled -> {
-                    analytics.logScreenView("bookmarks")
                     FeedType.BOOKMARKS
                 }
                 else -> FeedType.POSTS

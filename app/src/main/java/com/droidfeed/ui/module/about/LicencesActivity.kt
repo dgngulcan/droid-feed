@@ -21,13 +21,11 @@ class LicencesActivity : BaseActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         if (isMarshmallow()) {
-            setupTransparentStatusbar()
+            setupTransparentStatusBar()
         }
         window.statusBarColor = ContextCompat.getColor(this@LicencesActivity, R.color.pink)
 
         super.onCreate(savedInstanceState)
-
-        analytics.logScreenView("licences")
 
         setContentView(R.layout.activity_licence)
         init()
