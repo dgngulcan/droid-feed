@@ -14,7 +14,7 @@ buildscript {
             'fabric_gradle'    : '1.25.4',
             'firebase_core'    : '16.0.3',
             'firebase_config'  : '16.0.0',
-            'material'         : '1.0.0-rc01',
+            'material'         : '1.0.0-rc02',
             'glide'            : '4.8.0',
             'lottie'           : '2.6.0-beta19',
             'kotlin'           : '1.2.61',
