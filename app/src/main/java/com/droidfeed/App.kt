@@ -45,6 +45,9 @@ class App : Application(), HasActivityInjector {
     }
 }
 
+/**
+ * Intent for sending an email for contact purposes.
+ */
 val contactIntent: Intent by lazy {
     val intent = Intent(Intent.ACTION_SENDTO)
     intent.data = Uri.parse("mailto:hi@droidfeed.io")
@@ -52,6 +55,9 @@ val contactIntent: Intent by lazy {
     intent.putExtra(Intent.EXTRA_SUBJECT, "About DroidFeed")
 }
 
+/**
+ * Intent for sharing the application.
+ */
 val shareIntent: Intent by lazy {
     val intent = Intent()
     intent.action = Intent.ACTION_SEND
@@ -64,6 +70,9 @@ val shareIntent: Intent by lazy {
     intent
 }
 
+/**
+ * Intent for the applications Google play store page.
+ */
 val rateAppIntent: Intent by lazy {
     try {
         Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=" + BuildConfig.APPLICATION_ID))

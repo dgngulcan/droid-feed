@@ -4,6 +4,7 @@ import androidx.annotation.Keep
 import com.squareup.moshi.FromJson
 import com.squareup.moshi.JsonDataException
 
+@Suppress("unused")
 internal class ErrorAdapter {
 
     @FromJson

@@ -17,7 +17,7 @@ buildscript {
             'material'         : '1.0.0-rc02',
             'glide'            : '4.8.0',
             'lottie'           : '2.6.1',
-            'kotlin'           : '1.2.61',
+            'kotlin'           : '1.2.70',
             'kotlin_coroutines': '0.26.0',
             'retrofit'         : '2.4.0',
             'okHttp'           : '3.11.0',

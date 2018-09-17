@@ -1,16 +1,22 @@
 package com.droidfeed.data.db
 
-import androidx.sqlite.db.SupportSQLiteDatabase
 import androidx.room.migration.Migration
+import androidx.sqlite.db.SupportSQLiteDatabase
 import com.droidfeed.data.db.AppDatabase.Companion.POST_TABLE_NAME
 import com.droidfeed.data.db.AppDatabase.Companion.SOURCE_TABLE_NAME
 
+/**
+ * Adds sources table to the db.
+ */
 val MIGRATION_1_2: Migration = object : Migration(1, 2) {
     override fun migrate(database: SupportSQLiteDatabase) {
         database.execSQL("CREATE TABLE IF NOT EXISTS `$SOURCE_TABLE_NAME` (`url` TEXT NOT NULL, `name` TEXT NOT NULL, `is_active` INTEGER NOT NULL, PRIMARY KEY(`url`))")
     }
 }
 
+/**
+ * Adds id field to the `source` table and adds `source_id` as foreign key to posts table.
+ */
 val MIGRATION_2_3: Migration = object : Migration(2, 3) {
     override fun migrate(database: SupportSQLiteDatabase) {
         // add `id` to source table and make it primary key

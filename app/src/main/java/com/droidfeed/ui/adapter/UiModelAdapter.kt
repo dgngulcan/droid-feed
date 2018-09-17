@@ -4,9 +4,10 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.droidfeed.ui.adapter.diff.UiModelDiffCallback
-import com.droidfeed.ui.common.BaseUiModel
 import com.droidfeed.util.logStackTrace
-import kotlinx.coroutines.experimental.android.UI
+import kotlinx.coroutines.experimental.Dispatchers
+import kotlinx.coroutines.experimental.GlobalScope
+import kotlinx.coroutines.experimental.android.Main
 import kotlinx.coroutines.experimental.async
 import kotlinx.coroutines.experimental.launch
 
@@ -15,7 +16,6 @@ import kotlinx.coroutines.experimental.launch
  */
 @Suppress("UNCHECKED_CAST")
 class UiModelAdapter constructor(
-    private val dataInsertedCallback: DataInsertedCallback? = null,
     val layoutManager: RecyclerView.LayoutManager? = null
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
@@ -55,9 +55,8 @@ class UiModelAdapter constructor(
                 uiModels.addAll(newUiModels)
                 updateViewTypes(newUiModels as ArrayList<BaseUiModelAlias>)
                 notifyDataSetChanged()
-
             } else {
-                launch(UI) {
+                GlobalScope.launch(Dispatchers.Main) {
                     val oldItems = async { ArrayList(uiModels) }
 
                     val diffResult = async {
@@ -75,8 +74,6 @@ class UiModelAdapter constructor(
                         uiModels.clear()
                         uiModels.addAll(newUiModels)
                         updateViewTypes(uiModels)
-
-                        dataInsertedCallback?.onUpdated()
                     }
                 }
             }

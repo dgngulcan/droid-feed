@@ -31,7 +31,7 @@ class DFGlideModule : AppGlideModule() {
 }
 
 /**
- * Adds [RoundedCorners] transformation while handling DP to PX conversion.
+ * Adds [RoundedCorners] transformation.
  *
  * @param cornerRadius as DP
  */

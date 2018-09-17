@@ -56,7 +56,6 @@ class AppRateHelper @Inject constructor(
     private fun postponeAppRating(multiplier: Int = 1) {
         sharedPrefs.appRatePromptIndex += APP_RATE_PROMPT_INDEX * multiplier
     }
-
 }
 
 internal const val APP_RATE_PROMPT_INDEX = 3

@@ -9,7 +9,6 @@ import com.droidfeed.ui.module.feed.FeedFragment
 import com.droidfeed.ui.module.newsletter.NewsletterFragment
 import javax.inject.Inject
 
-
 @MainScope
 class MainNavController @Inject constructor(val activity: MainActivity) {
 
@@ -19,7 +18,7 @@ class MainNavController @Inject constructor(val activity: MainActivity) {
     private var activeFragment: Fragment? = null
 
     private val feedFragment: FeedFragment by lazy {
-      FeedFragment()
+        FeedFragment()
     }
 
     private val aboutFragment: AboutFragment by lazy {

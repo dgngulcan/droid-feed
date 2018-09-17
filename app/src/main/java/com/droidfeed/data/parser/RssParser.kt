@@ -5,7 +5,7 @@ import com.droidfeed.data.model.Content
 import com.droidfeed.data.model.Post
 import com.droidfeed.data.model.Source
 import com.droidfeed.util.DateTimeUtils
-import com.droidfeed.util.extention.skip
+import com.droidfeed.util.extention.skipTag
 import com.droidfeed.util.logStackTrace
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Element
@@ -30,7 +30,7 @@ class RssParser @Inject constructor(private var dateTimeUtils: DateTimeUtils) : 
 
                 when (parser.name) {
                     "channel" -> posts.addAll(parseChannel(parser, source))
-                    else -> parser.skip()
+                    else -> parser.skipTag()
                 }
             }
         } catch (e: XmlPullParserException) {
@@ -53,10 +53,9 @@ class RssParser @Inject constructor(private var dateTimeUtils: DateTimeUtils) : 
 
             when (parser.name) {
                 "item" -> posts.add(readPost(parser, rssChannel, source))
-//                "title" -> rssChannel.title= getChannelTitle(parser)
                 "atom:link" -> rssChannel.link = parseLink(parser)
                 "image" -> rssChannel.imageUrl = parseChannelImage(parser)
-                else -> parser.skip()
+                else -> parser.skipTag()
             }
         }
 
@@ -72,7 +71,7 @@ class RssParser @Inject constructor(private var dateTimeUtils: DateTimeUtils) : 
 
             when (parser.name) {
                 "url" -> channelImage = parser.nextText()
-                else -> parser.skip()
+                else -> parser.skipTag()
             }
         }
         return channelImage
@@ -98,7 +97,7 @@ class RssParser @Inject constructor(private var dateTimeUtils: DateTimeUtils) : 
                 "description",
                 "content:encoded" -> post.content = parsePostContent(parser.nextText())
 
-                else -> parser.skip()
+                else -> parser.skipTag()
             }
         }
 

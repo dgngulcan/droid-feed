@@ -7,10 +7,10 @@ import com.droidfeed.ui.adapter.UiModelClickListener
 
 class SourceViewHolder(
     private val binding: ListItemSourceBinding
-) : androidx.recyclerview.widget.RecyclerView.ViewHolder(binding.root) {
+) : RecyclerView.ViewHolder(binding.root) {
 
-    fun bind(source: Source, licenceClickListener: UiModelClickListener<Source>) {
+    fun bind(source: Source, clickListener: UiModelClickListener<Source>) {
         binding.source = source
-        binding.clickListener = licenceClickListener
+        binding.clickListener = clickListener
     }
 }
