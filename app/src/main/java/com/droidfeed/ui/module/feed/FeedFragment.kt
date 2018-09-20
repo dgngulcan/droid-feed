@@ -10,6 +10,7 @@ import android.view.ViewGroup
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.paging.PagedList
+import androidx.recyclerview.widget.RecyclerView
 import com.droidfeed.R
 import com.droidfeed.data.DataStatus
 import com.droidfeed.data.model.Post
@@ -23,10 +24,16 @@ import com.droidfeed.util.AppRateHelper
 import com.droidfeed.util.CustomTab
 import com.droidfeed.util.event.EventObserver
 import com.droidfeed.util.extention.isOnline
+import com.droidfeed.util.logConsole
 import com.droidfeed.util.shareCount
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.fragment_feed.*
+import kotlinx.coroutines.experimental.GlobalScope
+import kotlinx.coroutines.experimental.delay
+import kotlinx.coroutines.experimental.launch
 import javax.inject.Inject
+import kotlin.math.abs
+import kotlin.math.absoluteValue
 
 class FeedFragment : BaseFragment("feed") {
 
@@ -81,6 +88,25 @@ class FeedFragment : BaseFragment("feed") {
             val layoutManager = activity?.let { WrapContentLinearLayoutManager(it) }
             newsRecyclerView.layoutManager = layoutManager
 
+
+            var scrolledAmount = 0
+            newsRecyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+                override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                    super.onScrolled(recyclerView, dx, dy)
+                    scrolledAmount += dy.absoluteValue
+
+                    if (scrolledAmount > 100) {
+                        mainViewModel.onScrolledEnough()
+                        scrolledAmount = 0
+                    }
+
+                    GlobalScope.launch {
+                        delay(200)
+                        scrolledAmount = 0
+                    }
+                }
+            })
+
             (newsRecyclerView.itemAnimator as androidx.recyclerview.widget.DefaultItemAnimator)
                 .supportsChangeAnimations = false
             newsRecyclerView.swapAdapter(adapter, true)
@@ -90,7 +116,11 @@ class FeedFragment : BaseFragment("feed") {
                     this@FeedFragment.viewModel.refresh()
                 } else {
                     swipeRefreshArticles.isRefreshing = false
-                    Snackbar.make(swipeRefreshArticles, R.string.info_no_internet, Snackbar.LENGTH_LONG).show()
+                    Snackbar.make(
+                        swipeRefreshArticles,
+                        R.string.info_no_internet,
+                        Snackbar.LENGTH_LONG
+                    ).show()
                 }
             }
         }
@@ -101,11 +131,12 @@ class FeedFragment : BaseFragment("feed") {
             pagedList?.let { list ->
                 adapter.submitList(list as PagedList<BaseUiModelAlias>)
 
-                binding.containerEmptyBookmark.visibility = if (list.size == 0 && !swipeRefreshArticles.isEnabled) {
-                    View.VISIBLE
-                } else {
-                    View.GONE
-                }
+                binding.containerEmptyBookmark.visibility =
+                        if (list.size == 0 && !swipeRefreshArticles.isEnabled) {
+                            View.VISIBLE
+                        } else {
+                            View.GONE
+                        }
             }
         })
 
