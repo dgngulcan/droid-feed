@@ -13,8 +13,10 @@ import com.droidfeed.R
 import com.droidfeed.databinding.FragmentAboutBinding
 import com.droidfeed.ui.common.BaseFragment
 import com.droidfeed.util.CustomTab
+import com.droidfeed.util.coroutineScope
 import com.droidfeed.util.extention.startActivity
-import kotlinx.coroutines.experimental.android.UI
+import kotlinx.coroutines.experimental.Dispatchers
+import kotlinx.coroutines.experimental.android.Main
 import kotlinx.coroutines.experimental.delay
 import kotlinx.coroutines.experimental.launch
 import javax.inject.Inject
@@ -53,7 +55,7 @@ class AboutFragment : BaseFragment("about") {
     private fun init() {
         binding.txtAppVersion.text = getString(R.string.app_version, BuildConfig.VERSION_NAME)
 
-        launch(UI) {
+        coroutineScope.launch(Dispatchers.Main) {
             binding.animView.frame = 0
             delay(500)
             binding.animView.resumeAnimation()
@@ -88,5 +90,4 @@ class AboutFragment : BaseFragment("about") {
             startActivity(Intent(context, LicencesActivity::class.java))
         })
     }
-
 }

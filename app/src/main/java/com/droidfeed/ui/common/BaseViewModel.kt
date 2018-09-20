@@ -1,14 +1,20 @@
 package com.droidfeed.ui.common
 
-import androidx.lifecycle.ViewModel
 import android.os.SystemClock
+import androidx.lifecycle.ViewModel
+import kotlinx.coroutines.experimental.CoroutineScope
+import kotlinx.coroutines.experimental.Dispatchers
+import kotlinx.coroutines.experimental.Job
+import kotlinx.coroutines.experimental.android.Main
+import kotlin.coroutines.experimental.CoroutineContext
 
-abstract class BaseViewModel : ViewModel() {
+abstract class BaseViewModel : ViewModel(), CoroutineScope {
 
     private var lastClickTime: Long = 0
+    private val job = Job()
 
     /**
-     * To prevent click spams.
+     * Returns if a click event should be consumed or not. It is mainly to prevent spam clicks.
      */
     var canClick: Boolean = true
         get() {
@@ -19,4 +25,12 @@ abstract class BaseViewModel : ViewModel() {
                 true
             }
         }
+
+    override val coroutineContext: CoroutineContext
+        get() = job + Dispatchers.Main
+
+    override fun onCleared() {
+        super.onCleared()
+        job.cancel()
+    }
 }

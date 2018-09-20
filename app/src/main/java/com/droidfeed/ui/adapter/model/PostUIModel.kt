@@ -10,7 +10,7 @@ import com.droidfeed.ui.adapter.diff.Diffable
 import com.droidfeed.ui.adapter.viewholder.PostLargeViewHolder
 import com.droidfeed.ui.adapter.viewholder.PostSmallViewHolder
 import com.droidfeed.ui.adapter.viewholder.PostViewHolder
-import com.droidfeed.ui.common.BaseUiModel
+import com.droidfeed.ui.adapter.BaseUiModel
 import com.droidfeed.ui.module.feed.PostClickListener
 
 data class PostUIModel(

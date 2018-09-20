@@ -2,8 +2,6 @@ package com.droidfeed.util
 
 import android.app.Activity
 import android.content.ComponentName
-import android.content.pm.PackageManager
-import android.graphics.BitmapFactory
 import android.net.Uri
 import android.webkit.URLUtil
 import androidx.appcompat.content.res.AppCompatResources
@@ -13,9 +11,13 @@ import androidx.browser.customtabs.CustomTabsServiceConnection
 import androidx.core.content.ContextCompat
 import androidx.core.graphics.drawable.toBitmap
 import com.droidfeed.R
+import com.droidfeed.util.extention.isPackageAvailable
 import com.google.android.material.snackbar.Snackbar
 import javax.inject.Inject
 
+/**
+ * Custom Chrome Tabs helper.
+ */
 class CustomTab @Inject constructor(val activity: Activity) {
 
     companion object {
@@ -26,8 +28,12 @@ class CustomTab @Inject constructor(val activity: Activity) {
     private val tabIntent: CustomTabsIntent by lazy {
         CustomTabsIntent.Builder().apply {
 
-            val icon = AppCompatResources.getDrawable(activity, R.drawable.ic_arrow_back_black_24dp)?.toBitmap()
-            icon?.let { setCloseButtonIcon(it) }
+            AppCompatResources.getDrawable(
+                activity,
+                R.drawable.ic_arrow_back_black_24dp
+            )
+                ?.toBitmap()
+                ?.let { setCloseButtonIcon(it) }
 
             setToolbarColor(
                 ContextCompat.getColor(
@@ -47,7 +53,6 @@ class CustomTab @Inject constructor(val activity: Activity) {
                 android.R.anim.fade_in,
                 android.R.anim.fade_out
             )
-
         }.build()
     }
 
@@ -58,7 +63,7 @@ class CustomTab @Inject constructor(val activity: Activity) {
      */
     fun showTab(url: String) {
         if (URLUtil.isValidUrl(url)) {
-            if (isPackageAvailable(CHROME_STABLE_PACKAGE)) {
+            if (activity.isPackageAvailable(CHROME_STABLE_PACKAGE)) {
                 bindCustomTabsService(url, CHROME_STABLE_PACKAGE)
             } else {
                 val builder = CustomTabsIntent.Builder()
@@ -95,21 +100,5 @@ class CustomTab @Inject constructor(val activity: Activity) {
     private fun launchCustomTab(url: String) {
         tabClient?.warmup(0L)
         tabIntent.launchUrl(activity, Uri.parse(url))
-    }
-
-
-    /**
-     * Checks if the given package name is available on the device.
-     *
-     * @param targetPackage package name to be checked
-     * @return true if available
-     */
-    private fun isPackageAvailable(targetPackage: String): Boolean {
-        return try {
-            activity.packageManager.getPackageInfo(targetPackage, PackageManager.GET_META_DATA)
-            true
-        } catch (e: PackageManager.NameNotFoundException) {
-            false
-        }
     }
 }

@@ -9,6 +9,9 @@ private const val TAG = "DroidFeed"
 
 /**
  * Exception logger.
+ *
+ * @param exception
+ * @param message
  */
 fun logStackTrace(exception: Exception, message: String = "Exception") {
     if (BuildConfig.DEBUG) {
@@ -21,6 +24,8 @@ fun logStackTrace(exception: Exception, message: String = "Exception") {
 
 /**
  * Debug console logger.
+ *
+ * @param message
  */
 fun logConsole(message: String) {
     if (BuildConfig.DEBUG) {

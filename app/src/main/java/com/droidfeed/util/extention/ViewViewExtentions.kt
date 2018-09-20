@@ -9,11 +9,9 @@ import com.bumptech.glide.request.RequestOptions
 import com.droidfeed.R
 
 /**
- *  Commonly used extension functions.
- */
-
-/**
  * Loads given image url into the ImageView via Glide.
+ *
+ * @param urlOrResource
  */
 fun ImageView.loadImage(urlOrResource: Any) {
     Glide.with(context)
@@ -25,10 +23,9 @@ fun ImageView.loadImage(urlOrResource: Any) {
         .into(this)
 }
 
-fun View.toggleVisibility(show: Boolean) {
-    this.visibility = if (show) View.VISIBLE else View.GONE
-}
-
+/**
+ * Hides the soft keyboard.
+ */
 fun View.hideKeyboard() {
     val imm = context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
     imm.hideSoftInputFromWindow(windowToken, 0)

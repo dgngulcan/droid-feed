@@ -11,6 +11,7 @@ import com.droidfeed.ui.adapter.UiModelAdapter
 import com.droidfeed.ui.adapter.model.LicenceUiModel
 import com.droidfeed.ui.common.BaseActivity
 import com.droidfeed.util.CustomTab
+import com.droidfeed.util.isMarshmallow
 import kotlinx.android.synthetic.main.activity_licence.*
 
 class LicencesActivity : BaseActivity() {

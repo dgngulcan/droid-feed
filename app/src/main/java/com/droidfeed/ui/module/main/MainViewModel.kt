@@ -29,7 +29,6 @@ class MainViewModel @Inject constructor(
     private val sourceClickListener = object : UiModelClickListener<Source> {
         override fun onClick(model: Source) {
             model.isActive = !model.isActive
-
             sourceRepo.updateSource(model)
         }
     }

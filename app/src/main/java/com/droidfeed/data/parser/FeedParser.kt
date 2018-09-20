@@ -5,7 +5,7 @@ import com.droidfeed.data.model.Content
 import com.droidfeed.data.model.Post
 import com.droidfeed.data.model.Source
 import com.droidfeed.util.DateTimeUtils
-import com.droidfeed.util.extention.skip
+import com.droidfeed.util.extention.skipTag
 import com.droidfeed.util.logStackTrace
 import org.xmlpull.v1.XmlPullParser
 import javax.inject.Inject
@@ -26,7 +26,7 @@ class FeedParser @Inject constructor(private var dateTimeUtils: DateTimeUtils) :
 
                 when (parser.name) {
                     "entry" -> posts.add(parsePost(parser, source))
-                    else -> parser.skip()
+                    else -> parser.skipTag()
                 }
             }
         } catch (ignored: Exception) {
@@ -52,7 +52,7 @@ class FeedParser @Inject constructor(private var dateTimeUtils: DateTimeUtils) :
                 "link" -> post.link = parseLink(parser)
                 "updated" -> post.pubDateTimestamp = getPublishDate(parser.nextText())
                 "media:group" -> post.content = parseMediaIntoPost(parser)
-                else -> parser.skip()
+                else -> parser.skipTag()
             }
         }
 
@@ -69,7 +69,7 @@ class FeedParser @Inject constructor(private var dateTimeUtils: DateTimeUtils) :
             when (parser.name) {
                 "name" -> channel.title = parser.nextText()
                 "uri" -> channel.link = parser.nextText()
-                else -> parser.skip()
+                else -> parser.skipTag()
             }
         }
 
@@ -87,7 +87,7 @@ class FeedParser @Inject constructor(private var dateTimeUtils: DateTimeUtils) :
             when (parser.name) {
                 "media:thumbnail" -> content.contentImage = parseLink(parser, "url")
                 "media:description" -> content.content = parser.nextText()
-                else -> parser.skip()
+                else -> parser.skipTag()
             }
         }
 

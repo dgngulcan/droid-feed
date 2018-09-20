@@ -24,8 +24,8 @@ import com.droidfeed.data.DataStatus
  * Data class that is necessary for a UI to show a listing and interact w/ the rest of the system
  */
 data class Listing<T>(
-        val pagedList: LiveData<PagedList<T>>,
-        val networkState: LiveData<DataStatus>,
-        val refresh: () -> Unit,
-        val retry: () -> Unit
+    val pagedList: LiveData<PagedList<T>>,
+    val networkState: LiveData<DataStatus>,
+    val refresh: () -> Unit,
+    val retry: () -> Unit
 )

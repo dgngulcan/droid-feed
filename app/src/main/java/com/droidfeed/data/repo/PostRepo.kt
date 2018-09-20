@@ -12,7 +12,6 @@ import com.droidfeed.data.model.Post
 import com.droidfeed.data.model.Source
 import com.droidfeed.data.parser.NewsXmlParser
 import com.droidfeed.ui.adapter.model.PostUIModel
-import com.droidfeed.util.extention.blockingObserve
 import com.droidfeed.util.logStackTrace
 import kotlinx.coroutines.experimental.launch
 import okhttp3.OkHttpClient
@@ -62,7 +61,7 @@ class PostRepo @Inject constructor(
         val networkState = MutableLiveData<DataStatus>()
 
         launch {
-            sources.blockingObserve()?.forEach { source ->
+            sources.value?.forEach { source ->
                 val result = fetch(source)
                 result.data
                     ?.takeIf { it.isNotEmpty() }

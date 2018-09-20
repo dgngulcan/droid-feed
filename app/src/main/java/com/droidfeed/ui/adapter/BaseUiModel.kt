@@ -1,8 +1,6 @@
-package com.droidfeed.ui.common
+package com.droidfeed.ui.adapter
 
-import androidx.recyclerview.widget.RecyclerView
 import android.view.ViewGroup
-import com.droidfeed.ui.adapter.UiModelAdapter
 import com.droidfeed.ui.adapter.diff.Diffable
 
 /**
