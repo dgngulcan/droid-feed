@@ -95,7 +95,7 @@ class FeedFragment : BaseFragment("feed") {
                     super.onScrolled(recyclerView, dx, dy)
                     scrolledAmount += dy.absoluteValue
 
-                    if (scrolledAmount > 100) {
+                    if (scrolledAmount > 200) {
                         mainViewModel.onScrolledEnough()
                         scrolledAmount = 0
                     }
