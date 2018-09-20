@@ -17,6 +17,7 @@ class MainViewModel @Inject constructor(
 
     private val result = MutableLiveData<List<SourceUiModel>>()
     val bookmarksEvent = MutableLiveData<Event<Boolean>>()
+    val hideMenuEvent = MutableLiveData<Event<Unit>>()
 
     val sourceUiModelData: LiveData<List<SourceUiModel>> =
         Transformations.switchMap(sourceRepo.sources) { sourceList ->
@@ -35,5 +36,9 @@ class MainViewModel @Inject constructor(
 
     fun onBookmarksEvent(isEnabled: Boolean) {
         bookmarksEvent.value = Event(isEnabled)
+    }
+
+    fun onScrolledEnough() {
+        hideMenuEvent.postValue(Event(Unit))
     }
 }

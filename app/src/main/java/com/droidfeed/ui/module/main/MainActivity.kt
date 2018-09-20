@@ -7,6 +7,7 @@ import android.animation.ValueAnimator
 import android.graphics.drawable.ColorDrawable
 import android.graphics.drawable.TransitionDrawable
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import androidx.core.content.ContextCompat
 import androidx.core.view.GravityCompat
@@ -20,6 +21,7 @@ import com.droidfeed.ui.adapter.BaseUiModelAlias
 import com.droidfeed.ui.adapter.UiModelAdapter
 import com.droidfeed.ui.common.BaseActivity
 import com.droidfeed.util.AnimUtils
+import com.droidfeed.util.event.EventObserver
 import com.droidfeed.util.isMarshmallow
 import com.droidfeed.util.logConsole
 import com.google.android.material.appbar.AppBarLayout
@@ -103,9 +105,10 @@ class MainActivity : BaseActivity() {
             toggleFilterMenu(!it.isSelected)
         }
 
-        binding.appbar.containerView.appBar.addOnOffsetChangedListener(
-            AppBarLayout.OnOffsetChangedListener { appBarLayout, i ->
-            logConsole("i: $i")
+        viewModel.hideMenuEvent.observe(this, EventObserver {
+            if (binding.appbar.btnMenu.isSelected) {
+                animateMenu(binding.appbar.btnMenu)
+            }
         })
 
         initNavigationClicks()
@@ -116,7 +119,7 @@ class MainActivity : BaseActivity() {
             highlightSelectedMenuButton(it)
             navController.openFeedFragment()
             binding.appbar.txtTitle.text = getString(R.string.app_name_lower)
-            onMenuItemSelected(whiteColor)
+            onMenuItemSelected(transColor)
             toggleFilterMenu(true)
             toggleBookmarksMenu(true)
             if (isMarshmallow()) {
@@ -178,7 +181,7 @@ class MainActivity : BaseActivity() {
         currentMenuColor = color
         animateMenuColor(color)
 
-        if (color != whiteColor) {
+        if (color != transColor) {
             animateNavigationBarColor(color)
         } else {
             animateNavigationBarColor(blackColor)
