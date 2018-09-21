@@ -34,8 +34,6 @@ class AppRateHelper @Inject constructor(
                 }
             }
         }
-
-        showRateSnackbar(view)
     }
 
     private fun showRateSnackbar(view: View) {

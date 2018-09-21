@@ -2,6 +2,7 @@ package com.droidfeed.ui.adapter.viewholder
 
 import android.view.View
 import android.widget.ImageView
+import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.droidfeed.R
 import com.droidfeed.data.model.Post
@@ -12,11 +13,7 @@ import com.droidfeed.util.glide.roundCorners
 /**
  * ViewHolder to display article cards.
  */
-abstract class PostViewHolder(private val root: View) : androidx.recyclerview.widget.RecyclerView.ViewHolder(root) {
-
-    companion object {
-        private const val SATURATION_DURATION = 2000L
-    }
+abstract class PostViewHolder(private val root: View) : RecyclerView.ViewHolder(root) {
 
     /**
      * Binds the post to the ViewHolder.
@@ -30,6 +27,7 @@ abstract class PostViewHolder(private val root: View) : androidx.recyclerview.wi
         imageView: ImageView,
         post: Post
     ) {
+
         GlideApp.with(root.context)
             .load(post.image)
             .diskCacheStrategy(DiskCacheStrategy.RESOURCE)
