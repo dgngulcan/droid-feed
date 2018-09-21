@@ -24,7 +24,6 @@ import com.droidfeed.util.AppRateHelper
 import com.droidfeed.util.CustomTab
 import com.droidfeed.util.event.EventObserver
 import com.droidfeed.util.extention.isOnline
-import com.droidfeed.util.logConsole
 import com.droidfeed.util.shareCount
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.fragment_feed.*
@@ -32,7 +31,6 @@ import kotlinx.coroutines.experimental.GlobalScope
 import kotlinx.coroutines.experimental.delay
 import kotlinx.coroutines.experimental.launch
 import javax.inject.Inject
-import kotlin.math.abs
 import kotlin.math.absoluteValue
 
 class FeedFragment : BaseFragment("feed") {
@@ -87,7 +85,6 @@ class FeedFragment : BaseFragment("feed") {
         binding.apply {
             val layoutManager = activity?.let { WrapContentLinearLayoutManager(it) }
             newsRecyclerView.layoutManager = layoutManager
-
 
             var scrolledAmount = 0
             newsRecyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {

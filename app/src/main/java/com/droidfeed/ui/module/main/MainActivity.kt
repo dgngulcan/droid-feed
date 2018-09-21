@@ -7,7 +7,6 @@ import android.animation.ValueAnimator
 import android.graphics.drawable.ColorDrawable
 import android.graphics.drawable.TransitionDrawable
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import androidx.core.content.ContextCompat
 import androidx.core.view.GravityCompat
@@ -23,8 +22,6 @@ import com.droidfeed.ui.common.BaseActivity
 import com.droidfeed.util.AnimUtils
 import com.droidfeed.util.event.EventObserver
 import com.droidfeed.util.isMarshmallow
-import com.droidfeed.util.logConsole
-import com.google.android.material.appbar.AppBarLayout
 import kotlinx.android.synthetic.main.activity_main_app_bar.view.*
 import kotlinx.android.synthetic.main.menu_main.view.*
 import javax.inject.Inject

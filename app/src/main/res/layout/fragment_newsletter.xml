@@ -55,8 +55,8 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/spacing_xlarge"
             android:layout_marginTop="@dimen/spacing_xlarge"
-            android:textColorHint="#eaffffff"
             android:layout_marginEnd="@dimen/spacing_xlarge"
+            android:textColorHint="#eaffffff"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textView6">
@@ -114,6 +114,8 @@
             android:layout_height="0dp"
             android:layout_marginTop="48dp"
             android:layout_marginBottom="56dp"
+            android:clickable="true"
+            android:focusable="true"
             android:minHeight="150dp"
             android:scaleType="centerInside"
             app:layout_constraintBottom_toBottomOf="parent"

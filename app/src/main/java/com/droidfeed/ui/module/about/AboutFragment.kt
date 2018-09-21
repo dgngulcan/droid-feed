@@ -13,9 +13,9 @@ import com.droidfeed.R
 import com.droidfeed.databinding.FragmentAboutBinding
 import com.droidfeed.ui.common.BaseFragment
 import com.droidfeed.util.CustomTab
-import com.droidfeed.util.coroutineScope
 import com.droidfeed.util.extention.startActivity
 import kotlinx.coroutines.experimental.Dispatchers
+import kotlinx.coroutines.experimental.GlobalScope
 import kotlinx.coroutines.experimental.android.Main
 import kotlinx.coroutines.experimental.delay
 import kotlinx.coroutines.experimental.launch
@@ -31,31 +31,45 @@ class AboutFragment : BaseFragment("about") {
     @Inject
     lateinit var customTab: CustomTab
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        viewModel = ViewModelProviders
+            .of(this, viewModelFactory)
+            .get(AboutViewModel::class.java)
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         binding = FragmentAboutBinding.inflate(inflater, container, false)
-        return binding.root
-    }
-
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-        viewModel = ViewModelProviders
-            .of(this, viewModelFactory)
-            .get(AboutViewModel::class.java)
-
         binding.viewModel = viewModel
 
         init()
         initObservers()
+
+        return binding.root
     }
 
     private fun init() {
         binding.txtAppVersion.text = getString(R.string.app_version, BuildConfig.VERSION_NAME)
 
-        coroutineScope.launch(Dispatchers.Main) {
+        binding.animView.setOnClickListener {
+            if (!binding.animView.isAnimating) {
+                binding.animView.speed *= -1f
+                binding.animView.resumeAnimation()
+            }
+        }
+
+        binding.animView.setOnClickListener {
+            if (!binding.animView.isAnimating) {
+                binding.animView.speed *= -1f
+                binding.animView.resumeAnimation()
+            }
+        }
+
+        GlobalScope.launch(Dispatchers.Main) {
             binding.animView.frame = 0
             delay(500)
             binding.animView.resumeAnimation()
@@ -64,29 +78,29 @@ class AboutFragment : BaseFragment("about") {
 
     @Suppress("UNCHECKED_CAST")
     private fun initObservers() {
-        viewModel.rateAppEvent.observe(this, Observer {
+        viewModel.rateAppEvent.observe(viewLifecycleOwner, Observer {
             activity?.let { it1 ->
                 it?.startActivity(it1)
                 analytics.logAppRateClick()
             }
         })
 
-        viewModel.contactDevEvent.observe(this, Observer {
+        viewModel.contactDevEvent.observe(viewLifecycleOwner, Observer {
             activity?.let { it1 -> it?.startActivity(it1) }
         })
 
-        viewModel.shareAppEvent.observe(this, Observer {
+        viewModel.shareAppEvent.observe(viewLifecycleOwner, Observer {
             activity?.let { it1 ->
                 it?.startActivity(it1)
                 analytics.logShare("app")
             }
         })
 
-        viewModel.openLinkEvent.observe(this, Observer {
+        viewModel.openLinkEvent.observe(viewLifecycleOwner, Observer {
             it?.let { it1 -> customTab.showTab(it1) }
         })
 
-        viewModel.openLibrariesEvent.observe(this, Observer {
+        viewModel.openLibrariesEvent.observe(viewLifecycleOwner, Observer {
             startActivity(Intent(context, LicencesActivity::class.java))
         })
     }

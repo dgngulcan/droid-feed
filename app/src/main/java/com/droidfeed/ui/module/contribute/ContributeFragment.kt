@@ -9,14 +9,13 @@ import androidx.lifecycle.ViewModelProviders
 import com.droidfeed.databinding.FragmentContributeBinding
 import com.droidfeed.ui.common.BaseFragment
 import com.droidfeed.util.CustomTab
-import kotlinx.coroutines.experimental.android.UI
+import kotlinx.coroutines.experimental.Dispatchers
+import kotlinx.coroutines.experimental.GlobalScope
+import kotlinx.coroutines.experimental.android.Main
 import kotlinx.coroutines.experimental.delay
 import kotlinx.coroutines.experimental.launch
 import javax.inject.Inject
 
-/**
- * Created by Dogan Gulcan on 12/16/17.
- */
 class ContributeFragment : BaseFragment("contribute") {
 
     private lateinit var binding: FragmentContributeBinding
@@ -25,6 +24,14 @@ class ContributeFragment : BaseFragment("contribute") {
     @Inject
     lateinit var customTab: CustomTab
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        viewModel = ViewModelProviders.of(
+            this,
+            viewModelFactory
+        ).get(ContributeViewModel::class.java)
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -32,33 +39,32 @@ class ContributeFragment : BaseFragment("contribute") {
     ): View? {
         super.onCreateView(inflater, container, savedInstanceState)
         binding = FragmentContributeBinding.inflate(inflater, container, false)
-        return binding.root
-    }
-
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-        viewModel = ViewModelProviders.of(
-            this,
-            viewModelFactory
-        ).get(ContributeViewModel::class.java)
-
         binding.viewModel = viewModel
 
         init()
-        initObservables()
+        initObservers()
+
+        return binding.root
     }
 
     private fun init() {
-        launch(UI) {
+        binding.animView.setOnClickListener {
+            if (!binding.animView.isAnimating) {
+                binding.animView.speed *= -1f
+                binding.animView.resumeAnimation()
+            }
+        }
+
+        GlobalScope.launch(Dispatchers.Main) {
             binding.animView.frame = 0
             delay(500)
             binding.animView.resumeAnimation()
         }
     }
 
-    private fun initObservables() {
-        viewModel.openRepositoryEvent.observe(this, Observer {
-            it?.let { it1 ->
+    private fun initObservers() {
+        viewModel.openRepositoryEvent.observe(viewLifecycleOwner, Observer { url ->
+            url?.let { it1 ->
                 customTab.showTab(it1)
             }
         })
