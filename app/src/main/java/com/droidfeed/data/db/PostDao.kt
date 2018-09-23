@@ -19,7 +19,7 @@ interface PostDao {
 
     @Query(
         "SELECT * FROM ${AppDatabase.POST_TABLE_NAME} WHERE source_id " +
-                "IN (SELECT  ${AppDatabase.SOURCE_TABLE_NAME}.id from ${AppDatabase.SOURCE_TABLE_NAME} " +
+                "IN (SELECT  ${AppDatabase.SOURCE_TABLE_NAME}.id FROM ${AppDatabase.SOURCE_TABLE_NAME} " +
                 "WHERE is_active = 1) " +
                 "ORDER BY pub_date_timestamp DESC"
     )

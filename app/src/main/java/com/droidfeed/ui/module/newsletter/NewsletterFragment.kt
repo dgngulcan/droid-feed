@@ -17,7 +17,9 @@ import com.droidfeed.ui.common.BaseFragment
 import com.droidfeed.util.extention.hideKeyboard
 import com.droidfeed.util.extention.isOnline
 import com.google.android.material.snackbar.Snackbar
-import kotlinx.coroutines.experimental.android.UI
+import kotlinx.coroutines.experimental.Dispatchers
+import kotlinx.coroutines.experimental.GlobalScope
+import kotlinx.coroutines.experimental.android.Main
 import kotlinx.coroutines.experimental.delay
 import kotlinx.coroutines.experimental.launch
 
@@ -27,24 +29,35 @@ class NewsletterFragment : BaseFragment("newsletter") {
     private lateinit var binding: FragmentNewsletterBinding
     private lateinit var viewModel: NewsletterViewModel
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        viewModel = ViewModelProviders
+            .of(this, viewModelFactory)
+            .get(NewsletterViewModel::class.java)
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         super.onCreateView(inflater, container, savedInstanceState)
-
         binding = FragmentNewsletterBinding.inflate(inflater, container, false)
+
+        init()
+        initObservers()
+
         return binding.root
     }
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-        viewModel = ViewModelProviders
-            .of(this, viewModelFactory)
-            .get(NewsletterViewModel::class.java)
-
-        init()
+    private fun initObservers() {
+        viewModel.signUpEvent.observe(viewLifecycleOwner, Observer { resource ->
+            when (resource?.dataState) {
+                is DataStatus.Loading -> onLoading()
+                is DataStatus.Success -> onSignUpSuccess()
+                is DataStatus.Error<*> -> onSignUpError(resource.dataState as DataStatus.Error<*>)
+            }
+        })
     }
 
     private fun init() {
@@ -68,7 +81,11 @@ class NewsletterFragment : BaseFragment("newsletter") {
                     }
                 }
             } else {
-                Snackbar.make(binding.animView, R.string.info_no_internet, Snackbar.LENGTH_LONG).show()
+                Snackbar.make(
+                    binding.animView,
+                    R.string.info_no_internet,
+                    Snackbar.LENGTH_LONG
+                ).show()
             }
         }
 
@@ -81,15 +98,14 @@ class NewsletterFragment : BaseFragment("newsletter") {
             )
         )
 
-        viewModel.signUpEvent.observe(this, Observer { resource ->
-            when (resource?.dataState) {
-                is DataStatus.Loading -> onLoading()
-                is DataStatus.Success -> onSignUpSuccess()
-                is DataStatus.Error<*> -> onSignUpError(resource.dataState as DataStatus.Error<*>)
+        binding.animView.setOnClickListener {
+            if (!binding.animView.isAnimating) {
+                binding.animView.speed *= -1f
+                binding.animView.resumeAnimation()
             }
-        })
+        }
 
-        launch(UI) {
+        GlobalScope.launch(Dispatchers.Main) {
             binding.animView.frame = 0
             delay(500)
             binding.animView.resumeAnimation()

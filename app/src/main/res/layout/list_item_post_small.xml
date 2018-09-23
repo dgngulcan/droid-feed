@@ -23,9 +23,9 @@
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/containerContent"
-            android:background="@drawable/border_shape"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:background="@drawable/border_shape">
 
             <TextView
                 android:id="@+id/txtTitle"
@@ -69,6 +69,19 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 tools:srcCompat="@mipmap/ic_launcher" />
+
+            <ImageView
+                android:id="@+id/imgContentType"
+                visibilityToggle="@{post.isVideoContent}"
+                android:layout_width="36dp"
+                android:layout_height="36dp"
+                android:contentDescription="@string/content_article_image"
+                app:layout_constraintBottom_toBottomOf="@+id/imgPost"
+                app:layout_constraintEnd_toEndOf="@+id/imgPost"
+                app:layout_constraintStart_toStartOf="@+id/imgPost"
+                app:layout_constraintTop_toTopOf="parent"
+                android:src="@drawable/ic_content_video" />
+
 
             <ImageView
                 android:id="@+id/imgShare"

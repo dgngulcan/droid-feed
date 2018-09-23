@@ -11,6 +11,7 @@ import com.droidfeed.ui.adapter.UiModelAdapter
 import com.droidfeed.ui.adapter.model.LicenceUiModel
 import com.droidfeed.ui.common.BaseActivity
 import com.droidfeed.util.CustomTab
+import com.droidfeed.util.isMarshmallow
 import kotlinx.android.synthetic.main.activity_licence.*
 
 class LicencesActivity : BaseActivity() {
@@ -21,13 +22,11 @@ class LicencesActivity : BaseActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         if (isMarshmallow()) {
-            setupTransparentStatusbar()
+            setupTransparentStatusBar()
         }
         window.statusBarColor = ContextCompat.getColor(this@LicencesActivity, R.color.pink)
 
         super.onCreate(savedInstanceState)
-
-        analytics.logScreenView("licences")
 
         setContentView(R.layout.activity_licence)
         init()

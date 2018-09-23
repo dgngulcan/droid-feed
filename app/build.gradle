@@ -5,8 +5,8 @@ apply plugin: 'kotlin-kapt'
 apply plugin: 'io.fabric'
 
 ext.app = [
-        'version'            : '2.0.1',
-        'version_code'       : 12,
+        'version'            : '2.0.2',
+        'version_code'       : 13,
         'compile_sdk_version': 28,
         'min_sdk_version'    : 21,
         'target_sdk_version' : 28
@@ -86,16 +86,13 @@ dependencies {
     implementation "com.google.android.material:material:$versions.material"
 
     implementation "androidx.core:core-ktx:$versions.android_ktx"
-
     implementation "androidx.fragment:fragment:$versions.fragment"
     implementation "androidx.appcompat:appcompat:$versions.appcompat"
     implementation "androidx.browser:browser:$versions.browser"
     implementation "androidx.constraintlayout:constraintlayout:$versions.constraint_layout"
-
     implementation "androidx.lifecycle:lifecycle-runtime:$versions.arch_lifecycle"
     implementation "androidx.lifecycle:lifecycle-extensions:$versions.arch_lifecycle"
     kapt "androidx.lifecycle:lifecycle-compiler:$versions.arch_lifecycle"
-
     implementation "androidx.paging:paging-runtime:$versions.arch_paging"
     implementation "androidx.room:room-runtime:$versions.arch_room"
     kapt "androidx.room:room-compiler:$versions.arch_room"

@@ -14,16 +14,16 @@ buildscript {
             'fabric_gradle'    : '1.25.4',
             'firebase_core'    : '16.0.3',
             'firebase_config'  : '16.0.0',
-            'material'         : '1.0.0-rc01',
+            'material'         : '1.0.0-rc02',
             'glide'            : '4.8.0',
-            'lottie'           : '2.6.0-beta19',
-            'kotlin'           : '1.2.61',
-            'kotlin_coroutines': '0.23.4',
+            'lottie'           : '2.6.1',
+            'kotlin'           : '1.2.70',
+            'kotlin_coroutines': '0.26.0',
             'retrofit'         : '2.4.0',
-            'okHttp'           : '3.9.0',
-            'mockito'          : '2.19.1',
-            'play_services'    : '4.0.1',
-            'jSoup'            : '1.11.2',
+            'okHttp'           : '3.11.0',
+            'mockito'          : '2.22.0',
+            'play_services'    : '4.1.0',
+            'jSoup'            : '1.11.3',
             'test_arch'        : '2.0.0-rc01',
             'test_espresso'    : '3.1.0-alpha4',
             'test_runner'      : '1.1.0-alpha4'
@@ -36,13 +36,17 @@ buildscript {
     }
 
     dependencies {
-        classpath 'com.android.tools.build:gradle:3.2.0-rc02'
+        classpath 'com.android.tools.build:gradle:3.2.0-rc03'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$versions.kotlin"
         classpath "org.jetbrains.kotlin:kotlin-android-extensions:$versions.kotlin"
         classpath "io.fabric.tools:gradle:$versions.fabric_gradle"
         classpath "com.google.gms:google-services:$versions.play_services"
     }
 
+}
+
+plugins {
+    id "com.github.ben-manes.versions" version "0.20.0"
 }
 
 allprojects {

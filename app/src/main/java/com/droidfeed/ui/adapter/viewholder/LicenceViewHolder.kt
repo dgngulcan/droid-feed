@@ -6,7 +6,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.droidfeed.R
 import com.droidfeed.data.model.Licence
 import com.droidfeed.databinding.ListItemLicenceBinding
-import com.droidfeed.util.extention.getClickableSpanned
+import com.droidfeed.util.extention.getClickableSpan
 
 class LicenceViewHolder(
     private val binding: ListItemLicenceBinding
@@ -19,7 +19,7 @@ class LicenceViewHolder(
         }
 
         val text = binding.root.context.getString(R.string.licence)
-        val span = text.getClickableSpanned(
+        val span = text.getClickableSpan(
             text,
             ContextCompat.getColor(binding.root.context, android.R.color.white)
         ) {

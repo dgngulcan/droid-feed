@@ -25,4 +25,3 @@ data class DataResource<out T> private constructor(
         }
     }
 }
-

@@ -61,8 +61,8 @@
 
     <string name="empty_screen_bookmark">You haven\'t bookmarked anything yet.</string>
 
-    <string name="dialog_rate_app">We ❤️ you too!\nPlease rate us on Play Store.</string>
-    <string name="do_you_like_droidfeed">Do you like using DroidFeed?</string>
+    <string name="dialog_rate_app">Thanks! Would you like to review us on Google Play?</string>
+    <string name="like_to_review_df">Would you like to review DroidFeed?</string>
     <string name="your_email">Your e-mail</string>
     <string name="sign_me_up">Sign Me Up</string>
     <string name="legal">Legal</string>

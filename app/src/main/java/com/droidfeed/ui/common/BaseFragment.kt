@@ -7,7 +7,7 @@ import com.droidfeed.util.AnalyticsUtil
 import dagger.android.support.AndroidSupportInjection
 import javax.inject.Inject
 
-abstract class BaseFragment(val viewTag: String) : Fragment() {
+abstract class BaseFragment(private val viewTag: String) : Fragment() {
 
     @Inject
     lateinit var viewModelFactory: ViewModelProvider.Factory
@@ -19,6 +19,6 @@ abstract class BaseFragment(val viewTag: String) : Fragment() {
         AndroidSupportInjection.inject(this)
         super.onAttach(context)
 
-        analytics.logScreenView(viewTag)
+        activity?.let { analytics.logScreenView(it, viewTag) }
     }
 }

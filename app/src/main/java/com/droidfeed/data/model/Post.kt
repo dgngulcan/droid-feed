@@ -68,6 +68,15 @@ data class Post(
             }
         }
 
+
+    @Transient
+    @Ignore
+    var isVideoContent: Boolean = false
+        get() {
+            return channel.link.contains("youtube")
+        }
+
+
     @Transient
     @Ignore
     val bookmarkObservable = ObservableInt(R.drawable.ic_bookmark_border_accent_24dp)

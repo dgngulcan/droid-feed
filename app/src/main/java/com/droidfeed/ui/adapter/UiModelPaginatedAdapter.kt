@@ -5,9 +5,10 @@ import androidx.collection.SparseArrayCompat
 import androidx.paging.PagedList
 import androidx.paging.PagedListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.droidfeed.ui.common.BaseUiModel
 import com.droidfeed.util.logStackTrace
-import kotlinx.coroutines.experimental.android.UI
+import kotlinx.coroutines.experimental.Dispatchers
+import kotlinx.coroutines.experimental.GlobalScope
+import kotlinx.coroutines.experimental.android.Main
 import kotlinx.coroutines.experimental.launch
 
 /**
@@ -36,7 +37,7 @@ class UiModelPaginatedAdapter : PagedListAdapter<BaseUiModelAlias, RecyclerView.
     }
 
     override fun submitList(pagedList: PagedList<BaseUiModelAlias>?) {
-        launch {
+        GlobalScope.launch {
             if (pagedList == null || pagedList.isEmpty()) {
                 super.submitList(pagedList)
             } else {
@@ -49,7 +50,7 @@ class UiModelPaginatedAdapter : PagedListAdapter<BaseUiModelAlias, RecyclerView.
                 }
 
                 parseViewTypes.join()
-                launch(UI) { super.submitList(pagedList) }
+                launch(Dispatchers.Main) { super.submitList(pagedList) }
             }
         }
     }
@@ -57,7 +58,9 @@ class UiModelPaginatedAdapter : PagedListAdapter<BaseUiModelAlias, RecyclerView.
     override fun getItemViewType(position: Int): Int {
         return try {
             when {
-                position in 0..(itemCount - 1) && itemCount > 0 -> currentList?.let { it[position]?.getViewType() } ?: 0
+                position in 0..(itemCount - 1) && itemCount > 0 -> currentList?.let {
+                    it[position]?.getViewType()
+                } ?: 0
                 else -> 0
             }
         } catch (e: IndexOutOfBoundsException) {
@@ -65,5 +68,4 @@ class UiModelPaginatedAdapter : PagedListAdapter<BaseUiModelAlias, RecyclerView.
             0
         }
     }
-
 }

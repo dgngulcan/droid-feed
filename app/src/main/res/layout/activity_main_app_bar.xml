@@ -17,8 +17,7 @@
             android:fitsSystemWindows="false"
             android:minHeight="56dp"
             android:theme="@style/AppTheme.AppBarOverlay"
-            app:elevation="0dp"
-            app:layout_behavior="com.droidfeed.util.behavior.FixAppBarLayoutBehavior">
+            app:elevation="0dp">
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/containerToolbar"

@@ -9,7 +9,6 @@
 -allowaccessmodification
 
 
-
 -renamesourcefileattribute SourceFile
 -keepattributes SourceFile,LineNumberTable
 -repackageclasses ''
@@ -17,6 +16,7 @@
 
 -keep class com.crashlytics.** { *; }
 -keepattributes *Annotation*,Signature,Exceptions
+
 
 -keep class com.squareup.okhttp.** { *; }
 -keep interface com.squareup.okhttp.** { *; }
