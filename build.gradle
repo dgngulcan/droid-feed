@@ -1,24 +1,24 @@
 buildscript {
 
     ext.versions = [
-            'android_ktx'      : '1.0.0-rc02',
-            'appcompat'        : '1.0.0-rc02',
-            'arch_lifecycle'   : '2.0.0-rc01',
+            'android_ktx'      : '1.0.0',
+            'appcompat'        : '1.0.0',
+            'arch_lifecycle'   : '2.0.0',
             'arch_room'        : '2.0.0-rc01',
-            'arch_paging'      : '2.0.0-rc01',
-            'browser'          : '1.0.0-rc02',
+            'arch_paging'      : '2.0.0',
+            'browser'          : '1.0.0',
             'constraint_layout': '2.0.0-alpha2',
             'crashlytics'      : '2.9.5',
             'dagger'           : '2.16',
-            'fragment'         : '1.0.0-rc02',
-            'fabric_gradle'    : '1.25.4',
+            'fragment'         : '1.0.0',
+            'fabric_gradle'    : '1.26.0',
             'firebase_core'    : '16.0.3',
             'firebase_config'  : '16.0.0',
-            'material'         : '1.0.0-rc02',
+            'material'         : '1.0.0',
             'glide'            : '4.8.0',
             'lottie'           : '2.6.1',
-            'kotlin'           : '1.2.70',
-            'kotlin_coroutines': '0.26.0',
+            'kotlin'           : '1.2.71',
+            'kotlin_coroutines': '0.30.0',
             'retrofit'         : '2.4.0',
             'okHttp'           : '3.11.0',
             'mockito'          : '2.22.0',
@@ -36,7 +36,7 @@ buildscript {
     }
 
     dependencies {
-        classpath 'com.android.tools.build:gradle:3.2.0-rc03'
+        classpath 'com.android.tools.build:gradle:3.2.0'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$versions.kotlin"
         classpath "org.jetbrains.kotlin:kotlin-android-extensions:$versions.kotlin"
         classpath "io.fabric.tools:gradle:$versions.fabric_gradle"
@@ -46,7 +46,7 @@ buildscript {
 }
 
 plugins {
-    id "com.github.ben-manes.versions" version "0.20.0"
+    id "com.github.ben-manes.versions" version "0.20.0" // dependencyUpdates
 }
 
 allprojects {
