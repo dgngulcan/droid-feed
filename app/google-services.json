@@ -1,0 +1,24 @@
+{  
+   "project_info":{  
+      "project_number":"114141241180",
+      "firebase_url":"https://rssreader-b4ff7.firebaseio.com",
+      "project_id":"rssreader-b4ff7",
+      "storage_bucket":"rssreader-b4ff7.appspot.com"
+   },
+   "client":[  
+      {  
+         "client_info":{  
+            "mobilesdk_app_id":"1:114141241180:android:6d3aebdc73c57738",
+            "android_client_info":{  
+               "package_name":"com.droidfeed.debug"
+            }
+         },
+         "api_key":[  
+            {  
+               "current_key":""
+            }
+         ]
+      }
+   ],
+   "configuration_version":"1"
+}
