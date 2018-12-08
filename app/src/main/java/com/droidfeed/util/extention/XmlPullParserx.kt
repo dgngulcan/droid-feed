@@ -1,6 +1,6 @@
 package com.droidfeed.util.extention
 
-import com.droidfeed.util.logStackTrace
+import com.droidfeed.util.logException
 import org.xmlpull.v1.XmlPullParser
 import org.xmlpull.v1.XmlPullParserException
 
@@ -24,6 +24,6 @@ private fun XmlPullParser.skip() {
             }
         }
     } catch (e: XmlPullParserException) {
-        logStackTrace(e)
+        logException(e)
     }
 }
