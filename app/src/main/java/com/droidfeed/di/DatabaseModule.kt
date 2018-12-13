@@ -10,7 +10,9 @@ import com.droidfeed.data.db.MIGRATION_2_3
 import com.droidfeed.data.model.Source
 import dagger.Module
 import dagger.Provides
-import kotlinx.coroutines.experimental.launch
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 import javax.inject.Singleton
 
 /**
@@ -44,7 +46,7 @@ class DatabaseModule {
     }
 
     private fun insertSources(appDatabase: AppDatabase?) {
-        launch {
+        GlobalScope.launch(Dispatchers.IO) {
             appDatabase?.sourceDao()?.insertSources(
                 listOf(
                     Source(
@@ -91,6 +93,11 @@ class DatabaseModule {
                         9,
                         "Fragmented",
                         "https://fragmentedpodcast.com/feed"
+                    ),
+                    Source(
+                        10,
+                        "Android Developers",
+                        "https://medium.com/feed/androiddevelopers"
                     )
                 )
             )
