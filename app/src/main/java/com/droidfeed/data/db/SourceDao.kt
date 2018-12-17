@@ -8,10 +8,7 @@ import com.droidfeed.data.model.Source
 @Dao
 interface SourceDao {
 
-    @Query(
-        "SELECT * FROM $SOURCE_TABLE_NAME " +
-                "ORDER BY name ASC"
-    )
+    @Query("SELECT * FROM $SOURCE_TABLE_NAME ORDER BY name ASC")
     fun getSources(): LiveData<List<Source>>
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
