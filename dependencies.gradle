@@ -79,7 +79,8 @@ deps.dagger = [
 
 deps.room = [
         runtime : "androidx.room:room-runtime:$versions.room",
-        compiler: "androidx.room:room-compiler:$versions.room"
+        compiler: "androidx.room:room-compiler:$versions.room",
+        testing : "androidx.room:room-testing:$versions.room"
 ]
 
 deps.navigation = [
