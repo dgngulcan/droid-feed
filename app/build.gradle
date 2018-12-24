@@ -80,7 +80,6 @@ dependencies {
 
     implementation deps.androidx.core
     implementation deps.androidx.fragment
-    implementation "androidx.appcompat:appcompat:1.0.2"
     implementation deps.androidx.browser
     implementation deps.androidx.lifecycle
     kapt deps.androidx.lifecycle_compiler
@@ -127,6 +126,7 @@ dependencies {
     androidTestImplementation deps.testx.rules
     androidTestImplementation deps.testx.monitor
     androidTestImplementation deps.testx.ext
+    androidTestImplementation deps.room.testing
 
     detektPlugins deps.detekt_formatting
 }
