@@ -1,5 +1,11 @@
 <img  src="/art/ss1.png" width="25%"/><img  src="/art/ss2.png" width="25%"/><img  src="/art/ss3.png" width="25%"/><img  src="/art/ss4.png" width="25%"/>
 
+# 🚧 REFACTORING IN PROGRESS
+ - *PRs won't be accepted at this point.*
+
+- *Comments and new issues are most welcomed!*
+
+
 # DroidFeed
 Curated news feed for Android Developers!
 
