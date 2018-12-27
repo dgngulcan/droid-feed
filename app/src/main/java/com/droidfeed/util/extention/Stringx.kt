@@ -7,6 +7,9 @@ import android.text.style.ClickableSpan
 import android.text.style.ForegroundColorSpan
 import android.view.View
 import androidx.annotation.ColorInt
+import com.droidfeed.util.logException
+import java.text.ParseException
+import java.text.SimpleDateFormat
 
 /**
  * Returns clickable spannable.
@@ -46,4 +49,24 @@ fun String.getClickableSpan(
     }
 
     return span
+}
+
+/**
+ * Returns the timestamp value of the given date.
+ *
+ * @param simpleDateFormat
+ *
+ * @return the number of milliseconds since January 1, 1970, 00:00:00 GMT or null
+ */
+@Synchronized
+fun String.asTimestamp(
+    simpleDateFormat: SimpleDateFormat
+): Long? {
+    return try {
+        val mDate = simpleDateFormat.parse(this)
+        mDate?.time
+    } catch (e: ParseException) {
+        logException(e)
+        0L
+    }
 }
