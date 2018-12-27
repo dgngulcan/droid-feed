@@ -25,7 +25,6 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-
             android:background="@drawable/border_shape">
 
             <TextView
@@ -62,6 +61,9 @@
                 android:id="@+id/imgPost"
                 android:layout_width="match_parent"
                 android:layout_height="160dp"
+                android:layout_marginStart="@dimen/card_border_width"
+                android:layout_marginTop="@dimen/card_border_width"
+                android:layout_marginEnd="@dimen/card_border_width"
                 android:contentDescription="@string/content_article_image"
                 android:scaleType="centerCrop"
                 app:layout_constraintEnd_toEndOf="parent"
