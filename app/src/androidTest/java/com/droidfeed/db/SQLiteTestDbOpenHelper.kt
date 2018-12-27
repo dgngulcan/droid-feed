@@ -1,10 +1,10 @@
-package com.droidfeed
+package com.droidfeed.db
 
 import android.content.Context
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
 
-internal class SQLiteTestDbOpenHelper(
+class SQLiteTestDbOpenHelper(
     context: Context,
     databaseName: String
 ) : SQLiteOpenHelper(
@@ -29,4 +29,6 @@ internal class SQLiteTestDbOpenHelper(
     companion object {
         const val DATABASE_VERSION = 1
     }
+
+
 }
