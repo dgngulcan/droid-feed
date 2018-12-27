@@ -4,9 +4,7 @@ import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.sqlite.db.SupportSQLiteDatabase
 import com.droidfeed.App
-import com.droidfeed.data.db.AppDatabase
-import com.droidfeed.data.db.MIGRATION_1_2
-import com.droidfeed.data.db.MIGRATION_2_3
+import com.droidfeed.data.db.*
 import com.droidfeed.data.model.Source
 import dagger.Module
 import dagger.Provides
@@ -31,7 +29,9 @@ class DatabaseModule {
             AppDatabase.APP_DATABASE_NAME
         ).addMigrations(
             MIGRATION_1_2,
-            MIGRATION_2_3
+            MIGRATION_1_4,
+            MIGRATION_2_3,
+            MIGRATION_3_4
         ).addCallback(object : RoomDatabase.Callback() {
             override fun onCreate(db: SupportSQLiteDatabase) {
                 insertSources(appDatabase)
