@@ -78,7 +78,7 @@ dependencies {
 
     implementation deps.material_design
 
-    implementation deps.androidx.core
+    implementation deps.androidx.core_ktx
     implementation deps.androidx.fragment
     implementation deps.androidx.browser
     implementation deps.androidx.lifecycle
