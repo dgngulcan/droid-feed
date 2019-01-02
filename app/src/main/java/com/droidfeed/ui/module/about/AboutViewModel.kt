@@ -15,25 +15,25 @@ class AboutViewModel @Inject constructor() : BaseViewModel() {
     val contactDevEvent = SingleLiveEvent<Intent>()
     val openLinkEvent = SingleLiveEvent<String>()
     val shareAppEvent = SingleLiveEvent<Intent>()
-    val openLibrariesEvent = SingleLiveEvent<Unit>()
+    val openLicencesEvent = SingleLiveEvent<Unit>()
 
     fun openPlayStore() {
-        if (canClick) rateAppEvent.setValue(rateAppIntent)
+        rateAppEvent.setValue(rateAppIntent)
     }
 
     fun contactEmail() {
-        if (canClick) contactDevEvent.setValue(contactIntent)
+        contactDevEvent.setValue(contactIntent)
     }
 
     fun shareApp() {
-        if (canClick) shareAppEvent.setValue(shareIntent)
+        shareAppEvent.setValue(shareIntent)
     }
 
     fun openPrivacyPolicy() {
-        if (canClick) openLinkEvent.setValue(BuildConfig.DROIDFEED_PRIVACY_POLICY)
+        openLinkEvent.setValue(BuildConfig.DROIDFEED_PRIVACY_POLICY)
     }
 
     fun openLicences() {
-        if (canClick) openLibrariesEvent.setValue(Unit)
+        openLicencesEvent.setValue(Unit)
     }
 }
