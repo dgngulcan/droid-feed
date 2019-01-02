@@ -15,8 +15,8 @@
 
         <activity
             android:name=".ui.module.main.MainActivity"
-            android:label="@string/app_name"
             android:configChanges="orientation"
+            android:label="@string/app_name"
             android:windowSoftInputMode="adjustPan">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -31,12 +31,14 @@
                 <category android:name="android.intent.category.BROWSABLE" />
 
                 <data
-                    android:scheme="https"
-                    android:host="droidfeed.io" />
+                    android:host="droidfeed.io"
+                    android:scheme="https" />
             </intent-filter>
         </activity>
 
-        <activity android:name=".ui.module.about.LicencesActivity" />
+        <activity
+            android:name=".ui.module.about.LicencesActivity"
+            android:launchMode="singleTask" />
 
         <meta-data
             android:name="preloaded_fonts"
