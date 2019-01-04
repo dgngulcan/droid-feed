@@ -89,6 +89,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             android:layout_marginEnd="@dimen/spacing_xlarge"
+            android:backgroundTint="@color/colorAccent"
             android:text="@string/sign_me_up"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textInputLayout" />
