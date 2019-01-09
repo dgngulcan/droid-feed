@@ -1,13 +1,13 @@
 package com.droidfeed.data
 
-/**
- * Sealed class for data call statuses.
- */
-sealed class DataStatus {
+@Suppress("unused")
+sealed class DataStatus<T> {
 
-    object Loading : DataStatus()
+    data class Loading<T>(val progress: Int? = null) : DataStatus<T>()
 
-    object Success : DataStatus()
+    data class Successful<T>(val data: T? = null) : DataStatus<T>()
 
-    data class Error<out T>(val data: T? = null) : DataStatus()
+    data class Failed<T>(val throwable: Throwable? = null) : DataStatus<T>()
+
+    data class HttpFailed<T>(val code: Int) : DataStatus<T>()
 }
