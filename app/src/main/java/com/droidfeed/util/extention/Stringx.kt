@@ -7,7 +7,7 @@ import android.text.style.ClickableSpan
 import android.text.style.ForegroundColorSpan
 import android.view.View
 import androidx.annotation.ColorInt
-import com.droidfeed.util.logException
+import com.droidfeed.util.logThrowable
 import java.text.ParseException
 import java.text.SimpleDateFormat
 
@@ -66,7 +66,7 @@ fun String.asTimestamp(
         val mDate = simpleDateFormat.parse(this)
         mDate?.time
     } catch (e: ParseException) {
-        logException(e)
+        logThrowable(e)
         0L
     }
 }

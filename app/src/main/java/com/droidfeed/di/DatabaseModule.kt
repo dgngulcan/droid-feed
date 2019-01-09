@@ -13,9 +13,7 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import javax.inject.Singleton
 
-/**
- * Created by Dogan Gulcan on 9/30/17.
- */
+
 @Module
 class DatabaseModule {
 

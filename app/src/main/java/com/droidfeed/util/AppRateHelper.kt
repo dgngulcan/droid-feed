@@ -4,13 +4,14 @@ import android.content.Context
 import android.content.SharedPreferences
 import android.view.LayoutInflater
 import android.view.View
+import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
 import com.droidfeed.R
 import com.droidfeed.data.db.PostDao
 import com.droidfeed.rateAppIntent
 import com.google.android.material.snackbar.Snackbar
-import kotlinx.coroutines.experimental.GlobalScope
-import kotlinx.coroutines.experimental.launch
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 class AppRateHelper @Inject constructor(
@@ -37,7 +38,7 @@ class AppRateHelper @Inject constructor(
     }
 
     private fun showRateSnackbar(view: View) {
-        Snackbar.make(view, R.string.like_to_review_df, 5000)
+        Snackbar.make(view, R.string.like_to_review_df, Snackbar.LENGTH_LONG)
             .setAction(R.string.yes) { buildRateAppDialog(view.context)?.show() }
             .setActionTextColor(
                 ContextCompat.getColor(
@@ -54,10 +55,10 @@ class AppRateHelper @Inject constructor(
             .show()
     }
 
-    private fun buildRateAppDialog(context: Context): androidx.appcompat.app.AlertDialog.Builder? {
+    private fun buildRateAppDialog(context: Context): AlertDialog.Builder? {
         val view = LayoutInflater.from(context).inflate(R.layout.dialog_rate_app, null)
 
-        return androidx.appcompat.app.AlertDialog.Builder(context)
+        return AlertDialog.Builder(context)
             .setView(view)
             .setPositiveButton(R.string.sure) { _, _ ->
                 context.startActivity(rateAppIntent)

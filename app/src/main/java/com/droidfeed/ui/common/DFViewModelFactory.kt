@@ -18,7 +18,7 @@ package com.droidfeed.ui.common
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import com.droidfeed.util.logStackTrace
+import com.droidfeed.util.logThrowable
 import javax.inject.Inject
 import javax.inject.Provider
 import javax.inject.Singleton
@@ -37,7 +37,7 @@ class DFViewModelFactory @Inject constructor(
             @Suppress("UNCHECKED_CAST")
             return creator.get() as T
         } catch (e: RuntimeException) {
-            logStackTrace(e)
+            logThrowable(e)
             throw RuntimeException()
         }
     }

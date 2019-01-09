@@ -18,7 +18,7 @@ import javax.inject.Inject
 @Suppress("UNCHECKED_CAST", "WHEN_ENUM_CAN_BE_NULL_IN_JAVA")
 class FeedViewModel @Inject constructor(
     sourceRepo: SourceRepo,
-    private val feedRepo: PostRepo
+    private val postRepo: PostRepo
 ) : BaseViewModel() {
 
     val feedType = MutableLiveData<FeedType>()
@@ -27,10 +27,10 @@ class FeedViewModel @Inject constructor(
     private val repoResult = map(feedType) { type ->
         when (type) {
             FeedType.POSTS -> {
-                feedRepo.getAllPosts(sources) { createUiModels(it) }
+                postRepo.getAllPosts(sources) { createPostUIModel(it) }
             }
             FeedType.BOOKMARKS -> {
-                feedRepo.getBookmarkedPosts { createUiModels(it) }
+                postRepo.getBookmarkedPosts { createPostUIModel(it) }
             }
         }
     }
@@ -43,34 +43,27 @@ class FeedViewModel @Inject constructor(
     val postUnBookmarkEvent = SingleLiveEvent<Post>()
     val postShareEvent = SingleLiveEvent<Intent>()
 
-    private fun createUiModels(posts: List<Post>): List<PostUIModel> {
+    private fun createPostUIModel(posts: List<Post>): List<PostUIModel> {
         if (posts.isNotEmpty()) {
             posts[0].layoutType = UiModelType.POST_LARGE
         }
         return posts.map { PostUIModel(it, postClickCallback) }
     }
 
-    private val postClickCallback by lazy {
+    private val postClickCallback =
         object : PostClickListener {
             override fun onItemClick(post: Post) {
-                if (canClick) {
-                    postOpenDetail.setValue(post)
-                }
+                postOpenDetail.setValue(post)
             }
 
             override fun onShareClick(post: Post) {
-                if (canClick) {
-                    postShareEvent.setValue(post.getShareIntent())
-                }
+                postShareEvent.setValue(post.getShareIntent())
             }
 
             override fun onBookmarkClick(post: Post) {
-                if (canClick) {
-                    toggleBookmark(post)
-                }
+                toggleBookmark(post)
             }
         }
-    }
 
     fun setFeedType(feedType: FeedType) {
         if (this.feedType.value != feedType) {
@@ -91,6 +84,6 @@ class FeedViewModel @Inject constructor(
             postBookmarkEvent.setValue(true)
         }
 
-        feedRepo.updatePost(article)
+        postRepo.updatePost(article)
     }
 }

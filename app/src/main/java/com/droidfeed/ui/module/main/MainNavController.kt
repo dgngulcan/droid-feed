@@ -49,7 +49,7 @@ class MainNavController @Inject constructor(val activity: MainActivity) {
         changeFragment(newsletterFragment)
     }
 
-    private fun changeFragment(fragment: androidx.fragment.app.Fragment) {
+    private fun changeFragment(fragment: Fragment) {
         activeFragment = fragment
 
         fragmentManager.beginTransaction()

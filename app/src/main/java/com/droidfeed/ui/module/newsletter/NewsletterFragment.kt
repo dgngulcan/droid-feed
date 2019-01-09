@@ -10,18 +10,17 @@ import androidx.core.content.ContextCompat
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.droidfeed.R
-import com.droidfeed.data.DataStatus
 import com.droidfeed.data.api.mailchimp.ErrorType
 import com.droidfeed.databinding.FragmentNewsletterBinding
 import com.droidfeed.ui.common.BaseFragment
+import com.droidfeed.util.AnimUtils.Companion.MEDIUM_ANIM_DURATION
 import com.droidfeed.util.extention.hideKeyboard
 import com.droidfeed.util.extention.isOnline
 import com.google.android.material.snackbar.Snackbar
-import kotlinx.coroutines.experimental.Dispatchers
-import kotlinx.coroutines.experimental.GlobalScope
-import kotlinx.coroutines.experimental.android.Main
-import kotlinx.coroutines.experimental.delay
-import kotlinx.coroutines.experimental.launch
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 @SuppressLint("ValidFragment")
 class NewsletterFragment : BaseFragment("newsletter") {
@@ -107,7 +106,7 @@ class NewsletterFragment : BaseFragment("newsletter") {
 
         GlobalScope.launch(Dispatchers.Main) {
             binding.animView.frame = 0
-            delay(500)
+            delay(MEDIUM_ANIM_DURATION)
             binding.animView.resumeAnimation()
         }
     }

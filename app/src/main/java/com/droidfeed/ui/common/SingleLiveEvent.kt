@@ -1,10 +1,10 @@
 package com.droidfeed.ui.common
 
+import androidx.annotation.MainThread
+import androidx.annotation.Nullable
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
-import androidx.annotation.MainThread
-import androidx.annotation.Nullable
 import com.droidfeed.util.logConsole
 import java.util.concurrent.atomic.AtomicBoolean
 

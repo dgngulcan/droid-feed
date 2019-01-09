@@ -5,16 +5,15 @@ import androidx.collection.SparseArrayCompat
 import androidx.paging.PagedList
 import androidx.paging.PagedListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.droidfeed.util.logStackTrace
-import kotlinx.coroutines.experimental.Dispatchers
-import kotlinx.coroutines.experimental.GlobalScope
-import kotlinx.coroutines.experimental.android.Main
-import kotlinx.coroutines.experimental.launch
+import com.droidfeed.util.logThrowable
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 /**
  * Generic [RecyclerView.Adapter] for [BaseUiModel]s.
  */
-@Suppress("UNCHECKED_CAST")
 class UiModelPaginatedAdapter : PagedListAdapter<BaseUiModelAlias, RecyclerView.ViewHolder>(
     BaseUiModelDiffCallback()
 ) {
@@ -37,35 +36,39 @@ class UiModelPaginatedAdapter : PagedListAdapter<BaseUiModelAlias, RecyclerView.
     }
 
     override fun submitList(pagedList: PagedList<BaseUiModelAlias>?) {
-        GlobalScope.launch {
+        GlobalScope.launch(Dispatchers.IO) {
             if (pagedList == null || pagedList.isEmpty()) {
                 super.submitList(pagedList)
             } else {
                 val parseViewTypes = launch {
-                    pagedList.forEach {
-                        if (it != null) {
-                            viewTypes.put(it.getViewType(), it)
+                    pagedList.forEach { uiModel ->
+                        if (uiModel != null) {
+                            viewTypes.put(uiModel.getViewType(), uiModel)
                         }
                     }
                 }
 
                 parseViewTypes.join()
-                launch(Dispatchers.Main) { super.submitList(pagedList) }
+                withContext(Dispatchers.Main) { super.submitList(pagedList) }
             }
         }
     }
 
+    fun isEmpty() = itemCount == 0
+
     override fun getItemViewType(position: Int): Int {
         return try {
             when {
-                position in 0..(itemCount - 1) && itemCount > 0 -> currentList?.let {
-                    it[position]?.getViewType()
+                position in 0 until itemCount && itemCount > 0 -> currentList?.let { pagedList ->
+                    pagedList[position]?.getViewType()
                 } ?: 0
                 else -> 0
             }
         } catch (e: IndexOutOfBoundsException) {
-            logStackTrace(e)
+            logThrowable(e)
             0
         }
     }
 }
+
+typealias BaseUiModelAlias = BaseUiModel<in RecyclerView.ViewHolder>

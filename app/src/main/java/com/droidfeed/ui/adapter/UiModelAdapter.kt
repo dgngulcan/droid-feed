@@ -1,15 +1,15 @@
 package com.droidfeed.ui.adapter
 
 import android.view.ViewGroup
+import androidx.collection.SparseArrayCompat
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.droidfeed.ui.adapter.diff.UiModelDiffCallback
-import com.droidfeed.util.logStackTrace
-import kotlinx.coroutines.experimental.Dispatchers
-import kotlinx.coroutines.experimental.GlobalScope
-import kotlinx.coroutines.experimental.android.Main
-import kotlinx.coroutines.experimental.async
-import kotlinx.coroutines.experimental.launch
+import com.droidfeed.util.logThrowable
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.async
+import kotlinx.coroutines.launch
 
 /**
  * Generic [RecyclerView.Adapter] for [BaseUiModel]s.
@@ -20,7 +20,7 @@ class UiModelAdapter constructor(
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     private val uiModels = ArrayList<BaseUiModelAlias>()
-    private val viewTypes = androidx.collection.SparseArrayCompat<BaseUiModelAlias>()
+    private val viewTypes = SparseArrayCompat<BaseUiModelAlias>()
 
     override fun onCreateViewHolder(
         parent: ViewGroup,
@@ -40,20 +40,20 @@ class UiModelAdapter constructor(
     override fun getItemViewType(position: Int): Int =
         try {
             when {
-                position in 0..(itemCount - 1) && itemCount > 0 -> uiModels[position].getViewType()
+                position in 0 until itemCount && itemCount > 0 -> uiModels[position].getViewType()
                 else -> 0
             }
         } catch (e: IndexOutOfBoundsException) {
-            logStackTrace(e)
+            logThrowable(e)
             0
         }
 
     @Synchronized
     fun addUiModels(newUiModels: Collection<BaseUiModelAlias>?) {
-        newUiModels?.let { _ ->
+        newUiModels?.let { newModels ->
             if (uiModels.isEmpty()) {
-                uiModels.addAll(newUiModels)
-                updateViewTypes(newUiModels as ArrayList<BaseUiModelAlias>)
+                uiModels.addAll(newModels)
+                updateViewTypes(newModels as ArrayList<BaseUiModelAlias>)
                 notifyDataSetChanged()
             } else {
                 GlobalScope.launch(Dispatchers.Main) {
@@ -68,11 +68,11 @@ class UiModelAdapter constructor(
                         )
                     }
 
-                    diffResult.await().let {
-                        dispatchUpdates(it)
+                    diffResult.await().let { result ->
+                        dispatchUpdates(result)
 
                         uiModels.clear()
-                        uiModels.addAll(newUiModels)
+                        uiModels.addAll(newModels)
                         updateViewTypes(uiModels)
                     }
                 }
@@ -87,10 +87,8 @@ class UiModelAdapter constructor(
     }
 
     private fun updateViewTypes(uiModels: ArrayList<BaseUiModelAlias>) {
-        uiModels.forEach {
-            viewTypes.put(it.getViewType(), it)
+        uiModels.forEach { baseUiModel ->
+            viewTypes.put(baseUiModel.getViewType(), baseUiModel)
         }
     }
 }
-
-typealias BaseUiModelAlias = BaseUiModel<in RecyclerView.ViewHolder>

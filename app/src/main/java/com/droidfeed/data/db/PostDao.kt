@@ -49,14 +49,6 @@ interface PostDao {
 
     @Query(
         "DELETE FROM ${AppDatabase.POST_TABLE_NAME} " +
-                "WHERE bookmarked = 0 " +
-                "IN (SELECT pub_date_timestamp from ${AppDatabase.POST_TABLE_NAME} " +
-                "ORDER BY pub_date_timestamp DESC LIMIT 10)"
-    )
-    fun trimCache()
-
-    @Query(
-        "DELETE FROM ${AppDatabase.POST_TABLE_NAME} " +
                 "WHERE bookmarked == 0 " +
                 "AND channel_title LIKE :sourceUrl || '%'"
     )

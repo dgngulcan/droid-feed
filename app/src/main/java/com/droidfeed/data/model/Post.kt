@@ -16,7 +16,8 @@ import com.droidfeed.ui.adapter.diff.Diffable
         parentColumns = ["id"],
         childColumns = ["source_id"],
         onDelete = CASCADE
-    )]
+    )],
+    indices = [Index(value = ["source_id"])]
 )
 data class Post(
     @PrimaryKey
@@ -68,14 +69,12 @@ data class Post(
             }
         }
 
-
     @Transient
     @Ignore
     var isVideoContent: Boolean = false
         get() {
             return channel.link.contains("youtube")
         }
-
 
     @Transient
     @Ignore

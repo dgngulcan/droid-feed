@@ -2,8 +2,7 @@ package com.droidfeed.ui.module.newsletter
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.Transformations
-import com.droidfeed.data.DataResource
+import androidx.lifecycle.Transformations.switchMap
 import com.droidfeed.data.api.mailchimp.Subscriber
 import com.droidfeed.data.api.mailchimp.SubscriptionStatus
 import com.droidfeed.data.repo.NewsletterRepo
@@ -16,9 +15,7 @@ class NewsletterViewModel @Inject constructor(
 
     private val signUpEmail = MutableLiveData<String>()
 
-    val signUpEvent: LiveData<DataResource<Any>> = Transformations.switchMap(
-        signUpEmail
-    ) { email ->
+    val signUpEvent: LiveData<DataResource<Any>> = switchMap(signUpEmail) { email ->
         val subscriber = Subscriber(email, SubscriptionStatus.SUBSCRIBED)
         newsletterRepo.addSubscriberToNewsletter(subscriber)
     }

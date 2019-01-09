@@ -15,45 +15,48 @@ import com.droidfeed.util.extention.isPackageAvailable
 import com.google.android.material.snackbar.Snackbar
 import javax.inject.Inject
 
+
 /**
  * Custom Chrome Tabs helper.
  */
 class CustomTab @Inject constructor(val activity: Activity) {
 
-    companion object {
-        private const val CHROME_STABLE_PACKAGE = "com.android.chrome"
-    }
-
     private var tabClient: CustomTabsClient? = null
     private val tabIntent: CustomTabsIntent by lazy {
-        CustomTabsIntent.Builder().apply {
+        CustomTabsIntent.Builder()
+            .apply {
+                AppCompatResources
+                    .getDrawable(
+                        activity,
+                        R.drawable.ic_arrow_back_black_24dp
+                    )
+                    ?.toBitmap()
+                    ?.let { setCloseButtonIcon(it) }
 
-            AppCompatResources.getDrawable(
-                activity,
-                R.drawable.ic_arrow_back_black_24dp
-            )
-                ?.toBitmap()
-                ?.let { setCloseButtonIcon(it) }
-
-            setToolbarColor(
-                ContextCompat.getColor(
-                    activity,
-                    android.R.color.white
+                setToolbarColor(
+                    ContextCompat.getColor(
+                        activity,
+                        android.R.color.white
+                    )
                 )
-            )
 
-            setStartAnimations(
-                activity,
-                android.R.anim.fade_in,
-                android.R.anim.fade_out
-            )
+                setStartAnimations(
+                    activity,
+                    android.R.anim.fade_in,
+                    android.R.anim.fade_out
+                )
 
-            setExitAnimations(
-                activity,
-                android.R.anim.fade_in,
-                android.R.anim.fade_out
-            )
-        }.build()
+                setExitAnimations(
+                    activity,
+                    android.R.anim.fade_in,
+                    android.R.anim.fade_out
+                )
+            }.run {
+                addDefaultShareMenuItem()
+                build()
+            }
+
+
     }
 
     /**
@@ -66,9 +69,7 @@ class CustomTab @Inject constructor(val activity: Activity) {
             if (activity.isPackageAvailable(CHROME_STABLE_PACKAGE)) {
                 bindCustomTabsService(url, CHROME_STABLE_PACKAGE)
             } else {
-                val builder = CustomTabsIntent.Builder()
-                val customTabsIntent = builder.build()
-                customTabsIntent.launchUrl(activity, Uri.parse(url))
+                tabIntent.launchUrl(activity, Uri.parse(url))
             }
         } else {
             Snackbar.make(
@@ -100,5 +101,9 @@ class CustomTab @Inject constructor(val activity: Activity) {
     private fun launchCustomTab(url: String) {
         tabClient?.warmup(0L)
         tabIntent.launchUrl(activity, Uri.parse(url))
+    }
+
+    companion object {
+        private const val CHROME_STABLE_PACKAGE = "com.android.chrome"
     }
 }

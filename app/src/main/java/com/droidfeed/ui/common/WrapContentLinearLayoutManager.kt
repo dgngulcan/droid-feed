@@ -3,7 +3,7 @@ package com.droidfeed.ui.common
 import android.content.Context
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.droidfeed.util.logStackTrace
+import com.droidfeed.util.logThrowable
 
 class WrapContentLinearLayoutManager(context: Context) : LinearLayoutManager(context) {
 
@@ -11,7 +11,7 @@ class WrapContentLinearLayoutManager(context: Context) : LinearLayoutManager(con
         try {
             super.onLayoutChildren(recycler, state)
         } catch (e: IndexOutOfBoundsException) {
-            logStackTrace(e)
+            logThrowable(e)
         }
     }
 }

@@ -10,9 +10,9 @@ import com.droidfeed.util.logConsole
  * @param activity
  */
 fun Intent.startActivity(activity: Activity) {
-    if (this.resolveActivity(activity.packageManager) != null) {
+    if (resolveActivity(activity.packageManager) != null) {
         activity.startActivity(this)
     } else {
-        logConsole("There are no activity can handle this intent")
+        logConsole("There are no activity can handle this intent.")
     }
 }

@@ -7,7 +7,7 @@ import com.droidfeed.data.model.Post
 import com.droidfeed.data.model.Source
 import com.droidfeed.util.extention.asTimestamp
 import com.droidfeed.util.extention.skipTag
-import com.droidfeed.util.logException
+import com.droidfeed.util.logThrowable
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Element
 import org.xmlpull.v1.XmlPullParser
@@ -35,7 +35,7 @@ class RssParser @Inject constructor() : XmlParser() {
                 }
             }
         } catch (e: XmlPullParserException) {
-            logException(e)
+            logThrowable(e)
         }
 
         return posts

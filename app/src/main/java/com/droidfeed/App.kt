@@ -7,7 +7,7 @@ import android.content.SharedPreferences
 import android.net.Uri
 import com.droidfeed.di.DaggerAppComponent
 import com.droidfeed.util.appOpenCount
-import com.droidfeed.util.logException
+import com.droidfeed.util.logThrowable
 import com.google.firebase.remoteconfig.FirebaseRemoteConfig
 import dagger.android.AndroidInjector
 import dagger.android.DispatchingAndroidInjector
@@ -84,7 +84,7 @@ val rateAppIntent: Intent by lazy {
             Uri.parse("market://details?id=" + BuildConfig.APPLICATION_ID)
         )
     } catch (e: android.content.ActivityNotFoundException) {
-        logException(e)
+        logThrowable(e)
         Intent(
             Intent.ACTION_VIEW,
             Uri.parse(

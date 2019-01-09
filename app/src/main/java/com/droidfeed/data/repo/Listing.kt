@@ -25,7 +25,7 @@ import com.droidfeed.data.DataStatus
  */
 data class Listing<T>(
     val pagedList: LiveData<PagedList<T>>,
-    val networkState: LiveData<DataStatus>,
+    val networkState: LiveData<DataStatus<T>>,
     val refresh: () -> Unit,
     val retry: () -> Unit
 )

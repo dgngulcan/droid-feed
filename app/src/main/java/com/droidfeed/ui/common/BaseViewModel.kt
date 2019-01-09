@@ -2,11 +2,10 @@ package com.droidfeed.ui.common
 
 import android.os.SystemClock
 import androidx.lifecycle.ViewModel
-import kotlinx.coroutines.experimental.CoroutineScope
-import kotlinx.coroutines.experimental.Dispatchers
-import kotlinx.coroutines.experimental.Job
-import kotlinx.coroutines.experimental.android.Main
-import kotlin.coroutines.experimental.CoroutineContext
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlin.coroutines.CoroutineContext
 
 abstract class BaseViewModel : ViewModel(), CoroutineScope {
 
@@ -18,7 +17,7 @@ abstract class BaseViewModel : ViewModel(), CoroutineScope {
      */
     var canClick: Boolean = true
         get() {
-            return if (SystemClock.elapsedRealtime() - lastClickTime < 250) {
+            return if (SystemClock.elapsedRealtime() - lastClickTime < CLICK_TIMEOUT_IN_MILLIS) {
                 false
             } else {
                 lastClickTime = SystemClock.elapsedRealtime()
@@ -32,5 +31,9 @@ abstract class BaseViewModel : ViewModel(), CoroutineScope {
     override fun onCleared() {
         super.onCleared()
         job.cancel()
+    }
+
+    companion object {
+        private const val CLICK_TIMEOUT_IN_MILLIS = 200
     }
 }

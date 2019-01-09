@@ -2,12 +2,11 @@ package com.droidfeed.data.repo
 
 import com.droidfeed.data.db.SourceDao
 import com.droidfeed.data.model.Source
-import kotlinx.coroutines.experimental.Dispatchers
-import kotlinx.coroutines.experimental.GlobalScope
-import kotlinx.coroutines.experimental.IO
-import kotlinx.coroutines.experimental.launch
 import javax.inject.Inject
 import javax.inject.Singleton
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 
 /**
  * Repository of feed sources.

@@ -9,7 +9,7 @@ class ContributeViewModel @Inject constructor() : BaseViewModel() {
 
     val openRepositoryEvent = SingleLiveEvent<String>()
 
-    fun openGithubPage() {
+    fun openRepository() {
         openRepositoryEvent.setValue(BuildConfig.DROIDFEED_GITHUB_URL)
     }
 }

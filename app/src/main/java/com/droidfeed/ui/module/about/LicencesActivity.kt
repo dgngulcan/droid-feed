@@ -76,7 +76,10 @@ class LicencesActivity : BaseActivity() {
         licences.add(
             Licence(
                 "Glide",
-                "Glide is a fast and efficient open source media management and contentImage loading framework for Android that wraps media decoding, memory and disk caching, and resource pooling into a simple and easy to use interface.",
+                "Glide is a fast and efficient open source media management and " +
+                        "contentImage loading framework for Android that wraps media decoding, " +
+                        "memory and disk caching, and resource pooling into a simple and easy to " +
+                        "use interface.",
                 "https://github.com/bumptech/glide/",
                 "https://raw.githubusercontent.com/bumptech/glide/master/LICENSE"
             )

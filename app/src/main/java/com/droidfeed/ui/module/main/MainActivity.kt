@@ -22,9 +22,9 @@ import com.droidfeed.ui.common.BaseActivity
 import com.droidfeed.util.AnimUtils
 import com.droidfeed.util.event.EventObserver
 import com.droidfeed.util.isMarshmallow
+import javax.inject.Inject
 import kotlinx.android.synthetic.main.activity_main_app_bar.view.*
 import kotlinx.android.synthetic.main.menu_main.view.*
-import javax.inject.Inject
 
 @Suppress("UNCHECKED_CAST")
 class MainActivity : BaseActivity() {
@@ -66,13 +66,10 @@ class MainActivity : BaseActivity() {
             lightStatusBarTheme()
         }
         super.onCreate(savedInstanceState)
-        initBindings()
+
+        binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
         init()
         initFilterDrawer()
-    }
-
-    private fun initBindings() {
-        binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
     }
 
     private fun init() {
@@ -257,8 +254,10 @@ class MainActivity : BaseActivity() {
     }
 
     private fun animateMenuButton(it: View) {
-        binding.appbar.btnMenu.speed = if (it.isSelected) 1f else -1f
-        binding.appbar.btnMenu.resumeAnimation()
+        binding.appbar.btnMenu.run {
+            speed = if (it.isSelected) 1f else -1f
+            resumeAnimation()
+        }
     }
 
     private fun animateTitleColor(active: Boolean) {

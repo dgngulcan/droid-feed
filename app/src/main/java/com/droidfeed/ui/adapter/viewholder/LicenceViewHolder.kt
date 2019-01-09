@@ -26,7 +26,7 @@ class LicenceViewHolder(
             listener.invoke(licence.licenceUrl)
         }
 
-        binding.spnLicence.text = span
+//        binding.licenceSpan = span
         binding.spnLicence.movementMethod = LinkMovementMethod.getInstance()
     }
 }

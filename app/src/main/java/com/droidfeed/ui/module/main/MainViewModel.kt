@@ -21,9 +21,7 @@ class MainViewModel @Inject constructor(
 
     val sourceUiModelData: LiveData<List<SourceUiModel>> =
         Transformations.switchMap(sourceRepo.sources) { sourceList ->
-            result.value = sourceList.map {
-                SourceUiModel(it, sourceClickListener)
-            }
+            result.value = sourceList.map { SourceUiModel(it, sourceClickListener) }
             result
         }
 

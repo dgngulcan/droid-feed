@@ -5,15 +5,14 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Transformations.switchMap
 import androidx.paging.LivePagedListBuilder
 import androidx.paging.PagedList
-import com.droidfeed.data.DataResource
 import com.droidfeed.data.DataStatus
 import com.droidfeed.data.db.PostDao
 import com.droidfeed.data.model.Post
 import com.droidfeed.data.model.Source
 import com.droidfeed.data.parser.NewsXmlParser
 import com.droidfeed.ui.adapter.model.PostUIModel
-import com.droidfeed.util.logStackTrace
-import kotlinx.coroutines.experimental.launch
+import com.droidfeed.util.logThrowable
+import kotlinx.coroutines.launch
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import java.io.IOException
@@ -29,21 +28,27 @@ class PostRepo @Inject constructor(
     private val okHttpClient: OkHttpClient,
     private val xmlParser: NewsXmlParser,
     private val postDao: PostDao
-) {
+) : BaseRepo() {
 
+    /**
+     * Returns all the posts as a [Listing].
+     *
+     * @param sources to fetch posts from
+     * @param transform function for the models
+     */
     fun getAllPosts(
         sources: LiveData<List<Source>>,
-        createUiModels: (List<Post>) -> List<PostUIModel>
+        transform: (List<Post>) -> List<PostUIModel>
     ): Listing<PostUIModel> {
         val pagedList = LivePagedListBuilder(
             postDao.getAllPosts().mapByPage {
-                createUiModels(it)
+                transform(it)
             },
             pagedListConfig
         ).build()
 
         val refreshTrigger = MutableLiveData<Unit>()
-        val networkState = switchMap(refreshTrigger) { refresh(sources) }
+        val networkState = switchMap(refreshTrigger) { refresh<PostUIModel>(sources) }
 
         return Listing<PostUIModel>(
             pagedList = pagedList,
@@ -57,24 +62,32 @@ class PostRepo @Inject constructor(
 
     fun updatePost(post: Post) = launch { postDao.updateArticle(post) }
 
-    private fun refresh(sources: LiveData<List<Source>>): LiveData<DataStatus> {
-        val networkState = MutableLiveData<DataStatus>()
+    private fun <T> refresh(sources: LiveData<List<Source>>): LiveData<DataStatus<T>> {
+        val networkState = MutableLiveData<DataStatus<T>>()
 
         launch {
             sources.value?.forEach { source ->
                 val result = fetch(source)
-                result.data
-                    ?.takeIf { it.isNotEmpty() }
-                    ?.let { savePostsToDB(it) }
-
-                networkState.postValue(result.dataState)
+                when (result) {
+                    is DataStatus.Loading -> networkState.postValue(DataStatus.Loading())
+                    is DataStatus.Successful -> {
+                        result.data?.let { savePostsToDB(it) }
+                        networkState.postValue(DataStatus.Successful())
+                    }
+                    is DataStatus.Failed -> {
+                        networkState.postValue(DataStatus.Failed(result.throwable))
+                    }
+                    is DataStatus.HttpFailed -> {
+                        networkState.postValue(DataStatus.HttpFailed(result.code))
+                    }
+                }
             }
         }
 
         return networkState
     }
 
-    private fun fetch(source: Source): DataResource<List<Post>> {
+    private fun fetch(source: Source): DataStatus<List<Post>> {
         val request = Request.Builder()
             .url(source.url)
             .build()
@@ -86,13 +99,13 @@ class PostRepo @Inject constructor(
                     xmlParser.parse(it, source)
                 }
 
-                DataResource.success(posts)
+                DataStatus.Successful(posts)
             } else {
-                DataResource.success(emptyList())
+                DataStatus.HttpFailed(response.code())
             }
         } catch (e: IOException) {
-            logStackTrace(e)
-            DataResource.error(e)
+            logThrowable(e)
+            DataStatus.Failed(e)
         }
     }
 
@@ -101,23 +114,27 @@ class PostRepo @Inject constructor(
     ): Listing<PostUIModel> {
 
         val pagedList = LivePagedListBuilder(
-            postDao.getBookmarkedPosts().mapByPage {
-                createUiModels(it)
-            },
+            postDao.getBookmarkedPosts()
+                .mapByPage {
+                    createUiModels(it)
+                },
             pagedListConfig
         ).build()
 
-        val dummyStatus = MutableLiveData<DataStatus>()
-        dummyStatus.postValue(DataStatus.Success)
+        val dummyStatus = MutableLiveData<DataStatus<List<PostUIModel>>>()
+        dummyStatus.postValue(DataStatus.Successful())
 
         return Listing<PostUIModel>(pagedList = pagedList,
-            networkState = dummyStatus,
+            networkState = dummyStatus as LiveData<DataStatus<PostUIModel>>,
             refresh = {},
             retry = {}
         )
     }
 
-    private fun savePostsToDB(posts: List<Post>) = launch { postDao.insertArticles(posts) }
+
+    private fun savePostsToDB(posts: List<Post>) = launch {
+        postDao.insertArticles(posts)
+    }
 
     companion object {
         private const val PAGE_SIZE = 30

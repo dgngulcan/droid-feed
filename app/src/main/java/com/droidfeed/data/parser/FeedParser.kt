@@ -7,7 +7,7 @@ import com.droidfeed.data.model.Post
 import com.droidfeed.data.model.Source
 import com.droidfeed.util.extention.asTimestamp
 import com.droidfeed.util.extention.skipTag
-import com.droidfeed.util.logException
+import com.droidfeed.util.logThrowable
 import org.xmlpull.v1.XmlPullParser
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -31,7 +31,7 @@ class FeedParser @Inject constructor() : XmlParser() {
                 }
             }
         } catch (ignored: Exception) {
-            logException(ignored)
+            logThrowable(ignored)
         }
 
         return posts

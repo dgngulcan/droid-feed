@@ -8,13 +8,12 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.droidfeed.databinding.FragmentContributeBinding
 import com.droidfeed.ui.common.BaseFragment
+import com.droidfeed.util.AnimUtils.Companion.MEDIUM_ANIM_DURATION
 import com.droidfeed.util.CustomTab
-import kotlinx.coroutines.experimental.Dispatchers
-import kotlinx.coroutines.experimental.GlobalScope
-import kotlinx.coroutines.experimental.android.Main
-import kotlinx.coroutines.experimental.delay
-import kotlinx.coroutines.experimental.launch
 import javax.inject.Inject
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 class ContributeFragment : BaseFragment("contribute") {
 
@@ -55,18 +54,17 @@ class ContributeFragment : BaseFragment("contribute") {
             }
         }
 
-        GlobalScope.launch(Dispatchers.Main) {
+        launch(Dispatchers.Main) {
             binding.animView.frame = 0
-            delay(500)
+            delay(MEDIUM_ANIM_DURATION)
             binding.animView.resumeAnimation()
         }
     }
 
     private fun initObservers() {
-        viewModel.openRepositoryEvent.observe(viewLifecycleOwner, Observer { url ->
-            url?.let { it1 ->
-                customTab.showTab(it1)
-            }
-        })
+        viewModel.openRepositoryEvent.observe(viewLifecycleOwner,
+            Observer { url ->
+                url?.let { customTab.showTab(it) }
+            })
     }
 }
