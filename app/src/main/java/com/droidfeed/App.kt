@@ -22,6 +22,7 @@ class App : Application(), HasActivityInjector {
     @Inject
     lateinit var sharedPrefs: SharedPreferences
 
+    @Suppress("unused")
     @Inject
     lateinit var remoteConfig: FirebaseRemoteConfig
 
