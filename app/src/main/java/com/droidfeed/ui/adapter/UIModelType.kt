@@ -3,9 +3,9 @@ package com.droidfeed.ui.adapter
 /**
  * Types of the UI models.
  *
- * @see [UiModelAdapter]
+ * @see [UIModelAdapter]
  */
-enum class UiModelType {
+enum class UIModelType {
     POST_SMALL,
     POST_LARGE,
     LICENCE,
