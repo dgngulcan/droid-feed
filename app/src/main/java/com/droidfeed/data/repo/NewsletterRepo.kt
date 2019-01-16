@@ -27,8 +27,8 @@ class NewsletterRepo @Inject constructor(
      *
      * @param subscriber
      */
-    fun addSubscriberToNewsletter(subscriber: Subscriber): LiveData<DataStatus<Any>> {
-        val dataStatus = MutableLiveData<DataStatus<Any>>()
+    fun addSubscriberToNewsletter(subscriber: Subscriber): LiveData<DataStatus<Nothing>> {
+        val dataStatus = MutableLiveData<DataStatus<Nothing>>()
             .also { it.postValue(DataStatus.Loading()) }
 
         GlobalScope.launch(Dispatchers.IO) {
