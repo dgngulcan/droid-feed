@@ -10,9 +10,6 @@ import com.droidfeed.ui.module.feed.PostClickListener
 import com.droidfeed.util.glide.GlideApp
 import com.droidfeed.util.glide.roundCorners
 
-/**
- * ViewHolder to display article cards.
- */
 abstract class PostViewHolder(private val root: View) : RecyclerView.ViewHolder(root) {
 
     /**
@@ -21,7 +18,10 @@ abstract class PostViewHolder(private val root: View) : RecyclerView.ViewHolder(
      * @param post
      * @param postClickListener
      */
-    abstract fun bind(post: Post, postClickListener: PostClickListener)
+    abstract fun bind(
+        post: Post,
+        postClickListener: PostClickListener
+    )
 
     protected fun bindImage(
         imageView: ImageView,

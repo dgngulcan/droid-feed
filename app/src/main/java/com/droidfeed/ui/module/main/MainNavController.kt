@@ -58,7 +58,7 @@ class MainNavController @Inject constructor(val activity: MainActivity) {
                 android.R.animator.fade_out
             )
             .replace(containerId, fragment)
-            .commitAllowingStateLoss()
+            .commit()
     }
 
     fun isFeedFragment(): Boolean {

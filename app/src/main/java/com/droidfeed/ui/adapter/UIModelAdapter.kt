@@ -43,7 +43,7 @@ class UIModelAdapter constructor(
 
 
     @Synchronized
-    fun addUiModels(newUiModels: List<BaseUIModelAlias>?) {
+    fun addUIModels(newUiModels: List<BaseUIModelAlias>?) {
         newUiModels?.let { newModels ->
             if (uiModels.isEmpty()) {
                 uiModels.addAll(newModels)

@@ -10,6 +10,8 @@ import androidx.core.content.ContextCompat
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.droidfeed.R
+import com.droidfeed.data.DataStatus
+import com.droidfeed.data.api.mailchimp.Error
 import com.droidfeed.data.api.mailchimp.ErrorType
 import com.droidfeed.databinding.FragmentNewsletterBinding
 import com.droidfeed.ui.common.BaseFragment
@@ -18,7 +20,6 @@ import com.droidfeed.util.extention.hideKeyboard
 import com.droidfeed.util.extention.isOnline
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
@@ -51,10 +52,12 @@ class NewsletterFragment : BaseFragment("newsletter") {
 
     private fun initObservers() {
         viewModel.signUpEvent.observe(viewLifecycleOwner, Observer { resource ->
-            when (resource?.dataState) {
+            when (resource) {
                 is DataStatus.Loading -> onLoading()
-                is DataStatus.Success -> onSignUpSuccess()
-                is DataStatus.Error<*> -> onSignUpError(resource.dataState as DataStatus.Error<*>)
+                is DataStatus.Successful -> onSignUpSuccess()
+                is DataStatus.Failed -> onSignUpError(resource.throwable as Error)
+                is DataStatus.HttpFailed -> {
+                }
             }
         })
     }
@@ -104,7 +107,7 @@ class NewsletterFragment : BaseFragment("newsletter") {
             }
         }
 
-        GlobalScope.launch(Dispatchers.Main) {
+        launch(Dispatchers.Main) {
             binding.animView.frame = 0
             delay(MEDIUM_ANIM_DURATION)
             binding.animView.resumeAnimation()
@@ -128,26 +131,24 @@ class NewsletterFragment : BaseFragment("newsletter") {
         }
     }
 
-    private fun onSignUpError(state: DataStatus.Error<*>) {
+    private fun onSignUpError(error: Error) {
         binding.apply {
             btnImIn.visibility = View.VISIBLE
             binding.textInputLayout.error = null
             progressBar.visibility = View.GONE
         }
 
-        if (state.data is ErrorType) {
-            when (state.data) {
-                ErrorType.MEMBER_ALREADY_EXIST -> {
-                    binding.textInputLayout.error = getString(R.string.newsletter_email_exist)
-                }
+        when (error.type) {
+            ErrorType.MEMBER_ALREADY_EXIST -> {
+                binding.textInputLayout.error = getString(R.string.newsletter_email_exist)
+            }
 
-                ErrorType.INVALID_RESOURCE -> {
-                    Snackbar.make(
-                        binding.btnImIn,
-                        getString(R.string.error_api_generic),
-                        Snackbar.LENGTH_SHORT
-                    ).show()
-                }
+            ErrorType.INVALID_RESOURCE -> {
+                Snackbar.make(
+                    binding.btnImIn,
+                    getString(R.string.error_api_generic),
+                    Snackbar.LENGTH_SHORT
+                ).show()
             }
         }
     }

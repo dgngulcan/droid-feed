@@ -15,7 +15,7 @@ import kotlinx.coroutines.withContext
  */
 class UIModelPaginatedAdapter(
     coroutineScope: CoroutineScope
-) : PagedListAdapter<BaseUIModelAlias, RecyclerView.ViewHolder>(BaseUiModelDiffCallback()),
+) : PagedListAdapter<BaseUIModelAlias, RecyclerView.ViewHolder>(BaseUIModelDiffCallback()),
     CoroutineScope by coroutineScope {
 
     private val viewTypes = SparseArrayCompat<BaseUIModelAlias>()

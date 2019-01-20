@@ -8,9 +8,7 @@ import com.droidfeed.data.db.*
 import com.droidfeed.data.model.Source
 import dagger.Module
 import dagger.Provides
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.*
 import javax.inject.Singleton
 
 
@@ -35,16 +33,17 @@ class DatabaseModule {
                 insertSources(appDatabase)
             }
 
-            override fun onOpen(db: SupportSQLiteDatabase) {
-                insertSources(appDatabase)
-            }
+//            override fun onOpen(db: SupportSQLiteDatabase) {
+//                insertSources(appDatabase)
+//            }
         }).build()
 
         return appDatabase
     }
 
     private fun insertSources(appDatabase: AppDatabase?) {
-        GlobalScope.launch(Dispatchers.IO) {
+        GlobalScope.launch {
+            delay(3000)
             appDatabase?.sourceDao()?.insertSources(
                 listOf(
                     Source(
@@ -76,7 +75,7 @@ class DatabaseModule {
                         6,
                         "AndroidDev",
                         "https://twitrss.me/twitter_user_to_rss/?user=AndroidDev"
-                    ),
+                        ),
                     Source(
                         7,
                         "Android Developers Blog",

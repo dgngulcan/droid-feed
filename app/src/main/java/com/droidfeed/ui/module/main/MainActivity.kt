@@ -13,18 +13,19 @@ import androidx.core.view.GravityCompat
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
+import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.droidfeed.R
 import com.droidfeed.databinding.ActivityMainBinding
-import com.droidfeed.ui.adapter.BaseUiModelAlias
-import com.droidfeed.ui.adapter.UiModelAdapter
+import com.droidfeed.ui.adapter.BaseUIModelAlias
+import com.droidfeed.ui.adapter.UIModelAdapter
 import com.droidfeed.ui.common.BaseActivity
 import com.droidfeed.util.AnimUtils
 import com.droidfeed.util.event.EventObserver
 import com.droidfeed.util.isMarshmallow
-import javax.inject.Inject
 import kotlinx.android.synthetic.main.activity_main_app_bar.view.*
 import kotlinx.android.synthetic.main.menu_main.view.*
+import javax.inject.Inject
 
 @Suppress("UNCHECKED_CAST")
 class MainActivity : BaseActivity() {
@@ -105,6 +106,10 @@ class MainActivity : BaseActivity() {
             }
         })
 
+        binding.appbar.txtToolbarTitle.setOnClickListener {
+            navController.scrollToTop()
+        }
+
         initNavigationClicks()
     }
 
@@ -112,7 +117,7 @@ class MainActivity : BaseActivity() {
         binding.appbar.containerToolbar.btnNavHome.setOnClickListener {
             highlightSelectedMenuButton(it)
             navController.openFeedFragment()
-            binding.appbar.txtTitle.text = getString(R.string.app_name_lower)
+            binding.appbar.txtToolbarTitle.text = getString(R.string.app_name_lower)
             onMenuItemSelected(transColor)
             toggleFilterMenu(true)
             toggleBookmarksMenu(true)
@@ -124,7 +129,7 @@ class MainActivity : BaseActivity() {
         binding.appbar.containerToolbar.btnNavNewsletter.setOnClickListener {
             highlightSelectedMenuButton(it)
             navController.openNewsletterFragment()
-            binding.appbar.txtTitle.text = getString(R.string.nav_newsletter)
+            binding.appbar.txtToolbarTitle.text = getString(R.string.nav_newsletter)
             onMenuItemSelected(blueColor)
             toggleFilterMenu(false)
             toggleBookmarksMenu(false)
@@ -136,7 +141,7 @@ class MainActivity : BaseActivity() {
         binding.appbar.containerToolbar.btnNavContribute.setOnClickListener {
             highlightSelectedMenuButton(it)
             navController.openContributeFragment()
-            binding.appbar.txtTitle.text = getString(R.string.nav_contribute)
+            binding.appbar.txtToolbarTitle.text = getString(R.string.nav_contribute)
             onMenuItemSelected(grayColor)
             toggleFilterMenu(false)
             toggleBookmarksMenu(false)
@@ -148,7 +153,7 @@ class MainActivity : BaseActivity() {
         binding.appbar.containerToolbar.btnNavAbout.setOnClickListener {
             highlightSelectedMenuButton(it)
             navController.openAboutFragment()
-            binding.appbar.txtTitle.text = getString(R.string.nav_about)
+            binding.appbar.txtToolbarTitle.text = getString(R.string.nav_about)
             onMenuItemSelected(pinkColor)
             toggleFilterMenu(false)
             toggleBookmarksMenu(false)
@@ -279,7 +284,7 @@ class MainActivity : BaseActivity() {
         }
 
         ObjectAnimator.ofInt(
-            binding.appbar.txtTitle,
+            binding.appbar.txtToolbarTitle,
             "textColor",
             fromColor,
             toColor
@@ -287,21 +292,24 @@ class MainActivity : BaseActivity() {
             setEvaluator(ArgbEvaluator())
             interpolator = animUtils.linearOutSlowInInterpolator
             duration = ANIM_DURATION
-        }.also { it.start() }
+        }.run {
+            start()
+        }
     }
 
     private fun initFilterDrawer() {
         val linearLayoutManager = LinearLayoutManager(this)
-        val uiModelAdapter = UiModelAdapter(layoutManager = linearLayoutManager)
+        val uiModelAdapter = UIModelAdapter(
+            this,
+            linearLayoutManager
+        )
 
-        viewModel.sourceUiModelData.observe(this, Observer {
-            uiModelAdapter.addUiModels(it as Collection<BaseUiModelAlias>)
+        viewModel.sourceUIModelData.observe(this, Observer { sourceUIModels ->
+            uiModelAdapter.addUIModels(sourceUIModels as List<BaseUIModelAlias>)
         })
 
         binding.filterRecycler.apply {
-            (itemAnimator as androidx.recyclerview.widget.DefaultItemAnimator)
-                .supportsChangeAnimations = false
-
+            (itemAnimator as DefaultItemAnimator).supportsChangeAnimations = false
             adapter = uiModelAdapter
             overScrollMode = View.OVER_SCROLL_NEVER
             layoutManager = linearLayoutManager

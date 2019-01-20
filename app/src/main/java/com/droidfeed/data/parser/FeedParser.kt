@@ -51,7 +51,7 @@ class FeedParser @Inject constructor() : XmlParser() {
                 "author" -> post.channel = parseChannel(parser)
                 "title" -> post.title = parser.nextText()
                 "link" -> post.link = parseLink(parser)
-                "updated" -> post.pubDateTimestamp = getPublishDate(parser.nextText())
+                "published" -> post.pubDateTimestamp = getPublishDate(parser.nextText())
                 "media:group" -> post.content = parseMediaIntoPost(parser)
                 else -> parser.skipTag()
             }

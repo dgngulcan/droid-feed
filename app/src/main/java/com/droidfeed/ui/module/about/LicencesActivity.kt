@@ -6,8 +6,8 @@ import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.droidfeed.R
 import com.droidfeed.data.model.Licence
-import com.droidfeed.ui.adapter.BaseUiModelAlias
-import com.droidfeed.ui.adapter.UiModelAdapter
+import com.droidfeed.ui.adapter.BaseUIModelAlias
+import com.droidfeed.ui.adapter.UIModelAdapter
 import com.droidfeed.ui.adapter.model.LicenceUiModel
 import com.droidfeed.ui.common.BaseActivity
 import com.droidfeed.util.CustomTab
@@ -16,15 +16,27 @@ import kotlinx.android.synthetic.main.activity_licence.*
 
 class LicencesActivity : BaseActivity() {
 
-    private val adapter: UiModelAdapter by lazy { UiModelAdapter() }
+    private val layoutManager = LinearLayoutManager(this)
+    private val adapter: UIModelAdapter by lazy {
+        UIModelAdapter(
+            this,
+            layoutManager
+        )
+    }
 
     private val customTab: CustomTab by lazy { CustomTab(this) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         if (isMarshmallow()) {
             setupTransparentStatusBar()
+            lightStatusBarTheme()
         }
-        window.statusBarColor = ContextCompat.getColor(this@LicencesActivity, R.color.pink)
+
+        window.apply {
+            val pinkColor = ContextCompat.getColor(this@LicencesActivity, R.color.pink)
+            statusBarColor = pinkColor
+            navigationBarColor = pinkColor
+        }
 
         super.onCreate(savedInstanceState)
 
@@ -33,11 +45,10 @@ class LicencesActivity : BaseActivity() {
     }
 
     private fun init() {
-        val libraries = getLibrariesUiModels() as Collection<BaseUiModelAlias>
+        val libraries = getLibrariesUiModels()
+        adapter.addUIModels(libraries as List<BaseUIModelAlias>)
 
-        adapter.addUiModels(libraries)
-
-        recyclerView.layoutManager = LinearLayoutManager(this)
+        recyclerView.layoutManager = layoutManager
         recyclerView.overScrollMode = View.OVER_SCROLL_NEVER
         recyclerView.adapter = adapter
 
