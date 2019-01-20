@@ -34,14 +34,14 @@
                     android:focusable="true"
                     android:padding="8dp"
                     android:scaleType="centerInside"
-                    app:layout_constraintBottom_toBottomOf="@+id/txtTitle"
+                    app:layout_constraintBottom_toBottomOf="@+id/txtToolbarTitle"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="@+id/txtTitle"
+                    app:layout_constraintTop_toTopOf="@+id/txtToolbarTitle"
                     app:lottie_rawRes="@raw/menu_to_close_anim"
                     tools:src="@drawable/ic_cat" />
 
                 <TextView
-                    android:id="@+id/txtTitle"
+                    android:id="@+id/txtToolbarTitle"
                     android:layout_width="wrap_content"
                     android:layout_height="56dp"
                     android:fontFamily="@font/poppins_semibold"
@@ -69,9 +69,9 @@
                     style="@style/DF.Button.Icon"
                     android:layout_marginEnd="8dp"
                     android:src="@drawable/ic_filter_list_accent_24dp"
-                    app:layout_constraintBottom_toBottomOf="@+id/txtTitle"
+                    app:layout_constraintBottom_toBottomOf="@+id/txtToolbarTitle"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="@+id/txtTitle" />
+                    app:layout_constraintTop_toTopOf="@+id/txtToolbarTitle" />
 
                 <include
                     android:id="@+id/menu"
@@ -81,8 +81,8 @@
                     android:layout_marginTop="8dp"
                     android:layout_marginEnd="16dp"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="@+id/txtTitle"
-                    app:layout_constraintTop_toBottomOf="@+id/txtTitle" />
+                    app:layout_constraintStart_toStartOf="@+id/txtToolbarTitle"
+                    app:layout_constraintTop_toBottomOf="@+id/txtToolbarTitle" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
         </com.google.android.material.appbar.AppBarLayout>
