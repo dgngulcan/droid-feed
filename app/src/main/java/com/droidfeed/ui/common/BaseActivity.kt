@@ -12,10 +12,16 @@ import com.droidfeed.util.isMarshmallow
 import dagger.android.AndroidInjection
 import dagger.android.DispatchingAndroidInjector
 import dagger.android.support.HasSupportFragmentInjector
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
 import javax.inject.Inject
+import kotlin.coroutines.CoroutineContext
 
 @SuppressLint("Registered")
-abstract class BaseActivity : AppCompatActivity(), HasSupportFragmentInjector {
+abstract class BaseActivity : AppCompatActivity(),
+    HasSupportFragmentInjector,
+    CoroutineScope {
 
     @Inject
     lateinit var viewModelFactory: ViewModelProvider.Factory
@@ -23,13 +29,25 @@ abstract class BaseActivity : AppCompatActivity(), HasSupportFragmentInjector {
     @Inject
     lateinit var fragmentInjector: DispatchingAndroidInjector<Fragment>
 
+    private lateinit var job: Job
+
+    override val coroutineContext: CoroutineContext
+        get() = Dispatchers.Main + job
+
     override fun onCreate(savedInstanceState: Bundle?) {
         AndroidInjection.inject(this)
         super.onCreate(savedInstanceState)
+
+        job = Job()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        job.cancel()
     }
 
     /**
-     * Makes status bar transparent.
+     * Makes code bar transparent.
      */
     protected fun setupTransparentStatusBar() {
         window.run {
