@@ -2,6 +2,7 @@ package com.droidfeed.util
 
 import android.app.Activity
 import android.content.ComponentName
+import android.content.Intent
 import android.net.Uri
 import android.webkit.URLUtil
 import androidx.appcompat.content.res.AppCompatResources
@@ -54,9 +55,9 @@ class CustomTab @Inject constructor(val activity: Activity) {
             }.run {
                 addDefaultShareMenuItem()
                 build()
+            }.also { customTabIntent ->
+                customTabIntent.intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP)
             }
-
-
     }
 
     /**
