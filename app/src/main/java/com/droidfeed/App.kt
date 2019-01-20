@@ -30,7 +30,12 @@ class App : Application(), HasActivityInjector {
         super.onCreate()
         initDagger()
 
+        initSources()
+
         sharedPrefs.appOpenCount += 1
+    }
+
+    private fun initSources() {
     }
 
     private fun initDagger() {
