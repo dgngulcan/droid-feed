@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="title"
+            type="String" />
+
+        <variable
+            name="homeNavClickListener"
+            type="android.view.View.OnClickListener" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/containerToolbar"
+        android:layout_width="match_parent"
+        android:layout_height="56dp"
+        android:fitsSystemWindows="true"
+        tools:background="@color/gray">
+
+        <ImageView
+            android:id="@+id/btnBack"
+            style="@style/DF.Button.Icon"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_marginStart="8dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:clickable="true"
+            android:contentDescription="@string/content_desc_back_button"
+            android:focusable="true"
+            android:onClick="@{(v) -> homeNavClickListener.onClick(v)}"
+            android:src="@drawable/ic_arrow_back_white_24dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/txtTitle"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
+            android:ellipsize="end"
+            android:fontFamily="@font/poppins_semibold"
+            android:gravity="center_vertical"
+            android:maxLines="1"
+            android:paddingStart="8dp"
+            android:paddingTop="@dimen/poppins_font_correction_for_30sp"
+            android:paddingEnd="16dp"
+            android:text="@{title}"
+            android:textColor="@android:color/white"
+            android:textSize="30sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/btnBack"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="Lorem Ipsum" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

@@ -18,7 +18,10 @@ fun avdImageResource(
 }
 
 @BindingAdapter("visibilityToggle")
-fun visibilityToggle(view: View, show: Boolean) {
+fun visibilityToggle(
+    view: View,
+    show: Boolean
+) {
     view.visibility = if (show) View.VISIBLE else View.GONE
 }
 
@@ -30,6 +33,14 @@ fun loadHtml(
     if (htmlContent.isNotBlank()) {
         webView.loadData(htmlContent, "text/html", "UTF-8")
     }
+}
+
+@BindingAdapter("displayUrl")
+fun displayUrl(
+    webView: WebView,
+    url: String
+) {
+    webView.loadUrl(url)
 }
 
 @BindingAdapter("relativeDate")
@@ -44,7 +55,11 @@ fun setRelativeTime(
     )
 }
 
-@BindingAdapter(value = ["publisher", "timestamp"], requireAll = true)
+@BindingAdapter(
+    value = ["publisher",
+        "timestamp"],
+    requireAll = true
+)
 fun setRelativeDate(
     view: TextView,
     publisher: String?,

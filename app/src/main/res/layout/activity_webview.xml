@@ -1,15 +1,41 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent">
 
-    <include
-        android:id="@+id/toolbar"
-        layout="@layout/widget_toolbar" />
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:binding="http://schemas.android.com/tools">
 
-    <WebView
-        android:id="@+id/webView"
+    <data>
+
+        <variable
+            name="url"
+            type="String" />
+
+        <variable
+            name="toolbarTitle"
+            type="String" />
+
+        <variable
+            name="toolbarHomeNavClickListener"
+            type="android.view.View.OnClickListener" />
+    </data>
+
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent"
+        android:orientation="vertical">
 
-</FrameLayout>
+        <include
+            android:id="@+id/toolbar"
+            layout="@layout/widget_toolbar"
+            app:homeNavClickListener="@{toolbarHomeNavClickListener}"
+            app:title="@{toolbarTitle}" />
+
+        <WebView
+            android:id="@+id/webView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            binding:displayUrl="@{url}" />
+
+    </LinearLayout>
+
+</layout>

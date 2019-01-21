@@ -1,57 +1,39 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="match_parent"
-    android:background="@color/pink"
-    android:layout_height="match_parent">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/containerToolbar"
+    <data>
+
+        <variable
+            name="toolbarTitle"
+            type="String" />
+
+        <variable
+            name="toolbarHomeNavClickListener"
+            type="android.view.View.OnClickListener" />
+    </data>
+
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
+        android:background="@color/pink"
         android:fitsSystemWindows="true"
-        app:layout_collapseMode="pin"
-        app:layout_scrollFlags="scroll">
+        android:orientation="vertical">
 
-        <ImageView
-            android:id="@+id/btnBack"
-            style="@style/DF.Button.Icon"
-            android:layout_width="48dp"
-            android:layout_height="48dp"
-            android:layout_marginStart="8dp"
-            android:clickable="true"
-            android:focusable="true"
-            android:src="@drawable/ic_arrow_back_white_24dp"
-            app:layout_constraintBottom_toBottomOf="@+id/txtTitle"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/txtTitle" />
+        <include
+            android:id="@+id/toolbar"
+            layout="@layout/widget_toolbar"
+            app:homeNavClickListener="@{toolbarHomeNavClickListener}"
+            app:title="@{toolbarTitle}" />
 
-        <TextView
-            android:id="@+id/txtTitle"
-            android:layout_width="wrap_content"
-            android:layout_height="56dp"
-            android:fontFamily="@font/poppins_semibold"
-            android:gravity="center_vertical"
-            android:paddingStart="8dp"
-            android:paddingTop="6dp"
-            android:paddingEnd="8dp"
-            android:text="@string/licences"
-            android:textColor="@android:color/white"
-            android:textSize="30sp"
-            app:layout_constraintStart_toEndOf="@+id/btnBack" />
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:clipToPadding="false"
+            android:paddingTop="16dp"
+            android:paddingBottom="16dp" />
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+    </LinearLayout>
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recyclerView"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:paddingTop="16dp"
-        android:paddingBottom="16dp"
-        android:clipToPadding="false"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/containerToolbar" />
-
-</androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

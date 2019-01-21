@@ -47,12 +47,13 @@
                     android:fontFamily="@font/poppins_semibold"
                     android:gravity="center_vertical"
                     android:paddingStart="8dp"
-                    android:paddingTop="6dp"
+                    android:paddingTop="@dimen/poppins_font_correction_for_30sp"
                     android:paddingEnd="8dp"
                     android:text="@string/app_name"
                     android:textColor="@color/grayDark1"
                     android:textSize="30sp"
-                    app:layout_constraintStart_toEndOf="@+id/btnMenu" />
+                    app:layout_constraintStart_toEndOf="@+id/btnMenu"
+                    app:layout_constraintTop_toTopOf="parent" />
 
                 <ImageView
                     android:id="@+id/btnBookmarks"
