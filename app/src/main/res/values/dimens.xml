@@ -17,5 +17,6 @@
     <dimen name="card_corner_radius">3dp</dimen>
     <dimen name="touch_raise">4dp</dimen>
     <dimen name="card_border_width">1dp</dimen>
+    <dimen name="poppins_font_correction_for_30sp">6dp</dimen>
 
 </resources>
