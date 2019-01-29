@@ -1,20 +1,35 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="termsOfServiceSpan"
+            type="android.text.SpannableString" />
+
+        <variable
+            name="onBoardViewModel"
+            type="com.droidfeed.ui.module.onboard.OnBoardViewModel" />
+
+    </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:animateLayoutChanges="true">
 
-        <androidx.appcompat.widget.AppCompatImageView
-            android:id="@+id/appCompatImageView"
+        <ImageView
+            android:id="@+id/imageView"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:scaleType="centerCrop"
-            app:srcCompat="@drawable/onboard_bg" />
+            app:loadImage="@{onBoardViewModel.backgroundImageId}"
+            tools:srcCompat="@drawable/onboard_bg" />
 
         <TextView
-            android:id="@+id/txtToolbarTitle"
+            android:id="@+id/txtTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:fontFamily="@font/poppins_semibold"
@@ -27,7 +42,7 @@
 
         <View
             android:id="@+id/divider"
-            android:layout_width="395dp"
+            android:layout_width="0dp"
             android:layout_height="1dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -35,9 +50,43 @@
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="0.24" />
 
+        <com.google.android.material.checkbox.MaterialCheckBox
+            android:id="@+id/cbAgreement"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginBottom="16dp"
+            android:onCheckedChanged="@{(v,isChecked)->onBoardViewModel.onAgreementChecked(isChecked)}"
+            android:paddingStart="8dp"
+            android:text="@{termsOfServiceSpan}"
+            android:textAppearance="@style/Base.TextAppearance.AppCompat.Body2"
+            android:textColor="@android:color/white"
+            app:buttonTint="@color/colorAccent"
+            app:isEnabled="@{onBoardViewModel.isAgreementCBEnabled}"
+            app:layout_constraintBottom_toTopOf="@+id/btnContinue"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            tools:checked="false"
+            tools:ignore="RtlSymmetry"
+            tools:text="I agree to the terms of service" />
+
+        <ProgressBar
+            android:id="@+id/progressBar"
+            style="@style/Base.Widget.AppCompat.ProgressBar.Horizontal"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="32dp"
+            android:layout_marginEnd="32dp"
+            android:indeterminate="true"
+            app:isVisible="@{onBoardViewModel.isProgressVisible}"
+            app:layout_constraintBottom_toTopOf="@+id/btnContinue"
+            app:layout_constraintEnd_toEndOf="@+id/btnContinue"
+            app:layout_constraintStart_toStartOf="@+id/btnContinue"
+            tools:visibility="visible" />
 
         <com.google.android.material.button.MaterialButton
-            android:id="@+id/btnGithub"
+            android:id="@+id/btnContinue"
             style="@style/DF.Button.Flat"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -45,12 +94,12 @@
             android:layout_marginEnd="64dp"
             android:layout_marginBottom="72dp"
             android:backgroundTint="@color/colorAccentDark"
+            android:onClick="@{(v)->onBoardViewModel.onContinueClicked()}"
             android:text="@string/action_continue"
-            app:cornerRadius="24dp"
-            app:layout_constraintBottom_toBottomOf="@+id/appCompatImageView"
+            app:isEnabled="@{onBoardViewModel.isContinueButtonEnabled()}"
+            app:layout_constraintBottom_toBottomOf="@+id/imageView"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent" />
-
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
