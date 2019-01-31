@@ -54,14 +54,13 @@ class MainActivity : BaseActivity() {
         mainViewModel = ViewModelProviders
             .of(this, viewModelFactory)
             .get(MainViewModel::class.java)
-            .also {
-                subscribeUserTerms()
-                subscribeNavigation()
-                subscribeScrollTopEvent()
-                subscribeSources()
-                subscribeMenuVisibility()
-                subscribeFilterVisibility()
-            }
+
+        subscribeUserTerms()
+        subscribeNavigation()
+        subscribeScrollTopEvent()
+        subscribeSources()
+        subscribeMenuVisibility()
+        subscribeFilterVisibility()
 
         binding = DataBindingUtil.setContentView<ActivityMainBinding>(
             this,
@@ -69,13 +68,13 @@ class MainActivity : BaseActivity() {
         ).apply {
             viewModel = mainViewModel
             setLifecycleOwner(this@MainActivity)
-        }.also {
-            binding.appbar.containerView.layoutTransition.apply {
-                enableTransitionType(LayoutTransition.CHANGING)
-            }
-
-            initFilterDrawer()
         }
+
+        binding.appbar.containerView.layoutTransition.apply {
+            enableTransitionType(LayoutTransition.CHANGING)
+        }
+
+        initFilterDrawer()
     }
 
     private fun subscribeSources() {
