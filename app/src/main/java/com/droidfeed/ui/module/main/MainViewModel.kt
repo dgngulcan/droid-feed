@@ -1,8 +1,11 @@
 package com.droidfeed.ui.module.main
 
+import android.content.SharedPreferences
+import androidx.annotation.StringRes
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Transformations.map
+import com.droidfeed.R
 import com.droidfeed.data.model.Source
 import com.droidfeed.data.repo.PostRepo
 import com.droidfeed.data.repo.SourceRepo
@@ -10,17 +13,30 @@ import com.droidfeed.ui.adapter.UiModelClickListener
 import com.droidfeed.ui.adapter.model.SourceUIModel
 import com.droidfeed.ui.common.BaseViewModel
 import com.droidfeed.util.event.Event
+import com.droidfeed.util.hasAcceptedTerms
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 class MainViewModel @Inject constructor(
     sourceRepo: SourceRepo,
-    postRepo: PostRepo
+    postRepo: PostRepo,
+    sharedPrefs: SharedPreferences
 ) : BaseViewModel() {
 
-    val bookmarksEvent = MutableLiveData<Event<Boolean>>()
-    val hideMenuEvent = MutableLiveData<Event<Unit>>()
+    val toolbarTitle = MutableLiveData<@StringRes Int>().apply { value = R.string.app_name }
+    val navigationEvent = MutableLiveData<Destination>().apply { value = Destination.FEED }
+    val scrollTopEvent = MutableLiveData<Event<Unit>>()
+
+    val isUserTermsAccepted =
+        MutableLiveData<Boolean>().apply { value = sharedPrefs.hasAcceptedTerms }
+    val isMenuVisible = MutableLiveData<Boolean>().apply { value = false }
+    val isSourceFilterVisible = MutableLiveData<Event<Boolean>>().apply { value = Event(false) }
+    val isFilterButtonVisible = MutableLiveData<Boolean>().apply { value = true }
+    val isBookmarksShown = MutableLiveData<Boolean>().apply { value = false }
+    val isBookmarksButtonVisible = MutableLiveData<Boolean>().apply { value = true }
+    val isBookmarksButtonSelected = MutableLiveData<Boolean>().apply { value = false }
+
 
     val sourceUIModelData: LiveData<List<SourceUIModel>> =
         map(sourceRepo.getSources()) { sourceList ->
@@ -36,18 +52,82 @@ class MainViewModel @Inject constructor(
             launch(Dispatchers.IO) {
                 /* update source when activated */
                 if (source.isActive) {
-                    postRepo.refresh(listOf(source))
+                    postRepo.refresh(
+                        this,
+                        listOf(source)
+                    )
                 }
+
                 sourceRepo.updateSource(source)
             }
         }
     }
 
-    fun onBookmarksEvent(isEnabled: Boolean) {
-        bookmarksEvent.value = Event(isEnabled)
+    fun onHomeNavSelected() {
+        toolbarTitle.postValue(R.string.app_name)
+        navigationEvent.postValue(Destination.FEED)
+        isFilterButtonVisible.postValue(!(isBookmarksButtonSelected.value ?: true))
+        isBookmarksButtonVisible.postValue(true)
+        isMenuVisible.postValue(false)
+    }
+
+    fun onNewsletterNavSelected() {
+        toolbarTitle.postValue(R.string.nav_title_newsletter)
+        navigationEvent.postValue(Destination.NEWSLETTER)
+        isFilterButtonVisible.postValue(false)
+        isBookmarksButtonVisible.postValue(false)
+        isMenuVisible.postValue(false)
+    }
+
+    fun onContributeNavSelected() {
+        toolbarTitle.postValue(R.string.nav_title_contribute)
+        navigationEvent.postValue(Destination.CONTRIBUTE)
+        isFilterButtonVisible.postValue(false)
+        isBookmarksButtonVisible.postValue(false)
+        isMenuVisible.postValue(false)
+    }
+
+    fun onAboutNavSelected() {
+        toolbarTitle.postValue(R.string.nav_title_about)
+        navigationEvent.postValue(Destination.ABOUT)
+        isFilterButtonVisible.postValue(false)
+        isBookmarksButtonVisible.postValue(false)
+        isMenuVisible.postValue(false)
+    }
+
+    fun onSourceFilterClicked() {
+        isSourceFilterVisible.postValue(Event(true))
+    }
+
+    fun onMenuClicked() {
+        val isCurrentlyVisible = isMenuVisible.value ?: false
+        isMenuVisible.postValue(!isCurrentlyVisible)
+        isBookmarksButtonVisible.postValue(!isCurrentlyVisible)
+    }
+
+    fun onBookmarksEvent() {
+        val isCurrentlySelected = (isBookmarksButtonSelected.value ?: false)
+        isBookmarksShown.postValue(!isCurrentlySelected)
+        isBookmarksButtonSelected.postValue(!isCurrentlySelected)
+    }
+
+    fun onToolbarTitleClicked() {
+        scrollTopEvent.postValue(Event(Unit))
     }
 
     fun onScrolledEnough() {
-        hideMenuEvent.postValue(Event(Unit))
+        isMenuVisible.postValue(false)
     }
+
+    fun onBackPressed(
+        isFilterDrawerOpen: Boolean,
+        navigateBack: () -> Unit
+    ) {
+        when {
+            isMenuVisible.value == true -> isMenuVisible.postValue(false)
+            isFilterDrawerOpen -> isSourceFilterVisible.postValue(Event(false))
+            else -> navigateBack()
+        }
+    }
+
 }

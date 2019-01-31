@@ -1,6 +1,7 @@
 package com.droidfeed.di.main
 
 import com.droidfeed.ui.module.main.MainActivity
+import com.droidfeed.util.ColorPalette
 import com.droidfeed.util.CustomTab
 import dagger.Module
 import dagger.Provides
@@ -9,7 +10,8 @@ import dagger.Provides
 class MainModule {
 
     @Provides
-    fun providesCustomTab(activity: MainActivity): CustomTab {
-        return CustomTab(activity)
-    }
+    fun providesCustomTab(activity: MainActivity) = CustomTab(activity)
+
+    @Provides
+    fun provideColorPalette(activity: MainActivity) = ColorPalette(activity)
 }

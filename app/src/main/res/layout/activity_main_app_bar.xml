@@ -3,6 +3,13 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <data>
+
+        <variable
+            name="viewModel"
+            type="com.droidfeed.ui.module.main.MainViewModel" />
+    </data>
+
     <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:id="@+id/containerView"
         android:layout_width="match_parent"
@@ -32,8 +39,10 @@
                     android:layout_marginStart="8dp"
                     android:clickable="true"
                     android:focusable="true"
+                    android:onClick="@{(v)->viewModel.onMenuClicked()}"
                     android:padding="8dp"
                     android:scaleType="centerInside"
+                    app:isSelected="@{!viewModel.isMenuVisible}"
                     app:layout_constraintBottom_toBottomOf="@+id/txtToolbarTitle"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="@+id/txtToolbarTitle"
@@ -44,46 +53,56 @@
                     android:id="@+id/txtToolbarTitle"
                     android:layout_width="wrap_content"
                     android:layout_height="56dp"
+                    android:clickable="true"
+                    android:focusable="true"
                     android:fontFamily="@font/poppins_semibold"
                     android:gravity="center_vertical"
+                    android:onClick="@{(v)->viewModel.onToolbarTitleClicked()}"
                     android:paddingStart="8dp"
                     android:paddingTop="@dimen/poppins_font_correction_for_30sp"
                     android:paddingEnd="8dp"
-                    android:text="@string/app_name"
+                    android:text="@{viewModel.toolbarTitle}"
                     android:textColor="@color/grayDark1"
                     android:textSize="30sp"
                     app:layout_constraintStart_toEndOf="@+id/btnMenu"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    app:layout_constraintTop_toTopOf="parent"
+                    tools:text="@string/app_name" />
 
-                <ImageView
+                <ImageButton
                     android:id="@+id/btnBookmarks"
                     style="@style/DF.Button.Icon"
                     android:layout_marginEnd="56dp"
                     android:background="@drawable/sl_menu_bookmark_bg_drawable"
+                    android:onClick="@{(v)->viewModel.onBookmarksEvent()}"
                     android:src="@drawable/sl_menu_bookmark_drawable"
+                    app:isSelected="@{viewModel.isBookmarksButtonSelected}"
+                    app:isVisible="@{viewModel.isBookmarksButtonVisible}"
                     app:layout_constraintBottom_toBottomOf="@+id/btnFilter"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="@+id/btnFilter" />
 
-                <ImageView
+                <ImageButton
                     android:id="@+id/btnFilter"
                     style="@style/DF.Button.Icon"
                     android:layout_marginEnd="8dp"
+                    android:onClick="@{(v)->viewModel.onSourceFilterClicked()}"
                     android:src="@drawable/ic_filter_list_accent_24dp"
+                    app:isVisible="@{viewModel.isFilterButtonVisible}"
                     app:layout_constraintBottom_toBottomOf="@+id/txtToolbarTitle"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="@+id/txtToolbarTitle" />
 
                 <include
                     android:id="@+id/menu"
-                    layout="@layout/menu_main"
+                    layout="@layout/activity_main_menu"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_marginTop="8dp"
                     android:layout_marginEnd="16dp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="@+id/txtToolbarTitle"
-                    app:layout_constraintTop_toBottomOf="@+id/txtToolbarTitle" />
+                    app:layout_constraintTop_toBottomOf="@+id/txtToolbarTitle"
+                    app:viewModel="@{viewModel}" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
         </com.google.android.material.appbar.AppBarLayout>

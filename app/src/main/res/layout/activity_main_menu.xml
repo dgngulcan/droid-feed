@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="viewModel"
+            type="com.droidfeed.ui.module.main.MainViewModel" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/containerMenu"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingBottom="32dp"
+        app:isVisible="@{viewModel.isMenuVisible}"
+        tools:background="@color/gray"
+        tools:visibility="visible">
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnNavHome"
+            style="@style/DF.Button.Menu.Text"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:onClick="@{(v)->viewModel.onHomeNavSelected()}"
+            android:text="@string/nav_home"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnNavNewsletter"
+            style="@style/DF.Button.Menu.Text"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:onClick="@{(v)->viewModel.onNewsletterNavSelected()}"
+            android:text="@string/nav_title_newsletter"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/btnNavHome" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnNavContribute"
+            style="@style/DF.Button.Menu.Text"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:onClick="@{(v)->viewModel.onContributeNavSelected()}"
+            android:text="@string/nav_title_contribute"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/btnNavNewsletter" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnNavAbout"
+            style="@style/DF.Button.Menu.Text"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:onClick="@{(v)->viewModel.onAboutNavSelected()}"
+            android:text="@string/nav_title_about"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/btnNavContribute" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

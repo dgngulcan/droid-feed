@@ -3,6 +3,7 @@ package com.droidfeed.ui.module.main
 import androidx.fragment.app.Fragment
 import com.droidfeed.R
 import com.droidfeed.di.MainScope
+import com.droidfeed.ui.common.Scrollable
 import com.droidfeed.ui.module.about.AboutFragment
 import com.droidfeed.ui.module.contribute.ContributeFragment
 import com.droidfeed.ui.module.feed.FeedFragment
@@ -15,43 +16,15 @@ class MainNavController @Inject constructor(val activity: MainActivity) {
     private val fragmentManager = activity.supportFragmentManager
     private val containerId = R.id.fragmentContainer
 
-    private var activeFragment: Fragment? = null
+    var activeDestination: Destination? = null
+        private set
 
-    private val feedFragment: FeedFragment by lazy {
-        FeedFragment()
-    }
-
-    private val aboutFragment: AboutFragment by lazy {
-        AboutFragment()
-    }
-
-    private val newsletterFragment: NewsletterFragment by lazy {
-        NewsletterFragment()
-    }
-
-    private val contributeFragment: ContributeFragment by lazy {
-        ContributeFragment()
-    }
-
-    fun openFeedFragment() {
-        changeFragment(feedFragment)
-    }
-
-    fun openAboutFragment() {
-        changeFragment(aboutFragment)
-    }
-
-    fun openContributeFragment() {
-        changeFragment(contributeFragment)
-    }
-
-    fun openNewsletterFragment() {
-        changeFragment(newsletterFragment)
-    }
+    private val feedFragment: FeedFragment by lazy { FeedFragment() }
+    private val aboutFragment: AboutFragment by lazy { AboutFragment() }
+    private val newsletterFragment: NewsletterFragment by lazy { NewsletterFragment() }
+    private val contributeFragment: ContributeFragment by lazy { ContributeFragment() }
 
     private fun changeFragment(fragment: Fragment) {
-        activeFragment = fragment
-
         fragmentManager.beginTransaction()
             .setCustomAnimations(
                 android.R.animator.fade_in,
@@ -61,14 +34,24 @@ class MainNavController @Inject constructor(val activity: MainActivity) {
             .commit()
     }
 
-    fun isFeedFragment(): Boolean {
-        return activeFragment?.equals(feedFragment) ?: false
-    }
-
     fun scrollToTop() {
         val currentFragment = fragmentManager.findFragmentById(containerId)
-        when (currentFragment) {
-            is FeedFragment -> currentFragment.scrollToTop()
+
+        if (currentFragment is Scrollable) {
+            currentFragment.scrollToTop()
+        }
+    }
+
+    fun open(destination: Destination) {
+        if (activeDestination != destination) {
+            activeDestination = destination
+
+            when (destination) {
+                Destination.FEED -> changeFragment(feedFragment)
+                Destination.ABOUT -> changeFragment(aboutFragment)
+                Destination.NEWSLETTER -> changeFragment(newsletterFragment)
+                Destination.CONTRIBUTE -> changeFragment(contributeFragment)
+            }
         }
     }
 }
