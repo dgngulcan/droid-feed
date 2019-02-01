@@ -1,52 +1,43 @@
 package com.droidfeed.ui.module.feed
 
 import android.content.Intent
-import android.content.SharedPreferences
 import android.graphics.Color
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.view.isVisible
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.paging.PagedList
-import androidx.recyclerview.widget.RecyclerView
+import androidx.recyclerview.widget.DefaultItemAnimator
 import com.droidfeed.R
-import com.droidfeed.data.DataStatus
-import com.droidfeed.data.model.Post
 import com.droidfeed.databinding.FragmentFeedBinding
+import com.droidfeed.rateAppIntent
 import com.droidfeed.ui.adapter.BaseUIModelAlias
 import com.droidfeed.ui.adapter.UIModelPaginatedAdapter
 import com.droidfeed.ui.common.BaseFragment
+import com.droidfeed.ui.common.CollapseScrollListener
+import com.droidfeed.ui.common.Scrollable
 import com.droidfeed.ui.common.WrapContentLinearLayoutManager
 import com.droidfeed.ui.module.main.MainViewModel
 import com.droidfeed.util.AppRateHelper
 import com.droidfeed.util.CustomTab
 import com.droidfeed.util.event.EventObserver
 import com.droidfeed.util.extention.isOnline
-import com.droidfeed.util.shareCount
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.fragment_feed.*
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
 import javax.inject.Inject
-import kotlin.math.absoluteValue
 
-class FeedFragment : BaseFragment("feed") {
+class FeedFragment : BaseFragment("feed"), Scrollable {
 
-    private lateinit var viewModel: FeedViewModel
+    private lateinit var feedViewModel: FeedViewModel
     private lateinit var mainViewModel: MainViewModel
     private lateinit var binding: FragmentFeedBinding
 
-    private val adapter by lazy { UIModelPaginatedAdapter(this) }
+    private val paginatedAdapter by lazy { UIModelPaginatedAdapter(this) }
 
     @Inject
     lateinit var customTab: CustomTab
-
-    @Inject
-    lateinit var sharedPrefs: SharedPreferences
 
     @Inject
     lateinit var appRateHelper: AppRateHelper
@@ -54,7 +45,7 @@ class FeedFragment : BaseFragment("feed") {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        viewModel = ViewModelProviders
+        feedViewModel = ViewModelProviders
             .of(this, viewModelFactory)
             .get(FeedViewModel::class.java)
 
@@ -69,64 +60,77 @@ class FeedFragment : BaseFragment("feed") {
         savedInstanceState: Bundle?
     ): View? {
         super.onCreateView(inflater, container, savedInstanceState)
-        binding = FragmentFeedBinding.inflate(inflater, container, false)
+        binding = FragmentFeedBinding.inflate(
+            inflater,
+            container,
+            false
+        ).apply {
+            viewModel = feedViewModel
+            setLifecycleOwner(this@FeedFragment)
+        }
 
-
-        subscribeNetworkState()
         subscribePosts()
-        subscribePostBookmarkEvent()
+        subscribeAppRateEvent()
+        subscribeIsRefreshing()
         subscribePostOpenEvent()
         subscribePostShareEvent()
-        subscribeActiveSourceCount()
-        subscribeBookmarksOpenEvent()
+        subscribePlayStoreEvent()
         subscribeUnBookmarkEvent()
+        subscribeBookmarksOpenEvent()
 
-        viewModel.setFeedType(FeedType.POSTS)
+        feedViewModel.setFeedType(FeedType.POSTS)
+
+        initFeed()
+        initSwipeRefresh()
 
         return binding.root
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
-        init()
+    private fun subscribePlayStoreEvent() {
+        feedViewModel.openPlayStorePage.observe(viewLifecycleOwner, EventObserver {
+            startActivity(rateAppIntent)
+        })
     }
 
-    private fun init() {
-        binding.apply {
-            val layoutManager = activity?.let { WrapContentLinearLayoutManager(it) }
-            newsRecyclerView.layoutManager = layoutManager
+    private fun initFeed() {
+        binding.newsRecyclerView.apply {
+            layoutManager = WrapContentLinearLayoutManager(requireContext())
 
-            var scrolledAmount = 0
-
-            newsRecyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
-                override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
-                    super.onScrolled(recyclerView, dx, dy)
-                    scrolledAmount += dy.absoluteValue
-
-                    if (scrolledAmount > MENU_SCROLL_THRESHOLD_TO_CLOSE) {
-                        mainViewModel.onScrolledEnough()
-                        scrolledAmount = 0
-                    }
-
-                    GlobalScope.launch {
-                        delay(MENU_SCROLL_THRESHOLD_TO_CLOSE)
-                        scrolledAmount = 0
-                    }
-                }
+            addOnScrollListener(CollapseScrollListener {
+                mainViewModel.onCollapseMenu()
             })
 
-            (newsRecyclerView.itemAnimator as androidx.recyclerview.widget.DefaultItemAnimator)
-                .supportsChangeAnimations = false
-            newsRecyclerView.swapAdapter(adapter, true)
+            (itemAnimator as DefaultItemAnimator).supportsChangeAnimations = false
 
-            swipeRefreshArticles.setOnRefreshListener {
-                if (context?.isOnline() == true) {
-                    viewModel.refresh()
-                } else {
-                    swipeRefreshArticles.isRefreshing = false
+            swapAdapter(
+                paginatedAdapter,
+                false
+            )
+        }
+    }
+
+    private fun subscribeAppRateEvent() {
+        feedViewModel.showAppRateSnack.observe(viewLifecycleOwner, EventObserver { onAction ->
+            appRateHelper.showRateSnackbar(binding.root) {
+                onAction()
+            }
+        })
+    }
+
+    private fun subscribeIsRefreshing() {
+        feedViewModel.isRefreshing.observe(viewLifecycleOwner, Observer { isRefreshing ->
+            swipeRefreshArticles.isRefreshing = isRefreshing
+        })
+    }
+
+    private fun initSwipeRefresh() {
+        binding.swipeRefreshArticles.setOnRefreshListener {
+            when {
+                context?.isOnline() == true -> feedViewModel.refresh()
+                else -> {
+                    binding.swipeRefreshArticles.isRefreshing = false
                     Snackbar.make(
-                        swipeRefreshArticles,
+                        binding.root,
                         R.string.info_no_internet,
                         Snackbar.LENGTH_LONG
                     ).show()
@@ -135,115 +139,58 @@ class FeedFragment : BaseFragment("feed") {
         }
     }
 
-    private fun subscribeNetworkState() {
-        viewModel.networkState.observe(viewLifecycleOwner, Observer { dataStatus ->
-            when (dataStatus) {
-                is DataStatus.Loading -> {
-                    if (adapter.isEmpty()) {
-                        binding.progressBar.visibility = View.VISIBLE
-                    }
-                }
-                is DataStatus.Successful,
-                is DataStatus.Failed,
-                is DataStatus.HttpFailed -> {
-                    if (swipeRefreshArticles.isRefreshing) {
-                        swipeRefreshArticles.isRefreshing = false
-                    }
-                    binding.progressBar.visibility = View.GONE
-                }
-            }
-        })
-    }
-
     private fun subscribePosts() {
-        viewModel.postsLiveData.observe(this, Observer { pagedList ->
-            binding.progressBar.isVisible = false
-
-            adapter.submitList(pagedList as PagedList<BaseUIModelAlias>)
-
-            binding.containerEmptyBookmark.visibility =
-                    if (pagedList.isEmpty() && !swipeRefreshArticles.isEnabled) {
-                        View.VISIBLE
-                    } else {
-                        View.GONE
-                    }
-        })
-    }
-
-    private fun subscribePostBookmarkEvent() {
-        viewModel.postBookmarkEvent.observe(viewLifecycleOwner, EventObserver {
-            appRateHelper.checkAppRatePrompt(binding.root)
-            analytics.logBookmark(true)
+        feedViewModel.postsLiveData.observe(viewLifecycleOwner, Observer { pagedList ->
+            paginatedAdapter.submitList(pagedList as PagedList<BaseUIModelAlias>)
         })
     }
 
     private fun subscribePostOpenEvent() {
-        viewModel.postOpenDetail.observe(viewLifecycleOwner, EventObserver { post ->
+        feedViewModel.openPostDetail.observe(viewLifecycleOwner, EventObserver { post ->
             customTab.showTab(post.link)
-            analytics.logPostClick()
         })
     }
 
     private fun subscribePostShareEvent() {
-        viewModel.postShareEvent.observe(viewLifecycleOwner, EventObserver { post ->
-            sharedPrefs.shareCount += 1
+        feedViewModel.sharePost.observe(viewLifecycleOwner, EventObserver { post ->
             startActivityForResult(post.getShareIntent(), REQUEST_CODE_SHARE)
-            analytics.logShare("post")
         })
     }
 
     private fun subscribeUnBookmarkEvent() {
-        viewModel.postUnBookmarkEvent.observe(viewLifecycleOwner, EventObserver { post ->
-            if (viewModel.feedType.value == FeedType.BOOKMARKS) {
-                showBookmarkUndoSnackbar(post)
+        feedViewModel.showUndoBookmarkSnack.observe(viewLifecycleOwner, EventObserver { onUndo ->
+            Snackbar.make(
+                binding.root,
+                R.string.info_bookmark_removed,
+                Snackbar.LENGTH_LONG
+            ).apply {
+                setActionTextColor(Color.YELLOW)
+                setAction(R.string.undo) { onUndo() }
+            }.run {
+                show()
             }
-            analytics.logBookmark(false)
-        })
-    }
-
-    private fun subscribeActiveSourceCount() {
-        viewModel.activeSourceCountLiveData.observe(this, Observer { count ->
-            binding.containerEmptySource.isVisible = count == 0
         })
     }
 
     private fun subscribeBookmarksOpenEvent() {
-        mainViewModel.bookmarksEvent.observe(viewLifecycleOwner, EventObserver { isEnabled ->
-            val feedType = when {
-                isEnabled -> {
-                    FeedType.BOOKMARKS
-                }
-                else -> FeedType.POSTS
-            }
-            viewModel.setFeedType(feedType)
-            swipeRefreshArticles.isEnabled = !isEnabled
+        mainViewModel.isBookmarksShown.observe(viewLifecycleOwner, Observer { isEnabled ->
+            val feedType = if (isEnabled) FeedType.BOOKMARKS else FeedType.POSTS
+            feedViewModel.setFeedType(feedType)
         })
-    }
-
-    private fun showBookmarkUndoSnackbar(post: Post) {
-        Snackbar.make(
-            binding.root,
-            R.string.info_bookmark_removed,
-            Snackbar.LENGTH_LONG
-        )
-            .setActionTextColor(Color.YELLOW)
-            .setAction(R.string.undo) { viewModel.toggleBookmark(post) }
-            .show()
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         when (requestCode) {
-            REQUEST_CODE_SHARE -> appRateHelper.checkAppRatePrompt(binding.root)
+            REQUEST_CODE_SHARE -> feedViewModel.onReturnedFromPost()
         }
     }
 
-    internal fun scrollToTop() {
+    override fun scrollToTop() {
         binding.newsRecyclerView.smoothScrollToPosition(0)
     }
 
     companion object {
         private const val REQUEST_CODE_SHARE = 4122
-        private const val MENU_SCROLL_THRESHOLD_TO_CLOSE = 200L
     }
 }

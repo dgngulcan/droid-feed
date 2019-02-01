@@ -26,6 +26,17 @@ internal var SharedPreferences.appOpenCount: Int
     }
 
 /**
+ * Returns true if user has accepted terms of use.
+ */
+internal var SharedPreferences.hasAcceptedTerms: Boolean
+    set(value) {
+        edit { putBoolean("accepted_terms", value) }
+    }
+    get() {
+        return getBoolean("accepted_terms", false)
+    }
+
+/**
  * Count of the app rating criteria matching events.
  */
 internal var SharedPreferences.appRatePromptIndex: Int
@@ -34,6 +45,17 @@ internal var SharedPreferences.appRatePromptIndex: Int
     }
     get() {
         return getInt("app_rate_prompt_count", APP_RATE_PROMPT_INDEX)
+    }
+
+/**
+ * Count of the app rating prompt ignored.
+ */
+internal var SharedPreferences.appRatePromptIgnoreCount: Int
+    set(value) {
+        edit { putInt("app_rate_prompt_ignore_count", value) }
+    }
+    get() {
+        return getInt("app_rate_prompt_ignore_count", 0)
     }
 
 /**
@@ -46,3 +68,5 @@ internal var SharedPreferences.appRatePrompt: Boolean
     get() {
         return getBoolean("app_rate_prompt", true)
     }
+
+internal const val APP_RATE_PROMPT_INDEX = 3
