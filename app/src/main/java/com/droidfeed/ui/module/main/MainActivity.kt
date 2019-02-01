@@ -94,7 +94,7 @@ class MainActivity : BaseActivity() {
     }
 
     private fun subscribeNavigation() {
-        mainViewModel.navigationEvent.observe(this, Observer { destination ->
+        mainViewModel.onNavigation.observe(this, Observer { destination ->
             if (navController.activeDestination != destination) {
                 navController.open(destination)
 
@@ -133,7 +133,7 @@ class MainActivity : BaseActivity() {
     }
 
     private fun subscribeScrollTopEvent() {
-        mainViewModel.scrollTopEvent.observe(this, EventObserver {
+        mainViewModel.scrollTop.observe(this, EventObserver {
             navController.scrollToTop()
         })
     }

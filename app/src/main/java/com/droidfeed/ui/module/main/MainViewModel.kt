@@ -25,11 +25,12 @@ class MainViewModel @Inject constructor(
 ) : BaseViewModel() {
 
     val toolbarTitle = MutableLiveData<@StringRes Int>().apply { value = R.string.app_name }
-    val navigationEvent = MutableLiveData<Destination>().apply { value = Destination.FEED }
-    val scrollTopEvent = MutableLiveData<Event<Unit>>()
+    val onNavigation = MutableLiveData<Destination>().apply { value = Destination.FEED }
+    val scrollTop = MutableLiveData<Event<Unit>>()
 
-    val isUserTermsAccepted =
-        MutableLiveData<Boolean>().apply { value = sharedPrefs.hasAcceptedTerms }
+    val isUserTermsAccepted = MutableLiveData<Boolean>().apply {
+        value = sharedPrefs.hasAcceptedTerms
+    }
     val isMenuVisible = MutableLiveData<Boolean>().apply { value = false }
     val isSourceFilterVisible = MutableLiveData<Event<Boolean>>().apply { value = Event(false) }
     val isFilterButtonVisible = MutableLiveData<Boolean>().apply { value = true }
@@ -65,7 +66,7 @@ class MainViewModel @Inject constructor(
 
     fun onHomeNavSelected() {
         toolbarTitle.postValue(R.string.app_name)
-        navigationEvent.postValue(Destination.FEED)
+        onNavigation.postValue(Destination.FEED)
         isFilterButtonVisible.postValue(!(isBookmarksButtonSelected.value ?: true))
         isBookmarksButtonVisible.postValue(true)
         isMenuVisible.postValue(false)
@@ -73,7 +74,7 @@ class MainViewModel @Inject constructor(
 
     fun onNewsletterNavSelected() {
         toolbarTitle.postValue(R.string.nav_title_newsletter)
-        navigationEvent.postValue(Destination.NEWSLETTER)
+        onNavigation.postValue(Destination.NEWSLETTER)
         isFilterButtonVisible.postValue(false)
         isBookmarksButtonVisible.postValue(false)
         isMenuVisible.postValue(false)
@@ -81,7 +82,7 @@ class MainViewModel @Inject constructor(
 
     fun onContributeNavSelected() {
         toolbarTitle.postValue(R.string.nav_title_contribute)
-        navigationEvent.postValue(Destination.CONTRIBUTE)
+        onNavigation.postValue(Destination.CONTRIBUTE)
         isFilterButtonVisible.postValue(false)
         isBookmarksButtonVisible.postValue(false)
         isMenuVisible.postValue(false)
@@ -89,7 +90,7 @@ class MainViewModel @Inject constructor(
 
     fun onAboutNavSelected() {
         toolbarTitle.postValue(R.string.nav_title_about)
-        navigationEvent.postValue(Destination.ABOUT)
+        onNavigation.postValue(Destination.ABOUT)
         isFilterButtonVisible.postValue(false)
         isBookmarksButtonVisible.postValue(false)
         isMenuVisible.postValue(false)
@@ -112,10 +113,10 @@ class MainViewModel @Inject constructor(
     }
 
     fun onToolbarTitleClicked() {
-        scrollTopEvent.postValue(Event(Unit))
+        scrollTop.postValue(Event(Unit))
     }
 
-    fun onScrolledEnough() {
+    fun onCollapseMenu() {
         isMenuVisible.postValue(false)
     }
 
