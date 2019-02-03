@@ -6,6 +6,10 @@
     <data>
 
         <variable
+            name="previousIssuesSpan"
+            type="android.text.SpannableString" />
+
+        <variable
             name="viewModel"
             type="com.droidfeed.ui.module.newsletter.NewsletterViewModel" />
     </data>
@@ -22,7 +26,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/spacing_xlarge"
-            android:layout_marginTop="40dp"
+            android:layout_marginTop="16dp"
             android:layout_marginEnd="@dimen/spacing_xlarge"
             android:text="@string/newsletter_headline"
             app:layout_constraintEnd_toEndOf="parent"
@@ -56,13 +60,26 @@
             app:layout_constraintStart_toStartOf="@+id/textView2"
             app:layout_constraintTop_toBottomOf="@+id/textView5" />
 
+        <TextView
+            android:id="@+id/txtPreviousIssues"
+            style="@style/DF.BodyStyle"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/spacing_small"
+            android:drawableStart="@drawable/ic_email_open_white_24dp"
+            android:drawablePadding="@dimen/spacing_large"
+            android:text="@{previousIssuesSpan}"
+            app:layout_constraintEnd_toEndOf="@+id/textView2"
+            app:layout_constraintStart_toStartOf="@+id/textView2"
+            app:layout_constraintTop_toBottomOf="@+id/textView6" />
+
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/textInputLayout"
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/spacing_xlarge"
-            android:layout_marginTop="@dimen/spacing_xlarge"
+            android:layout_marginTop="16dp"
             android:layout_marginEnd="@dimen/spacing_xlarge"
             android:animateLayoutChanges="true"
             android:textColorHint="#eaffffff"
@@ -70,7 +87,7 @@
             app:isVisible="@{viewModel.isEmailInputVisible}"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textView6">
+            app:layout_constraintTop_toBottomOf="@+id/txtPreviousIssues">
 
             <ProgressBar
                 android:id="@+id/progressBar"
@@ -112,14 +129,14 @@
             style="@style/DF.BodyStyle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="24dp"
+            android:layout_marginTop="16dp"
             android:gravity="center"
             android:paddingStart="32dp"
             android:paddingEnd="32dp"
             android:text="@string/info_subs_confirmed"
             android:textColor="#85ff00"
             app:isVisible="@{viewModel.isSubsConfirmationVisible}"
-            app:layout_constraintTop_toBottomOf="@+id/textView6"
+            app:layout_constraintTop_toBottomOf="@+id/txtPreviousIssues"
             tools:visibility="visible" />
 
         <com.airbnb.lottie.LottieAnimationView

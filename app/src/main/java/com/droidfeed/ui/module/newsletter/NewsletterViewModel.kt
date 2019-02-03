@@ -3,6 +3,7 @@ package com.droidfeed.ui.module.newsletter
 import android.util.Patterns
 import androidx.annotation.StringRes
 import androidx.lifecycle.MutableLiveData
+import com.droidfeed.BuildConfig
 import com.droidfeed.R
 import com.droidfeed.data.DataStatus
 import com.droidfeed.data.api.mailchimp.ErrorType
@@ -27,6 +28,12 @@ class NewsletterViewModel @Inject constructor(
     val isSubsConfirmationVisible = MutableLiveData<Boolean>().apply { value = false }
     val errorText = MutableLiveData<@StringRes Int>().apply { value = R.string.empty_string }
     val showErrorSnack = MutableLiveData<Event<@StringRes Int>>()
+    val openUrl = MutableLiveData<Event<String>>()
+
+
+    fun onPreviousIssues() {
+        openUrl.postValue(Event(BuildConfig.DROIDFEED_PREVIOUS_ISSUES))
+    }
 
     /**
      * Sign up given email to DroidFeed newsletter.

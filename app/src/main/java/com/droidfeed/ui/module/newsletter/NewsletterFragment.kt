@@ -2,24 +2,32 @@ package com.droidfeed.ui.module.newsletter
 
 import android.annotation.SuppressLint
 import android.os.Bundle
+import android.text.method.LinkMovementMethod
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.ViewModelProviders
+import com.droidfeed.R
 import com.droidfeed.databinding.FragmentNewsletterBinding
 import com.droidfeed.ui.common.BaseFragment
 import com.droidfeed.util.AnimUtils
+import com.droidfeed.util.CustomTab
 import com.droidfeed.util.event.EventObserver
+import com.droidfeed.util.extention.getClickableSpan
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 @SuppressLint("ValidFragment")
 class NewsletterFragment : BaseFragment("newsletter") {
 
     private lateinit var binding: FragmentNewsletterBinding
     private lateinit var newsletterViewModel: NewsletterViewModel
+
+    @Inject
+    lateinit var customTab: CustomTab
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -41,14 +49,24 @@ class NewsletterFragment : BaseFragment("newsletter") {
             false
         ).apply {
             viewModel = newsletterViewModel
+            previousIssuesSpan = oldIssuesSpan()
             setLifecycleOwner(this@NewsletterFragment)
+
+            txtPreviousIssues.movementMethod = LinkMovementMethod.getInstance()
         }
+
+        subscribeErrorSnack()
+        subscribeOpenUrl()
 
         initAnimations()
 
-        subscribeErrorSnack()
-
         return binding.root
+    }
+
+    private fun subscribeOpenUrl() {
+        newsletterViewModel.openUrl.observe(this, EventObserver { url ->
+            customTab.showTab(url)
+        })
     }
 
     private fun subscribeErrorSnack() {
@@ -60,6 +78,15 @@ class NewsletterFragment : BaseFragment("newsletter") {
             ).show()
         })
 
+    }
+
+    private fun oldIssuesSpan() = getString(
+        R.string.previous_issues,
+        getString(R.string.see_here)
+    ).getClickableSpan(
+        getString(R.string.see_here)
+    ) {
+        newsletterViewModel.onPreviousIssues()
     }
 
     private fun initAnimations() {
