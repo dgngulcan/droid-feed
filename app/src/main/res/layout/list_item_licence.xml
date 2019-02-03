@@ -20,17 +20,18 @@
         android:focusable="true"
         android:minHeight="76dp"
         android:orientation="vertical"
-        tools:background="@color/gray">
+        android:paddingBottom="16dp"
+        tools:background="@color/pink">
 
         <TextView
             android:id="@+id/title"
             style="@style/DF.TitleStyle.List"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:text="@{licence.name}"
             android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
             android:layout_marginEnd="16dp"
+            android:text="@{licence.name}"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
@@ -41,28 +42,27 @@
             style="@style/TextAppearance.MaterialComponents.Body1"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:textColor="@color/transparentWhite"
             android:layout_marginTop="4dp"
+            android:layout_marginEnd="8dp"
             android:ellipsize="end"
             android:maxLines="2"
             android:text="@{licence.description}"
-            android:layout_marginEnd="8dp"
+            android:textColor="@color/transparentWhite"
             app:layout_constraintEnd_toEndOf="@+id/title"
             app:layout_constraintStart_toStartOf="@+id/title"
             app:layout_constraintTop_toBottomOf="@+id/title"
             tools:text="Description text could be long or small" />
 
-        <TextView
-            android:id="@+id/spnLicence"
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnLicence"
+            style="@style/DF.Button.Flat"
             android:layout_width="wrap_content"
-            android:layout_height="24dp"
-            android:gravity="center_vertical"
-            android:layout_marginBottom="16dp"
-            style="@style/TextAppearance.MaterialComponents.Body2"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="@+id/content"
-            app:layout_constraintTop_toBottomOf="@+id/content"
-            tools:text="@string/licence" />
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:backgroundTint="@color/colorAccent"
+            android:text="@string/licence"
+            app:layout_constraintEnd_toEndOf="@+id/content"
+            app:layout_constraintTop_toBottomOf="@+id/content" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

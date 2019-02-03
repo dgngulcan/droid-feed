@@ -23,6 +23,7 @@
         <include
             android:id="@+id/toolbar"
             layout="@layout/widget_toolbar"
+            android:homeNavClickListener="@{toolbarHomeNavClickListener}"
             app:homeNavClickListener="@{toolbarHomeNavClickListener}"
             app:title="@{toolbarTitle}" />
 
