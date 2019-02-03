@@ -8,8 +8,12 @@ import android.view.ViewGroup
 import androidx.lifecycle.ViewModelProviders
 import com.droidfeed.databinding.FragmentNewsletterBinding
 import com.droidfeed.ui.common.BaseFragment
+import com.droidfeed.util.AnimUtils
 import com.droidfeed.util.event.EventObserver
 import com.google.android.material.snackbar.Snackbar
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 @SuppressLint("ValidFragment")
 class NewsletterFragment : BaseFragment("newsletter") {
@@ -40,6 +44,8 @@ class NewsletterFragment : BaseFragment("newsletter") {
             setLifecycleOwner(this@NewsletterFragment)
         }
 
+        initAnimations()
+
         subscribeErrorSnack()
 
         return binding.root
@@ -55,4 +61,20 @@ class NewsletterFragment : BaseFragment("newsletter") {
         })
 
     }
+
+    private fun initAnimations() {
+        binding.animView.setOnClickListener {
+            if (!binding.animView.isAnimating) {
+                binding.animView.speed *= -1f
+                binding.animView.resumeAnimation()
+            }
+        }
+
+        launch(Dispatchers.Main) {
+            binding.animView.frame = 0
+            delay(AnimUtils.MEDIUM_ANIM_DURATION)
+            binding.animView.resumeAnimation()
+        }
+    }
+
 }
