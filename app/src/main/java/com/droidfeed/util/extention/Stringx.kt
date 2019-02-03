@@ -25,6 +25,7 @@ fun String.getClickableSpan(
 ): SpannableString {
     val signUpSpan = object : ClickableSpan() {
         override fun onClick(widget: View) {
+            widget.cancelPendingInputEvents()
             clickEvent.invoke(widget)
         }
     }

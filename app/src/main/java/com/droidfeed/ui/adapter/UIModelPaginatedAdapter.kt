@@ -40,21 +40,16 @@ class UIModelPaginatedAdapter(
             if (pagedList == null || pagedList.isEmpty()) {
                 super.submitList(pagedList)
             } else {
-                val parseViewTypes = launch {
-                    pagedList.forEach { uiModel ->
-                        if (uiModel != null) {
-                            viewTypes.put(uiModel.getViewType(), uiModel)
-                        }
+                pagedList.forEach { uiModel ->
+                    if (uiModel != null) {
+                        viewTypes.put(uiModel.getViewType(), uiModel)
                     }
                 }
 
-                parseViewTypes.join()
                 withContext(Dispatchers.Main) { super.submitList(pagedList) }
             }
         }
     }
-
-    fun isEmpty() = itemCount == 0
 
     override fun getItemViewType(position: Int) =
         when (position) {

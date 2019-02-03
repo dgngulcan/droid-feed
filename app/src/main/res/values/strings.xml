@@ -1,6 +1,6 @@
 <resources>
     <string name="app_name">DroidFeed</string>
-    <string name="app_name_lower">droidfeed</string>
+    w
     <string name="app_version">v%1$s</string>
 
     <string name="error_invalid_article_url">Article URL is invalid</string>
@@ -11,15 +11,15 @@
     <string name="nav_home">Home</string>
     <string name="nav_feed">Feed</string>
     <string name="nav_bookmarks">Bookmarks</string>
-    <string name="nav_about">About</string>
+    <string name="nav_title_about">About</string>
     <string name="nav_header_desc">Navigation header</string>
-    <string name="nav_contribute">Contribute</string>
-    <string name="nav_newsletter">Newsletter</string>
+    <string name="nav_title_contribute">Contribute</string>
+    <string name="nav_title_newsletter">Newsletter</string>
 
     <string name="send_email">Send email</string>
     <string name="about_page_copy">Your hub for the latest Android Development news and thoughts.</string>
 
-    <string name="info_no_internet">Couldn\'t connect the internet.</string>
+    <string name="info_no_internet">Internet connection is not available</string>
     <string name="info_bookmark_removed">Bookmark is removed</string>
 
     <string name="can_not_refresh">Can\'t refresh.</string>
@@ -54,7 +54,7 @@
     <string name="newsletter_desc1">Sent out weekly. No spam ever.</string>
     <string name="newsletter_desc2">Top news, articles, podcasts, and job postings delivered to your inbox.
 </string>
-    <string name="newsletter_email_exist">You are already a subscriber.\nSee you in your inbox.</string>
+    <string name="newsletter_email_exist">You are already a subscriber. See you in your inbox.</string>
     <string name="newsletter_subscribed">Successfully subscribed!\nSee you in your inbox.</string>
 
     <string name="empty_screen_bookmark">You haven\'t bookmarked anything yet.</string>
@@ -64,15 +64,24 @@
     <string name="empty_bookmark_title">Hi! Your bookmarked posts\nwill show up here.</string>
 
     <string name="dialog_rate_app">Thanks! Would you like to review us on Google Play?</string>
-    <string name="like_to_review_df">Would you like to review DroidFeed?</string>
+    <string name="like_to_review_df">Would you like to review DroidFeed on Google Play?</string>
     <string name="your_email">Your e-mail</string>
     <string name="sign_me_up">Sign Me Up</string>
     <string name="legal">Legal</string>
+    <string name="action_continue">Continue</string>
     <string name="privacy_policy">Privacy Policy</string>
+    <string name="terms_of_service">Terms of Service</string>
+    <string name="i_agree_to">I agree to the %1$s</string>
+    <string name="previous_issues">Want to see previous issues? %1$s</string>
+    <string name="see_here">See here.</string>
+
 
     <string name="content_article_image">image of the article</string>
     <string name="content_app_logo">DroidFeed logo</string>
     <string name="info_subs_confirmed">Thanks! Please check your inbox for a confirmation.</string>
     <string name="licence">Licence</string>
-
+    <string name="content_desc_back_button">Back navigation button</string>
+    <string name="error_cannot_obtain_sources">Can not obtain the news sources. Please try again later.</string>
+    <string name="empty_string" />
+    <string name="error_invalid_url">Cannot open invalid URL.</string>
 </resources>

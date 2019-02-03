@@ -76,7 +76,7 @@ class DatabaseMigrationTest {
 
         val posts = getMigrationValidatedRoomDatabase(migrations)
             .postDao()
-            .getAllPostsLiveData()
+            .getAllAsLiveData()
             .blockingObserve() ?: emptyList()
 
         assertEquals("https://post.link.test", posts[0].link)
@@ -117,7 +117,7 @@ class DatabaseMigrationTest {
         assertEquals(true, sources[2].isActive)
         assertEquals(3, sources[2].id)
 
-        val posts = migratedDb.postDao().getAllPostsLiveData().blockingObserve() ?: emptyList()
+        val posts = migratedDb.postDao().getAllAsLiveData().blockingObserve() ?: emptyList()
         assertEquals("https://post.link.test", posts[0].link)
         assertEquals("https://some.url2", posts[0].channel.link)
         assertEquals(2, posts[0].sourceId)
@@ -135,7 +135,7 @@ class DatabaseMigrationTest {
 
         val posts = getMigrationValidatedRoomDatabase(migrations)
             .postDao()
-            .getAllPostsLiveData().blockingObserve() ?: emptyList()
+            .getAllAsLiveData().blockingObserve() ?: emptyList()
 
         assertEquals("https://post.link.test", posts[0].link)
         assertEquals("https://channel.link.test", posts[0].channel.link)

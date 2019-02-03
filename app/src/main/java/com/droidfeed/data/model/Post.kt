@@ -73,6 +73,7 @@ data class Post(
     @Transient
     @Ignore
     var isVideoContent: Boolean = false
+        private set
         get() {
             return channel.link.contains("youtube")
         }
@@ -84,6 +85,7 @@ data class Post(
     @Transient
     @Ignore
     var image: String = ""
+        private set
         get() = if (content.contentImage.isBlank()) channel.imageUrl else content.contentImage
 
     fun isBookmarked() = bookmarked == 1
@@ -93,10 +95,6 @@ data class Post(
         type = "text/plain"
         putExtra(Intent.EXTRA_TEXT, "$title\n\n$link")
         addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP)
-    }
-
-    override fun equals(other: Any?): Boolean {
-        return super.equals(other)
     }
 
     override fun compareTo(other: Post) = compareValuesBy(this, other) { it.pubDateTimestamp }

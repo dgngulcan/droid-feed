@@ -2,13 +2,7 @@
 
 package com.droidfeed.util.extention
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import com.droidfeed.data.DataStatus
 import com.droidfeed.util.logThrowable
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.HttpException
@@ -41,33 +35,4 @@ suspend fun <T> Call<T>.suspendingEnqueue() = suspendCoroutine<T> { continuation
             }
         }
     })
-}
-
-
-/**
- * accepts a transform
- *
- */
-@Suppress("UNCHECKED_CAST")
-fun <T, L : Collection<T>, R> Call<L>.transformResult(
-    transform: (T) -> R
-): LiveData<DataStatus<L>> {
-    val liveData = MutableLiveData<DataStatus<L>>()
-        .also { it.postValue(DataStatus.Loading()) }
-
-    GlobalScope.launch(Dispatchers.IO) {
-        val dataStatus = try {
-            val results = suspendingEnqueue()
-                .map(transform)
-
-            DataStatus.Successful(results)
-        } catch (t: HttpException) {
-            DataStatus.HttpFailed<L>(t.code())
-        } catch (t: Throwable) {
-            DataStatus.Failed<L>(t)
-        } as DataStatus<L>
-
-        liveData.postValue(dataStatus)
-    }
-    return liveData
 }

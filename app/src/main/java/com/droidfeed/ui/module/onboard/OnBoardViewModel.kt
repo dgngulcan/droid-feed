@@ -1,6 +1,6 @@
 package com.droidfeed.ui.module.onboard
 
-import androidx.annotation.IdRes
+import androidx.annotation.DrawableRes
 import androidx.lifecycle.MutableLiveData
 import com.droidfeed.BuildConfig
 import com.droidfeed.R
@@ -26,7 +26,7 @@ class OnBoardViewModel @Inject constructor(
 
     val openUrl = MutableLiveData<Event<String>>()
     val openMainActivity = MutableLiveData<Event<Unit>>()
-    val showSnackBar = MutableLiveData<Event<@IdRes Int>>()
+    val showSnackBar = MutableLiveData<Event<@DrawableRes Int>>()
 
     private var isSourceListPulled = false
     private var isPendingNavigation = false

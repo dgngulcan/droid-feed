@@ -83,7 +83,7 @@ class CustomTab @Inject constructor(val activity: Activity) {
         } else {
             Snackbar.make(
                 activity.window.decorView,
-                com.droidfeed.R.string.error_invalid_article_url,
+                R.string.error_invalid_url,
                 Snackbar.LENGTH_LONG
             ).show()
         }

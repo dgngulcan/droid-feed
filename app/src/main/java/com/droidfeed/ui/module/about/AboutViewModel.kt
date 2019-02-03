@@ -1,39 +1,40 @@
 package com.droidfeed.ui.module.about
 
 import android.content.Intent
+import androidx.lifecycle.MutableLiveData
 import com.droidfeed.BuildConfig
 import com.droidfeed.contactIntent
 import com.droidfeed.rateAppIntent
 import com.droidfeed.shareIntent
 import com.droidfeed.ui.common.BaseViewModel
-import com.droidfeed.ui.common.SingleLiveEvent
+import com.droidfeed.util.event.Event
 import javax.inject.Inject
 
 class AboutViewModel @Inject constructor() : BaseViewModel() {
 
-    val rateAppEvent = SingleLiveEvent<Intent>()
-    val contactDevEvent = SingleLiveEvent<Intent>()
-    val openLinkEvent = SingleLiveEvent<String>()
-    val shareAppEvent = SingleLiveEvent<Intent>()
-    val openLicencesEvent = SingleLiveEvent<Unit>()
+    val startIntent = MutableLiveData<Event<Intent>>()
+    val openUrl = MutableLiveData<Event<String>>()
+    val openLicences = MutableLiveData<Event<Unit>>()
 
     fun openPlayStore() {
-        rateAppEvent.setValue(rateAppIntent)
+        startIntent.postValue(Event(rateAppIntent))
+        analytics.logAppRateClick()
     }
 
     fun contactEmail() {
-        contactDevEvent.setValue(contactIntent)
+        startIntent.postValue(Event(contactIntent))
     }
 
     fun shareApp() {
-        shareAppEvent.setValue(shareIntent)
+        startIntent.postValue(Event(shareIntent))
+        analytics.logShare("app")
     }
 
     fun openPrivacyPolicy() {
-        openLinkEvent.setValue(BuildConfig.DROIDFEED_PRIVACY_POLICY)
+        openUrl.postValue(Event(BuildConfig.DROIDFEED_PRIVACY_POLICY))
     }
 
     fun openLicences() {
-        openLicencesEvent.setValue(Unit)
+        openLicences.postValue(Event(Unit))
     }
 }

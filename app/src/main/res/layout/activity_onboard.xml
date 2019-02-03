@@ -57,7 +57,7 @@
             android:layout_marginStart="8dp"
             android:layout_marginEnd="16dp"
             android:layout_marginBottom="16dp"
-            android:onCheckedChanged="@{(v,isChecked)->onBoardViewModel.onAgreementChecked(isChecked)}"
+            android:checked="@={onBoardViewModel.isContinueButtonEnabled}"
             android:paddingStart="8dp"
             android:text="@{termsOfServiceSpan}"
             android:textAppearance="@style/Base.TextAppearance.AppCompat.Body2"

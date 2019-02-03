@@ -9,26 +9,35 @@ sealed class DataStatus<out T> {
      *
      * @param progress
      */
-    data class Loading<out T>(val progress: Int? = null) : DataStatus<T>()
+    data class Loading<out T>(
+        val progress: Int? = null
+    ) : DataStatus<T>()
 
     /**
      * Represents success state for the data.
      *
      * @param data
      */
-    data class Successful<T>(val data: T? = null) : DataStatus<T>()
+    data class Successful<T>(
+        val data: T? = null
+    ) : DataStatus<T>()
 
     /**
      * Represents fail state for the data.
      *
      * @param throwable
      */
-    data class Failed<out T>(val throwable: Throwable? = null) : DataStatus<T>()
+    data class Failed<out T>(
+        val throwable: Throwable? = null
+    ) : DataStatus<T>()
 
     /**
      * Represents fail state for Http call i.e. non 200 status codes.
      *
      * @param code http status code
      */
-    data class HttpFailed<out T>(val code: Int) : DataStatus<T>()
+    data class HttpFailed<out T>(
+        val code: Int = 0,
+        val errorBody: T? = null
+    ) : DataStatus<T>()
 }

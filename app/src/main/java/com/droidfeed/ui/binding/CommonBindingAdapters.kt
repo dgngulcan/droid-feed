@@ -5,11 +5,16 @@ import android.view.View
 import android.webkit.WebView
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.core.view.isVisible
 import androidx.databinding.BindingAdapter
 import com.droidfeed.R
+import com.droidfeed.util.extention.fadeIn
+import com.droidfeed.util.extention.fadeOut
+import com.droidfeed.util.glide.GlideApp
+import com.google.android.material.textfield.TextInputLayout
 import java.util.*
 
-@BindingAdapter("avdImageResource")
+@BindingAdapter("app:avdImageResource")
 fun avdImageResource(
     imageView: ImageView,
     avdImageResource: Int
@@ -17,25 +22,64 @@ fun avdImageResource(
     imageView.setImageResource(avdImageResource)
 }
 
-@BindingAdapter("visibilityToggle")
-fun visibilityToggle(
+@BindingAdapter("app:isVisible")
+fun isVisible(
     view: View,
-    show: Boolean
+    isVisible: Boolean
 ) {
-    view.visibility = if (show) View.VISIBLE else View.GONE
+    if (view.isVisible != isVisible)
+        view.isVisible = isVisible
 }
 
-@BindingAdapter("loadHtml")
-fun loadHtml(
-    webView: WebView,
-    htmlContent: String
+
+@BindingAdapter("app:isSelected")
+fun isSelected(
+    view: View,
+    isSelected: Boolean
 ) {
-    if (htmlContent.isNotBlank()) {
-        webView.loadData(htmlContent, "text/html", "UTF-8")
+    if (view.isSelected != isSelected) {
+        view.isSelected = isSelected
     }
 }
 
-@BindingAdapter("displayUrl")
+
+@BindingAdapter("app:isEnabled")
+fun isEnabled(
+    view: View,
+    isEnabled: Boolean
+) {
+    if (view.isEnabled != isEnabled) {
+        view.isEnabled = isEnabled
+
+        if (isEnabled) {
+            view.fadeIn()
+        } else {
+            view.fadeOut(0.5f)
+        }
+    }
+}
+
+@BindingAdapter("app:errorText")
+fun errorText(
+    view: TextInputLayout,
+    stringId: Int
+) {
+    val string = view.context.getString(stringId)
+    view.error = string
+    view.isErrorEnabled = string.isNotBlank()
+}
+
+@BindingAdapter("app:loadImage")
+fun loadImage(
+    imageView: ImageView,
+    resId: Int
+) {
+    GlideApp.with(imageView)
+        .load(resId)
+        .into(imageView)
+}
+
+@BindingAdapter("app:displayUrl")
 fun displayUrl(
     webView: WebView,
     url: String
@@ -43,21 +87,9 @@ fun displayUrl(
     webView.loadUrl(url)
 }
 
-@BindingAdapter("relativeDate")
-fun setRelativeTime(
-    view: TextView,
-    timeStamp: Long
-) {
-    view.text = DateUtils.getRelativeTimeSpanString(
-        timeStamp,
-        Calendar.getInstance(TimeZone.getDefault()).timeInMillis,
-        DateUtils.SECOND_IN_MILLIS
-    )
-}
-
 @BindingAdapter(
-    value = ["publisher",
-        "timestamp"],
+    value = ["app:publisher",
+        "app:timestamp"],
     requireAll = true
 )
 fun setRelativeDate(

@@ -32,7 +32,6 @@
             android:onClick="@{()->viewModel.contactEmail()}"
             android:text="@string/contact_us"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="@+id/textView"
             app:layout_constraintTop_toTopOf="parent" />
 
         <com.google.android.material.button.MaterialButton
@@ -100,7 +99,7 @@
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:layout_marginTop="48dp"
-            android:layout_marginBottom="56dp"
+            android:layout_marginBottom="16dp"
             android:clickable="true"
             android:focusable="true"
             android:scaleType="centerInside"

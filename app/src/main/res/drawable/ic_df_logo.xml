@@ -1,11 +1,13 @@
 <vector xmlns:android="http://schemas.android.com/apk/res/android"
-    android:width="108dp"
-    android:height="108dp"
-    android:viewportWidth="369.23077"
-    android:viewportHeight="369.23077">
+    xmlns:tools="http://schemas.android.com/tools"
+    android:width="300dp"
+    android:height="300dp"
+    android:viewportWidth="369"
+    android:viewportHeight="369"
+    tools:ignore="VectorRaster">
     <group
-        android:translateX="138.61539"
-        android:translateY="112.61539">
+        android:translateX="138"
+        android:translateY="112">
         <path
             android:fillColor="#FF4B4646"
             android:fillType="nonZero"

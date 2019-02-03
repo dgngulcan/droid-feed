@@ -9,48 +9,49 @@ import com.droidfeed.data.model.Post
 interface PostDao {
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
-    fun insertArticles(rssItem: List<Post>)
+    fun insert(posts: List<Post>)
 
     @Update(onConflict = OnConflictStrategy.REPLACE)
-    fun updateArticle(article: Post)
+    fun update(post: Post)
 
     @Delete
-    fun deleteArticle(article: Post)
+    fun delete(post: Post)
 
     @Query(
         "SELECT * FROM ${AppDatabase.POST_TABLE_NAME} WHERE source_id " +
-                "IN (SELECT  ${AppDatabase.SOURCE_TABLE_NAME}.id FROM ${AppDatabase.SOURCE_TABLE_NAME} " +
+                "IN (SELECT  ${AppDatabase.SOURCE_TABLE_NAME}.id " +
+                "FROM ${AppDatabase.SOURCE_TABLE_NAME} " +
                 "WHERE is_active = 1) " +
                 "ORDER BY pub_date_timestamp DESC"
     )
-    fun getAllPosts(): DataSource.Factory<Int, Post>
+    fun getAll(): DataSource.Factory<Int, Post>
 
     @Query(
         "SELECT * FROM ${AppDatabase.POST_TABLE_NAME} " +
                 "ORDER BY pub_date_timestamp DESC"
     )
-    fun getAllPostsLiveData(): LiveData<List<Post>>
+    fun getAllAsLiveData(): LiveData<List<Post>>
 
     @Query(
         "SELECT * FROM ${AppDatabase.POST_TABLE_NAME} " +
                 "WHERE bookmarked = 1 " +
                 "ORDER BY pub_date_timestamp DESC"
     )
-    fun getBookmarkedPosts(): DataSource.Factory<Int, Post>
+    fun getBookmarked(): DataSource.Factory<Int, Post>
 
     @Query("SELECT COUNT(*) FROM ${AppDatabase.POST_TABLE_NAME}")
-    fun getFeedItemCount(): Int
+    fun getPostCount(): Int
 
     @Query(
         "SELECT COUNT(*) FROM ${AppDatabase.POST_TABLE_NAME} " +
                 "WHERE bookmarked = 1"
     )
-    fun getBookmarkedItemCount(): Int
+    fun getBookmarkedCount(): Int
 
     @Query(
         "DELETE FROM ${AppDatabase.POST_TABLE_NAME} " +
                 "WHERE bookmarked == 0 " +
                 "AND channel_title LIKE :sourceUrl || '%'"
     )
-    fun clearNonBookmarkedSource(sourceUrl: String)
+    fun clearNonBookmarked(sourceUrl: String)
 }

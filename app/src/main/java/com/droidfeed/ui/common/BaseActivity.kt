@@ -50,16 +50,29 @@ abstract class BaseActivity : AppCompatActivity(),
      * Makes code bar transparent.
      */
     protected fun setupTransparentStatusBar() {
-        window.run {
-            clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS)
-            addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
-            statusBarColor = Color.TRANSPARENT
-            decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+        if (isMarshmallow()) {
+            window.run {
+                clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS)
+                addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
+                statusBarColor = Color.TRANSPARENT
+                decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+            }
+        }
+    }
+
+    protected fun setupFullScreenWindow() {
+        if (isMarshmallow()) {
+            window.setFlags(
+                WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS,
+                WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS
+            )
         }
     }
 
     protected fun darkStatusBarTheme() {
-        window.decorView.systemUiVisibility = 0
+        if (isMarshmallow()) {
+            window.decorView.systemUiVisibility = 0
+        }
     }
 
     protected fun lightStatusBarTheme() {

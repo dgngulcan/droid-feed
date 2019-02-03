@@ -1,5 +1,6 @@
 package com.droidfeed.ui.module.webview
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import androidx.databinding.DataBindingUtil
 import com.droidfeed.R
@@ -19,10 +20,13 @@ class WebViewActivity : BaseActivity() {
         init(binding)
     }
 
+    @SuppressLint("SetJavaScriptEnabled")
     private fun init(binding: ActivityWebviewBinding) {
         val webSiteUrl = intent.getStringExtra(EXTRA_URL)
 
         binding.apply {
+            webView.settings.javaScriptEnabled = true
+
             url = webSiteUrl
             toolbarTitle = webSiteUrl
             setToolbarHomeNavClickListener {

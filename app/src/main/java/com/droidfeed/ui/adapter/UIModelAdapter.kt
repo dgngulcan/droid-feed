@@ -13,7 +13,7 @@ import kotlinx.coroutines.*
 @Suppress("UNCHECKED_CAST")
 class UIModelAdapter constructor(
     coroutineScope: CoroutineScope,
-    val layoutManager: RecyclerView.LayoutManager? = null
+    private val layoutManager: RecyclerView.LayoutManager? = null
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>(),
     CoroutineScope by coroutineScope {
 

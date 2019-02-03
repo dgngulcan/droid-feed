@@ -25,6 +25,7 @@ android {
 
         buildConfigField 'String', "DROIDFEED_GITHUB_URL", "\"https://github.com/dgngulcan/droid-feed\""
         buildConfigField 'String', "DROIDFEED_PRIVACY_POLICY", "\"https://app.termly.io/document/privacy-policy/ab750f11-7f6d-499d-aafb-57697bd8aba0\""
+        buildConfigField 'String', "DROIDFEED_PREVIOUS_ISSUES", "\"https://us12.campaign-archive.com/home/?u=f04785b3cff4f9a551bab8831&id=b45d2a62b0\""
 
         multiDexEnabled true
 
@@ -111,6 +112,7 @@ dependencies {
 
     implementation deps.firebase.core
     implementation deps.firebase.config
+    implementation deps.firebase.firestore
 
     implementation deps.jsoup
 

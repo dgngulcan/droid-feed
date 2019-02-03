@@ -6,13 +6,12 @@ import com.droidfeed.data.model.Post
 import com.droidfeed.data.model.Source
 import com.droidfeed.data.parser.NewsXmlParser
 import com.droidfeed.util.logThrowable
+import kotlinx.coroutines.*
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import java.io.IOException
 import javax.inject.Inject
 import javax.inject.Singleton
-import kotlin.coroutines.resume
-import kotlin.coroutines.suspendCoroutine
 
 @Suppress("UNCHECKED_CAST")
 @Singleton
@@ -22,37 +21,46 @@ class PostRepo @Inject constructor(
     private val postDao: PostDao
 ) {
 
-    fun getAllPosts() = postDao.getAllPosts()
+    fun getAll() = postDao.getAll()
 
-    fun getBookmarkedPosts() = postDao.getBookmarkedPosts()
+    fun getBookmarked() = postDao.getBookmarked()
 
-    fun updatePost(post: Post) = postDao.updateArticle(post)
+    fun getBookmarkedCount() = postDao.getBookmarkedCount()
 
-    suspend fun refresh(sources: List<Source>): List<DataStatus<Nothing>> =
-        suspendCoroutine { continuation ->
-            val result = sources.map { source ->
+    fun updatePost(post: Post) = postDao.update(post)
+
+    /**
+     * Refresh the posts of the given sources. Sources are fetched and parsed asynchronously. After
+     * fetching and parsing, the posts are added to the database.
+     *
+     * @param coroutineScope
+     * @param sources to refresh
+     */
+    suspend fun refresh(
+        coroutineScope: CoroutineScope,
+        sources: List<Source>
+    ): List<DataStatus<Nothing>> = runBlocking {
+        val allPosts = mutableListOf<Post>()
+
+        val asyncFetches = sources.map { source ->
+            coroutineScope.async(Dispatchers.IO) {
                 val result = fetchAndParsePosts(source)
 
-                val status: DataStatus<Nothing> = when (result) {
-                    is DataStatus.Loading -> {
-                        DataStatus.Loading()
-                    }
+                when (result) {
                     is DataStatus.Successful -> {
-                        result.data?.let { addPosts(it) }
+                        result.data?.let { allPosts.addAll(it) }
                         DataStatus.Successful()
                     }
-                    is DataStatus.Failed -> {
-                        DataStatus.Failed(result.throwable)
-                    }
-                    is DataStatus.HttpFailed -> {
-                        DataStatus.HttpFailed(result.code)
-                    }
+                    else -> result as DataStatus<Nothing>
                 }
-                status
             }
-
-            continuation.resume(result)
         }
+
+        val results = asyncFetches.awaitAll()
+        addPosts(allPosts)
+
+        results
+    }
 
     private fun fetchAndParsePosts(source: Source): DataStatus<List<Post>> {
         val request = Request.Builder()
@@ -78,6 +86,6 @@ class PostRepo @Inject constructor(
         }
     }
 
-    private fun addPosts(posts: List<Post>) = postDao.insertArticles(posts)
+    private fun addPosts(posts: List<Post>) = postDao.insert(posts)
 
 }
