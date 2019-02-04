@@ -119,16 +119,16 @@ class FeedFragment : BaseFragment("feed"), Scrollable {
 
     private fun subscribeIsRefreshing() {
         feedViewModel.isRefreshing.observe(viewLifecycleOwner, Observer { isRefreshing ->
-            swipeRefreshArticles.isRefreshing = isRefreshing
+            swipeRefreshPosts.isRefreshing = isRefreshing
         })
     }
 
     private fun initSwipeRefresh() {
-        binding.swipeRefreshArticles.setOnRefreshListener {
+        binding.swipeRefreshPosts.setOnRefreshListener {
             when {
                 context?.isOnline() == true -> feedViewModel.refresh()
                 else -> {
-                    binding.swipeRefreshArticles.isRefreshing = false
+                    binding.swipeRefreshPosts.isRefreshing = false
                     Snackbar.make(
                         binding.root,
                         R.string.info_no_internet,

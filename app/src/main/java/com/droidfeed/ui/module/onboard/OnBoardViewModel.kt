@@ -59,11 +59,11 @@ class OnBoardViewModel @Inject constructor(
     }
 
     private fun pullSources() = launch(Dispatchers.IO) {
-        val result = sourceRepo.pullSources()
+        val result = sourceRepo.pull()
 
         when (result) {
             is DataStatus.Successful -> {
-                sourceRepo.insertSources(result.data ?: emptyList())
+                sourceRepo.insert(result.data ?: emptyList())
                 isSourceListPulled = true
 
                 if (isPendingNavigation) {

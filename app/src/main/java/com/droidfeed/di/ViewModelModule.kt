@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModelProvider
 import com.droidfeed.ui.common.DFViewModelFactory
 import com.droidfeed.ui.module.about.AboutViewModel
 import com.droidfeed.ui.module.about.licence.LicencesViewModel
+import com.droidfeed.ui.module.conferences.ConferencesViewModel
 import com.droidfeed.ui.module.contribute.ContributeViewModel
 import com.droidfeed.ui.module.feed.FeedViewModel
 import com.droidfeed.ui.module.main.MainViewModel
@@ -51,6 +52,11 @@ abstract class ViewModelModule {
     @IntoMap
     @ViewModelKey(LicencesViewModel::class)
     abstract fun bindLicencesViewModel(viewModel: LicencesViewModel): ViewModel
+
+    @Binds
+    @IntoMap
+    @ViewModelKey(ConferencesViewModel::class)
+    abstract fun bindConferencesViewModel(viewModel: ConferencesViewModel): ViewModel
 
     @Binds
     abstract fun bindViewModelFactory(factory: DFViewModelFactory): ViewModelProvider.Factory

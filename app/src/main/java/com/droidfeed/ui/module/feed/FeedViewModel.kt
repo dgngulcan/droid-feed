@@ -84,7 +84,7 @@ class FeedViewModel @Inject constructor(
             value = R.string.empty_source_content
         }
 
-    val isProgressBarVisible = MutableLiveData<Boolean>().apply { value = false }
+    val isProgressVisible = MutableLiveData<Boolean>().apply { value = false }
     val isRefreshing = MutableLiveData<Boolean>().apply { value = false }
     val openPostDetail = MutableLiveData<Event<Post>>()
     val showUndoBookmarkSnack = MutableLiveData<Event<() -> Unit>>()
@@ -136,15 +136,15 @@ class FeedViewModel @Inject constructor(
 
     fun refresh() = launch(Dispatchers.IO) {
         if (postsLiveData.value?.isEmpty() == true) {
-            isProgressBarVisible.postValue(true)
+            isProgressVisible.postValue(true)
         }
 
         postRepo.refresh(
             this,
-            sourceRepo.getActiveSources()
+            sourceRepo.getActives()
         )
 
-        isProgressBarVisible.postValue(false)
+        isProgressVisible.postValue(false)
         isRefreshing.postValue(false)
     }
 

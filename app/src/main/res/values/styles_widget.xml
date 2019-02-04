@@ -79,9 +79,18 @@
     <style name="DF.Button.Flat" parent="@style/Widget.MaterialComponents.Button.UnelevatedButton">
         <item name="android:textAllCaps">false</item>
         <item name="android:textIsSelectable">false</item>
-        <item name="cornerRadius">24dp</item>
+        <item name="cornerRadius">@dimen/buttonCornerRadius</item>
         <item name="android:fontFamily">@font/poppins_medium</item>
         <item name="android:textColor">@android:color/white</item>
+    </style>
+
+    <style name="DF.Button.Outline" parent="@style/Widget.MaterialComponents.Button.OutlinedButton">
+        <item name="android:textAllCaps">false</item>
+        <item name="android:textIsSelectable">false</item>
+        <item name="cornerRadius">@dimen/card_corner_radius</item>
+        <item name="android:fontFamily">@font/poppins_medium</item>
+        <item name="strokeColor">@color/colorAccent</item>
+        <item name="android:textColor">@android:color/primary_text_light</item>
     </style>
 
     <style name="DF.Button.Icon">

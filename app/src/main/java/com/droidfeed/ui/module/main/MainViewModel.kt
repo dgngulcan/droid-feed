@@ -40,7 +40,7 @@ class MainViewModel @Inject constructor(
 
 
     val sourceUIModelData: LiveData<List<SourceUIModel>> =
-        map(sourceRepo.getSources()) { sourceList ->
+        map(sourceRepo.getAll()) { sourceList ->
             sourceList.map { source ->
                 SourceUIModel(source, sourceClickListener)
             }
@@ -59,7 +59,7 @@ class MainViewModel @Inject constructor(
                     )
                 }
 
-                sourceRepo.updateSource(source)
+                sourceRepo.update(source)
             }
         }
     }
@@ -83,6 +83,14 @@ class MainViewModel @Inject constructor(
     fun onContributeNavSelected() {
         toolbarTitle.postValue(R.string.nav_title_contribute)
         onNavigation.postValue(Destination.CONTRIBUTE)
+        isFilterButtonVisible.postValue(false)
+        isBookmarksButtonVisible.postValue(false)
+        isMenuVisible.postValue(false)
+    }
+
+    fun onConferencesNavSelected() {
+        toolbarTitle.postValue(R.string.nav_title_conferences)
+        onNavigation.postValue(Destination.CONFERENCES)
         isFilterButtonVisible.postValue(false)
         isBookmarksButtonVisible.postValue(false)
         isMenuVisible.postValue(false)

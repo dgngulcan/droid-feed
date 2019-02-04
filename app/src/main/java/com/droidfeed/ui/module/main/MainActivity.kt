@@ -100,9 +100,9 @@ class MainActivity : BaseActivity() {
 
                 when (destination) {
                     Destination.FEED -> {
+                        highlightSelectedMenuItem(binding.appbar.menu.btnNavHome)
                         onMenuItemSelected(colorPalette.transparent)
                         lightStatusBarTheme()
-                        highlightSelectedMenuItem(binding.appbar.menu.btnNavHome)
                     }
                     Destination.NEWSLETTER -> {
                         onMenuItemSelected(colorPalette.blue)
@@ -118,6 +118,11 @@ class MainActivity : BaseActivity() {
                         highlightSelectedMenuItem(binding.appbar.menu.btnNavAbout)
                         onMenuItemSelected(colorPalette.pink)
                         darkStatusBarTheme()
+                    }
+                    Destination.CONFERENCES -> {
+                        highlightSelectedMenuItem(binding.appbar.menu.btnNavConferences)
+                        onMenuItemSelected(colorPalette.transparent)
+                        lightStatusBarTheme()
                     }
                 }
             }
@@ -232,10 +237,14 @@ class MainActivity : BaseActivity() {
     }
 
     private fun animateTitleColor(isActive: Boolean) {
-        val isFeedScreenActive = navController.activeDestination == Destination.FEED
+        val isLightThemed = when (navController.activeDestination) {
+            Destination.CONFERENCES,
+            Destination.FEED -> true
+            else -> false
+        }
 
         val commonColor = when {
-            isFeedScreenActive -> colorPalette.grayDark
+            isLightThemed -> colorPalette.grayDark
             else -> colorPalette.white
         }
 

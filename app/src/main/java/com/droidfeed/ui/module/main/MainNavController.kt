@@ -5,6 +5,7 @@ import com.droidfeed.R
 import com.droidfeed.di.MainScope
 import com.droidfeed.ui.common.Scrollable
 import com.droidfeed.ui.module.about.AboutFragment
+import com.droidfeed.ui.module.conferences.ConferencesFragment
 import com.droidfeed.ui.module.contribute.ContributeFragment
 import com.droidfeed.ui.module.feed.FeedFragment
 import com.droidfeed.ui.module.newsletter.NewsletterFragment
@@ -23,6 +24,7 @@ class MainNavController @Inject constructor(val activity: MainActivity) {
     private val aboutFragment: AboutFragment by lazy { AboutFragment() }
     private val newsletterFragment: NewsletterFragment by lazy { NewsletterFragment() }
     private val contributeFragment: ContributeFragment by lazy { ContributeFragment() }
+    private val conferencesFragment: ConferencesFragment by lazy { ConferencesFragment() }
 
     private fun changeFragment(fragment: Fragment) {
         fragmentManager.beginTransaction()
@@ -51,6 +53,7 @@ class MainNavController @Inject constructor(val activity: MainActivity) {
                 Destination.ABOUT -> changeFragment(aboutFragment)
                 Destination.NEWSLETTER -> changeFragment(newsletterFragment)
                 Destination.CONTRIBUTE -> changeFragment(contributeFragment)
+                Destination.CONFERENCES -> changeFragment(conferencesFragment)
             }
         }
     }

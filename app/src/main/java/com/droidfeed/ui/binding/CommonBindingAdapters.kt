@@ -87,6 +87,23 @@ fun displayUrl(
     webView.loadUrl(url)
 }
 
+
+@BindingAdapter("app:relativeTimestamp")
+fun setRelativeTimestamp(
+    view: TextView,
+    date: Date?
+) {
+    if (date != null) {
+        val relativeDate = DateUtils.getRelativeTimeSpanString(
+            date.time,
+            Calendar.getInstance(TimeZone.getDefault()).timeInMillis,
+            DateUtils.SECOND_IN_MILLIS
+        )
+
+        view.text = relativeDate.toString()
+    }
+}
+
 @BindingAdapter(
     value = ["app:publisher",
         "app:timestamp"],

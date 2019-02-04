@@ -4,5 +4,6 @@ enum class Destination {
     FEED,
     ABOUT,
     NEWSLETTER,
-    CONTRIBUTE
+    CONTRIBUTE,
+    CONFERENCES
 }

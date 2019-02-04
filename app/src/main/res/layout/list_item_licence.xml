@@ -20,7 +20,7 @@
         android:focusable="true"
         android:minHeight="76dp"
         android:orientation="vertical"
-        android:paddingBottom="16dp"
+        android:padding="16dp"
         tools:background="@color/pink">
 
         <TextView
@@ -28,9 +28,6 @@
             style="@style/DF.TitleStyle.List"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="16dp"
-            android:layout_marginEnd="16dp"
             android:text="@{licence.name}"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"

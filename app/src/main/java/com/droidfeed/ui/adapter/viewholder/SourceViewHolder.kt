@@ -9,7 +9,10 @@ class SourceViewHolder(
     private val binding: ListItemSourceBinding
 ) : RecyclerView.ViewHolder(binding.root) {
 
-    fun bind(source: Source, clickListener: UiModelClickListener<Source>) {
+    fun bind(
+        source: Source,
+        clickListener: UiModelClickListener<Source>
+    ) {
         binding.source = source
         binding.clickListener = clickListener
     }

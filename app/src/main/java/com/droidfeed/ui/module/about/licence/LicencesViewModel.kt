@@ -2,7 +2,7 @@ package com.droidfeed.ui.module.about.licence
 
 import androidx.lifecycle.MutableLiveData
 import com.droidfeed.data.model.Licence
-import com.droidfeed.ui.adapter.model.LicenceUiModel
+import com.droidfeed.ui.adapter.model.LicenceUIModel
 import com.droidfeed.ui.common.BaseViewModel
 import com.droidfeed.util.event.Event
 import kotlinx.coroutines.Dispatchers
@@ -11,7 +11,7 @@ import javax.inject.Inject
 
 class LicencesViewModel @Inject constructor() : BaseViewModel() {
 
-    val licenceUIModels = MutableLiveData<List<LicenceUiModel>>()
+    val licenceUIModels = MutableLiveData<List<LicenceUIModel>>()
     val openUrl = MutableLiveData<Event<String>>()
     val onBackNavigation = MutableLiveData<Event<Unit>>()
 
@@ -21,7 +21,7 @@ class LicencesViewModel @Inject constructor() : BaseViewModel() {
 
     private fun fillLicenceUIModels() = launch(Dispatchers.IO) {
         val uiModels = getLicences().map { licence ->
-            LicenceUiModel(licence) { url ->
+            LicenceUIModel(licence) { url ->
                 openUrl.postValue(Event(url))
             }
         }

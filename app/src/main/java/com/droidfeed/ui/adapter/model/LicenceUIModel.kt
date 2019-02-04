@@ -9,7 +9,7 @@ import com.droidfeed.ui.adapter.UIModelType
 import com.droidfeed.ui.adapter.diff.Diffable
 import com.droidfeed.ui.adapter.viewholder.LicenceViewHolder
 
-class LicenceUiModel(
+class LicenceUIModel(
     private val licence: Licence,
     private val listener: (String) -> Unit
 ) : BaseUIModel<LicenceViewHolder> {

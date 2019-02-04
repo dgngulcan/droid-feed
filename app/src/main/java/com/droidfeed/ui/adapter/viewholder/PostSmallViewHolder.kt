@@ -9,9 +9,14 @@ import com.droidfeed.ui.module.feed.PostClickListener
  *
  * @param binding
  */
-class PostSmallViewHolder(private val binding: ListItemPostSmallBinding) : PostViewHolder(binding.root) {
+class PostSmallViewHolder(
+    private val binding: ListItemPostSmallBinding
+) : PostViewHolder(binding.root) {
 
-    override fun bind(post: Post, postClickListener: PostClickListener) {
+    override fun bind(
+        post: Post,
+        postClickListener: PostClickListener
+    ) {
         binding.postClickListener = postClickListener
         binding.post = post
         binding.executePendingBindings()
