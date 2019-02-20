@@ -89,5 +89,4 @@ class LicencesActivity : BaseActivity() {
             onBackPressed()
         })
     }
-
 }

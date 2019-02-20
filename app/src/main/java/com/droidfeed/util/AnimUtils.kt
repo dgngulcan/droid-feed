@@ -1,9 +1,7 @@
 package com.droidfeed.util
 
-import android.view.View
 import android.view.animation.AnimationUtils
 import android.view.animation.Interpolator
-import androidx.core.view.isVisible
 import com.droidfeed.App
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -22,8 +20,6 @@ class AnimUtils @Inject constructor(appContext: App) {
     val linearOutSlowInInterpolator: Interpolator by lazy {
         AnimationUtils.loadInterpolator(appContext, android.R.interpolator.linear_out_slow_in)
     }
-
-
 
     companion object {
         const val MEDIUM_ANIM_DURATION = 500L

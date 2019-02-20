@@ -1,3 +1,5 @@
+@file:Suppress("unused")
+
 package com.droidfeed.di
 
 import androidx.lifecycle.ViewModel

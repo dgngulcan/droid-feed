@@ -87,5 +87,4 @@ class OnBoardActivity : BaseActivity() {
             startActivity(this)
         }
     }
-
 }

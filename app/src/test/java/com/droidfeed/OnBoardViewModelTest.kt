@@ -30,27 +30,21 @@ class OnBoardViewModelTest {
 
     @Test
     fun WHEN_initiated_THEN_pull_sources() {
-
     }
 
     @Test
     fun WHEN_agreed_terms_THEN_enable_continue_button() {
-
     }
 
     @Test
     fun WHEN_continue_button_is_clicked_THEN_disable_continue_button() {
-
     }
 
     @Test
     fun GIVEN_sources_are_pulled_WHEN_continue_button_is_clicked_THEN_open_main_activity() {
-
     }
 
     @Test
     fun GIVEN_sources_are_not_pulled_WHEN_continue_button_is_clicked_THEN_show_progress_and_open_main_activity() {
-
     }
-
 }

@@ -22,5 +22,4 @@ abstract class BaseViewModel : ViewModel(), CoroutineScope {
         super.onCleared()
         job.cancel()
     }
-
 }

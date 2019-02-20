@@ -22,5 +22,4 @@ class BaseUIModelDiffCallback : DiffUtil.ItemCallback<BaseUIModelAlias>() {
         oldItem: BaseUIModelAlias,
         newItem: BaseUIModelAlias
     ) = newItem.getData()
-
 }

@@ -8,7 +8,6 @@ import com.droidfeed.data.model.Conference
 import com.droidfeed.databinding.ListItemConferenceBinding
 import java.util.*
 
-
 class ConferenceViewHolder(
     private val binding: ListItemConferenceBinding
 ) : RecyclerView.ViewHolder(binding.root) {
@@ -39,5 +38,4 @@ class ConferenceViewHolder(
             onCFPClick(conference)
         }
     }
-
 }

@@ -124,5 +124,4 @@ class LicencesViewModel @Inject constructor() : BaseViewModel() {
                 licence.name
             }
     }
-
 }

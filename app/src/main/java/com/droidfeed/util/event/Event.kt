@@ -21,6 +21,7 @@ package com.droidfeed.util.event
  *
  * [Read more about this.](https://medium.com/google-developers/livedata-with-snackbar-navigation-and-other-events-the-singleliveevent-case-ac2622673150)
  */
+@Suppress("MemberVisibilityCanBePrivate")
 open class Event<out T>(private val content: T? = null) {
 
     var hasBeenHandled = false

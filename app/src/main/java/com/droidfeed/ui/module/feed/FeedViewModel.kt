@@ -197,6 +197,5 @@ class FeedViewModel @Inject constructor(
 
     companion object {
         private const val ITEM_PER_PAGE = 20
-
     }
 }

@@ -2,9 +2,10 @@ package com.droidfeed.data.repo
 
 import com.droidfeed.data.DataStatus
 import com.droidfeed.data.model.Conference
-import com.droidfeed.util.extention.getUpcomingConferences
 import com.droidfeed.util.extention.isOnline
+import com.google.firebase.Timestamp
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.Query
 import java.net.UnknownHostException
 import java.util.*
 import javax.inject.Inject
@@ -16,17 +17,26 @@ class ConferenceRepo @Inject constructor(
 ) {
 
     suspend fun getUpcoming() = suspendCoroutine<DataStatus<List<Conference>>> { continuation ->
-        firestore.getUpcomingConferences()
+        firestore.collection("conferences")
+            .orderBy(
+                "date_start",
+                Query.Direction.ASCENDING
+            )
+            .whereGreaterThanOrEqualTo(
+                "date_start",
+                Timestamp(Date())
+            )
+            .get()
             .addOnSuccessListener { result ->
                 val conferences = result.documents.map { document ->
                     Conference(
                         document["name"] as String,
                         document["location"] as String,
                         document["url"] as String,
-                        document["date_start"] as Date,
-                        document["date_end"] as Date,
-                        document["cfp_start"] as? Date,
-                        document["cfp_end"] as? Date,
+                        (document["date_start"] as Timestamp).toDate(),
+                        (document["date_end"] as Timestamp).toDate(),
+                        (document["cfp_start"] as? Timestamp)?.toDate(),
+                        (document["cfp_end"] as? Timestamp)?.toDate(),
                         document["cfp_url"] as? String
                     )
                 }
@@ -38,10 +48,8 @@ class ConferenceRepo @Inject constructor(
                 } else {
                     continuation.resume(DataStatus.Successful(conferences))
                 }
-
             }.addOnFailureListener { exception ->
                 continuation.resume(DataStatus.Failed(exception))
             }
     }
-
 }

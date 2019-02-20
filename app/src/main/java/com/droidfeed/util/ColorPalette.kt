@@ -15,5 +15,4 @@ class ColorPalette @Inject constructor(context: Context) {
     val blue by lazy { ContextCompat.getColor(context, R.color.blue) }
     val gray by lazy { ContextCompat.getColor(context, R.color.gray) }
     val grayDark by lazy { ContextCompat.getColor(context, R.color.grayDark1) }
-
 }

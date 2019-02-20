@@ -41,7 +41,6 @@ class UIModelAdapter constructor(
             else -> 0
         }
 
-
     @Synchronized
     fun addUIModels(newUiModels: List<BaseUIModelAlias>?) {
         newUiModels?.let { newModels ->

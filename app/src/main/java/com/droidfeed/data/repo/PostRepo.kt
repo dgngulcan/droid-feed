@@ -81,11 +81,9 @@ class PostRepo @Inject constructor(
             } else {
                 DataStatus.HttpFailed(response.code())
             }
-
         } catch (e: IOException) {
             logThrowable(e)
             DataStatus.Failed(e)
         }
     }
-
 }

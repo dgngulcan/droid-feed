@@ -33,12 +33,10 @@ class ConferencesViewModel @Inject constructor(
                     createConferenceUIModel(conference)
                 }
                 conferences.postValue(uiModels)
-
             }
             is DataStatus.Failed -> {
             }
         }
-
     }
 
     private fun createConferenceUIModel(conference: Conference): ConferenceUIModel {
@@ -51,5 +49,4 @@ class ConferencesViewModel @Inject constructor(
                 openUrl.postValue(Event(conf.cfpUrl))
             })
     }
-
 }

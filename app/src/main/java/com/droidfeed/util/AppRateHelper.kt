@@ -36,4 +36,3 @@ class AppRateHelper @Inject constructor(private val sharedPrefs: SharedPreferenc
         }
     }
 }
-

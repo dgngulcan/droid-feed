@@ -53,5 +53,4 @@ class NewsletterRepo @Inject constructor(
         val jsonAdapter = moshi.adapter<MailchimpError>(MailchimpError::class.java)
         return jsonAdapter.fromJson(errorBody)
     }
-
 }

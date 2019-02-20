@@ -4,7 +4,6 @@ import android.content.Context
 import android.content.pm.PackageManager
 import android.net.ConnectivityManager
 
-
 /**
  * Checks if the device has internet access.
  *

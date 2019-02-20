@@ -96,9 +96,5 @@ class ConferencesFragment : BaseFragment("conferences") {
                 false
             )
         }
-
-
     }
-
-
 }

@@ -31,7 +31,6 @@ fun isVisible(
         view.isVisible = isVisible
 }
 
-
 @BindingAdapter("app:isSelected")
 fun isSelected(
     view: View,
@@ -41,7 +40,6 @@ fun isSelected(
         view.isSelected = isSelected
     }
 }
-
 
 @BindingAdapter("app:isEnabled")
 fun isEnabled(
@@ -86,7 +84,6 @@ fun displayUrl(
 ) {
     webView.loadUrl(url)
 }
-
 
 @BindingAdapter("app:relativeTimestamp")
 fun setRelativeTimestamp(

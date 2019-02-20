@@ -77,7 +77,6 @@ class NewsletterFragment : BaseFragment("newsletter") {
                 Snackbar.LENGTH_SHORT
             ).show()
         })
-
     }
 
     private fun oldIssuesSpan() = getString(
@@ -103,5 +102,4 @@ class NewsletterFragment : BaseFragment("newsletter") {
             binding.animView.resumeAnimation()
         }
     }
-
 }

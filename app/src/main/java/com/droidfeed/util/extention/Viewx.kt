@@ -3,13 +3,8 @@ package com.droidfeed.util.extention
 import android.content.Context
 import android.view.View
 import android.view.inputmethod.InputMethodManager
-import android.widget.ImageView
 import androidx.core.view.isVisible
-import com.bumptech.glide.Glide
-import com.bumptech.glide.request.RequestOptions
-import com.droidfeed.R
 import com.droidfeed.util.AnimUtils
-
 
 /**
  * Hides the soft keyboard.

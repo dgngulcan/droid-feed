@@ -12,6 +12,7 @@ import com.droidfeed.data.api.mailchimp.Subscriber
 import com.droidfeed.data.api.mailchimp.SubscriptionStatus
 import com.droidfeed.data.repo.NewsletterRepo
 import com.droidfeed.ui.common.BaseViewModel
+import com.droidfeed.util.AnalyticsUtil
 import com.droidfeed.util.event.Event
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -19,7 +20,8 @@ import java.net.UnknownHostException
 import javax.inject.Inject
 
 class NewsletterViewModel @Inject constructor(
-    private val newsletterRepo: NewsletterRepo
+    private val newsletterRepo: NewsletterRepo,
+    private val analyticsUtil: AnalyticsUtil
 ) : BaseViewModel() {
 
     val isSignButtonVisible = MutableLiveData<Boolean>().apply { value = true }
@@ -29,7 +31,6 @@ class NewsletterViewModel @Inject constructor(
     val errorText = MutableLiveData<@StringRes Int>().apply { value = R.string.empty_string }
     val showErrorSnack = MutableLiveData<Event<@StringRes Int>>()
     val openUrl = MutableLiveData<Event<String>>()
-
 
     fun onPreviousIssues() {
         openUrl.postValue(Event(BuildConfig.DROIDFEED_PREVIOUS_ISSUES))
@@ -77,6 +78,7 @@ class NewsletterViewModel @Inject constructor(
             is DataStatus.Successful -> {
                 isEmailInputVisible.postValue(false)
                 isSubsConfirmationVisible.postValue(true)
+                analyticsUtil.logNewsletterSignUp()
             }
             is DataStatus.Failed -> {
                 isSignButtonVisible.postValue(true)
@@ -100,5 +102,4 @@ class NewsletterViewModel @Inject constructor(
             }
         }
     }
-
 }

@@ -18,6 +18,7 @@
     <color name="grayDark2">#212121</color>
     <color name="yellow">#FFC66d</color>
     <color name="green">#3B8686</color>
+    <color name="greenBright">#85ff00</color>
     <color name="pink">#E24971</color>
     <color name="blue">#2D7FDF</color>
     <color name="redError">#FFA9A9</color>

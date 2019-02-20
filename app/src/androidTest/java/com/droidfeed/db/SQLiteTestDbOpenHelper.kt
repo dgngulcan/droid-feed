@@ -29,6 +29,4 @@ class SQLiteTestDbOpenHelper(
     companion object {
         const val DATABASE_VERSION = 1
     }
-
-
 }

@@ -35,10 +35,8 @@ class SourceRepo @Inject constructor(
     @WorkerThread
     fun update(source: Source) = sourceDao.updateSource(source)
 
-
     @WorkerThread
     fun insert(sources: List<Source>) = sourceDao.insertSources(sources)
-
 
     /**
      * Pulls sources from Firebase Firestore.

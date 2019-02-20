@@ -78,7 +78,6 @@ class AboutFragment : BaseFragment("about") {
         })
     }
 
-
     private fun subscribeStartIntentEvent() {
         aboutViewModel.startIntent.observe(viewLifecycleOwner, EventObserver { intent ->
             startActivity(intent)
@@ -99,6 +98,4 @@ class AboutFragment : BaseFragment("about") {
             binding.animView.resumeAnimation()
         }
     }
-
-
 }

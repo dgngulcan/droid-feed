@@ -149,5 +149,4 @@ class MainViewModel @Inject constructor(
             else -> navigateBack()
         }
     }
-
 }

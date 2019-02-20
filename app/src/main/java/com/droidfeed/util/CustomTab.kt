@@ -18,7 +18,6 @@ import com.droidfeed.util.extention.isPackageAvailable
 import com.google.android.material.snackbar.Snackbar
 import javax.inject.Inject
 
-
 /**
  * Custom Chrome Tabs helper.
  */

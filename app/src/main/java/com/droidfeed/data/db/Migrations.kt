@@ -24,7 +24,6 @@ val MIGRATION_2_3: Migration = object : Migration(2, 3) {
         // bind posts to sources
         database.execSQL("UPDATE $POST_TABLE_NAME SET source_id = (SELECT id FROM $SOURCE_TABLE_NAME WHERE url = $POST_TABLE_NAME.channel_link)")
     }
-
 }
 
 /**

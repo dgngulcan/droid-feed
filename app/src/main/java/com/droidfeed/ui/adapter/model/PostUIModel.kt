@@ -43,5 +43,4 @@ data class PostUIModel(
     override fun getViewType(): Int = post.layoutType.ordinal
 
     override fun getData() = post
-
 }

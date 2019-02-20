@@ -33,11 +33,7 @@ class OnBoardViewModel @Inject constructor(
     private var pullSourceJob = Job()
 
     init {
-        pullSourceJob = pullSources()  /* news sources are pulled on first open */
-    }
-
-    fun onAgreementChecked(isChecked: Boolean) {
-        isContinueButtonEnabled.postValue(isChecked)
+        pullSourceJob = pullSources() /* news sources are pulled on first open */
     }
 
     fun onTermsOfUseClicked() {
@@ -97,5 +93,4 @@ class OnBoardViewModel @Inject constructor(
         isAgreementCBEnabled.postValue(!isLoading)
         isProgressVisible.postValue(isLoading)
     }
-
 }

@@ -104,5 +104,4 @@ data class Post(
     override fun hasSameContentWith(item: Any): Boolean {
         return bookmarked == (item as Post).bookmarked
     }
-
 }
