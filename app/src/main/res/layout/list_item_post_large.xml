@@ -52,7 +52,7 @@
                 app:layout_constraintBottom_toBottomOf="@+id/imgBookmark"
                 app:layout_constraintStart_toStartOf="@+id/txtTitle"
                 app:layout_constraintTop_toTopOf="@+id/imgBookmark"
-                app:layout_goneMarginBottom="8dp"
+                app:layout_goneMarginBottom="@dimen/spacing_small"
                 app:publisher="@{post.channel.title}"
                 app:timestamp="@{post.pubDateTimestamp}"
                 tools:text="Publisher - 3 hours ago" />
@@ -99,7 +99,7 @@
             <ImageView
                 android:id="@+id/imgBookmark"
                 style="@style/BorderlessImageButton"
-                android:layout_marginEnd="8dp"
+                android:layout_marginEnd="@dimen/spacing_small"
                 android:contentDescription="@string/content_desc_bookmark_button"
                 android:onClick="@{()->postClickListener.onBookmarkClick(post)}"
                 app:avdImageResource="@{post.bookmarkObservable}"

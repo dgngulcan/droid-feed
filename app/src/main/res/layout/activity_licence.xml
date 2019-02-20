@@ -23,7 +23,6 @@
         <include
             android:id="@+id/toolbar"
             layout="@layout/widget_toolbar"
-            android:homeNavClickListener="@{toolbarHomeNavClickListener}"
             app:homeNavClickListener="@{toolbarHomeNavClickListener}"
             app:title="@{toolbarTitle}" />
 
@@ -32,8 +31,8 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:clipToPadding="false"
-            android:paddingTop="16dp"
-            android:paddingBottom="16dp" />
+            android:paddingTop="@dimen/spacing_medium"
+            android:paddingBottom="@dimen/spacing_medium" />
 
     </LinearLayout>
 

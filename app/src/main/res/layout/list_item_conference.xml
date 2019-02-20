@@ -44,7 +44,7 @@
                 style="@style/DF.TitleStyleLight.List"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
+                android:layout_marginTop="@dimen/spacing_small"
                 android:ellipsize="end"
                 android:maxLines="3"
                 android:text="@{conference.name}"
@@ -65,14 +65,14 @@
                 app:layout_constraintTop_toBottomOf="@+id/txtTitle"
                 tools:text="Brooklyn, NY" />
 
-
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/btnCFP"
                 style="@style/DF.Button.Outline"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
+                android:layout_marginTop="@dimen/spacing_small"
                 android:text="@{cfpButtonText}"
+                app:rippleColor="@color/colorAccentLight"
                 app:isVisible="@{conference.cfpEndDate!=null ? true : false}"
                 app:layout_constraintStart_toStartOf="@+id/txtLocation"
                 app:layout_constraintTop_toBottomOf="@+id/txtLocation"
