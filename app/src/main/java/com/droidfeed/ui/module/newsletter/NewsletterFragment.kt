@@ -50,7 +50,7 @@ class NewsletterFragment : BaseFragment("newsletter") {
         ).apply {
             viewModel = newsletterViewModel
             previousIssuesSpan = oldIssuesSpan()
-            setLifecycleOwner(this@NewsletterFragment)
+            lifecycleOwner = this@NewsletterFragment
 
             txtPreviousIssues.movementMethod = LinkMovementMethod.getInstance()
         }

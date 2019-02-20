@@ -9,7 +9,6 @@ import com.droidfeed.ui.adapter.UIModelType
 import com.droidfeed.ui.adapter.diff.Diffable
 import com.droidfeed.ui.adapter.viewholder.ConferenceViewHolder
 
-
 class ConferenceUIModel(
     private val conference: Conference,
     private val onItemClick: (Conference) -> Unit,

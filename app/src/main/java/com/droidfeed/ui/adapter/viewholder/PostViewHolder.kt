@@ -13,6 +13,7 @@ import com.droidfeed.util.glide.roundCorners
 abstract class PostViewHolder(private val root: View) : RecyclerView.ViewHolder(root) {
 
     private val cornerSize = root.resources.getDimension(R.dimen.card_corner_radius).toInt()
+
     /**
      * Binds the post to the ViewHolder.
      *

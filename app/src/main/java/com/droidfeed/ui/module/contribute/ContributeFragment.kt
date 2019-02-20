@@ -43,7 +43,7 @@ class ContributeFragment : BaseFragment("contribute") {
             false
         ).apply {
             viewModel = contributeViewModel
-            setLifecycleOwner(this@ContributeFragment)
+            lifecycleOwner = this@ContributeFragment
         }
 
         subscribeOpenRepositoryEvent()

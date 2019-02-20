@@ -51,7 +51,7 @@ class AboutFragment : BaseFragment("about") {
         ).apply {
             viewModel = aboutViewModel
             appVersion = getString(R.string.app_version, BuildConfig.VERSION_NAME)
-            setLifecycleOwner(this@AboutFragment)
+            lifecycleOwner = this@AboutFragment
         }
 
         subscribeStartIntentEvent()

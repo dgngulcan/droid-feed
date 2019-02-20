@@ -66,7 +66,7 @@ class FeedFragment : BaseFragment("feed"), Scrollable {
             false
         ).apply {
             viewModel = feedViewModel
-            setLifecycleOwner(this@FeedFragment)
+            lifecycleOwner = this@FeedFragment
         }
 
         subscribePosts()

@@ -23,6 +23,7 @@ import com.droidfeed.ui.module.onboard.OnBoardActivity
 import com.droidfeed.util.AnimUtils
 import com.droidfeed.util.ColorPalette
 import com.droidfeed.util.event.EventObserver
+import com.droidfeed.util.extention.hideKeyboard
 import javax.inject.Inject
 
 @Suppress("UNCHECKED_CAST")
@@ -67,7 +68,7 @@ class MainActivity : BaseActivity() {
             R.layout.activity_main
         ).apply {
             viewModel = mainViewModel
-            setLifecycleOwner(this@MainActivity)
+            lifecycleOwner = this@MainActivity
         }
 
         binding.appbar.containerView.layoutTransition.apply {
@@ -192,6 +193,10 @@ class MainActivity : BaseActivity() {
 
                 animateMenuColor(color)
                 animateTitleColor(isVisible)
+
+                if (isVisible) {
+                    binding.root.hideKeyboard()
+                }
             }
         })
     }

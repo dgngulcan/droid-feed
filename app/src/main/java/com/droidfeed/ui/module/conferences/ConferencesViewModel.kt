@@ -15,7 +15,6 @@ class ConferencesViewModel @Inject constructor(
     private val conferenceRepo: ConferenceRepo
 ) : BaseViewModel() {
 
-
     val conferences = MutableLiveData<List<ConferenceUIModel>>()
     val isProgressVisible = MutableLiveData<Boolean>().apply { value = true }
     val openUrl = MutableLiveData<Event<String>>()

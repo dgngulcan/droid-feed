@@ -29,6 +29,8 @@ class PostRepo @Inject constructor(
 
     fun updatePost(post: Post) = postDao.update(post)
 
+    private fun addPosts(posts: List<Post>) = postDao.insert(posts)
+
     /**
      * Refresh the posts of the given sources. Sources are fetched and parsed asynchronously. After
      * fetching and parsing, the posts are added to the database.
@@ -85,7 +87,5 @@ class PostRepo @Inject constructor(
             DataStatus.Failed(e)
         }
     }
-
-    private fun addPosts(posts: List<Post>) = postDao.insert(posts)
 
 }

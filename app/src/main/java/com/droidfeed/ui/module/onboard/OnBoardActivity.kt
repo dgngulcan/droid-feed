@@ -39,7 +39,7 @@ class OnBoardActivity : BaseActivity() {
             this,
             R.layout.activity_onboard
         ).apply {
-            setLifecycleOwner(this@OnBoardActivity)
+            lifecycleOwner = this@OnBoardActivity
             cbAgreement.movementMethod = LinkMovementMethod.getInstance()
 
             onBoardViewModel = viewModel

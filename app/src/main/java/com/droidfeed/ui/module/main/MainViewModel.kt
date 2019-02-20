@@ -6,6 +6,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Transformations.map
 import com.droidfeed.R
+import com.droidfeed.data.DataStatus
 import com.droidfeed.data.model.Source
 import com.droidfeed.data.repo.PostRepo
 import com.droidfeed.data.repo.SourceRepo
@@ -38,13 +39,23 @@ class MainViewModel @Inject constructor(
     val isBookmarksButtonVisible = MutableLiveData<Boolean>().apply { value = true }
     val isBookmarksButtonSelected = MutableLiveData<Boolean>().apply { value = false }
 
-
     val sourceUIModelData: LiveData<List<SourceUIModel>> =
         map(sourceRepo.getAll()) { sourceList ->
             sourceList.map { source ->
                 SourceUIModel(source, sourceClickListener)
             }
         }
+
+    init {
+        updateSources(sourceRepo)
+    }
+
+    private fun updateSources(sourceRepo: SourceRepo) = launch(Dispatchers.IO) {
+        val result = sourceRepo.pull()
+        if (result is DataStatus.Successful) {
+            sourceRepo.insert(result.data ?: emptyList())
+        }
+    }
 
     private val sourceClickListener = object : UiModelClickListener<Source> {
         override fun onClick(source: Source) {

@@ -22,7 +22,7 @@ class ConferencesFragment : BaseFragment("conferences") {
 
     private lateinit var conferencesViewModel: ConferencesViewModel
     private lateinit var mainViewModel: MainViewModel
-    private lateinit var binding: com.droidfeed.databinding.FragmentConferencesBinding
+    private lateinit var binding: FragmentConferencesBinding
 
     private val linearLayoutManager = LinearLayoutManager(context)
     private val uiModelAdapter: UIModelAdapter by lazy {
@@ -60,7 +60,7 @@ class ConferencesFragment : BaseFragment("conferences") {
             false
         ).apply {
             viewModel = conferencesViewModel
-            setLifecycleOwner(this@ConferencesFragment)
+            lifecycleOwner = this@ConferencesFragment
         }
 
         subscribeOpenUrl()
