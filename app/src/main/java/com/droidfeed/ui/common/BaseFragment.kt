@@ -23,7 +23,7 @@ abstract class BaseFragment(private val viewTag: String) : Fragment(), Coroutine
     private lateinit var job: Job
 
     override val coroutineContext: CoroutineContext
-        get() = Dispatchers.Main + job
+        get() = Dispatchers.Default + job
 
     override fun onAttach(context: Context) {
         AndroidSupportInjection.inject(this)
