@@ -1,5 +1,5 @@
 package com.droidfeed.ui.adapter
 
-interface UiModelClickListener<in T> {
+interface UIModelClickListener<in T> {
     fun onClick(model: T)
 }

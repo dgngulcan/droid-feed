@@ -10,7 +10,7 @@
 
         <variable
             name="clickListener"
-            type="com.droidfeed.ui.adapter.UiModelClickListener" />
+            type="com.droidfeed.ui.adapter.UIModelClickListener" />
 
     </data>
 
