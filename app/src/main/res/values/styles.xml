@@ -7,15 +7,30 @@
 
         <item name="android:statusBarColor">@android:color/transparent</item>
 
-        <item name="android:windowBackground">@color/appBackground</item>
+        <item name="android:windowBackground">@android:color/white</item>
         <item name="android:windowActionBarOverlay">true</item>
         <item name="android:windowActionModeOverlay">true</item>
         <item name="android:windowContentOverlay">@null</item>
+
         <item name="windowNoTitle">true</item>
+
+        <item name="android:windowAnimationStyle">@style/ActivityAnimations</item>
     </style>
 
     <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.MaterialComponents.ActionBar" />
 
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.MaterialComponents.Light" />
 
+    <style name="AppTheme.Splash">
+        <item name="android:windowBackground">@drawable/splash_bg</item>
+    </style>
+
+    <style name="AppTheme.DarkWindowBackground">
+        <item name="android:windowBackground">@color/grayDark1</item>
+    </style>
+
+    <style name="ActivityAnimations" parent="@android:style/Animation.Activity">
+        <item name="android:windowEnterTransition">@android:anim/fade_in</item>
+        <item name="android:windowExitTransition">@android:anim/fade_out</item>
+    </style>
 </resources>

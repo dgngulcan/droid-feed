@@ -3,22 +3,19 @@ package com.droidfeed.util
 import android.util.Log
 import com.crashlytics.android.Crashlytics
 import com.droidfeed.BuildConfig
-import java.lang.Exception
 
 private const val TAG = "DroidFeed"
 
 /**
  * Exception logger.
  *
- * @param exception
- * @param message
+ * @param throwable
  */
-fun logStackTrace(exception: Exception, message: String = "Exception") {
+fun logThrowable(throwable: Throwable) {
     if (BuildConfig.DEBUG) {
-        Log.e(TAG, message, exception)
-        exception.printStackTrace()
+        throwable.printStackTrace()
     } else {
-        Crashlytics.logException(exception)
+        Crashlytics.logException(throwable)
     }
 }
 

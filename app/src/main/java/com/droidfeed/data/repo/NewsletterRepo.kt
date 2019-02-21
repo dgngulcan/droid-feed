@@ -1,16 +1,15 @@
 package com.droidfeed.data.repo
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import com.droidfeed.data.DataResource
-import com.droidfeed.data.api.mailchimp.Error
+import com.droidfeed.data.DataStatus
 import com.droidfeed.data.api.mailchimp.ErrorAdapter
-import com.droidfeed.data.api.mailchimp.ErrorType
+import com.droidfeed.data.api.mailchimp.MailchimpError
 import com.droidfeed.data.api.mailchimp.Subscriber
 import com.droidfeed.data.api.mailchimp.service.NewsletterService
+import com.droidfeed.util.extention.suspendingEnqueue
 import com.google.firebase.remoteconfig.FirebaseRemoteConfig
 import com.squareup.moshi.Moshi
-import kotlinx.coroutines.experimental.launch
+import retrofit2.HttpException
+import java.net.HttpURLConnection.HTTP_BAD_REQUEST
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -25,59 +24,33 @@ class NewsletterRepo @Inject constructor(
      *
      * @param subscriber
      */
-    fun addSubscriberToNewsletter(subscriber: Subscriber): LiveData<DataResource<Any>> {
-        val callLiveData = MutableLiveData<DataResource<Any>>()
-
-        callLiveData.value = DataResource.loading()
-
-        launch {
+    suspend fun addSubscriberToNewsletter(subscriber: Subscriber): DataStatus<MailchimpError> =
+        try {
             val listId = remoteConfig.getString("mc_newsletter_list_id")
-
-            val call = newsletterService.addSubscriber(listId, subscriber)
-            call.execute().let { response ->
-                if (response.isSuccessful) {
-                    callLiveData.postValue(DataResource.success(Any()))
-                } else {
-                    when (response.code()) {
-                        400 -> {
-                            val errorBody = response.errorBody()?.string()
-                            val mcError = errorBody?.let { parseError(it) }
-
-                            when {
-                                mcError != null -> postError(mcError, callLiveData)
-                                else -> callLiveData.postValue(DataResource.error(mcError))
-                            }
-                        }
-
-                        else -> callLiveData.postValue(DataResource.error())
+            newsletterService.addSubscriber(listId, subscriber).suspendingEnqueue()
+            DataStatus.Successful()
+        } catch (e: HttpException) {
+            when (e.code()) {
+                HTTP_BAD_REQUEST -> {
+                    val errorBody = e.response().errorBody()?.string()
+                    val mcError = errorBody?.let { parseError(it) }
+                    when {
+                        mcError != null -> DataStatus.HttpFailed(errorBody = mcError)
+                        else -> DataStatus.HttpFailed(e.code())
                     }
                 }
+                else -> DataStatus.HttpFailed(e.code())
             }
+        } catch (t: Throwable) {
+            DataStatus.Failed(t)
         }
 
-        return callLiveData
-    }
-
-    private fun parseError(errorBody: String): Error? {
+    private fun parseError(errorBody: String): MailchimpError? {
         val moshi = Moshi.Builder()
             .add(ErrorAdapter())
             .build()
 
-        val jsonAdapter = moshi.adapter<Error>(Error::class.java)
+        val jsonAdapter = moshi.adapter<MailchimpError>(MailchimpError::class.java)
         return jsonAdapter.fromJson(errorBody)
-    }
-
-    private fun postError(
-        error: Error,
-        callLiveData: MutableLiveData<DataResource<Any>>
-    ) {
-        when (error.type) {
-            ErrorType.MEMBER_ALREADY_EXIST -> {
-                callLiveData.postValue(DataResource.error(data = ErrorType.MEMBER_ALREADY_EXIST))
-            }
-            ErrorType.INVALID_RESOURCE -> {
-                callLiveData.postValue(DataResource.error(data = ErrorType.INVALID_RESOURCE))
-            }
-        }
     }
 }

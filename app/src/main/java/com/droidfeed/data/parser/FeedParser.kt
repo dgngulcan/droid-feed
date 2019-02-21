@@ -1,18 +1,19 @@
 package com.droidfeed.data.parser
 
+import com.droidfeed.data.DateFormat
 import com.droidfeed.data.model.Channel
 import com.droidfeed.data.model.Content
 import com.droidfeed.data.model.Post
 import com.droidfeed.data.model.Source
-import com.droidfeed.util.DateTimeUtils
+import com.droidfeed.util.extention.asTimestamp
 import com.droidfeed.util.extention.skipTag
-import com.droidfeed.util.logStackTrace
+import com.droidfeed.util.logThrowable
 import org.xmlpull.v1.XmlPullParser
 import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-class FeedParser @Inject constructor(private var dateTimeUtils: DateTimeUtils) : XmlParser() {
+class FeedParser @Inject constructor() : XmlParser() {
 
     override fun parsePosts(parser: XmlPullParser, source: Source): List<Post> {
         val posts = mutableListOf<Post>()
@@ -30,7 +31,7 @@ class FeedParser @Inject constructor(private var dateTimeUtils: DateTimeUtils) :
                 }
             }
         } catch (ignored: Exception) {
-            logStackTrace(ignored)
+            logThrowable(ignored)
         }
 
         return posts
@@ -50,7 +51,7 @@ class FeedParser @Inject constructor(private var dateTimeUtils: DateTimeUtils) :
                 "author" -> post.channel = parseChannel(parser)
                 "title" -> post.title = parser.nextText()
                 "link" -> post.link = parseLink(parser)
-                "updated" -> post.pubDateTimestamp = getPublishDate(parser.nextText())
+                "published" -> post.pubDateTimestamp = getPublishDate(parser.nextText())
                 "media:group" -> post.content = parseMediaIntoPost(parser)
                 else -> parser.skipTag()
             }
@@ -94,8 +95,6 @@ class FeedParser @Inject constructor(private var dateTimeUtils: DateTimeUtils) :
         return content
     }
 
-    private fun getPublishDate(rawDate: String) = dateTimeUtils.getTimeStampFromDate(
-        rawDate,
-        DateTimeUtils.DateFormat.ATOM.format
-    ) ?: 0
+    private fun getPublishDate(rawDate: String) =
+        rawDate.asTimestamp(DateFormat.ATOM.format) ?: 0
 }

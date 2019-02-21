@@ -1,13 +1,43 @@
 package com.droidfeed.data
 
-/**
- * Sealed class for data call statuses.
- */
-sealed class DataStatus {
+@Suppress("unused")
+sealed class DataStatus<out T> {
 
-    object Loading : DataStatus()
+    /**
+     * Represents loading state of the data. It should only be used when the loading starts. All
+     * other states are stating end of loading.
+     *
+     * @param progress
+     */
+    data class Loading<out T>(
+        val progress: Int? = null
+    ) : DataStatus<T>()
 
-    object Success : DataStatus()
+    /**
+     * Represents success state for the data.
+     *
+     * @param data
+     */
+    data class Successful<T>(
+        val data: T? = null
+    ) : DataStatus<T>()
 
-    data class Error<out T>(val data: T? = null) : DataStatus()
+    /**
+     * Represents fail state for the data.
+     *
+     * @param throwable
+     */
+    data class Failed<out T>(
+        val throwable: Throwable? = null
+    ) : DataStatus<T>()
+
+    /**
+     * Represents fail state for Http call i.e. non 200 status codes.
+     *
+     * @param code http status code
+     */
+    data class HttpFailed<out T>(
+        val code: Int = 0,
+        val errorBody: T? = null
+    ) : DataStatus<T>()
 }

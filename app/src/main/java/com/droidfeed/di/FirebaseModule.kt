@@ -38,8 +38,8 @@ class FirebaseModule {
         remoteConfig.setDefaults(R.xml.remote_config_defaults)
 
         remoteConfig.fetch(cacheDuration)
-            .addOnCompleteListener {
-                if (it.isSuccessful) {
+            .addOnCompleteListener { task ->
+                if (task.isSuccessful) {
                     remoteConfig.activateFetched()
                 }
             }

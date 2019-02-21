@@ -1,12 +1,13 @@
 package com.droidfeed.data.parser
 
+import com.droidfeed.data.DateFormat
 import com.droidfeed.data.model.Channel
 import com.droidfeed.data.model.Content
 import com.droidfeed.data.model.Post
 import com.droidfeed.data.model.Source
-import com.droidfeed.util.DateTimeUtils
+import com.droidfeed.util.extention.asTimestamp
 import com.droidfeed.util.extention.skipTag
-import com.droidfeed.util.logStackTrace
+import com.droidfeed.util.logThrowable
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Element
 import org.xmlpull.v1.XmlPullParser
@@ -16,7 +17,7 @@ import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-class RssParser @Inject constructor(private var dateTimeUtils: DateTimeUtils) : XmlParser() {
+class RssParser @Inject constructor() : XmlParser() {
 
     override fun parsePosts(parser: XmlPullParser, source: Source): List<Post> {
         val posts = mutableListOf<Post>()
@@ -34,7 +35,7 @@ class RssParser @Inject constructor(private var dateTimeUtils: DateTimeUtils) : 
                 }
             }
         } catch (e: XmlPullParserException) {
-            logStackTrace(e)
+            logThrowable(e)
         }
 
         return posts
@@ -105,7 +106,7 @@ class RssParser @Inject constructor(private var dateTimeUtils: DateTimeUtils) : 
     }
 
     private fun getPublishDate(rawDate: String) =
-        dateTimeUtils.getTimeStampFromDate(rawDate, DateTimeUtils.DateFormat.RSS.format) ?: 0
+        rawDate.asTimestamp(DateFormat.RSS.format) ?: 0
 
     private fun parsePostContent(contentText: String): Content {
         val doc = Jsoup.parse(contentText)

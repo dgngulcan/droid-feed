@@ -21,7 +21,8 @@ package com.droidfeed.util.event
  *
  * [Read more about this.](https://medium.com/google-developers/livedata-with-snackbar-navigation-and-other-events-the-singleliveevent-case-ac2622673150)
  */
-open class Event<out T>(private val content: T) {
+@Suppress("MemberVisibilityCanBePrivate")
+open class Event<out T>(private val content: T? = null) {
 
     var hasBeenHandled = false
         private set // Allow external read but not write
@@ -41,5 +42,5 @@ open class Event<out T>(private val content: T) {
     /**
      * Returns the content, even if it's already been handled.
      */
-    fun peekContent(): T = content
+    fun peekContent(): T? = content
 }

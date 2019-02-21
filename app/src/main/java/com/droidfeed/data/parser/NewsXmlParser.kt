@@ -3,7 +3,7 @@ package com.droidfeed.data.parser
 import android.util.Xml
 import com.droidfeed.data.model.Post
 import com.droidfeed.data.model.Source
-import com.droidfeed.util.logStackTrace
+import com.droidfeed.util.logThrowable
 import org.xmlpull.v1.XmlPullParser
 import org.xmlpull.v1.XmlPullParserException
 import java.io.StringReader
@@ -29,11 +29,13 @@ class NewsXmlParser @Inject constructor(
             val parser = Xml.newPullParser()
 
             try {
-                parser.setFeature(XmlPullParser.FEATURE_PROCESS_NAMESPACES, false)
-                parser.setInput(inputStream)
-                parser.nextTag()
+                parser.run {
+                    setFeature(XmlPullParser.FEATURE_PROCESS_NAMESPACES, false)
+                    setInput(inputStream)
+                    nextTag()
+                }
             } catch (e: XmlPullParserException) {
-                logStackTrace(e)
+                logThrowable(e)
             }
 
             return when (parser.name) {

@@ -10,7 +10,7 @@
 
         <variable
             name="clickListener"
-            type="com.droidfeed.ui.adapter.UiModelClickListener" />
+            type="com.droidfeed.ui.adapter.UIModelClickListener" />
 
     </data>
 
@@ -27,7 +27,7 @@
             android:id="@+id/textView3"
             style="@style/DF.Button.Text"
             android:layout_width="match_parent"
-            android:layout_height="48dp"
+            android:layout_height="@dimen/spacing_xxlarge"
             android:clickable="false"
             android:enabled="@{source.isEnabled()}"
             android:gravity="center_vertical"

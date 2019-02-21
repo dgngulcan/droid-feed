@@ -1,30 +1,19 @@
 package com.droidfeed.ui.common
 
-import android.os.SystemClock
 import androidx.lifecycle.ViewModel
-import kotlinx.coroutines.experimental.CoroutineScope
-import kotlinx.coroutines.experimental.Dispatchers
-import kotlinx.coroutines.experimental.Job
-import kotlinx.coroutines.experimental.android.Main
-import kotlin.coroutines.experimental.CoroutineContext
+import com.droidfeed.util.AnalyticsUtil
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import javax.inject.Inject
+import kotlin.coroutines.CoroutineContext
 
 abstract class BaseViewModel : ViewModel(), CoroutineScope {
 
-    private var lastClickTime: Long = 0
-    private val job = Job()
+    @Inject
+    lateinit var analytics: AnalyticsUtil
 
-    /**
-     * Returns if a click event should be consumed or not. It is mainly to prevent spam clicks.
-     */
-    var canClick: Boolean = true
-        get() {
-            return if (SystemClock.elapsedRealtime() - lastClickTime < 250) {
-                false
-            } else {
-                lastClickTime = SystemClock.elapsedRealtime()
-                true
-            }
-        }
+    private val job = Job()
 
     override val coroutineContext: CoroutineContext
         get() = job + Dispatchers.Main

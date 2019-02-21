@@ -5,50 +5,112 @@ import android.view.View
 import android.webkit.WebView
 import android.widget.ImageView
 import android.widget.TextView
-import androidx.core.widget.ContentLoadingProgressBar
+import androidx.core.view.isVisible
 import androidx.databinding.BindingAdapter
 import com.droidfeed.R
-import com.droidfeed.util.extention.loadImage
+import com.droidfeed.util.extention.fadeIn
+import com.droidfeed.util.extention.fadeOut
+import com.droidfeed.util.glide.GlideApp
+import com.google.android.material.textfield.TextInputLayout
 import java.util.*
 
-@BindingAdapter("imageResource")
-fun loadImage(imageView: ImageView, url: Any) {
-    imageView.loadImage(url)
-}
-
-@BindingAdapter("avdImageResource")
-fun avdImageResource(imageView: ImageView, avdImageResource: Int) {
+@BindingAdapter("app:avdImageResource")
+fun avdImageResource(
+    imageView: ImageView,
+    avdImageResource: Int
+) {
     imageView.setImageResource(avdImageResource)
 }
 
-@BindingAdapter("visibilityToggle")
-fun visibilityToggle(view: View, show: Boolean) {
-    view.visibility = if (show) View.VISIBLE else View.GONE
+@BindingAdapter("app:isVisible")
+fun isVisible(
+    view: View,
+    isVisible: Boolean
+) {
+    if (view.isVisible != isVisible)
+        view.isVisible = isVisible
 }
 
-@BindingAdapter("contentProgressBarVisibility")
-fun contentProgressBarVisibility(view: ContentLoadingProgressBar, show: Boolean) {
-    if (show) view.show() else view.hide()
-}
-
-@BindingAdapter("loadHtml")
-fun loadHtml(webView: WebView, htmlContent: String) {
-    if (htmlContent.isNotBlank()) {
-        webView.loadData(htmlContent, "text/html", "UTF-8")
+@BindingAdapter("app:isSelected")
+fun isSelected(
+    view: View,
+    isSelected: Boolean
+) {
+    if (view.isSelected != isSelected) {
+        view.isSelected = isSelected
     }
 }
 
-@BindingAdapter("relativeDate")
-fun setRelativeTime(view: TextView, timeStamp: Long) {
-    view.text = DateUtils.getRelativeTimeSpanString(
-        timeStamp,
-        Calendar.getInstance(TimeZone.getDefault()).timeInMillis,
-        DateUtils.SECOND_IN_MILLIS
-    )
+@BindingAdapter("app:isEnabled")
+fun isEnabled(
+    view: View,
+    isEnabled: Boolean
+) {
+    if (view.isEnabled != isEnabled) {
+        view.isEnabled = isEnabled
+
+        if (isEnabled) {
+            view.fadeIn()
+        } else {
+            view.fadeOut(0.5f)
+        }
+    }
 }
 
-@BindingAdapter(value = ["publisher", "timestamp"], requireAll = true)
-fun setRelativeDate(view: TextView, publisher: String?, timestamp: Long?) {
+@BindingAdapter("app:errorText")
+fun errorText(
+    view: TextInputLayout,
+    stringId: Int
+) {
+    val string = view.context.getString(stringId)
+    view.error = string
+    view.isErrorEnabled = string.isNotBlank()
+}
+
+@BindingAdapter("app:loadImage")
+fun loadImage(
+    imageView: ImageView,
+    resId: Int
+) {
+    GlideApp.with(imageView)
+        .load(resId)
+        .into(imageView)
+}
+
+@BindingAdapter("app:displayUrl")
+fun displayUrl(
+    webView: WebView,
+    url: String
+) {
+    webView.loadUrl(url)
+}
+
+@BindingAdapter("app:relativeTimestamp")
+fun setRelativeTimestamp(
+    view: TextView,
+    date: Date?
+) {
+    if (date != null) {
+        val relativeDate = DateUtils.getRelativeTimeSpanString(
+            date.time,
+            Calendar.getInstance(TimeZone.getDefault()).timeInMillis,
+            DateUtils.SECOND_IN_MILLIS
+        )
+
+        view.text = relativeDate.toString()
+    }
+}
+
+@BindingAdapter(
+    value = ["app:publisher",
+        "app:timestamp"],
+    requireAll = true
+)
+fun setRelativeDate(
+    view: TextView,
+    publisher: String?,
+    timestamp: Long?
+) {
     val date = if (timestamp == null) {
         ""
     } else {
@@ -60,5 +122,9 @@ fun setRelativeDate(view: TextView, publisher: String?, timestamp: Long?) {
         )
     }
 
-    view.text = view.context.getString(R.string.publisher_time, publisher ?: "", date.toString())
+    view.text = view.context.getString(
+        R.string.publisher_time,
+        publisher ?: "",
+        date.toString()
+    )
 }

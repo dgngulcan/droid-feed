@@ -3,6 +3,13 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <data>
+
+        <variable
+            name="viewModel"
+            type="com.droidfeed.ui.module.main.MainViewModel" />
+    </data>
+
     <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:id="@+id/containerView"
         android:layout_width="match_parent"
@@ -27,62 +34,75 @@
 
                 <com.airbnb.lottie.LottieAnimationView
                     android:id="@+id/btnMenu"
-                    android:layout_width="48dp"
-                    android:layout_height="48dp"
-                    android:layout_marginStart="8dp"
+                    android:layout_width="@dimen/spacing_xxlarge"
+                    android:layout_height="@dimen/spacing_xxlarge"
+                    android:layout_marginStart="@dimen/spacing_small"
                     android:clickable="true"
                     android:focusable="true"
-                    android:padding="8dp"
+                    android:onClick="@{(v)->viewModel.onMenuClicked()}"
+                    android:padding="@dimen/spacing_small"
                     android:scaleType="centerInside"
-                    app:layout_constraintBottom_toBottomOf="@+id/txtTitle"
+                    app:isSelected="@{!viewModel.isMenuVisible}"
+                    app:layout_constraintBottom_toBottomOf="@+id/txtToolbarTitle"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="@+id/txtTitle"
+                    app:layout_constraintTop_toTopOf="@+id/txtToolbarTitle"
                     app:lottie_rawRes="@raw/menu_to_close_anim"
                     tools:src="@drawable/ic_cat" />
 
                 <TextView
-                    android:id="@+id/txtTitle"
+                    android:id="@+id/txtToolbarTitle"
                     android:layout_width="wrap_content"
                     android:layout_height="56dp"
+                    android:clickable="true"
+                    android:focusable="true"
                     android:fontFamily="@font/poppins_semibold"
                     android:gravity="center_vertical"
-                    android:paddingStart="8dp"
-                    android:paddingTop="6dp"
-                    android:paddingEnd="8dp"
-                    android:text="@string/app_name"
+                    android:onClick="@{(v)->viewModel.onToolbarTitleClicked()}"
+                    android:paddingStart="@dimen/spacing_small"
+                    android:paddingTop="@dimen/poppins_font_correction_for_30sp"
+                    android:paddingEnd="@dimen/spacing_small"
+                    android:text="@{viewModel.toolbarTitle}"
                     android:textColor="@color/grayDark1"
                     android:textSize="30sp"
-                    app:layout_constraintStart_toEndOf="@+id/btnMenu" />
+                    app:layout_constraintStart_toEndOf="@+id/btnMenu"
+                    app:layout_constraintTop_toTopOf="parent"
+                    tools:text="@string/app_name" />
 
-                <ImageView
+                <ImageButton
                     android:id="@+id/btnBookmarks"
                     style="@style/DF.Button.Icon"
                     android:layout_marginEnd="56dp"
                     android:background="@drawable/sl_menu_bookmark_bg_drawable"
+                    android:onClick="@{(v)->viewModel.onBookmarksEvent()}"
                     android:src="@drawable/sl_menu_bookmark_drawable"
+                    app:isSelected="@{viewModel.isBookmarksButtonSelected}"
+                    app:isVisible="@{viewModel.isBookmarksButtonVisible}"
                     app:layout_constraintBottom_toBottomOf="@+id/btnFilter"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="@+id/btnFilter" />
 
-                <ImageView
+                <ImageButton
                     android:id="@+id/btnFilter"
                     style="@style/DF.Button.Icon"
-                    android:layout_marginEnd="8dp"
+                    android:layout_marginEnd="@dimen/spacing_small"
+                    android:onClick="@{(v)->viewModel.onSourceFilterClicked()}"
                     android:src="@drawable/ic_filter_list_accent_24dp"
-                    app:layout_constraintBottom_toBottomOf="@+id/txtTitle"
+                    app:isVisible="@{viewModel.isFilterButtonVisible}"
+                    app:layout_constraintBottom_toBottomOf="@+id/txtToolbarTitle"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="@+id/txtTitle" />
+                    app:layout_constraintTop_toTopOf="@+id/txtToolbarTitle" />
 
                 <include
                     android:id="@+id/menu"
-                    layout="@layout/menu_main"
+                    layout="@layout/activity_main_menu"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
-                    android:layout_marginTop="8dp"
-                    android:layout_marginEnd="16dp"
+                    android:layout_marginTop="@dimen/spacing_small"
+                    android:layout_marginEnd="@dimen/spacing_medium"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="@+id/txtTitle"
-                    app:layout_constraintTop_toBottomOf="@+id/txtTitle" />
+                    app:layout_constraintStart_toStartOf="@+id/txtToolbarTitle"
+                    app:layout_constraintTop_toBottomOf="@+id/txtToolbarTitle"
+                    app:viewModel="@{viewModel}" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
         </com.google.android.material.appbar.AppBarLayout>

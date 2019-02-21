@@ -8,18 +8,18 @@ import androidx.room.PrimaryKey
 import com.droidfeed.data.db.AppDatabase
 import com.droidfeed.ui.adapter.diff.Diffable
 
-@Entity(tableName = AppDatabase.SOURCE_TABLE_NAME)
+@Entity(tableName = AppDatabase.SOURCE_TABLE)
 data class Source(
 
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = "id")
-    var id: Int,
+    val id: Int,
 
     @ColumnInfo(name = "name")
-    var name: String,
+    val name: String,
 
     @ColumnInfo(name = "url")
-    var url: String
+    val url: String
 
 ) : Diffable {
 
@@ -33,9 +33,7 @@ data class Source(
     @Ignore
     val isEnabled = ObservableBoolean()
 
-    override fun isSame(item: Diffable): Boolean = (item as Source).url.contentEquals(url)
+    override fun isSame(item: Any) = url == (item as Source).url
 
-    override fun isContentSame(item: Diffable): Boolean {
-        return false
-    }
+    override fun hasSameContentWith(item: Any) = isActive == (item as Source).isActive
 }

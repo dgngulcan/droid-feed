@@ -1,37 +1,38 @@
 package com.droidfeed.ui.module.newsletter
 
 import android.annotation.SuppressLint
-import android.content.res.ColorStateList
 import android.os.Bundle
+import android.text.method.LinkMovementMethod
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.content.ContextCompat
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.droidfeed.R
-import com.droidfeed.data.DataStatus
-import com.droidfeed.data.api.mailchimp.ErrorType
 import com.droidfeed.databinding.FragmentNewsletterBinding
 import com.droidfeed.ui.common.BaseFragment
-import com.droidfeed.util.extention.hideKeyboard
-import com.droidfeed.util.extention.isOnline
+import com.droidfeed.util.AnimUtils
+import com.droidfeed.util.CustomTab
+import com.droidfeed.util.event.EventObserver
+import com.droidfeed.util.extention.getClickableSpan
 import com.google.android.material.snackbar.Snackbar
-import kotlinx.coroutines.experimental.Dispatchers
-import kotlinx.coroutines.experimental.GlobalScope
-import kotlinx.coroutines.experimental.android.Main
-import kotlinx.coroutines.experimental.delay
-import kotlinx.coroutines.experimental.launch
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 @SuppressLint("ValidFragment")
 class NewsletterFragment : BaseFragment("newsletter") {
 
     private lateinit var binding: FragmentNewsletterBinding
-    private lateinit var viewModel: NewsletterViewModel
+    private lateinit var newsletterViewModel: NewsletterViewModel
+
+    @Inject
+    lateinit var customTab: CustomTab
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        viewModel = ViewModelProviders
+
+        newsletterViewModel = ViewModelProviders
             .of(this, viewModelFactory)
             .get(NewsletterViewModel::class.java)
     }
@@ -42,62 +43,52 @@ class NewsletterFragment : BaseFragment("newsletter") {
         savedInstanceState: Bundle?
     ): View? {
         super.onCreateView(inflater, container, savedInstanceState)
-        binding = FragmentNewsletterBinding.inflate(inflater, container, false)
+        binding = FragmentNewsletterBinding.inflate(
+            inflater,
+            container,
+            false
+        ).apply {
+            viewModel = newsletterViewModel
+            previousIssuesSpan = oldIssuesSpan()
+            lifecycleOwner = this@NewsletterFragment
 
-        init()
-        initObservers()
+            txtPreviousIssues.movementMethod = LinkMovementMethod.getInstance()
+        }
+
+        subscribeErrorSnack()
+        subscribeOpenUrl()
+
+        initAnimations()
 
         return binding.root
     }
 
-    private fun initObservers() {
-        viewModel.signUpEvent.observe(viewLifecycleOwner, Observer { resource ->
-            when (resource?.dataState) {
-                is DataStatus.Loading -> onLoading()
-                is DataStatus.Success -> onSignUpSuccess()
-                is DataStatus.Error<*> -> onSignUpError(resource.dataState as DataStatus.Error<*>)
-            }
+    private fun subscribeOpenUrl() {
+        newsletterViewModel.openUrl.observe(this, EventObserver { url ->
+            customTab.showTab(url)
         })
     }
 
-    private fun init() {
-        binding.btnImIn.setOnClickListener {
-            if (context?.isOnline() == true) {
-                val email = binding.edtEmail.text.toString()
-                val isValidEmail = android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()
+    private fun subscribeErrorSnack() {
+        newsletterViewModel.showErrorSnack.observe(viewLifecycleOwner, EventObserver { stringId ->
+            Snackbar.make(
+                binding.root,
+                stringId,
+                Snackbar.LENGTH_SHORT
+            ).show()
+        })
+    }
 
-                when {
-                    email.isBlank() -> {
-                        binding.textInputLayout.error = getString(R.string.error_empty_email)
-                    }
-                    !isValidEmail -> {
-                        binding.textInputLayout.error = getString(R.string.error_email_format)
-                    }
-                    else -> {
-                        it.hideKeyboard()
-                        viewModel.signUp(email)
-                        binding.textInputLayout.error = null
-                        analytics.logNewsletterSignUp()
-                    }
-                }
-            } else {
-                Snackbar.make(
-                    binding.animView,
-                    R.string.info_no_internet,
-                    Snackbar.LENGTH_LONG
-                ).show()
-            }
-        }
+    private fun oldIssuesSpan() = getString(
+        R.string.previous_issues,
+        getString(R.string.see_here)
+    ).getClickableSpan(
+        getString(R.string.see_here)
+    ) {
+        newsletterViewModel.onPreviousIssues()
+    }
 
-        binding.textInputLayout.setErrorTextColor(
-            ColorStateList.valueOf(
-                ContextCompat.getColor(
-                    activity!!,
-                    R.color.redError
-                )
-            )
-        )
-
+    private fun initAnimations() {
         binding.animView.setOnClickListener {
             if (!binding.animView.isAnimating) {
                 binding.animView.speed *= -1f
@@ -105,51 +96,10 @@ class NewsletterFragment : BaseFragment("newsletter") {
             }
         }
 
-        GlobalScope.launch(Dispatchers.Main) {
+        launch(Dispatchers.Main) {
             binding.animView.frame = 0
-            delay(500)
+            delay(AnimUtils.MEDIUM_ANIM_DURATION)
             binding.animView.resumeAnimation()
-        }
-    }
-
-    private fun onLoading() {
-        binding.apply {
-            btnImIn.visibility = View.GONE
-            binding.textInputLayout.error = null
-            progressBar.visibility = View.VISIBLE
-        }
-    }
-
-    private fun onSignUpSuccess() {
-        binding.apply {
-            progressBar.visibility = View.GONE
-            btnImIn.visibility = View.GONE
-            textInputLayout.visibility = View.GONE
-            txtSubscriptionConfirmation.visibility = View.VISIBLE
-        }
-    }
-
-    private fun onSignUpError(state: DataStatus.Error<*>) {
-        binding.apply {
-            btnImIn.visibility = View.VISIBLE
-            binding.textInputLayout.error = null
-            progressBar.visibility = View.GONE
-        }
-
-        if (state.data is ErrorType) {
-            when (state.data) {
-                ErrorType.MEMBER_ALREADY_EXIST -> {
-                    binding.textInputLayout.error = getString(R.string.newsletter_email_exist)
-                }
-
-                ErrorType.INVALID_RESOURCE -> {
-                    Snackbar.make(
-                        binding.btnImIn,
-                        getString(R.string.error_api_generic),
-                        Snackbar.LENGTH_SHORT
-                    ).show()
-                }
-            }
         }
     }
 }
