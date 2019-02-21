@@ -1,6 +1,7 @@
 package com.droidfeed.data.api.mailchimp
 
 import androidx.annotation.Keep
+import com.droidfeed.util.logThrowable
 import com.squareup.moshi.FromJson
 import com.squareup.moshi.JsonDataException
 
@@ -14,7 +15,10 @@ internal class ErrorAdapter {
             "Member Exists" -> ErrorType.MEMBER_ALREADY_EXIST
             "Invalid DataResource" -> ErrorType.INVALID_DATA_RESOURCE
             "Invalid Resource" -> ErrorType.INVALID_RESOURCE
-            else -> throw JsonDataException("unknown suit: $errorJson.title")
+            else -> {
+                logThrowable(JsonDataException("unknown suit: $errorJson.title"))
+                ErrorType.UNKNOWN_SUIT
+            }
         }
 
         return MailchimpError(errorType, errorJson.status, errorJson.detail)
