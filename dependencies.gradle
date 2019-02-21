@@ -21,6 +21,7 @@ ext.versions = [
         firebase_firestore    : '18.0.1',
         okHttp                : '3.13.1',
         jSoup                 : '1.11.3',
+        gson                  : '2.8.5',
         play_services         : '4.2.0',
         material              : '1.1.0-alpha03',
         constraint_layout     : '2.0.0-alpha3',
@@ -89,8 +90,8 @@ deps.navigation = [
 ]
 
 deps.firebase = [
-        core  : "com.google.firebase:firebase-core:$versions.firebase_core",
-        config: "com.google.firebase:firebase-config:$versions.firebase_config",
+        core     : "com.google.firebase:firebase-core:$versions.firebase_core",
+        config   : "com.google.firebase:firebase-config:$versions.firebase_config",
         firestore: "com.google.firebase:firebase-firestore:$versions.firebase_firestore"
 ]
 
@@ -113,4 +114,5 @@ deps.junit = "junit:junit:$versions.junit"
 deps.arch_testing = "android.arch.core:core-testing:$versions.android_core_testing"
 deps.lottie = "com.airbnb.android:lottie:$versions.lottie"
 deps.jsoup = "org.jsoup:jsoup:$versions.jSoup"
+deps.gson = "com.google.code.gson:gson:$versions.gson"
 deps.detekt_formatting = "io.gitlab.arturbosch.detekt:detekt-formatting:${versions.detekt_ktlint}"
