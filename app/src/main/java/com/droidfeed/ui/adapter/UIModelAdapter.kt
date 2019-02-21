@@ -49,7 +49,7 @@ class UIModelAdapter constructor(
                 updateViewTypes(newModels)
                 notifyDataSetChanged()
             } else {
-                launch(Dispatchers.IO) {
+                launch {
                     val oldItems = async { ArrayList(uiModels) }
 
                     val diffResult = async {
