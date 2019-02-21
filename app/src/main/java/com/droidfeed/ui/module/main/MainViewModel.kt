@@ -10,7 +10,7 @@ import com.droidfeed.data.DataStatus
 import com.droidfeed.data.model.Source
 import com.droidfeed.data.repo.PostRepo
 import com.droidfeed.data.repo.SourceRepo
-import com.droidfeed.ui.adapter.UiModelClickListener
+import com.droidfeed.ui.adapter.UIModelClickListener
 import com.droidfeed.ui.adapter.model.SourceUIModel
 import com.droidfeed.ui.common.BaseViewModel
 import com.droidfeed.util.event.Event
@@ -57,7 +57,7 @@ class MainViewModel @Inject constructor(
         }
     }
 
-    private val sourceClickListener = object : UiModelClickListener<Source> {
+    private val sourceClickListener = object : UIModelClickListener<Source> {
         override fun onClick(source: Source) {
             source.isActive = !source.isActive
 
