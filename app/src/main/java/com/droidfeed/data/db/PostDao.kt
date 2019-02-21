@@ -18,38 +18,38 @@ interface PostDao {
     fun delete(post: Post)
 
     @Query(
-        "SELECT * FROM ${AppDatabase.POST_TABLE_NAME} WHERE source_id " +
-                "IN (SELECT  ${AppDatabase.SOURCE_TABLE_NAME}.id " +
-                "FROM ${AppDatabase.SOURCE_TABLE_NAME} " +
+        "SELECT * FROM ${AppDatabase.POST_TABLE} WHERE source_id " +
+                "IN (SELECT  ${AppDatabase.SOURCE_TABLE}.id " +
+                "FROM ${AppDatabase.SOURCE_TABLE} " +
                 "WHERE is_active = 1) " +
                 "ORDER BY pub_date_timestamp DESC"
     )
     fun getAll(): DataSource.Factory<Int, Post>
 
     @Query(
-        "SELECT * FROM ${AppDatabase.POST_TABLE_NAME} " +
+        "SELECT * FROM ${AppDatabase.POST_TABLE} " +
                 "ORDER BY pub_date_timestamp DESC"
     )
     fun getAllAsLiveData(): LiveData<List<Post>>
 
     @Query(
-        "SELECT * FROM ${AppDatabase.POST_TABLE_NAME} " +
+        "SELECT * FROM ${AppDatabase.POST_TABLE} " +
                 "WHERE bookmarked = 1 " +
                 "ORDER BY pub_date_timestamp DESC"
     )
     fun getBookmarked(): DataSource.Factory<Int, Post>
 
-    @Query("SELECT COUNT(*) FROM ${AppDatabase.POST_TABLE_NAME}")
+    @Query("SELECT COUNT(*) FROM ${AppDatabase.POST_TABLE}")
     fun getPostCount(): Int
 
     @Query(
-        "SELECT COUNT(*) FROM ${AppDatabase.POST_TABLE_NAME} " +
+        "SELECT COUNT(*) FROM ${AppDatabase.POST_TABLE} " +
                 "WHERE bookmarked = 1"
     )
     fun getBookmarkedCount(): Int
 
     @Query(
-        "DELETE FROM ${AppDatabase.POST_TABLE_NAME} " +
+        "DELETE FROM ${AppDatabase.POST_TABLE} " +
                 "WHERE bookmarked == 0 " +
                 "AND channel_title LIKE :sourceUrl || '%'"
     )
