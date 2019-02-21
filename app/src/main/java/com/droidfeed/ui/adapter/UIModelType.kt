@@ -9,6 +9,8 @@ enum class UIModelType {
     POST_SMALL,
     POST_LARGE,
     LICENCE,
+    CONFERENCE,
+    CONFERENCE_CFP,
     SOURCE,
     PLACEHOLDER
 }
