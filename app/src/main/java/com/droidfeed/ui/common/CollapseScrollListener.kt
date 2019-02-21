@@ -1,14 +1,16 @@
 package com.droidfeed.ui.common
 
 import androidx.recyclerview.widget.RecyclerView
-import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlin.math.absoluteValue
 
 class CollapseScrollListener(
+    private val coroutineScope: CoroutineScope,
     private val collapseListener: () -> Unit
-) : RecyclerView.OnScrollListener() {
+) : RecyclerView.OnScrollListener(),
+    CoroutineScope by coroutineScope {
     private var scrolledAmount = 0
 
     private val scrollThreshold = 200L
@@ -23,7 +25,7 @@ class CollapseScrollListener(
             scrolledAmount = 0
         }
 
-        GlobalScope.launch {
+        launch {
             delay(scrollDiminishingDelay)
             scrolledAmount = 0
         }
