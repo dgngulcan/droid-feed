@@ -84,6 +84,6 @@
     <string name="error_cannot_obtain_sources">Can not obtain the news sources. Please try again later.</string>
     <string name="empty_string" />
     <string name="error_invalid_url">Cannot open invalid URL.</string>
-    <string name="cfp_deadline">Call for Papers until %1$s</string>
+    <string name="cfp_deadline">CFP until %1$s</string>
     <string name="nav_title_conferences">Conferences</string>
 </resources>
