@@ -13,6 +13,9 @@ data class Conference(
     val cfpEndDate: Date? = null,
     val cfpUrl: String? = null
 ) : Diffable {
+
+    fun isCfpOpen() = cfpEndDate != null && cfpEndDate.after(Date())
+
     override fun isSame(item: Any) = item == this
 
     override fun hasSameContentWith(item: Any) = item == this
