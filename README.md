@@ -1,15 +1,9 @@
 <img  src="/art/ss1.png" width="25%"/><img  src="/art/ss2.png" width="25%"/><img  src="/art/ss3.png" width="25%"/><img  src="/art/ss4.png" width="25%"/>
 
-# 🚧 REFACTORING IN PROGRESS
- - *PRs won't be accepted at this point.*
-
-- *Comments and new issues are most welcomed!*
-
-
 # DroidFeed
 Curated news feed for Android Developers!
 
-Stay up to date with the latest Android Development news. Built for the Android developer community, DroidFeed presents news, articles, and podcasts about Android Development from a curated list of sources.
+Stay up to date with the latest Android Development news. Built for the Android developer community, DroidFeed presents news, articles, podcasts and conferences about Android Development from a curated list of sources. 
 
 
 
@@ -36,7 +30,7 @@ New developments should be branched and merged into the `develop` branch. Feel f
 License
 -------
 
-    Copyright 2018 Dogan Gulcan
+    Copyright 2019 Dogan Gulcan
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
