@@ -22,6 +22,7 @@ import com.droidfeed.util.event.Event
 import com.droidfeed.util.extention.asLiveData
 import com.droidfeed.util.shareCount
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -33,6 +34,7 @@ class FeedViewModel @Inject constructor(
 ) : BaseViewModel() {
 
     private val feedType = MutableLiveData<FeedType>()
+    private var refreshJob = Job()
 
     val postsLiveData: LiveData<PagedList<PostUIModel>> = switchMap(feedType) { type ->
         when (type) {
@@ -52,7 +54,7 @@ class FeedViewModel @Inject constructor(
     }
 
     val isEmptyStateVisible: LiveData<Boolean> = Transformations.map(postsLiveData) { list ->
-        if (list.isEmpty()) {
+        if (list.isEmpty() && !refreshJob.isActive) {
             when (feedType.value) {
                 FeedType.BOOKMARKS -> {
                     emptyStateDrawable.postValue(R.drawable.ic_empty_state_bookmark)
@@ -73,15 +75,15 @@ class FeedViewModel @Inject constructor(
 
     val emptyStateDrawable = MutableLiveData<@DrawableRes Int>()
         .apply {
-            value = R.drawable.ic_empty_state_bookshelf
+            value = R.drawable.ic_df_logo
         }
     val emptyTitleText = MutableLiveData<@StringRes Int>()
         .apply {
-            value = R.string.empty_source_title
+            value = R.string.empty_string
         }
     val emptySubtitleText = MutableLiveData<@StringRes Int>()
         .apply {
-            value = R.string.empty_source_content
+            value = R.string.empty_string
         }
 
     val isProgressVisible = MutableLiveData<Boolean>().apply { value = false }
@@ -93,7 +95,7 @@ class FeedViewModel @Inject constructor(
     val openPlayStorePage = MutableLiveData<Event<Unit>>()
 
     init {
-        refresh() /* todo: causes unnecessary fetching when rebound with the fragment*/
+        refreshJob = refresh() /* todo: causes unnecessary fetching when rebound with the fragment*/
     }
 
     private val pagedListConfig = PagedList.Config.Builder()
