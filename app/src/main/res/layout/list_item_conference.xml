@@ -21,17 +21,18 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-        <androidx.constraintlayout.widget.ConstraintLayout
+        <LinearLayout
             android:id="@+id/containerContent"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@drawable/border_shape"
+            android:orientation="vertical"
             android:padding="16dp">
 
             <TextView
                 android:id="@+id/txtDate"
                 style="@style/TextAppearance.MaterialComponents.Caption"
-                android:layout_width="0dp"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -42,7 +43,7 @@
             <TextView
                 android:id="@+id/txtTitle"
                 style="@style/DF.TitleStyleLight.List"
-                android:layout_width="0dp"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/spacing_small"
                 android:ellipsize="end"
@@ -57,7 +58,7 @@
             <TextView
                 android:id="@+id/txtLocation"
                 style="@style/TextAppearance.MaterialComponents.Caption"
-                android:layout_width="0dp"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@{conference.location}"
                 app:layout_constraintEnd_toEndOf="@+id/txtTitle"
@@ -72,13 +73,13 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/spacing_small"
                 android:text="@{cfpButtonText}"
-                app:rippleColor="@color/colorAccentLight"
-                app:isVisible="@{conference.cfpEndDate!=null ? true : false}"
+                app:isVisible="@{conference.isCfpOpen()}"
                 app:layout_constraintStart_toStartOf="@+id/txtLocation"
                 app:layout_constraintTop_toBottomOf="@+id/txtLocation"
+                app:rippleColor="@color/colorAccentLight"
                 tools:text="Call for papers until 13/2/2020" />
 
-        </androidx.constraintlayout.widget.ConstraintLayout>
+        </LinearLayout>
 
     </com.google.android.material.card.MaterialCardView>
 </layout>
