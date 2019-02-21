@@ -13,8 +13,8 @@ import com.droidfeed.data.model.Source
 abstract class AppDatabase : RoomDatabase() {
 
     companion object {
-        const val POST_TABLE_NAME = "rss"
-        const val SOURCE_TABLE_NAME = "source"
+        const val POST_TABLE = "rss"
+        const val SOURCE_TABLE = "source"
         const val APP_DATABASE_NAME = "droidfeed.db"
     }
 
