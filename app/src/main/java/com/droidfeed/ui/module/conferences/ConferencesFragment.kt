@@ -87,7 +87,7 @@ class ConferencesFragment : BaseFragment("conferences") {
         binding.newsRecyclerView.apply {
             layoutManager = WrapContentLinearLayoutManager(requireContext())
 
-            addOnScrollListener(CollapseScrollListener {
+            addOnScrollListener(CollapseScrollListener(this@ConferencesFragment) {
                 mainViewModel.onCollapseMenu()
             })
 
