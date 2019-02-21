@@ -6,7 +6,7 @@ apply plugin: 'io.fabric'
 
 ext.app = [
         'version'            : '2.1.0',
-        'version_code'       : 14,
+        'version_code'       : 15,
         'compile_sdk_version': 28,
         'min_sdk_version'    : 21,
         'target_sdk_version' : 28
@@ -115,6 +115,7 @@ dependencies {
     implementation deps.firebase.firestore
 
     implementation deps.jsoup
+    implementation deps.gson // quick fix for version conflict between room and firestore
 
     testImplementation deps.mockito
     testImplementation deps.junit
