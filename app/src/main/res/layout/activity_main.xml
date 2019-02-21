@@ -1,7 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <androidx.drawerlayout.widget.DrawerLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    <data>
+
+        <variable
+            name="viewModel"
+            type="com.droidfeed.ui.module.main.MainViewModel" />
+    </data>
+
+    <androidx.drawerlayout.widget.DrawerLayout
         android:id="@+id/drawer_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -11,7 +19,8 @@
             android:id="@+id/appbar"
             layout="@layout/activity_main_app_bar"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            android:layout_height="match_parent"
+            app:viewModel="@{viewModel}" />
 
         <com.google.android.material.navigation.NavigationView
             android:id="@+id/filterView"
@@ -30,7 +39,7 @@
                     style="@style/DF.TitleStyle"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="16dp"
+                    android:layout_marginStart="@dimen/spacing_medium"
                     android:layout_marginTop="@dimen/spacing_xxlarge"
                     android:text="@string/sources" />
 

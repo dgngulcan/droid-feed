@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="cfpButtonText"
+            type="String" />
+
+        <variable
+            name="conference"
+            type="com.droidfeed.data.model.Conference" />
+
+    </data>
+
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/itemCard"
+        style="@style/CardStyle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:id="@+id/containerContent"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/border_shape"
+            android:orientation="vertical"
+            android:padding="16dp">
+
+            <TextView
+                android:id="@+id/txtDate"
+                style="@style/TextAppearance.MaterialComponents.Caption"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:relativeTimestamp="@{conference.startDate}"
+                tools:text="in 15 days" />
+
+            <TextView
+                android:id="@+id/txtTitle"
+                style="@style/DF.TitleStyleLight.List"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/spacing_small"
+                android:ellipsize="end"
+                android:maxLines="3"
+                android:text="@{conference.name}"
+                app:layout_constraintEnd_toEndOf="@+id/txtDate"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="@+id/txtDate"
+                app:layout_constraintTop_toBottomOf="@+id/txtDate"
+                tools:text="Conference Name" />
+
+            <TextView
+                android:id="@+id/txtLocation"
+                style="@style/TextAppearance.MaterialComponents.Caption"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@{conference.location}"
+                app:layout_constraintEnd_toEndOf="@+id/txtTitle"
+                app:layout_constraintStart_toStartOf="@+id/txtTitle"
+                app:layout_constraintTop_toBottomOf="@+id/txtTitle"
+                tools:text="Brooklyn, NY" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnCFP"
+                style="@style/DF.Button.Outline"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/spacing_small"
+                android:text="@{cfpButtonText}"
+                app:isVisible="@{conference.isCfpOpen()}"
+                app:layout_constraintStart_toStartOf="@+id/txtLocation"
+                app:layout_constraintTop_toBottomOf="@+id/txtLocation"
+                app:rippleColor="@color/colorAccentLight"
+                tools:text="Call for papers until 13/2/2020" />
+
+        </LinearLayout>
+
+    </com.google.android.material.card.MaterialCardView>
+</layout>

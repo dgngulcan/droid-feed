@@ -1,28 +1,18 @@
 package com.droidfeed.data.repo
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.Transformations.switchMap
-import androidx.paging.LivePagedListBuilder
-import androidx.paging.PagedList
-import com.droidfeed.data.DataResource
 import com.droidfeed.data.DataStatus
 import com.droidfeed.data.db.PostDao
 import com.droidfeed.data.model.Post
 import com.droidfeed.data.model.Source
 import com.droidfeed.data.parser.NewsXmlParser
-import com.droidfeed.ui.adapter.model.PostUIModel
-import com.droidfeed.util.logStackTrace
-import kotlinx.coroutines.experimental.launch
+import com.droidfeed.util.logThrowable
+import kotlinx.coroutines.*
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import java.io.IOException
 import javax.inject.Inject
 import javax.inject.Singleton
 
-/**
- * Repository that is responsible for operating posts.
- */
 @Suppress("UNCHECKED_CAST")
 @Singleton
 class PostRepo @Inject constructor(
@@ -31,101 +21,69 @@ class PostRepo @Inject constructor(
     private val postDao: PostDao
 ) {
 
-    fun getAllPosts(
-        sources: LiveData<List<Source>>,
-        createUiModels: (List<Post>) -> List<PostUIModel>
-    ): Listing<PostUIModel> {
-        val pagedList = LivePagedListBuilder(
-            postDao.getAllPosts().mapByPage {
-                createUiModels(it)
-            },
-            pagedListConfig
-        ).build()
+    fun getAll() = postDao.getAll()
 
-        val refreshTrigger = MutableLiveData<Unit>()
-        val networkState = switchMap(refreshTrigger) { refresh(sources) }
+    fun getBookmarked() = postDao.getBookmarked()
 
-        return Listing<PostUIModel>(
-            pagedList = pagedList,
-            networkState = networkState,
-            refresh = {
-                refreshTrigger.value = null
-            },
-            retry = {}
-        )
-    }
+    fun getBookmarkedCount() = postDao.getBookmarkedCount()
 
-    fun updatePost(post: Post) = launch { postDao.updateArticle(post) }
+    fun updatePost(post: Post) = postDao.update(post)
 
-    private fun refresh(sources: LiveData<List<Source>>): LiveData<DataStatus> {
-        val networkState = MutableLiveData<DataStatus>()
+    private fun addPosts(posts: List<Post>) = postDao.insert(posts)
 
-        launch {
-            sources.value?.forEach { source ->
-                val result = fetch(source)
-                result.data
-                    ?.takeIf { it.isNotEmpty() }
-                    ?.let { savePostsToDB(it) }
+    /**
+     * Refresh the posts of the given sources. Sources are fetched and parsed asynchronously. After
+     * fetching and parsing, the posts are added to the database.
+     *
+     * @param coroutineScope
+     * @param sources to refresh
+     */
+    suspend fun refresh(
+        coroutineScope: CoroutineScope,
+        sources: List<Source>
+    ): List<DataStatus<Nothing>> = runBlocking {
+        val allPosts = mutableListOf<Post>()
 
-                networkState.postValue(result.dataState)
+        val asyncFetches = sources.map { source ->
+            coroutineScope.async(Dispatchers.IO) {
+                val result = fetchAndParsePosts(source)
+
+                when (result) {
+                    is DataStatus.Successful -> {
+                        result.data?.let { allPosts.addAll(it) }
+                        DataStatus.Successful()
+                    }
+                    else -> result as DataStatus<Nothing>
+                }
             }
         }
 
-        return networkState
+        val results = asyncFetches.awaitAll()
+        addPosts(allPosts)
+
+        results
     }
 
-    private fun fetch(source: Source): DataResource<List<Post>> {
+    private fun fetchAndParsePosts(source: Source): DataStatus<List<Post>> {
         val request = Request.Builder()
             .url(source.url)
             .build()
 
         return try {
             val response = okHttpClient.newCall(request).execute()
+
             if (response.isSuccessful) {
                 val posts = response.body()?.string()?.let {
                     xmlParser.parse(it, source)
                 }
 
-                DataResource.success(posts)
+                DataStatus.Successful(posts)
             } else {
-                DataResource.success(emptyList())
+                DataStatus.HttpFailed(response.code())
             }
         } catch (e: IOException) {
-            logStackTrace(e)
-            DataResource.error(e)
+            logThrowable(e)
+            DataStatus.Failed(e)
         }
-    }
-
-    fun getBookmarkedPosts(
-        createUiModels: (List<Post>) -> List<PostUIModel>
-    ): Listing<PostUIModel> {
-
-        val pagedList = LivePagedListBuilder(
-            postDao.getBookmarkedPosts().mapByPage {
-                createUiModels(it)
-            },
-            pagedListConfig
-        ).build()
-
-        val dummyStatus = MutableLiveData<DataStatus>()
-        dummyStatus.postValue(DataStatus.Success)
-
-        return Listing<PostUIModel>(pagedList = pagedList,
-            networkState = dummyStatus,
-            refresh = {},
-            retry = {}
-        )
-    }
-
-    private fun savePostsToDB(posts: List<Post>) = launch { postDao.insertArticles(posts) }
-
-    companion object {
-        private const val PAGE_SIZE = 30
-        private const val ENABLE_PLACEHOLDERS = false
-
-        private val pagedListConfig = PagedList.Config.Builder()
-            .setPageSize(PAGE_SIZE)
-            .setEnablePlaceholders(ENABLE_PLACEHOLDERS)
-            .build()
     }
 }

@@ -10,10 +10,9 @@ import com.droidfeed.ui.module.feed.PostClickListener
 import com.droidfeed.util.glide.GlideApp
 import com.droidfeed.util.glide.roundCorners
 
-/**
- * ViewHolder to display article cards.
- */
 abstract class PostViewHolder(private val root: View) : RecyclerView.ViewHolder(root) {
+
+    private val cornerSize = root.resources.getDimension(R.dimen.card_corner_radius).toInt()
 
     /**
      * Binds the post to the ViewHolder.
@@ -21,18 +20,19 @@ abstract class PostViewHolder(private val root: View) : RecyclerView.ViewHolder(
      * @param post
      * @param postClickListener
      */
-    abstract fun bind(post: Post, postClickListener: PostClickListener)
+    abstract fun bind(
+        post: Post,
+        postClickListener: PostClickListener
+    )
 
     protected fun bindImage(
         imageView: ImageView,
         post: Post
     ) {
-
         GlideApp.with(root.context)
             .load(post.image)
             .diskCacheStrategy(DiskCacheStrategy.RESOURCE)
-            .centerCrop()
-            .roundCorners(imageView.resources.getDimension(R.dimen.card_corner_radius).toInt())
+            .roundCorners(cornerSize)
             .into(imageView)
     }
 }

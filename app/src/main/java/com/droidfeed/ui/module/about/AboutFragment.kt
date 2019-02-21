@@ -6,19 +6,19 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
+import com.airbnb.lottie.LottieAnimationView
 import com.droidfeed.BuildConfig
 import com.droidfeed.R
 import com.droidfeed.databinding.FragmentAboutBinding
 import com.droidfeed.ui.common.BaseFragment
+import com.droidfeed.ui.module.about.licence.LicencesActivity
+import com.droidfeed.util.AnimUtils.Companion.MEDIUM_ANIM_DURATION
 import com.droidfeed.util.CustomTab
-import com.droidfeed.util.extention.startActivity
-import kotlinx.coroutines.experimental.Dispatchers
-import kotlinx.coroutines.experimental.GlobalScope
-import kotlinx.coroutines.experimental.android.Main
-import kotlinx.coroutines.experimental.delay
-import kotlinx.coroutines.experimental.launch
+import com.droidfeed.util.event.EventObserver
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @SuppressLint("ValidFragment")
@@ -26,14 +26,15 @@ import javax.inject.Inject
 class AboutFragment : BaseFragment("about") {
 
     private lateinit var binding: FragmentAboutBinding
-    private lateinit var viewModel: AboutViewModel
+    private lateinit var aboutViewModel: AboutViewModel
 
     @Inject
     lateinit var customTab: CustomTab
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        viewModel = ViewModelProviders
+
+        aboutViewModel = ViewModelProviders
             .of(this, viewModelFactory)
             .get(AboutViewModel::class.java)
     }
@@ -43,65 +44,58 @@ class AboutFragment : BaseFragment("about") {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        binding = FragmentAboutBinding.inflate(inflater, container, false)
-        binding.viewModel = viewModel
+        binding = FragmentAboutBinding.inflate(
+            inflater,
+            container,
+            false
+        ).apply {
+            viewModel = aboutViewModel
+            appVersion = getString(R.string.app_version, BuildConfig.VERSION_NAME)
+            lifecycleOwner = this@AboutFragment
+        }
 
-        init()
-        initObservers()
+        subscribeStartIntentEvent()
+        subscribeOpenUrlEvent()
+        subscribeOpenLicenceEvent()
+
+        initAnimations()
 
         return binding.root
     }
 
-    private fun init() {
-        binding.txtAppVersion.text = getString(R.string.app_version, BuildConfig.VERSION_NAME)
-
-        binding.animView.setOnClickListener {
-            if (!binding.animView.isAnimating) {
-                binding.animView.speed *= -1f
-                binding.animView.resumeAnimation()
-            }
-        }
-
-        binding.animView.setOnClickListener {
-            if (!binding.animView.isAnimating) {
-                binding.animView.speed *= -1f
-                binding.animView.resumeAnimation()
-            }
-        }
-
-        GlobalScope.launch(Dispatchers.Main) {
-            binding.animView.frame = 0
-            delay(500)
-            binding.animView.resumeAnimation()
-        }
+    private fun subscribeOpenLicenceEvent() {
+        aboutViewModel.openLicences.observe(viewLifecycleOwner, EventObserver {
+            Intent(context, LicencesActivity::class.java)
+                .also { intent ->
+                    startActivity(intent)
+                }
+        })
     }
 
-    @Suppress("UNCHECKED_CAST")
-    private fun initObservers() {
-        viewModel.rateAppEvent.observe(viewLifecycleOwner, Observer {
-            activity?.let { it1 ->
-                it?.startActivity(it1)
-                analytics.logAppRateClick()
+    private fun subscribeOpenUrlEvent() {
+        aboutViewModel.openUrl.observe(viewLifecycleOwner, EventObserver { url ->
+            customTab.showTab(url)
+        })
+    }
+
+    private fun subscribeStartIntentEvent() {
+        aboutViewModel.startIntent.observe(viewLifecycleOwner, EventObserver { intent ->
+            startActivity(intent)
+        })
+    }
+
+    private fun initAnimations() {
+        binding.animView.setOnClickListener { view ->
+            if (!(view as LottieAnimationView).isAnimating) {
+                view.speed *= -1f
+                view.resumeAnimation()
             }
-        })
+        }
 
-        viewModel.contactDevEvent.observe(viewLifecycleOwner, Observer {
-            activity?.let { it1 -> it?.startActivity(it1) }
-        })
-
-        viewModel.shareAppEvent.observe(viewLifecycleOwner, Observer {
-            activity?.let { it1 ->
-                it?.startActivity(it1)
-                analytics.logShare("app")
-            }
-        })
-
-        viewModel.openLinkEvent.observe(viewLifecycleOwner, Observer {
-            it?.let { it1 -> customTab.showTab(it1) }
-        })
-
-        viewModel.openLibrariesEvent.observe(viewLifecycleOwner, Observer {
-            startActivity(Intent(context, LicencesActivity::class.java))
-        })
+        launch(Dispatchers.Main) {
+            binding.animView.frame = 0
+            delay(MEDIUM_ANIM_DURATION)
+            binding.animView.resumeAnimation()
+        }
     }
 }

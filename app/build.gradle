@@ -5,8 +5,8 @@ apply plugin: 'kotlin-kapt'
 apply plugin: 'io.fabric'
 
 ext.app = [
-        'version'            : '2.0.2',
-        'version_code'       : 13,
+        'version'            : '2.1.0',
+        'version_code'       : 15,
         'compile_sdk_version': 28,
         'min_sdk_version'    : 21,
         'target_sdk_version' : 28
@@ -25,6 +25,7 @@ android {
 
         buildConfigField 'String', "DROIDFEED_GITHUB_URL", "\"https://github.com/dgngulcan/droid-feed\""
         buildConfigField 'String', "DROIDFEED_PRIVACY_POLICY", "\"https://app.termly.io/document/privacy-policy/ab750f11-7f6d-499d-aafb-57697bd8aba0\""
+        buildConfigField 'String', "DROIDFEED_PREVIOUS_ISSUES", "\"https://us12.campaign-archive.com/home/?u=f04785b3cff4f9a551bab8831&id=b45d2a62b0\""
 
         multiDexEnabled true
 
@@ -40,7 +41,6 @@ android {
     buildTypes {
         debug {
             applicationIdSuffix ".debug"
-            resValue("string", "PORT_NUMBER", "8081")
         }
 
         release {
@@ -67,12 +67,6 @@ android {
     }
 }
 
-kotlin {
-    experimental {
-        coroutines "enable"
-    }
-}
-
 androidExtensions {
     experimental = true
 }
@@ -80,54 +74,64 @@ androidExtensions {
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
 
-    implementation "org.jetbrains.kotlin:kotlin-stdlib:$versions.kotlin"
-    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$versions.kotlin_coroutines"
+    implementation deps.kotlin.stdlib
+    implementation deps.kotlin.coroutines
 
-    implementation "com.google.android.material:material:$versions.material"
+    implementation deps.material_design
 
-    implementation "androidx.core:core-ktx:$versions.android_ktx"
-    implementation "androidx.fragment:fragment:$versions.fragment"
-    implementation "androidx.appcompat:appcompat:$versions.appcompat"
-    implementation "androidx.browser:browser:$versions.browser"
-    implementation "androidx.constraintlayout:constraintlayout:$versions.constraint_layout"
-    implementation "androidx.lifecycle:lifecycle-runtime:$versions.arch_lifecycle"
-    implementation "androidx.lifecycle:lifecycle-extensions:$versions.arch_lifecycle"
-    kapt "androidx.lifecycle:lifecycle-compiler:$versions.arch_lifecycle"
-    implementation "androidx.paging:paging-runtime:$versions.arch_paging"
-    implementation "androidx.room:room-runtime:$versions.arch_room"
-    kapt "androidx.room:room-compiler:$versions.arch_room"
+    implementation deps.androidx.core_ktx
+    implementation deps.androidx.fragment
+    implementation deps.androidx.browser
+    implementation deps.androidx.lifecycle
+    kapt deps.androidx.lifecycle_compiler
+    implementation deps.androidx.paging
 
-    implementation "com.google.dagger:dagger:$versions.dagger"
-    implementation "com.google.dagger:dagger-android:$versions.dagger"
-    implementation "com.google.dagger:dagger-android-support:$versions.dagger"
-    kapt "com.google.dagger:dagger-compiler:$versions.dagger"
-    kapt "com.google.dagger:dagger-android-processor:$versions.dagger"
+    implementation deps.androidx.constraint_layout
 
-    implementation "com.github.bumptech.glide:glide:$versions.glide"
-    kapt "com.github.bumptech.glide:compiler:$versions.glide"
+    implementation deps.room.runtime
+    kapt deps.room.compiler
 
-    implementation "com.squareup.retrofit2:retrofit:$versions.retrofit"
-    implementation "com.squareup.retrofit2:converter-moshi:$versions.retrofit"
-    implementation "com.squareup.okhttp3:okhttp:$versions.okHttp"
-    implementation "com.squareup.okhttp3:logging-interceptor:$versions.okHttp"
+    implementation deps.dagger.core
+    implementation deps.dagger.android
+    implementation deps.dagger.android_support
+    kapt deps.dagger.compiler
+    kapt deps.dagger.processor
 
-    implementation "com.crashlytics.sdk.android:crashlytics:$versions.crashlytics"
+    implementation deps.glide.core
+    kapt deps.glide.compiler
 
-    implementation "com.airbnb.android:lottie:$versions.lottie"
+    implementation deps.retrofit.core
+    implementation deps.retrofit.moshi_converter
 
-    implementation "com.google.firebase:firebase-core:$versions.firebase_core"
-    implementation "com.google.firebase:firebase-config:$versions.firebase_config"
+    implementation deps.okhttp.core
+    implementation deps.okhttp.logging_interceptor
 
-    implementation "org.jsoup:jsoup:$versions.jSoup"
+    implementation deps.crashlytics
 
-    testImplementation 'junit:junit:4.12'
-    androidTestImplementation "androidx.test:runner:$versions.test_runner"
-    androidTestImplementation "androidx.test.espresso:espresso-core:$versions.test_espresso"
-    androidTestImplementation "androidx.room:room-testing:$versions.arch_room"
-    androidTestImplementation "androidx.arch.core:core-testing:$versions.test_arch"
+    implementation deps.lottie
 
-    testImplementation "org.mockito:mockito-core:$versions.mockito"
-    androidTestImplementation "org.mockito:mockito-android:$versions.mockito"
+    implementation deps.firebase.core
+    implementation deps.firebase.config
+    implementation deps.firebase.firestore
+
+    implementation deps.jsoup
+    implementation deps.gson // quick fix for version conflict between room and firestore
+
+    testImplementation deps.mockito
+    testImplementation deps.junit
+    testImplementation deps.testx.core
+    testImplementation deps.arch_testing
+
+    androidTestImplementation deps.arch_testing
+    androidTestImplementation deps.testx.core
+    androidTestImplementation deps.testx.runner
+    androidTestImplementation deps.testx.espresso
+    androidTestImplementation deps.testx.rules
+    androidTestImplementation deps.testx.monitor
+    androidTestImplementation deps.testx.ext
+    androidTestImplementation deps.room.testing
+
+    detektPlugins deps.detekt_formatting
 }
 
 apply plugin: 'com.google.gms.google-services'

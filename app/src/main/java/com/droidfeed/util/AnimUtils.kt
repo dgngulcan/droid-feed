@@ -20,4 +20,9 @@ class AnimUtils @Inject constructor(appContext: App) {
     val linearOutSlowInInterpolator: Interpolator by lazy {
         AnimationUtils.loadInterpolator(appContext, android.R.interpolator.linear_out_slow_in)
     }
+
+    companion object {
+        const val MEDIUM_ANIM_DURATION = 500L
+        const val SHORT_ANIM_DURATION = 150L
+    }
 }

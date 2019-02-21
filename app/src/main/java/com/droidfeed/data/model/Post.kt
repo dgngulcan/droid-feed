@@ -6,17 +6,18 @@ import androidx.room.*
 import androidx.room.ForeignKey.CASCADE
 import com.droidfeed.R
 import com.droidfeed.data.db.AppDatabase
-import com.droidfeed.ui.adapter.UiModelType
+import com.droidfeed.ui.adapter.UIModelType
 import com.droidfeed.ui.adapter.diff.Diffable
 
 @Entity(
-    tableName = AppDatabase.POST_TABLE_NAME,
+    tableName = AppDatabase.POST_TABLE,
     foreignKeys = [ForeignKey(
         entity = Source::class,
         parentColumns = ["id"],
         childColumns = ["source_id"],
         onDelete = CASCADE
-    )]
+    )],
+    indices = [Index(value = ["source_id"])]
 )
 data class Post(
     @PrimaryKey
@@ -51,9 +52,10 @@ data class Post(
     var hasFadedIn: Boolean = false,
 
     @Ignore
-    var layoutType: UiModelType = UiModelType.POST_SMALL
+    var layoutType: UIModelType = UIModelType.POST_SMALL
 
-) : Diffable, Comparable<Post> {
+) : Diffable,
+    Comparable<Post> {
 
     @Transient
     @ColumnInfo(name = "bookmarked")
@@ -68,14 +70,13 @@ data class Post(
             }
         }
 
-
     @Transient
     @Ignore
     var isVideoContent: Boolean = false
+        private set
         get() {
             return channel.link.contains("youtube")
         }
-
 
     @Transient
     @Ignore
@@ -84,29 +85,23 @@ data class Post(
     @Transient
     @Ignore
     var image: String = ""
+        private set
         get() = if (content.contentImage.isBlank()) channel.imageUrl else content.contentImage
 
-    fun getShareIntent(): Intent {
-        val sendIntent = Intent()
-        sendIntent.action = Intent.ACTION_SEND
-        sendIntent.putExtra(Intent.EXTRA_TEXT, "$title\n\n$link")
-        sendIntent.type = "text/plain"
-        return sendIntent
+    fun isBookmarked() = bookmarked == 1
+
+    fun getShareIntent() = Intent().apply {
+        action = Intent.ACTION_SEND
+        type = "text/plain"
+        putExtra(Intent.EXTRA_TEXT, "$title\n\n$link")
+        addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP)
     }
 
-    override fun compareTo(other: Post): Int =
-        compareValuesBy(this, other) { it.pubDateTimestamp }
+    override fun compareTo(other: Post) = compareValuesBy(this, other) { it.pubDateTimestamp }
 
-    override fun isSame(item: Diffable): Boolean = this.link.contentEquals((item as Post).link)
+    override fun isSame(item: Any) = link == (item as Post).link
 
-    override fun isContentSame(item: Diffable): Boolean {
-        return if (item is Post) {
-            val content1 = this.bookmarked == item.bookmarked
-            val content2 = this.link.contentEquals(item.link)
-
-            content1 && content2
-        } else {
-            false
-        }
+    override fun hasSameContentWith(item: Any): Boolean {
+        return bookmarked == (item as Post).bookmarked
     }
 }

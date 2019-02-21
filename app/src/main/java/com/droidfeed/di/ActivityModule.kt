@@ -1,9 +1,13 @@
+@file:Suppress("unused")
+
 package com.droidfeed.di
 
 import com.droidfeed.di.main.MainFragmentModule
 import com.droidfeed.di.main.MainModule
-import com.droidfeed.ui.module.about.LicencesActivity
+import com.droidfeed.ui.module.about.licence.LicencesActivity
 import com.droidfeed.ui.module.main.MainActivity
+import com.droidfeed.ui.module.onboard.OnBoardActivity
+import com.droidfeed.ui.module.webview.WebViewActivity
 import dagger.Module
 import dagger.android.ContributesAndroidInjector
 
@@ -16,4 +20,10 @@ abstract class ActivityModule {
 
     @ContributesAndroidInjector
     abstract fun contributeLicencesActivity(): LicencesActivity
+
+    @ContributesAndroidInjector
+    abstract fun contributeOnBoardActivity(): OnBoardActivity
+
+    @ContributesAndroidInjector
+    abstract fun contributeWebViewActivity(): WebViewActivity
 }
