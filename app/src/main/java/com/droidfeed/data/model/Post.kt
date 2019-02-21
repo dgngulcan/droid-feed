@@ -10,7 +10,7 @@ import com.droidfeed.ui.adapter.UIModelType
 import com.droidfeed.ui.adapter.diff.Diffable
 
 @Entity(
-    tableName = AppDatabase.POST_TABLE_NAME,
+    tableName = AppDatabase.POST_TABLE,
     foreignKeys = [ForeignKey(
         entity = Source::class,
         parentColumns = ["id"],

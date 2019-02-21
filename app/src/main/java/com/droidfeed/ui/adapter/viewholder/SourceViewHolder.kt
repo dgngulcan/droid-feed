@@ -3,7 +3,7 @@ package com.droidfeed.ui.adapter.viewholder
 import androidx.recyclerview.widget.RecyclerView
 import com.droidfeed.data.model.Source
 import com.droidfeed.databinding.ListItemSourceBinding
-import com.droidfeed.ui.adapter.UiModelClickListener
+import com.droidfeed.ui.adapter.UIModelClickListener
 
 class SourceViewHolder(
     private val binding: ListItemSourceBinding
@@ -11,7 +11,7 @@ class SourceViewHolder(
 
     fun bind(
         source: Source,
-        clickListener: UiModelClickListener<Source>
+        clickListener: UIModelClickListener<Source>
     ) {
         binding.source = source
         binding.clickListener = clickListener

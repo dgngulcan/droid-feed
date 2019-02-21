@@ -8,7 +8,7 @@ import androidx.room.PrimaryKey
 import com.droidfeed.data.db.AppDatabase
 import com.droidfeed.ui.adapter.diff.Diffable
 
-@Entity(tableName = AppDatabase.SOURCE_TABLE_NAME)
+@Entity(tableName = AppDatabase.SOURCE_TABLE)
 data class Source(
 
     @PrimaryKey(autoGenerate = true)
