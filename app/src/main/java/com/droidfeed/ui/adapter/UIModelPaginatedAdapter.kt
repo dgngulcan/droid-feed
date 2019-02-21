@@ -6,7 +6,9 @@ import androidx.paging.PagedList
 import androidx.paging.PagedListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 /**
  * Generic [RecyclerView.Adapter] for [BaseUIModel]s.
@@ -35,15 +37,11 @@ class UIModelPaginatedAdapter(
 
     override fun submitList(pagedList: PagedList<BaseUIModel<in RecyclerView.ViewHolder>>?) {
         launch {
-            if (pagedList == null || pagedList.isEmpty()) {
-                super.submitList(pagedList)
-            } else {
-                pagedList.forEach { uiModel ->
-                    if (uiModel != null) {
-                        viewTypes.put(uiModel.getViewType(), uiModel)
-                    }
-                }
+            pagedList?.forEach { uiModel ->
+                viewTypes.put(uiModel.getViewType(), uiModel)
+            }
 
+            withContext(Dispatchers.Main) {
                 super.submitList(pagedList)
             }
         }
