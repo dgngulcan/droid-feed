@@ -96,7 +96,7 @@ class FeedFragment : BaseFragment("feed"), Scrollable {
         binding.newsRecyclerView.apply {
             layoutManager = WrapContentLinearLayoutManager(requireContext())
 
-            addOnScrollListener(CollapseScrollListener {
+            addOnScrollListener(CollapseScrollListener(this@FeedFragment) {
                 mainViewModel.onCollapseMenu()
             })
 
