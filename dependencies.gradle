@@ -11,7 +11,7 @@ ext.versions = [
         browser               : '1.0.0',
         retrofit              : '2.5.0',
         fabric_gradle         : '1.27.0',
-        dagger                : '2.16',
+        dagger                : '2.21',
         lottie                : '2.8.0',
         glide                 : '4.9.0',
         crashlytics           : '2.9.9',
