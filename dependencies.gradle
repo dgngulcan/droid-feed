@@ -25,7 +25,7 @@ ext.versions = [
         play_services         : '4.2.0',
         material              : '1.1.0-alpha03',
         constraint_layout     : '2.0.0-alpha3',
-        mockito               : '2.24.0',
+        mockito               : '2.24.5',
         ktlint                : '0.28.0',
         dep_versions          : '0.20.0',
         android_core_testing  : '1.1.1',
