@@ -41,8 +41,9 @@ ext.versions = [
 ext.deps = [:]
 
 deps.kotlin = [
-        stdlib    : "org.jetbrains.kotlin:kotlin-stdlib:$versions.kotlin",
-        coroutines: "org.jetbrains.kotlinx:kotlinx-coroutines-android:$versions.kotlin_coroutines"
+        stdlib         : "org.jetbrains.kotlin:kotlin-stdlib:$versions.kotlin",
+        coroutines     : "org.jetbrains.kotlinx:kotlinx-coroutines-android:$versions.kotlin_coroutines",
+        coroutines_test: "org.jetbrains.kotlinx:kotlinx-coroutines-test:$versions.kotlin_coroutines"
 ]
 
 deps.androidx = [
@@ -105,10 +106,14 @@ deps.okhttp = [
         logging_interceptor: "com.squareup.okhttp3:logging-interceptor:$versions.okHttp"
 ]
 
+deps.mockito = [
+        core  : "org.mockito:mockito-core:$versions.mockito",
+        inline: "org.mockito:mockito-inline:$versions.mockito"
+]
+
 deps.crashlytics = "com.crashlytics.sdk.android:crashlytics:$versions.crashlytics"
 deps.constraint_layout = "androidx.constraintlayout:constraintlayout:$versions.constraint_layout"
 deps.material_design = "com.google.android.material:material:$versions.material"
-deps.mockito = "org.mockito:mockito-core:$versions.mockito"
 deps.moshi = "com.squareup.moshi:moshi-kotlin:$versions.moshi"
 deps.junit = "junit:junit:$versions.junit"
 deps.arch_testing = "android.arch.core:core-testing:$versions.android_core_testing"
