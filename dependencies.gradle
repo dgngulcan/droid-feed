@@ -42,6 +42,7 @@ ext.deps = [:]
 
 deps.kotlin = [
         stdlib         : "org.jetbrains.kotlin:kotlin-stdlib:$versions.kotlin",
+        reflect        : "org.jetbrains.kotlin:kotlin-reflect:$versions.kotlin",
         coroutines     : "org.jetbrains.kotlinx:kotlinx-coroutines-android:$versions.kotlin_coroutines",
         coroutines_test: "org.jetbrains.kotlinx:kotlinx-coroutines-test:$versions.kotlin_coroutines"
 ]
