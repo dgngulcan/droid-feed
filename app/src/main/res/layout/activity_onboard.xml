@@ -57,7 +57,7 @@
             android:layout_marginStart="@dimen/spacing_small"
             android:layout_marginEnd="@dimen/spacing_medium"
             android:layout_marginBottom="@dimen/spacing_medium"
-            android:checked="@={onBoardViewModel.isContinueButtonEnabled}"
+            android:onCheckedChanged="@{(v,isChecked)->onBoardViewModel.onAgreementChecked(isChecked)}"
             android:paddingStart="@dimen/spacing_small"
             android:text="@{termsOfServiceSpan}"
             android:textAppearance="@style/Base.TextAppearance.AppCompat.Body2"
