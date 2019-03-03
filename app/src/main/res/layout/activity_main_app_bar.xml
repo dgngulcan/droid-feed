@@ -76,7 +76,7 @@
                     android:onClick="@{(v)->viewModel.onBookmarksEvent()}"
                     android:src="@drawable/sl_menu_bookmark_drawable"
                     app:isSelected="@{viewModel.isBookmarksButtonSelected}"
-                    app:isVisible="@{viewModel.isBookmarksButtonVisible}"
+                    app:isVisible="@{viewModel.isBookmarksButtonVisible &amp;&amp; !viewModel.isMenuVisible()}"
                     app:layout_constraintBottom_toBottomOf="@+id/btnFilter"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="@+id/btnFilter" />
@@ -87,7 +87,7 @@
                     android:layout_marginEnd="@dimen/spacing_small"
                     android:onClick="@{(v)->viewModel.onSourceFilterClicked()}"
                     android:src="@drawable/ic_filter_list_accent_24dp"
-                    app:isVisible="@{viewModel.isFilterButtonVisible}"
+                    app:isVisible="@{viewModel.isFilterButtonVisible &amp;&amp; !viewModel.isMenuVisible()}"
                     app:layout_constraintBottom_toBottomOf="@+id/txtToolbarTitle"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="@+id/txtToolbarTitle" />
