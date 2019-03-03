@@ -49,6 +49,10 @@ android {
         }
     }
 
+    testOptions {
+        unitTests.returnDefaultValues = true
+    }
+
     dataBinding {
         enabled = true
     }
@@ -117,8 +121,10 @@ dependencies {
     implementation deps.jsoup
     implementation deps.gson // quick fix for version conflict between room and firestore
 
-    testImplementation deps.mockito
+    testImplementation deps.mockito.core
+    testImplementation deps.mockito.inline
     testImplementation deps.junit
+    testImplementation deps.kotlin.coroutines_test
     testImplementation deps.testx.core
     testImplementation deps.arch_testing
 

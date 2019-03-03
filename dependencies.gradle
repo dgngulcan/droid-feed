@@ -11,7 +11,7 @@ ext.versions = [
         browser               : '1.0.0',
         retrofit              : '2.5.0',
         fabric_gradle         : '1.27.0',
-        dagger                : '2.16',
+        dagger                : '2.21',
         lottie                : '2.8.0',
         glide                 : '4.9.0',
         crashlytics           : '2.9.9',
@@ -25,7 +25,7 @@ ext.versions = [
         play_services         : '4.2.0',
         material              : '1.1.0-alpha03',
         constraint_layout     : '2.0.0-alpha3',
-        mockito               : '2.24.0',
+        mockito               : '2.24.5',
         ktlint                : '0.28.0',
         dep_versions          : '0.20.0',
         android_core_testing  : '1.1.1',
@@ -41,8 +41,10 @@ ext.versions = [
 ext.deps = [:]
 
 deps.kotlin = [
-        stdlib    : "org.jetbrains.kotlin:kotlin-stdlib:$versions.kotlin",
-        coroutines: "org.jetbrains.kotlinx:kotlinx-coroutines-android:$versions.kotlin_coroutines"
+        stdlib         : "org.jetbrains.kotlin:kotlin-stdlib:$versions.kotlin",
+        reflect        : "org.jetbrains.kotlin:kotlin-reflect:$versions.kotlin",
+        coroutines     : "org.jetbrains.kotlinx:kotlinx-coroutines-android:$versions.kotlin_coroutines",
+        coroutines_test: "org.jetbrains.kotlinx:kotlinx-coroutines-test:$versions.kotlin_coroutines"
 ]
 
 deps.androidx = [
@@ -105,10 +107,14 @@ deps.okhttp = [
         logging_interceptor: "com.squareup.okhttp3:logging-interceptor:$versions.okHttp"
 ]
 
+deps.mockito = [
+        core  : "org.mockito:mockito-core:$versions.mockito",
+        inline: "org.mockito:mockito-inline:$versions.mockito"
+]
+
 deps.crashlytics = "com.crashlytics.sdk.android:crashlytics:$versions.crashlytics"
 deps.constraint_layout = "androidx.constraintlayout:constraintlayout:$versions.constraint_layout"
 deps.material_design = "com.google.android.material:material:$versions.material"
-deps.mockito = "org.mockito:mockito-core:$versions.mockito"
 deps.moshi = "com.squareup.moshi:moshi-kotlin:$versions.moshi"
 deps.junit = "junit:junit:$versions.junit"
 deps.arch_testing = "android.arch.core:core-testing:$versions.android_core_testing"

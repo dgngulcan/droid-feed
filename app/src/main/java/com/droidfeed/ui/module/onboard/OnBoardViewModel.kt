@@ -36,6 +36,10 @@ class OnBoardViewModel @Inject constructor(
         pullSourceJob = pullSources() /* news sources are pulled on first open */
     }
 
+    fun onAgreementChecked(isChecked: Boolean) {
+        isContinueButtonEnabled.postValue(isChecked)
+    }
+
     fun onTermsOfUseClicked() {
         openUrl.postValue(Event(BuildConfig.DROIDFEED_PRIVACY_POLICY))
     }
