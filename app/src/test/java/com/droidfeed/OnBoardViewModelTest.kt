@@ -30,10 +30,6 @@ class OnBoardViewModelTest {
 
     @Before
     fun before() {
-        runBlocking {
-            `when`(sourceRepo.pull()).thenReturn(DataStatus.Successful())
-        }
-
         viewModel = OnBoardViewModel(sourceRepo)
     }
 
@@ -87,8 +83,12 @@ class OnBoardViewModelTest {
 
     @Test
     fun WHEN_continue_button_is_clicked_THEN_open_main_activity() {
+        runBlocking {
+            `when`(sourceRepo.pull()).thenReturn(DataStatus.Successful())
+        }
         val observer = mock<EventObserver<Any>>()
         viewModel.openMainActivity.observeForever(observer)
+
         viewModel.onAgreementChecked(true)
 
         viewModel.onContinueClicked()
