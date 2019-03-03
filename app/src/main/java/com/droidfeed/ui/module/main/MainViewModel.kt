@@ -122,13 +122,13 @@ class MainViewModel @Inject constructor(
     fun onMenuClicked() {
         val isCurrentlyVisible = isMenuVisible.value ?: false
         isMenuVisible.postValue(!isCurrentlyVisible)
-        isBookmarksButtonVisible.postValue(!isCurrentlyVisible)
     }
 
     fun onBookmarksEvent() {
         val isCurrentlySelected = (isBookmarksButtonSelected.value ?: false)
         isBookmarksShown.postValue(!isCurrentlySelected)
         isBookmarksButtonSelected.postValue(!isCurrentlySelected)
+        isFilterButtonVisible.postValue(isCurrentlySelected)
     }
 
     fun onToolbarTitleClicked() {
