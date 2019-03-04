@@ -5,7 +5,7 @@ apply plugin: 'kotlin-kapt'
 apply plugin: 'io.fabric'
 
 ext.app = [
-        'version'            : '2.1.1',
+        'version'            : '2.2.1-debug',
         'version_code'       : 16,
         'compile_sdk_version': 28,
         'min_sdk_version'    : 21,
@@ -44,8 +44,8 @@ android {
         }
 
         release {
-            shrinkResources false
-            minifyEnabled false
+            shrinkResources true
+            minifyEnabled true
         }
     }
 
