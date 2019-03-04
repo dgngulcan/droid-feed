@@ -86,6 +86,12 @@ class FeedFragment : BaseFragment("feed"), Scrollable {
         return binding.root
     }
 
+    private fun subscribePosts() {
+        feedViewModel.postsLiveData.observe(viewLifecycleOwner, Observer { pagedList ->
+            paginatedAdapter.submitList(pagedList as PagedList<BaseUIModelAlias>)
+        })
+    }
+
     private fun subscribePlayStoreEvent() {
         feedViewModel.openPlayStorePage.observe(viewLifecycleOwner, EventObserver {
             startActivity(rateAppIntent)
@@ -139,12 +145,6 @@ class FeedFragment : BaseFragment("feed"), Scrollable {
         }
     }
 
-    private fun subscribePosts() {
-        feedViewModel.postsLiveData.observe(viewLifecycleOwner, Observer { pagedList ->
-            paginatedAdapter.submitList(pagedList as PagedList<BaseUIModelAlias>)
-        })
-    }
-
     private fun subscribePostOpenEvent() {
         feedViewModel.openPostDetail.observe(viewLifecycleOwner, EventObserver { post ->
             customTab.showTab(post.link)
@@ -165,6 +165,7 @@ class FeedFragment : BaseFragment("feed"), Scrollable {
                 Snackbar.LENGTH_LONG
             ).apply {
                 setActionTextColor(Color.YELLOW)
+                animationMode = Snackbar.ANIMATION_MODE_SLIDE
                 setAction(R.string.undo) { onUndo() }
             }.run {
                 show()
