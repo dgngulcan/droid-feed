@@ -6,7 +6,7 @@ apply plugin: 'io.fabric'
 
 ext.app = [
         'version'            : '2.1.5',
-        'version_code'       : 21,
+        'version_code'       : 22,
         'compile_sdk_version': 28,
         'min_sdk_version'    : 21,
         'target_sdk_version' : 28
