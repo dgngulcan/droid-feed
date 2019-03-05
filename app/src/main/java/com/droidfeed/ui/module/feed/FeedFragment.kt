@@ -50,7 +50,7 @@ class FeedFragment : BaseFragment("feed"), Scrollable {
             .get(FeedViewModel::class.java)
 
         mainViewModel = ViewModelProviders
-            .of(activity!!)
+            .of(activity!!, viewModelFactory)
             .get(MainViewModel::class.java)
     }
 

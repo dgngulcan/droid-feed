@@ -80,9 +80,9 @@ fun loadImage(
 @BindingAdapter("app:displayUrl")
 fun displayUrl(
     webView: WebView,
-    url: String
+    url: String?
 ) {
-    webView.loadUrl(url)
+    url?.let { webView.loadUrl(it) }
 }
 
 @BindingAdapter("app:relativeTimestamp")

@@ -2,8 +2,8 @@ package com.droidfeed.data.repo
 
 import com.droidfeed.data.DataStatus
 import com.droidfeed.data.api.mailchimp.ErrorAdapter
-import com.droidfeed.data.api.mailchimp.MailchimpError
-import com.droidfeed.data.api.mailchimp.Subscriber
+import com.droidfeed.data.api.mailchimp.model.MailchimpError
+import com.droidfeed.data.api.mailchimp.model.Subscriber
 import com.droidfeed.data.api.mailchimp.service.NewsletterService
 import com.droidfeed.util.extention.suspendingEnqueue
 import com.google.firebase.remoteconfig.FirebaseRemoteConfig
@@ -28,6 +28,7 @@ class NewsletterRepo @Inject constructor(
         try {
             val listId = remoteConfig.getString("mc_newsletter_list_id")
             newsletterService.addSubscriber(listId, subscriber).suspendingEnqueue()
+
             DataStatus.Successful()
         } catch (e: HttpException) {
             when (e.code()) {

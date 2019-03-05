@@ -1,7 +1,9 @@
-package com.droidfeed.data.api.mailchimp
+package com.droidfeed.data.api.mailchimp.model
 
+import androidx.annotation.Keep
 import com.squareup.moshi.Json
 
+@Keep
 data class UserResponse(
     val id: String,
 
