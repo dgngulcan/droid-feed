@@ -13,7 +13,6 @@
 -keepattributes SourceFile,LineNumberTable
 -repackageclasses ''
 
-
 -keep class com.crashlytics.** { *; }
 -keepattributes *Annotation*,Signature,Exceptions
 

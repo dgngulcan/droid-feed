@@ -11,9 +11,9 @@ private const val TAG = "DroidFeed"
  *
  * @param throwable
  */
-fun logThrowable(throwable: Throwable) {
+fun logThrowable(throwable: Throwable?) {
     if (BuildConfig.DEBUG) {
-        throwable.printStackTrace()
+        throwable?.printStackTrace()
     } else {
         Crashlytics.logException(throwable)
     }

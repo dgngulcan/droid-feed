@@ -1,15 +1,16 @@
 package com.droidfeed.ui.module.newsletter
 
+import android.util.Log
 import android.util.Patterns
 import androidx.annotation.StringRes
 import androidx.lifecycle.MutableLiveData
 import com.droidfeed.BuildConfig
 import com.droidfeed.R
 import com.droidfeed.data.DataStatus
-import com.droidfeed.data.api.mailchimp.ErrorType
-import com.droidfeed.data.api.mailchimp.MailchimpError
-import com.droidfeed.data.api.mailchimp.Subscriber
-import com.droidfeed.data.api.mailchimp.SubscriptionStatus
+import com.droidfeed.data.api.mailchimp.model.ErrorType
+import com.droidfeed.data.api.mailchimp.model.MailchimpError
+import com.droidfeed.data.api.mailchimp.model.Subscriber
+import com.droidfeed.data.api.mailchimp.model.SubscriptionStatus
 import com.droidfeed.data.repo.NewsletterRepo
 import com.droidfeed.ui.common.BaseViewModel
 import com.droidfeed.util.AnalyticsUtil
@@ -74,6 +75,8 @@ class NewsletterViewModel @Inject constructor(
     }
 
     private fun handleSignUpResponse(dataStatus: DataStatus<MailchimpError>) {
+        Log.e("JAMIRYO", "5---- $dataStatus")
+
         when (dataStatus) {
             is DataStatus.Successful -> {
                 isEmailInputVisible.postValue(false)

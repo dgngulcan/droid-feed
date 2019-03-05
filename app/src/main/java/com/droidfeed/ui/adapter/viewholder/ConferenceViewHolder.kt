@@ -18,7 +18,6 @@ open class ConferenceViewHolder(
             itemCard.setOnClickListener {
                 onItemClick(conference)
             }
-
         }
     }
 }

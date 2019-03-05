@@ -117,7 +117,7 @@
             android:layout_marginTop="@dimen/spacing_small"
             android:layout_marginEnd="@dimen/spacing_xlarge"
             android:backgroundTint="@color/colorAccent"
-            android:onClick="@{(v)->viewModel.signUp(edtEmail.getText().toString)}"
+            android:onClick="@{(v)->viewModel.signUp(edtEmail.getText().toString())}"
             android:text="@string/sign_me_up"
             app:isVisible="@{viewModel.isSignButtonVisible}"
             app:layout_constraintEnd_toEndOf="parent"

@@ -1,6 +1,9 @@
 package com.droidfeed.data.api.mailchimp
 
 import androidx.annotation.Keep
+import com.droidfeed.data.api.mailchimp.model.ErrorJson
+import com.droidfeed.data.api.mailchimp.model.ErrorType
+import com.droidfeed.data.api.mailchimp.model.MailchimpError
 import com.droidfeed.util.logThrowable
 import com.squareup.moshi.FromJson
 import com.squareup.moshi.JsonDataException
@@ -21,6 +24,10 @@ internal class ErrorAdapter {
             }
         }
 
-        return MailchimpError(errorType, errorJson.status, errorJson.detail)
+        return MailchimpError(
+            errorType,
+            errorJson.status,
+            errorJson.detail
+        )
     }
 }

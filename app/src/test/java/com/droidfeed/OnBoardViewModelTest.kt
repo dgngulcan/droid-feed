@@ -16,7 +16,6 @@ import org.junit.runners.JUnit4
 import org.mockito.ArgumentMatchers
 import org.mockito.Mockito.*
 
-
 @Suppress("TestFunctionName")
 @RunWith(JUnit4::class)
 class OnBoardViewModelTest {
@@ -80,7 +79,6 @@ class OnBoardViewModelTest {
         verify(observer).onChanged(false)
     }
 
-
     @Test
     fun WHEN_continue_button_is_clicked_THEN_open_main_activity() {
         runBlocking {
@@ -95,5 +93,4 @@ class OnBoardViewModelTest {
 
         verify(observer, only()).onChanged(ArgumentMatchers.any())
     }
-
 }
