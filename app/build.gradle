@@ -5,8 +5,8 @@ apply plugin: 'kotlin-kapt'
 apply plugin: 'io.fabric'
 
 ext.app = [
-        'version'            : '2.2.1-debug',
-        'version_code'       : 16,
+        'version'            : '2.1.5',
+        'version_code'       : 22,
         'compile_sdk_version': 28,
         'min_sdk_version'    : 21,
         'target_sdk_version' : 28
@@ -76,58 +76,43 @@ androidExtensions {
 }
 
 dependencies {
-    implementation fileTree(dir: 'libs', include: ['*.jar'])
-
+    implementation fileTree(include: ['*.jar'], dir: 'libs')
     implementation deps.kotlin.stdlib
     implementation deps.kotlin.coroutines
-
     implementation deps.material_design
-
     implementation deps.androidx.core_ktx
     implementation deps.androidx.fragment
     implementation deps.androidx.browser
     implementation deps.androidx.lifecycle
     kapt deps.androidx.lifecycle_compiler
     implementation deps.androidx.paging
-
     implementation deps.androidx.constraint_layout
-
     implementation deps.room.runtime
     kapt deps.room.compiler
-
     implementation deps.dagger.core
     implementation deps.dagger.android
     implementation deps.dagger.android_support
     kapt deps.dagger.compiler
     kapt deps.dagger.processor
-
     implementation deps.glide.core
     kapt deps.glide.compiler
-
     implementation deps.retrofit.core
     implementation deps.retrofit.moshi_converter
-
     implementation deps.okhttp.core
     implementation deps.okhttp.logging_interceptor
-
     implementation deps.crashlytics
-
     implementation deps.lottie
-
     implementation deps.firebase.core
     implementation deps.firebase.config
     implementation deps.firebase.firestore
-
     implementation deps.jsoup
     implementation deps.gson // quick fix for version conflict between room and firestore
-
     testImplementation deps.mockito.core
     testImplementation deps.mockito.inline
     testImplementation deps.junit
     testImplementation deps.kotlin.coroutines_test
     testImplementation deps.testx.core
     testImplementation deps.arch_testing
-
     androidTestImplementation deps.arch_testing
     androidTestImplementation deps.testx.core
     androidTestImplementation deps.testx.runner
@@ -136,7 +121,6 @@ dependencies {
     androidTestImplementation deps.testx.monitor
     androidTestImplementation deps.testx.ext
     androidTestImplementation deps.room.testing
-
     detektPlugins deps.detekt_formatting
 }
 
