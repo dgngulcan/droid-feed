@@ -54,6 +54,7 @@ class OnBoardViewModelTest {
         viewModel.isContinueButtonEnabled.observeForever(observer)
 
         viewModel.onAgreementChecked(true)
+
         verify(observer).onChanged(true)
     }
 
