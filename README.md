@@ -1,6 +1,8 @@
 <img  src="/art/ss1.png" width="25%"/><img  src="/art/ss2.png" width="25%"/><img  src="/art/ss3.png" width="25%"/><img  src="/art/ss4.png" width="25%"/>
 
 # DroidFeed
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/78f9ea01acba4ef598b06423707223f2)](https://app.codacy.com/app/dgngulcan/droid-feed?utm_source=github.com&utm_medium=referral&utm_content=dgngulcan/droid-feed&utm_campaign=Badge_Grade_Dashboard)
+
 Curated news feed for Android Developers!
 
 Stay up to date with the latest Android Development news. Built for the Android developer community, DroidFeed presents news, articles, podcasts and conferences about Android Development from a curated list of sources. 
