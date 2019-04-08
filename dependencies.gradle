@@ -17,6 +17,7 @@ ext.versions = [
         crashlytics           : '2.9.9',
         detekt_ktlint         : '1.0.0-RC14',
         firebase_core         : '16.0.7',
+        firebase_auth         : '16.2.0',
         firebase_config       : '16.3.0',
         firebase_firestore    : '18.1.0',
         okHttp                : '3.13.1',
@@ -93,6 +94,7 @@ deps.navigation = [
 
 deps.firebase = [
         core     : "com.google.firebase:firebase-core:$versions.firebase_core",
+        auth     : "com.google.firebase:firebase-auth:$versions.firebase_auth",
         config   : "com.google.firebase:firebase-config:$versions.firebase_config",
         firestore: "com.google.firebase:firebase-firestore:$versions.firebase_firestore"
 ]

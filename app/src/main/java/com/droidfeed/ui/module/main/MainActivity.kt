@@ -10,6 +10,7 @@ import android.view.View
 import androidx.core.view.GravityCompat
 import androidx.core.view.isVisible
 import androidx.databinding.DataBindingUtil
+import androidx.drawerlayout.widget.DrawerLayout
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.DefaultItemAnimator
@@ -24,6 +25,7 @@ import com.droidfeed.util.AnimUtils
 import com.droidfeed.util.ColorPalette
 import com.droidfeed.util.event.EventObserver
 import com.droidfeed.util.extention.hideKeyboard
+import kotlinx.android.synthetic.main.activity_main.*
 import javax.inject.Inject
 
 @Suppress("UNCHECKED_CAST")
@@ -62,6 +64,8 @@ class MainActivity : BaseActivity() {
         subscribeSources()
         subscribeMenuVisibility()
         subscribeFilterVisibility()
+        subscribeCloseKeyboard()
+        subscribeAddSourceIcon()
 
         binding = DataBindingUtil.setContentView<ActivityMainBinding>(
             this,
@@ -76,6 +80,19 @@ class MainActivity : BaseActivity() {
         }
 
         initFilterDrawer()
+    }
+
+    private fun subscribeAddSourceIcon() {
+//        mainViewModel.sourceAddIcon.observe(this, EventObserver {
+//
+//        })
+
+    }
+
+    private fun subscribeCloseKeyboard() {
+        mainViewModel.closeKeyboardEvent.observe(this, EventObserver {
+            edtFeedUrl.hideKeyboard()
+        })
     }
 
     private fun subscribeSources() {
@@ -279,6 +296,20 @@ class MainActivity : BaseActivity() {
             overScrollMode = View.OVER_SCROLL_NEVER
             layoutManager = linearLayoutManager
         }
+        binding.drawerLayout.addDrawerListener(object : DrawerLayout.DrawerListener {
+            override fun onDrawerStateChanged(newState: Int) {
+            }
+
+            override fun onDrawerSlide(drawerView: View, slideOffset: Float) {
+            }
+
+            override fun onDrawerClosed(drawerView: View) {
+                mainViewModel.onFilterDrawerClosed()
+            }
+
+            override fun onDrawerOpened(drawerView: View) {
+            }
+        })
     }
 
     override fun onBackPressed() {

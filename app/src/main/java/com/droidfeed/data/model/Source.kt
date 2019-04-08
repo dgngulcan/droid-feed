@@ -33,7 +33,6 @@ data class Source(
     @Ignore
     val isEnabled = ObservableBoolean()
 
-    override fun isSame(item: Any) = url == (item as Source).url
+    override fun isSame(item: Any) = id == (item as Source).id
 
-    override fun hasSameContentWith(item: Any) = isActive == (item as Source).isActive
 }

@@ -27,6 +27,7 @@ class ConferencesViewModel @Inject constructor(
         isProgressVisible.postValue(conferences.value?.isEmpty() == true)
 
         val dataStatus = conferenceRepo.getUpcoming()
+
         when (dataStatus) {
             is DataStatus.Successful -> {
                 val uiModels = dataStatus.data?.map { conference ->
@@ -44,9 +45,11 @@ class ConferencesViewModel @Inject constructor(
             conference,
             onItemClick = { conf ->
                 openUrl.postValue(Event(conf.url))
+                analytics.logConferenceClick()
             },
             onCFPClick = { conf ->
                 openUrl.postValue(Event(conf.cfpUrl))
+                analytics.logCFPClick()
             })
     }
 }

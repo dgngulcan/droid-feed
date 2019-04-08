@@ -4,8 +4,14 @@ import androidx.annotation.WorkerThread
 import com.droidfeed.data.DataStatus
 import com.droidfeed.data.db.SourceDao
 import com.droidfeed.data.model.Source
+import com.droidfeed.data.parser.NewsXmlParser
 import com.droidfeed.util.extention.isOnline
+import com.droidfeed.util.logThrowable
 import com.google.firebase.firestore.FirebaseFirestore
+import kotlinx.coroutines.GlobalScope
+import okhttp3.OkHttpClient
+import okhttp3.Request
+import java.io.IOException
 import java.net.UnknownHostException
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -18,7 +24,9 @@ import kotlin.coroutines.suspendCoroutine
 @Singleton
 class SourceRepo @Inject constructor(
     private val sourceDao: SourceDao,
-    private val firestore: FirebaseFirestore
+    private val firestore: FirebaseFirestore,
+    private val okHttpClient: OkHttpClient,
+    private val xmlParser: NewsXmlParser
 ) {
 
     fun getAll() = sourceDao.getSources()
@@ -39,7 +47,46 @@ class SourceRepo @Inject constructor(
     fun insert(sources: List<Source>) = sourceDao.insertSources(sources)
 
     /**
-     * Pulls sources from Firebase Firestore.
+     * Adds news source from given url.
+     *
+     * @param sourceUrl valid RSS or Atom feed url
+     */
+    fun addFromUrl(sourceUrl: String): DataStatus<String> {
+
+        return try {
+            val request = Request.Builder()
+                .url(sourceUrl)
+                .build()
+            val response = okHttpClient.newCall(request).execute()
+
+            if (response.isSuccessful) {
+                val channelTitle = response.body()?.string()?.let { feedString ->
+                    xmlParser.getChannelTitle(feedString)
+                }
+
+                if (channelTitle == null) {
+                    DataStatus.Failed()
+                } else {
+                    val source = Source(
+                        id = 0, /* will be auto-set by room */
+                        name = channelTitle,
+                        url = sourceUrl
+                    )
+
+                    sourceDao.insertSource(source)
+                    DataStatus.Successful(channelTitle)
+                }
+            } else {
+                DataStatus.HttpFailed(response.code())
+            }
+        } catch (e: IOException) {
+            logThrowable(e)
+            DataStatus.Failed(e)
+        }
+    }
+
+    /**
+     * Pulls sources from [FirebaseFirestore].
      */
     suspend fun pull() = suspendCoroutine<DataStatus<List<Source>>> { continuation ->
         firestore.collection("sources")
@@ -68,4 +115,7 @@ class SourceRepo @Inject constructor(
                 continuation.resume(DataStatus.Failed(exception))
             }
     }
+
+    fun isSourceExisting(sourceUrl: String) = sourceDao.isUrlExists(sourceUrl).isNotEmpty()
+
 }

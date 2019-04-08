@@ -11,5 +11,4 @@ data class Licence(
 
     override fun isSame(item: Any) = equals(item)
 
-    override fun hasSameContentWith(item: Any) = equals(item)
 }

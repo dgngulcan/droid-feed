@@ -14,19 +14,16 @@ class UIModelDiffCallback(
     override fun areItemsTheSame(
         oldItemPosition: Int,
         newItemPosition: Int
-    ) =
-        if (oldModels[oldItemPosition].javaClass != newModels[newItemPosition].javaClass) {
-            false
-        } else {
-            oldModels[oldItemPosition].getData().isSame(newModels[newItemPosition].getData())
-        }
+    ) = if (oldModels[oldItemPosition].javaClass != newModels[newItemPosition].javaClass) {
+        false
+    } else {
+        oldModels[oldItemPosition].getData().isSame(newModels[newItemPosition].getData())
+    }
 
     override fun areContentsTheSame(
-        oldItemPosition: Int,
-        newItemPosition: Int
-    ) = oldModels[oldItemPosition]
-        .getData()
-        .hasSameContentWith(newModels[newItemPosition].getData())
+        oldItemPos: Int,
+        newItemPos: Int
+    ) = oldModels[oldItemPos].getData() == newModels[newItemPos].getData()
 
     override fun getOldListSize(): Int = oldModels.size
 
@@ -35,7 +32,5 @@ class UIModelDiffCallback(
     override fun getChangePayload(
         oldItemPosition: Int,
         newItemPosition: Int
-    ) =
-        newModels[newItemPosition]
-            .getData()
+    ) = newModels[newItemPosition].getData()
 }

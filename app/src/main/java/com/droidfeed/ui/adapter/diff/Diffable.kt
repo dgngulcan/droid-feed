@@ -7,5 +7,4 @@ interface Diffable {
 
     fun isSame(item: Any): Boolean
 
-    fun hasSameContentWith(item: Any): Boolean
 }

@@ -10,7 +10,7 @@ import javax.inject.Inject
 class AppRateHelper @Inject constructor(private val sharedPrefs: SharedPreferences) {
 
     fun showRateSnackbar(view: View, onAction: () -> Unit) {
-        Snackbar.make(view, R.string.like_to_review_df, Snackbar.LENGTH_LONG)
+        Snackbar.make(view, R.string.like_to_review_df, 5000)
             .setAction(R.string.yes) { onAction() }
             .setAnimationMode(Snackbar.ANIMATION_MODE_SLIDE)
             .setActionTextColor(

@@ -1,6 +1,9 @@
 package com.droidfeed.ui.module.main
 
 import android.content.SharedPreferences
+import android.util.Patterns
+import android.webkit.URLUtil
+import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -16,11 +19,12 @@ import com.droidfeed.ui.common.BaseViewModel
 import com.droidfeed.util.event.Event
 import com.droidfeed.util.hasAcceptedTerms
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 class MainViewModel @Inject constructor(
-    sourceRepo: SourceRepo,
+    private val sourceRepo: SourceRepo,
     postRepo: PostRepo,
     sharedPrefs: SharedPreferences
 ) : BaseViewModel() {
@@ -32,19 +36,29 @@ class MainViewModel @Inject constructor(
     val isUserTermsAccepted = MutableLiveData<Boolean>().apply {
         value = sharedPrefs.hasAcceptedTerms
     }
+    val sourceAddIcon = MutableLiveData<@DrawableRes Int>().apply {
+        value = R.drawable.avd_close_to_add
+    }
     val isMenuVisible = MutableLiveData<Boolean>().apply { value = false }
+    val isSourceInputVisible = MutableLiveData<Boolean>().apply { value = false }
     val isSourceFilterVisible = MutableLiveData<Event<Boolean>>().apply { value = Event(false) }
+    val closeKeyboardEvent = MutableLiveData<Event<Boolean>>().apply { value = Event(false) }
+    val sourceErrText = MutableLiveData<@StringRes Int>().apply { value = R.string.empty_string }
+    val sourceInputText = MutableLiveData<@StringRes Int>().apply { value = R.string.empty_string }
+    val isSourceProgressVisible = MutableLiveData<Boolean>().apply { value = false }
+    val isSourceAddButtonEnabled = MutableLiveData<Boolean>().apply { value = true }
     val isFilterButtonVisible = MutableLiveData<Boolean>().apply { value = true }
     val isBookmarksShown = MutableLiveData<Boolean>().apply { value = false }
     val isBookmarksButtonVisible = MutableLiveData<Boolean>().apply { value = true }
     val isBookmarksButtonSelected = MutableLiveData<Boolean>().apply { value = false }
 
-    val sourceUIModelData: LiveData<List<SourceUIModel>> =
-        map(sourceRepo.getAll()) { sourceList ->
-            sourceList.map { source ->
-                SourceUIModel(source, sourceClickListener)
-            }
+    val sourceUIModelData: LiveData<List<SourceUIModel>> = map(sourceRepo.getAll()) { sourceList ->
+        sourceList.map { source ->
+            SourceUIModel(source, sourceClickListener)
         }
+    }
+
+    private var addSourceJob: Job? = null
 
     init {
         updateSources(sourceRepo)
@@ -119,6 +133,74 @@ class MainViewModel @Inject constructor(
         isSourceFilterVisible.postValue(Event(true))
     }
 
+    fun onAddSourceClicked() {
+        val shouldOpenInputField = !(isSourceInputVisible.value!!)
+        isSourceInputVisible.postValue(shouldOpenInputField)
+
+        if (shouldOpenInputField) {
+            sourceAddIcon.postValue(R.drawable.avd_add_to_close)
+        } else {
+            sourceAddIcon.postValue(R.drawable.avd_close_to_add)
+        }
+
+        analytics.logAddSourceButtonClick()
+    }
+
+    fun onSaveSourceClicked(url: String) {
+        addSourceJob = launch(Dispatchers.IO) {
+            if (Patterns.WEB_URL.matcher(url.toLowerCase()).matches()) {
+                sourceErrText.postValue(R.string.empty_string)
+
+                val cleanUrl = URLUtil.guessUrl(url)
+
+                val alreadyExists = sourceRepo.isSourceExisting(cleanUrl)
+
+                if (alreadyExists) {
+                    sourceErrText.postValue(R.string.error_source_exists)
+                } else {
+                    isSourceProgressVisible.postValue(true)
+                    isSourceAddButtonEnabled.postValue(false)
+                    closeKeyboardEvent.postValue(Event(true))
+
+                    val status = sourceRepo.addFromUrl(cleanUrl)
+
+                    when (status) {
+                        is DataStatus.Successful -> {
+                            isSourceProgressVisible.postValue(false)
+                            isSourceAddButtonEnabled.postValue(true)
+                            isSourceInputVisible.postValue(false)
+                        }
+                        is DataStatus.Failed -> {
+                            sourceErrText.postValue(R.string.error_add_source)
+                            isSourceProgressVisible.postValue(false)
+                            isSourceAddButtonEnabled.postValue(true)
+
+                        }
+                        is DataStatus.HttpFailed -> {
+                            sourceErrText.postValue(R.string.error_internet_or_url)
+                            isSourceProgressVisible.postValue(false)
+                            isSourceAddButtonEnabled.postValue(true)
+                        }
+                    }
+
+                }
+            } else if (url.isEmpty()) {
+                sourceErrText.postValue(R.string.error_empty_source_url)
+            } else {
+                sourceErrText.postValue(R.string.error_invalid_url)
+            }
+
+            analytics.logSaveSourceButtonClick()
+        }
+
+    }
+
+    fun onSourceInputTextChanged(text: CharSequence, start: Int, before: Int, count: Int) {
+        if (text.isNotEmpty()) {
+            sourceErrText.postValue(R.string.empty_string)
+        }
+    }
+
     fun onMenuClicked() {
         val isCurrentlyVisible = isMenuVisible.value ?: false
         isMenuVisible.postValue(!isCurrentlyVisible)
@@ -148,5 +230,12 @@ class MainViewModel @Inject constructor(
             isFilterDrawerOpen -> isSourceFilterVisible.postValue(Event(false))
             else -> navigateBack()
         }
+    }
+
+    fun onFilterDrawerClosed() {
+        isSourceInputVisible.postValue(false)
+        sourceInputText.postValue(R.string.empty_string)
+        sourceErrText.postValue(R.string.empty_string)
+        sourceAddIcon.postValue(R.drawable.avd_close_to_add)
     }
 }

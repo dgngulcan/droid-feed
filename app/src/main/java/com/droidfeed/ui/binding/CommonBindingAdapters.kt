@@ -7,6 +7,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.core.view.isVisible
 import androidx.databinding.BindingAdapter
+import androidx.vectordrawable.graphics.drawable.AnimatedVectorDrawableCompat
 import com.droidfeed.R
 import com.droidfeed.util.extention.fadeIn
 import com.droidfeed.util.extention.fadeOut
@@ -21,6 +22,18 @@ fun avdImageResource(
 ) {
     imageView.setImageResource(avdImageResource)
 }
+
+
+@BindingAdapter("app:avdImageResource2")
+fun avdImageResource2(
+    imageView: ImageView,
+    avdImageResource: Int
+) {
+    val avd = AnimatedVectorDrawableCompat.create(imageView.context, avdImageResource)
+    imageView.setImageDrawable(avd)
+    avd?.start()
+}
+
 
 @BindingAdapter("app:isVisible")
 fun isVisible(

@@ -37,6 +37,21 @@ class FeedParser @Inject constructor() : XmlParser() {
         return posts
     }
 
+    override fun getChannelTitle(parser: XmlPullParser): String? {
+        parser.require(XmlPullParser.START_TAG, null, "feed")
+
+        var title: String? = null
+
+        parseTags(
+            parser,
+            "title" to { tParser ->
+                title = tParser.nextText()
+            }
+        ) { title == null }
+
+        return title
+    }
+
     private fun parsePost(parser: XmlPullParser, source: Source): Post {
         val post = Post()
 

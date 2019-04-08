@@ -11,9 +11,11 @@ import javax.inject.Inject
 class AnalyticsUtil @Inject constructor(private val analytics: FirebaseAnalytics) {
 
     fun logBookmark(isBookmarked: Boolean) {
+        val text = if (isBookmarked) "bookmarked" else "unbookmarked"
+
         analytics.logEvent(
             "bookmark",
-            bundleOf(Pair("bookmarked", isBookmarked))
+            bundleOf(Pair("bookmarked", text))
         )
     }
 
@@ -35,12 +37,38 @@ class AnalyticsUtil @Inject constructor(private val analytics: FirebaseAnalytics
         )
     }
 
+    fun logConferenceClick() {
+        analytics.logEvent(
+            FirebaseAnalytics.Event.VIEW_ITEM,
+            bundleOf(Pair("conference", "conference"))
+        )
+    }
+
+    fun logCFPClick() {
+        analytics.logEvent(
+            FirebaseAnalytics.Event.VIEW_ITEM,
+            bundleOf(Pair("conference", "CFP"))
+        )
+    }
+
+    fun logAddSourceButtonClick() {
+        analytics.logEvent("click_add_source", null)
+    }
+
+    fun logSaveSourceButtonClick() {
+        analytics.logEvent("click_save_source", null)
+    }
+
     fun logScreenView(activity: Activity, screenTag: String) {
         analytics.setCurrentScreen(activity, screenTag, null)
     }
 
     fun logAppRateClick() {
         analytics.logEvent("open_play_store", null)
+    }
+
+    fun logAppRateFromPromtClick() {
+        analytics.logEvent("app_rate_prompt_rate", null)
     }
 
     fun logAppRatePrompt() {

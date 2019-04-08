@@ -180,14 +180,14 @@ class FeedViewModel @Inject constructor(
             launch(Dispatchers.IO) {
                 val bookmarkCount = postRepo.getBookmarkedCount()
 
-                if (canPromptAppRate(bookmarkCount)) {
-                    analytics.logAppRatePrompt()
+//                if (canPromptAppRate(bookmarkCount)) {
+//                    analytics.logAppRatePrompt()
 
                     showAppRateSnack.postValue(Event({
                         openPlayStorePage.postValue(Event(Unit))
-                        analytics.logAppRateClick()
+                        analytics.logAppRateFromPromtClick()
                     }))
-                }
+//                }
             }
         }
     }

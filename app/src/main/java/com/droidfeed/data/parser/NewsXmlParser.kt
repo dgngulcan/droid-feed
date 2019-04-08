@@ -45,4 +45,34 @@ class NewsXmlParser @Inject constructor(
             }
         }
     }
+
+    /**
+     * Parses and returns the channel title from given feed xml.
+     *
+     * @param xml RSS or Atom feed
+     */
+    fun getChannelTitle(xml: String): String? {
+        val inputStream = StringReader(xml)
+
+        inputStream.use {
+            val parser = Xml.newPullParser()
+
+            try {
+                parser.run {
+                    setFeature(XmlPullParser.FEATURE_PROCESS_NAMESPACES, false)
+                    setInput(inputStream)
+                    nextTag()
+                }
+            } catch (e: XmlPullParserException) {
+                logThrowable(e)
+            }
+
+            return when (parser.name) {
+                "rss" -> rssParser.getChannelTitle(parser)
+                "feed" -> feedParser.getChannelTitle(parser)
+                else -> null
+            }
+        }
+
+    }
 }

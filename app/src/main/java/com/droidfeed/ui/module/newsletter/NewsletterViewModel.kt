@@ -1,6 +1,5 @@
 package com.droidfeed.ui.module.newsletter
 
-import android.util.Log
 import androidx.annotation.StringRes
 import androidx.lifecycle.MutableLiveData
 import com.droidfeed.BuildConfig
@@ -77,8 +76,6 @@ class NewsletterViewModel @Inject constructor(
     }
 
     private fun handleSignUpResponse(dataStatus: DataStatus<MailchimpError>) {
-        Log.e("JAMIRYO", "5---- $dataStatus")
-
         when (dataStatus) {
             is DataStatus.Successful -> {
                 isEmailInputVisible.postValue(false)
