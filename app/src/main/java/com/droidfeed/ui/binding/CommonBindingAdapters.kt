@@ -65,7 +65,7 @@ fun isEnabled(
         if (isEnabled) {
             view.fadeIn()
         } else {
-            view.fadeOut(0.5f)
+            view.fadeOut(0.3f)
         }
     }
 }
