@@ -19,8 +19,12 @@ class DatabaseModule {
     ).addMigrations(
         MIGRATION_1_2,
         MIGRATION_1_4,
+        MIGRATION_1_5,
         MIGRATION_2_3,
-        MIGRATION_3_4
+        MIGRATION_2_5,
+        MIGRATION_3_4,
+        MIGRATION_3_5,
+        MIGRATION_4_5
     ).build()
 
     @Provides
