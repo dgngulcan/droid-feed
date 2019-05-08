@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
@@ -9,19 +10,36 @@
             type="com.droidfeed.data.model.Source" />
 
         <variable
-            name="clickListener"
-            type="com.droidfeed.ui.adapter.UIModelClickListener" />
+            name="itemClickListener"
+            type="android.view.View.OnClickListener" />
+
+        <variable
+            name="removeClickListener"
+            type="android.view.View.OnClickListener" />
 
     </data>
 
-    <FrameLayout
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:animateLayoutChanges="true"
+        android:background="?attr/selectableItemBackground"
         android:clickable="true"
         android:focusable="true"
-        android:background="?attr/selectableItemBackground"
-        android:onClick="@{()->clickListener.onClick(source)}"
-        android:theme="@style/Base.ThemeOverlay.AppCompat.Dark">
+        android:gravity="center_vertical"
+        android:onClick="@{(v)->itemClickListener.onClick(v)}"
+        android:theme="@style/Base.ThemeOverlay.AppCompat.Dark"
+        tools:background="@color/yellow">
+
+        <ImageView
+            style="@style/BorderlessImageButton"
+            android:layout_marginStart="@dimen/spacing_medium"
+            android:onClick="@{(v)->removeClickListener.onClick(v)}"
+            android:scaleType="center"
+            android:src="@drawable/ic_trash_can_outline"
+            android:visibility="gone"
+            tools:visibility="visible"
+            app:isVisible="@{source.isRemovable()}" />
 
         <TextView
             android:id="@+id/textView3"
@@ -29,13 +47,15 @@
             android:layout_width="match_parent"
             android:layout_height="@dimen/spacing_xxlarge"
             android:clickable="false"
+            android:ellipsize="end"
             android:enabled="@{source.isEnabled()}"
             android:gravity="center_vertical"
+            android:maxLines="1"
             android:paddingStart="@dimen/spacing_medium"
             android:paddingEnd="@dimen/spacing_medium"
             android:text="@{source.name}"
             tools:text="Title of an awesome publisher" />
 
-    </FrameLayout>
+    </LinearLayout>
 
 </layout>

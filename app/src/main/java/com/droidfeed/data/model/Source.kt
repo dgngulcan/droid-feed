@@ -19,7 +19,10 @@ data class Source(
     val name: String,
 
     @ColumnInfo(name = "url")
-    val url: String
+    val url: String,
+
+    @ColumnInfo(name = "is_user_source")
+    val isUserSource: Boolean
 
 ) : Diffable {
 
@@ -32,6 +35,9 @@ data class Source(
 
     @Ignore
     val isEnabled = ObservableBoolean()
+
+    @Ignore
+    val isRemovable = ObservableBoolean(false)
 
     override fun isSame(item: Any) = id == (item as Source).id
 

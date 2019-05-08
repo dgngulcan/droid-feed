@@ -55,6 +55,10 @@ class AnalyticsUtil @Inject constructor(private val analytics: FirebaseAnalytics
         analytics.logEvent("click_add_source", null)
     }
 
+    fun logRemoveSourceButtonClick() {
+        analytics.logEvent("click_remove_source", null)
+    }
+
     fun logSaveSourceButtonClick() {
         analytics.logEvent("click_save_source", null)
     }

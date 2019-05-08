@@ -5,6 +5,7 @@ import android.animation.LayoutTransition
 import android.animation.ObjectAnimator
 import android.animation.ValueAnimator
 import android.content.Intent
+import android.graphics.Color
 import android.os.Bundle
 import android.view.View
 import androidx.core.view.GravityCompat
@@ -19,12 +20,14 @@ import com.droidfeed.R
 import com.droidfeed.databinding.ActivityMainBinding
 import com.droidfeed.ui.adapter.BaseUIModelAlias
 import com.droidfeed.ui.adapter.UIModelAdapter
+import com.droidfeed.ui.adapter.model.SourceUIModel
 import com.droidfeed.ui.common.BaseActivity
 import com.droidfeed.ui.module.onboard.OnBoardActivity
 import com.droidfeed.util.AnimUtils
 import com.droidfeed.util.ColorPalette
 import com.droidfeed.util.event.EventObserver
 import com.droidfeed.util.extention.hideKeyboard
+import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.activity_main.*
 import javax.inject.Inject
 
@@ -65,7 +68,8 @@ class MainActivity : BaseActivity() {
         subscribeMenuVisibility()
         subscribeFilterVisibility()
         subscribeCloseKeyboard()
-        subscribeAddSourceIcon()
+        subscribeSourceListState()
+        subscribeSourceRemoveUndoSnack()
 
         binding = DataBindingUtil.setContentView<ActivityMainBinding>(
             this,
@@ -82,11 +86,28 @@ class MainActivity : BaseActivity() {
         initFilterDrawer()
     }
 
-    private fun subscribeAddSourceIcon() {
-//        mainViewModel.sourceAddIcon.observe(this, EventObserver {
-//
-//        })
+    private fun subscribeSourceRemoveUndoSnack() {
+        mainViewModel.showUndoSourceRemoveSnack.observe(this, EventObserver { onUndo ->
+            Snackbar.make(
+                binding.root,
+                R.string.info_source_removed,
+                Snackbar.LENGTH_LONG
+            ).apply {
+                setActionTextColor(Color.YELLOW)
+                animationMode = Snackbar.ANIMATION_MODE_SLIDE
+                setAction(R.string.undo) { onUndo() }
+            }.run {
+                show()
+            }
+        })
+    }
 
+    private fun subscribeSourceListState() {
+        mainViewModel.sourceTransformation.observe(this, Observer { transform ->
+            uiModelAdapter.map { items ->
+                transform(items as List<SourceUIModel>) as List<BaseUIModelAlias>
+            }
+        })
     }
 
     private fun subscribeCloseKeyboard() {
@@ -296,6 +317,7 @@ class MainActivity : BaseActivity() {
             overScrollMode = View.OVER_SCROLL_NEVER
             layoutManager = linearLayoutManager
         }
+
         binding.drawerLayout.addDrawerListener(object : DrawerLayout.DrawerListener {
             override fun onDrawerStateChanged(newState: Int) {
             }

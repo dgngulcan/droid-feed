@@ -50,7 +50,6 @@ class UIModelAdapter constructor(
                 notifyDataSetChanged()
             } else {
                 launch {
-
                     val diffResult = async {
                         val diffCallback = UIModelDiffCallback(
                             ArrayList(uiModels),
@@ -60,11 +59,12 @@ class UIModelAdapter constructor(
                         uiModels.clear()
                         uiModels.addAll(newModels)
 
+//                        withContext(Dispatchers.Main){notifyDataSetChanged()}
                         DiffUtil.calculateDiff(diffCallback, true)
                     }
 
                     withContext(Dispatchers.Main) {
-                        val dif=diffResult.await()
+                        val dif = diffResult.await()
                         dispatchUpdates(dif)
                     }
 
@@ -84,5 +84,9 @@ class UIModelAdapter constructor(
         uiModels.forEach { baseUiModel ->
             viewTypes.put(baseUiModel.getViewType(), baseUiModel)
         }
+    }
+
+    fun map(block: (List<BaseUIModelAlias>) -> Unit) {
+        block(uiModels)
     }
 }

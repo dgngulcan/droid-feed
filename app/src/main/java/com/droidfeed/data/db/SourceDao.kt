@@ -26,6 +26,9 @@ interface SourceDao {
     @Update(onConflict = OnConflictStrategy.REPLACE)
     fun updateSource(source: Source)
 
-    @Query("SELECT COUNT(*) FROM ${AppDatabase.SOURCE_TABLE} WHERE is_active = 1")
+    @Query("SELECT COUNT(*) FROM $SOURCE_TABLE WHERE is_active = 1")
     fun getActiveSourceCount(): Int
+
+    @Delete
+    fun remove(source: Source)
 }

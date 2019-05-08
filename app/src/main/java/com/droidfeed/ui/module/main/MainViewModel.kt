@@ -13,19 +13,17 @@ import com.droidfeed.data.DataStatus
 import com.droidfeed.data.model.Source
 import com.droidfeed.data.repo.PostRepo
 import com.droidfeed.data.repo.SourceRepo
-import com.droidfeed.ui.adapter.UIModelClickListener
 import com.droidfeed.ui.adapter.model.SourceUIModel
 import com.droidfeed.ui.common.BaseViewModel
 import com.droidfeed.util.event.Event
 import com.droidfeed.util.hasAcceptedTerms
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 class MainViewModel @Inject constructor(
     private val sourceRepo: SourceRepo,
-    postRepo: PostRepo,
+    private val postRepo: PostRepo,
     sharedPrefs: SharedPreferences
 ) : BaseViewModel() {
 
@@ -39,8 +37,14 @@ class MainViewModel @Inject constructor(
     val sourceAddIcon = MutableLiveData<@DrawableRes Int>().apply {
         value = R.drawable.avd_close_to_add
     }
+    val sourceRemoveIcon = MutableLiveData<@DrawableRes Int>().apply {
+        value = R.drawable.avd_close_to_minus
+    }
     val isMenuVisible = MutableLiveData<Boolean>().apply { value = false }
     val isSourceInputVisible = MutableLiveData<Boolean>().apply { value = false }
+    val isRemoveSourceVisible = MutableLiveData<Boolean>().apply { value = true }
+    val isRemoveSourceEnabled = MutableLiveData<Boolean>().apply { value = true }
+    val isAddSourceEnabled = MutableLiveData<Boolean>().apply { value = true }
     val isSourceFilterVisible = MutableLiveData<Event<Boolean>>().apply { value = Event(false) }
     val closeKeyboardEvent = MutableLiveData<Event<Boolean>>().apply { value = Event(false) }
     val sourceErrText = MutableLiveData<@StringRes Int>().apply { value = R.string.empty_string }
@@ -51,14 +55,25 @@ class MainViewModel @Inject constructor(
     val isBookmarksShown = MutableLiveData<Boolean>().apply { value = false }
     val isBookmarksButtonVisible = MutableLiveData<Boolean>().apply { value = true }
     val isBookmarksButtonSelected = MutableLiveData<Boolean>().apply { value = false }
+    val sourceTransformation = MutableLiveData<(List<SourceUIModel>) -> List<SourceUIModel>>()
+    val showUndoSourceRemoveSnack = MutableLiveData<Event<() -> Unit>>()
+
+
+    private var isUserAddedSourceExist = false
 
     val sourceUIModelData: LiveData<List<SourceUIModel>> = map(sourceRepo.getAll()) { sourceList ->
+        isUserAddedSourceExist = !sourceList.none { it.isUserSource }
+
+        isRemoveSourceVisible.postValue(isUserAddedSourceExist)
+
         sourceList.map { source ->
-            SourceUIModel(source, sourceClickListener)
+            SourceUIModel(
+                source = source,
+                onClick = this::onSourceClicked,
+                onRemove = this::onSourceRemoveClicked
+            )
         }
     }
-
-    private var addSourceJob: Job? = null
 
     init {
         updateSources(sourceRepo)
@@ -71,21 +86,29 @@ class MainViewModel @Inject constructor(
         }
     }
 
-    private val sourceClickListener = object : UIModelClickListener<Source> {
-        override fun onClick(source: Source) {
-            source.isActive = !source.isActive
+    private fun onSourceRemoveClicked(source: Source) {
+        launch(Dispatchers.IO) {
+            sourceRepo.remove(source)
+            sourceRemoveIcon.postValue(R.drawable.avd_close_to_minus)
+            isSourceAddButtonEnabled.postValue(true)
+            isAddSourceEnabled.postValue(true)
 
-            launch(Dispatchers.IO) {
-                /* update source when activated */
-                if (source.isActive) {
-                    postRepo.refresh(
-                        this,
-                        listOf(source)
-                    )
-                }
+            showUndoSourceRemoveSnack.postValue(Event {
+                sourceRepo.insert(listOf(source))
+            })
+        }
+    }
 
-                sourceRepo.update(source)
+    private fun onSourceClicked(source: Source) {
+        source.isActive = !source.isActive
+
+        launch(Dispatchers.IO) {
+            /* update source when activated */
+            if (source.isActive) {
+                postRepo.refresh(this, listOf(source))
             }
+
+            sourceRepo.update(source)
         }
     }
 
@@ -136,18 +159,19 @@ class MainViewModel @Inject constructor(
     fun onAddSourceClicked() {
         val shouldOpenInputField = !(isSourceInputVisible.value!!)
         isSourceInputVisible.postValue(shouldOpenInputField)
+        isRemoveSourceVisible.postValue(!shouldOpenInputField && isUserAddedSourceExist)
 
         if (shouldOpenInputField) {
-            sourceAddIcon.postValue(R.drawable.avd_add_to_close)
+            R.drawable.avd_add_to_close
         } else {
-            sourceAddIcon.postValue(R.drawable.avd_close_to_add)
-        }
+            R.drawable.avd_close_to_add
+        }.also(sourceAddIcon::postValue)
 
         analytics.logAddSourceButtonClick()
     }
 
     fun onSaveSourceClicked(url: String) {
-        addSourceJob = launch(Dispatchers.IO) {
+        launch(Dispatchers.IO) {
             if (Patterns.WEB_URL.matcher(url.toLowerCase()).matches()) {
                 sourceErrText.postValue(R.string.empty_string)
 
@@ -162,13 +186,12 @@ class MainViewModel @Inject constructor(
                     isSourceAddButtonEnabled.postValue(false)
                     closeKeyboardEvent.postValue(Event(true))
 
-                    val status = sourceRepo.addFromUrl(cleanUrl)
-
-                    when (status) {
+                    when (sourceRepo.addFromUrl(cleanUrl)) {
                         is DataStatus.Successful -> {
                             isSourceProgressVisible.postValue(false)
                             isSourceAddButtonEnabled.postValue(true)
                             isSourceInputVisible.postValue(false)
+                            sourceAddIcon.postValue(R.drawable.avd_close_to_add)
                         }
                         is DataStatus.Failed -> {
                             sourceErrText.postValue(R.string.error_add_source)
@@ -198,6 +221,30 @@ class MainViewModel @Inject constructor(
     fun onSourceInputTextChanged(text: CharSequence, start: Int, before: Int, count: Int) {
         if (text.isNotEmpty()) {
             sourceErrText.postValue(R.string.empty_string)
+        }
+    }
+
+    fun onRemoveSourceClicked() {
+        val isListRemovable = sourceRemoveIcon.value == R.drawable.avd_close_to_minus
+        isAddSourceEnabled.postValue(!isListRemovable)
+
+        transformSourcesRemovable(isListRemovable)
+
+        if (!isListRemovable) {
+            R.drawable.avd_close_to_minus
+        } else {
+            R.drawable.avd_minus_to_close
+        }.also(sourceRemoveIcon::postValue)
+
+        analytics.logRemoveSourceButtonClick()
+    }
+
+    private fun transformSourcesRemovable(isRemovable: Boolean) {
+        sourceTransformation.postValue { sourceList ->
+            sourceList
+                .filter { uiModel -> uiModel.getData().isUserSource }
+                .forEach { uiModel -> uiModel.getData().isRemovable.set(isRemovable) }
+            sourceList
         }
     }
 
@@ -237,5 +284,10 @@ class MainViewModel @Inject constructor(
         sourceInputText.postValue(R.string.empty_string)
         sourceErrText.postValue(R.string.empty_string)
         sourceAddIcon.postValue(R.drawable.avd_close_to_add)
+        sourceRemoveIcon.postValue(R.drawable.avd_close_to_minus)
+        isAddSourceEnabled.postValue(true)
+        isRemoveSourceVisible.postValue(isUserAddedSourceExist)
+        isRemoveSourceEnabled.postValue(true)
+        transformSourcesRemovable(false)
     }
 }

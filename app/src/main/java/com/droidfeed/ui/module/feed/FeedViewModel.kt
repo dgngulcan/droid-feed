@@ -155,9 +155,9 @@ class FeedViewModel @Inject constructor(
             post.bookmarked = 0
 
             if (feedType.value == FeedType.BOOKMARKS) {
-                showUndoBookmarkSnack.postValue(Event({
+                showUndoBookmarkSnack.postValue(Event {
                     togglePostBookmark(post)
-                }))
+                })
             }
         } else {
             post.bookmarked = 1
@@ -180,14 +180,14 @@ class FeedViewModel @Inject constructor(
             launch(Dispatchers.IO) {
                 val bookmarkCount = postRepo.getBookmarkedCount()
 
-//                if (canPromptAppRate(bookmarkCount)) {
-//                    analytics.logAppRatePrompt()
+                if (canPromptAppRate(bookmarkCount)) {
+                    analytics.logAppRatePrompt()
 
-                    showAppRateSnack.postValue(Event({
+                    showAppRateSnack.postValue(Event {
                         openPlayStorePage.postValue(Event(Unit))
                         analytics.logAppRateFromPromtClick()
-                    }))
-//                }
+                    })
+                }
             }
         }
     }

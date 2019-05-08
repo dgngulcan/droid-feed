@@ -8,7 +8,6 @@ import com.droidfeed.data.parser.NewsXmlParser
 import com.droidfeed.util.extention.isOnline
 import com.droidfeed.util.logThrowable
 import com.google.firebase.firestore.FirebaseFirestore
-import kotlinx.coroutines.GlobalScope
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import java.io.IOException
@@ -52,7 +51,6 @@ class SourceRepo @Inject constructor(
      * @param sourceUrl valid RSS or Atom feed url
      */
     fun addFromUrl(sourceUrl: String): DataStatus<String> {
-
         return try {
             val request = Request.Builder()
                 .url(sourceUrl)
@@ -70,7 +68,8 @@ class SourceRepo @Inject constructor(
                     val source = Source(
                         id = 0, /* will be auto-set by room */
                         name = channelTitle,
-                        url = sourceUrl
+                        url = sourceUrl,
+                        isUserSource = true
                     )
 
                     sourceDao.insertSource(source)
@@ -100,7 +99,8 @@ class SourceRepo @Inject constructor(
                     Source(
                         (document["id"] as Long).toInt(),
                         document["name"] as String,
-                        document["url"] as String
+                        document["url"] as String,
+                        false
                     )
                 }
 
@@ -117,5 +117,7 @@ class SourceRepo @Inject constructor(
     }
 
     fun isSourceExisting(sourceUrl: String) = sourceDao.isUrlExists(sourceUrl).isNotEmpty()
+
+    fun remove(source: Source) = sourceDao.remove(source)
 
 }

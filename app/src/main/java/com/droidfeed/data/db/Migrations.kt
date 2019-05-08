@@ -31,18 +31,77 @@ val MIGRATION_2_3: Migration = object : Migration(2, 3) {
  */
 val MIGRATION_3_4: Migration = object : Migration(3, 4) {
     override fun migrate(database: SupportSQLiteDatabase) {
-        database.execSQL("CREATE  INDEX `index_rss_source_id` ON `$POST_TABLE` (`source_id`)")
+        addSourceIdIndex(database)
     }
 }
+
 val MIGRATION_1_4: Migration = object : Migration(1, 4) {
     override fun migrate(database: SupportSQLiteDatabase) {
         database.execSQL("CREATE TABLE IF NOT EXISTS `$SOURCE_TABLE` (`url` TEXT NOT NULL, `name` TEXT NOT NULL, `is_active` INTEGER NOT NULL, PRIMARY KEY(`url`))")
 
         addSourceID(database)
 
-        // bindConference posts to sources
+        // bind posts to sources
         database.execSQL("UPDATE $POST_TABLE SET source_id = (SELECT id FROM $SOURCE_TABLE WHERE url = $POST_TABLE.channel_link)")
         database.execSQL("CREATE  INDEX `index_rss_source_id` ON `$POST_TABLE` (`source_id`)")
+    }
+}
+
+val MIGRATION_1_5: Migration = object : Migration(1, 5) {
+    override fun migrate(database: SupportSQLiteDatabase) {
+        database.execSQL("CREATE TABLE IF NOT EXISTS `$SOURCE_TABLE` (`url` TEXT NOT NULL, `name` TEXT NOT NULL, `is_active` INTEGER NOT NULL, PRIMARY KEY(`url`))")
+
+        addSourceID(database)
+
+        // bind posts to sources
+        database.execSQL("UPDATE $POST_TABLE SET source_id = (SELECT id FROM $SOURCE_TABLE WHERE url = $POST_TABLE.channel_link)")
+        database.execSQL("CREATE  INDEX `index_rss_source_id` ON `$POST_TABLE` (`source_id`)")
+
+        addIsUserSource(database)
+    }
+}
+
+
+val MIGRATION_2_5: Migration = object : Migration(2, 5) {
+    override fun migrate(database: SupportSQLiteDatabase) {
+        addSourceID(database)
+
+        // bind posts to sources
+        database.execSQL("UPDATE $POST_TABLE SET source_id = (SELECT id FROM $SOURCE_TABLE WHERE url = $POST_TABLE.channel_link)")
+        database.execSQL("CREATE  INDEX `index_rss_source_id` ON `$POST_TABLE` (`source_id`)")
+
+        addIsUserSource(database)
+    }
+}
+
+/**
+ * Adds `is_user_source` field to the `source` table.
+ */
+val MIGRATION_3_5: Migration = object : Migration(3, 5) {
+    override fun migrate(database: SupportSQLiteDatabase) {
+        addSourceIdIndex(database)
+        addIsUserSource(database)
+    }
+}
+/**
+ * Adds `is_user_source` field to the `source` table.
+ */
+val MIGRATION_4_5: Migration = object : Migration(4, 5) {
+    override fun migrate(database: SupportSQLiteDatabase) {
+        addIsUserSource(database)
+    }
+}
+
+private fun addSourceIdIndex(database: SupportSQLiteDatabase) {
+    database.execSQL("CREATE  INDEX `index_rss_source_id` ON `$POST_TABLE` (`source_id`)")
+}
+
+private fun addIsUserSource(database: SupportSQLiteDatabase) {
+    database.run {
+        execSQL("CREATE TABLE IF NOT EXISTS `source_temp` (`url` TEXT NOT NULL, `name` TEXT NOT NULL, `is_active` INTEGER NOT NULL, `id` INTEGER NOT NULL,`is_user_source` INTEGER NOT NULL DEFAULT 0, PRIMARY KEY(`id`))")
+        execSQL("INSERT INTO source_temp (url, name, is_active, id) SELECT url, name, is_active, id FROM `$SOURCE_TABLE`;")
+        execSQL("DROP TABLE IF EXISTS `$SOURCE_TABLE`;")
+        execSQL("ALTER TABLE source_temp RENAME TO `$SOURCE_TABLE`;")
     }
 }
 

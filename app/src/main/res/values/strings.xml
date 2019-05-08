@@ -25,6 +25,7 @@
 
     <string name="info_no_internet">Internet connection is not available</string>
     <string name="info_bookmark_removed">Bookmark is removed</string>
+    <string name="info_source_removed">Feed source is removed</string>
 
     <string name="can_not_refresh">Can\'t refresh.</string>
 

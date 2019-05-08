@@ -38,7 +38,7 @@
                 android:animateLayoutChanges="true"
                 android:orientation="vertical">
 
-                <FrameLayout
+                <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/spacing_xxlarge"
@@ -50,15 +50,35 @@
                         style="@style/DF.TitleStyle"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@string/sources" />
+                        android:text="@string/sources"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <ImageView
+                        android:id="@+id/imageView2"
+                        style="@style/BorderlessImageButton"
+                        android:layout_gravity="end|center_vertical"
+                        android:onClick="@{(v)->viewModel.onAddSourceClicked()}"
+                        app:avdImageResource2="@{viewModel.sourceAddIcon}"
+                        app:isEnabled="@{viewModel.isAddSourceEnabled}"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
 
                     <ImageView
                         style="@style/BorderlessImageButton"
                         android:layout_gravity="end|center_vertical"
-                        android:onClick="@{(v)->viewModel.onAddSourceClicked()}"
-                        app:avdImageResource2="@{viewModel.sourceAddIcon}" />
+                        android:layout_marginEnd="8dp"
+                        android:onClick="@{(v)->viewModel.onRemoveSourceClicked()}"
+                        app:avdImageResource2="@{viewModel.sourceRemoveIcon}"
+                        app:isEnabled="@{viewModel.isRemoveSourceEnabled}"
+                        app:isVisible="@{viewModel.isRemoveSourceVisible}"
+                        app:layout_constraintBottom_toBottomOf="@+id/imageView2"
+                        app:layout_constraintEnd_toStartOf="@+id/imageView2"
+                        app:layout_constraintTop_toTopOf="@+id/imageView2" />
 
-                </FrameLayout>
+                </androidx.constraintlayout.widget.ConstraintLayout>
 
                 <LinearLayout
                     android:layout_width="match_parent"
