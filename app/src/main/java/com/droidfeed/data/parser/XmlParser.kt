@@ -2,7 +2,7 @@ package com.droidfeed.data.parser
 
 import com.droidfeed.data.model.Post
 import com.droidfeed.data.model.Source
-import com.droidfeed.util.extention.skipTag
+import com.droidfeed.util.extension.skipTag
 import com.droidfeed.util.logThrowable
 import org.xmlpull.v1.XmlPullParser
 import org.xmlpull.v1.XmlPullParserException

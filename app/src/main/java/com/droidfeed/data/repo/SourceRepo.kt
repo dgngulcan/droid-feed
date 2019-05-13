@@ -5,7 +5,7 @@ import com.droidfeed.data.DataStatus
 import com.droidfeed.data.db.SourceDao
 import com.droidfeed.data.model.Source
 import com.droidfeed.data.parser.NewsXmlParser
-import com.droidfeed.util.extention.isOnline
+import com.droidfeed.util.extension.isOnline
 import com.droidfeed.util.logThrowable
 import com.google.firebase.firestore.FirebaseFirestore
 import okhttp3.OkHttpClient
@@ -39,11 +39,11 @@ class SourceRepo @Inject constructor(
      *
      * @param source
      */
-    @WorkerThread
     fun update(source: Source) = sourceDao.updateSource(source)
 
-    @WorkerThread
     fun insert(sources: List<Source>) = sourceDao.insertSources(sources)
+
+    fun insert(sources: Source) = sourceDao.insertSource(sources)
 
     /**
      * Adds news source from given url.

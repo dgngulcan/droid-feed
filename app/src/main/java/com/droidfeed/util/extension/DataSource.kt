@@ -1,4 +1,4 @@
-package com.droidfeed.util.extention
+package com.droidfeed.util.extension
 
 import androidx.lifecycle.LiveData
 import androidx.paging.DataSource

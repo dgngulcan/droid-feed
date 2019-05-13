@@ -5,8 +5,8 @@ import com.droidfeed.data.model.Channel
 import com.droidfeed.data.model.Content
 import com.droidfeed.data.model.Post
 import com.droidfeed.data.model.Source
-import com.droidfeed.util.extention.asTimestamp
-import com.droidfeed.util.extention.skipTag
+import com.droidfeed.util.extension.asTimestamp
+import com.droidfeed.util.extension.skipTag
 import com.droidfeed.util.logThrowable
 import org.xmlpull.v1.XmlPullParser
 import javax.inject.Inject

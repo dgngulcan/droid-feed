@@ -9,8 +9,8 @@ import androidx.core.view.isVisible
 import androidx.databinding.BindingAdapter
 import androidx.vectordrawable.graphics.drawable.AnimatedVectorDrawableCompat
 import com.droidfeed.R
-import com.droidfeed.util.extention.fadeIn
-import com.droidfeed.util.extention.fadeOut
+import com.droidfeed.util.extension.fadeIn
+import com.droidfeed.util.extension.fadeOut
 import com.droidfeed.util.glide.GlideApp
 import com.google.android.material.textfield.TextInputLayout
 import java.util.*

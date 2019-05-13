@@ -19,7 +19,7 @@ import com.droidfeed.util.appOpenCount
 import com.droidfeed.util.appRatePrompt
 import com.droidfeed.util.appRatePromptIndex
 import com.droidfeed.util.event.Event
-import com.droidfeed.util.extention.asLiveData
+import com.droidfeed.util.extension.asLiveData
 import com.droidfeed.util.shareCount
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -95,7 +95,7 @@ class FeedViewModel @Inject constructor(
     val openPlayStorePage = MutableLiveData<Event<Unit>>()
 
     init {
-        refreshJob = refresh() /* todo: causes unnecessary fetching when rebound with the fragment*/
+        refreshJob = refresh()
     }
 
     private val pagedListConfig = PagedList.Config.Builder()

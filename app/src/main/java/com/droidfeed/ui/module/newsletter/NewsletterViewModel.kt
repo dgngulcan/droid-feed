@@ -13,7 +13,7 @@ import com.droidfeed.data.repo.NewsletterRepo
 import com.droidfeed.ui.common.BaseViewModel
 import com.droidfeed.util.AnalyticsUtil
 import com.droidfeed.util.event.Event
-import com.droidfeed.util.extention.isValidEmail
+import com.droidfeed.util.extension.isValidEmail
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.net.UnknownHostException

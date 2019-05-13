@@ -13,7 +13,7 @@ import com.droidfeed.ui.common.BaseFragment
 import com.droidfeed.util.AnimUtils
 import com.droidfeed.util.CustomTab
 import com.droidfeed.util.event.EventObserver
-import com.droidfeed.util.extention.getClickableSpan
+import com.droidfeed.util.extension.getClickableSpan
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay

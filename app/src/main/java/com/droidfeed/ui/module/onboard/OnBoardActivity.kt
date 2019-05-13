@@ -12,7 +12,7 @@ import com.droidfeed.ui.common.BaseActivity
 import com.droidfeed.ui.module.main.MainActivity
 import com.droidfeed.util.CustomTab
 import com.droidfeed.util.event.EventObserver
-import com.droidfeed.util.extention.getClickableSpan
+import com.droidfeed.util.extension.getClickableSpan
 import com.droidfeed.util.hasAcceptedTerms
 import com.google.android.material.snackbar.Snackbar
 import javax.inject.Inject

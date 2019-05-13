@@ -1,4 +1,4 @@
-package com.droidfeed.util.extention
+package com.droidfeed.util.extension
 
 import android.text.Spannable
 import android.text.SpannableString
