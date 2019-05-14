@@ -11,23 +11,28 @@ import javax.inject.Inject
 class AnalyticsUtil @Inject constructor(private val analytics: FirebaseAnalytics) {
 
     fun logBookmark(isBookmarked: Boolean) {
-        val text = if (isBookmarked) "bookmarked" else "unbookmarked"
-
         analytics.logEvent(
             "bookmark",
-            bundleOf(Pair("bookmarked", text))
+            bundleOf(Pair("bookmarked", isBookmarked.toString()))
         )
     }
 
-    fun logShare(content: String) {
+    private fun logShare(content: String) {
         analytics.logEvent(
             FirebaseAnalytics.Event.SHARE,
             bundleOf(Pair("content", content))
         )
     }
 
-    fun logPostShare() {
-        logShare("post")
+    fun logPostShare() = logShare("post")
+    fun logShareApp() = logShare("app")
+    fun logSourceShare() = logShare("source")
+
+    fun logSourceActivation(isActivated: Boolean) {
+        analytics.logEvent(
+            "source",
+            bundleOf(Pair("activated", isActivated.toString()))
+        )
     }
 
     fun logPostClick() {
@@ -52,11 +57,15 @@ class AnalyticsUtil @Inject constructor(private val analytics: FirebaseAnalytics
     }
 
     fun logAddSourceButtonClick() {
-        analytics.logEvent("click_add_source", null)
+        analytics.logEvent("click_source_add", null)
     }
 
     fun logRemoveSourceButtonClick() {
-        analytics.logEvent("click_remove_source", null)
+        analytics.logEvent("click_source_remove", null)
+    }
+
+    fun logSourceRemoveUndo() {
+        analytics.logEvent("click_source_remove_undo", null)
     }
 
     fun logSaveSourceButtonClick() {
@@ -85,4 +94,21 @@ class AnalyticsUtil @Inject constructor(private val analytics: FirebaseAnalytics
             bundleOf(Pair("newsletter", ""))
         )
     }
+
+    fun logSourceAddSuccess() {
+        analytics.logEvent("click_add_source_success", null)
+    }
+
+    fun logSourceAddFail() {
+        analytics.logEvent("click_add_source_fail", null)
+    }
+
+    fun logSourceAlreadyExists() {
+        analytics.logEvent("click_add_source_exists", null)
+    }
+
+    fun logSourceAddFailInvalidUrl() {
+        analytics.logEvent("click_add_source_fail_invalid_url", null)
+    }
+
 }

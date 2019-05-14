@@ -61,22 +61,9 @@
                         android:layout_gravity="end|center_vertical"
                         android:onClick="@{(v)->viewModel.onAddSourceClicked()}"
                         app:avdImageResource2="@{viewModel.sourceAddIcon}"
-                        app:isEnabled="@{viewModel.isAddSourceEnabled}"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
-
-                    <ImageView
-                        style="@style/BorderlessImageButton"
-                        android:layout_gravity="end|center_vertical"
-                        android:layout_marginEnd="8dp"
-                        android:onClick="@{(v)->viewModel.onRemoveSourceClicked()}"
-                        app:avdImageResource2="@{viewModel.sourceRemoveIcon}"
-                        app:isEnabled="@{viewModel.isRemoveSourceEnabled}"
-                        app:isVisible="@{viewModel.isRemoveSourceVisible}"
-                        app:layout_constraintBottom_toBottomOf="@+id/imageView2"
-                        app:layout_constraintEnd_toStartOf="@+id/imageView2"
-                        app:layout_constraintTop_toTopOf="@+id/imageView2" />
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -123,7 +110,7 @@
                             android:hint="@string/feed_url"
                             android:inputType="text"
                             android:maxLines="1"
-                            android:onTextChanged="@{viewModel.onSourceInputTextChanged}"
+                            android:onTextChanged="@{viewModel::onSourceInputTextChanged}"
                             android:text="@{viewModel.sourceInputText}"
                             android:textColor="@android:color/white" />
 
