@@ -28,26 +28,17 @@
         android:focusable="true"
         android:gravity="center_vertical"
         android:onClick="@{(v)->itemClickListener.onClick(v)}"
+        android:orientation="horizontal"
         android:theme="@style/Base.ThemeOverlay.AppCompat.Dark"
         tools:background="@color/yellow">
-
-        <ImageView
-            style="@style/BorderlessImageButton"
-            android:layout_marginStart="@dimen/spacing_medium"
-            android:onClick="@{(v)->removeClickListener.onClick(v)}"
-            android:scaleType="center"
-            android:src="@drawable/ic_trash_can_outline"
-            android:visibility="gone"
-            tools:visibility="visible"
-            app:isVisible="@{source.isRemovable()}" />
 
         <TextView
             android:id="@+id/textView3"
             style="@style/DF.Button.Text"
             android:layout_width="match_parent"
             android:layout_height="@dimen/spacing_xxlarge"
+            android:layout_weight="1"
             android:clickable="false"
-            android:ellipsize="end"
             android:enabled="@{source.isEnabled()}"
             android:gravity="center_vertical"
             android:maxLines="1"
@@ -55,6 +46,18 @@
             android:paddingEnd="@dimen/spacing_medium"
             android:text="@{source.name}"
             tools:text="Title of an awesome publisher" />
+
+        <ImageView
+            style="@style/BorderlessImageButton"
+            android:paddingEnd="@dimen/spacing_medium"
+            android:paddingStart="@dimen/spacing_medium"
+            android:layout_weight="0.1"
+            android:onClick="@{(v)->removeClickListener.onClick(v)}"
+            android:scaleType="center"
+            android:src="@drawable/ic_more_vert_black_24dp"
+            android:visibility="gone"
+            app:isVisible="@{source.isUserSource}"
+            tools:visibility="visible" />
 
     </LinearLayout>
 

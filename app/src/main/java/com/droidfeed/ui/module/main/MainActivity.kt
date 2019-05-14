@@ -6,8 +6,11 @@ import android.animation.ObjectAnimator
 import android.animation.ValueAnimator
 import android.content.Intent
 import android.graphics.Color
+import android.os.Build
 import android.os.Bundle
 import android.view.View
+import android.view.WindowManager
+import androidx.annotation.RequiresApi
 import androidx.core.view.GravityCompat
 import androidx.core.view.isVisible
 import androidx.databinding.DataBindingUtil
@@ -20,32 +23,26 @@ import com.droidfeed.R
 import com.droidfeed.databinding.ActivityMainBinding
 import com.droidfeed.ui.adapter.BaseUIModelAlias
 import com.droidfeed.ui.adapter.UIModelAdapter
-import com.droidfeed.ui.adapter.model.SourceUIModel
 import com.droidfeed.ui.common.BaseActivity
 import com.droidfeed.ui.module.onboard.OnBoardActivity
 import com.droidfeed.util.AnimUtils
 import com.droidfeed.util.ColorPalette
 import com.droidfeed.util.event.EventObserver
-import com.droidfeed.util.extention.hideKeyboard
+import com.droidfeed.util.extension.hideKeyboard
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.activity_main.*
 import javax.inject.Inject
 
+
 @Suppress("UNCHECKED_CAST")
 class MainActivity : BaseActivity() {
 
-    @Inject
-    lateinit var navController: MainNavController
-
-    @Inject
-    lateinit var animUtils: AnimUtils
-
-    @Inject
-    lateinit var colorPalette: ColorPalette
+    @Inject lateinit var navController: MainNavController
+    @Inject lateinit var animUtils: AnimUtils
+    @Inject lateinit var colorPalette: ColorPalette
 
     private lateinit var mainViewModel: MainViewModel
     private lateinit var binding: ActivityMainBinding
-
     private var currentMenuColor = 0
     private var previousScreenColor = 0
     private var previousMenuButton: View? = null
@@ -68,7 +65,7 @@ class MainActivity : BaseActivity() {
         subscribeMenuVisibility()
         subscribeFilterVisibility()
         subscribeCloseKeyboard()
-        subscribeSourceListState()
+        subscribeSourceShareEvent()
         subscribeSourceRemoveUndoSnack()
 
         binding = DataBindingUtil.setContentView<ActivityMainBinding>(
@@ -77,13 +74,21 @@ class MainActivity : BaseActivity() {
         ).apply {
             viewModel = mainViewModel
             lifecycleOwner = this@MainActivity
-        }
-
-        binding.appbar.containerView.layoutTransition.apply {
-            enableTransitionType(LayoutTransition.CHANGING)
+            appbar.containerView.layoutTransition.enableTransitionType(LayoutTransition.CHANGING)
         }
 
         initFilterDrawer()
+    }
+
+    private fun subscribeSourceShareEvent() {
+        mainViewModel.shareSourceEvent.observe(this, EventObserver { content ->
+            Intent().apply {
+                action = Intent.ACTION_SEND
+                type = "text/plain"
+                putExtra(Intent.EXTRA_TEXT, content)
+                addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP)
+            }.also(this::startActivity)
+        })
     }
 
     private fun subscribeSourceRemoveUndoSnack() {
@@ -98,14 +103,6 @@ class MainActivity : BaseActivity() {
                 setAction(R.string.undo) { onUndo() }
             }.run {
                 show()
-            }
-        })
-    }
-
-    private fun subscribeSourceListState() {
-        mainViewModel.sourceTransformation.observe(this, Observer { transform ->
-            uiModelAdapter.map { items ->
-                transform(items as List<SourceUIModel>) as List<BaseUIModelAlias>
             }
         })
     }
@@ -318,6 +315,10 @@ class MainActivity : BaseActivity() {
             layoutManager = linearLayoutManager
         }
 
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+            setFilterPaddingForCutout()
+        }
+
         binding.drawerLayout.addDrawerListener(object : DrawerLayout.DrawerListener {
             override fun onDrawerStateChanged(newState: Int) {
             }
@@ -327,11 +328,24 @@ class MainActivity : BaseActivity() {
 
             override fun onDrawerClosed(drawerView: View) {
                 mainViewModel.onFilterDrawerClosed()
+                drawerView.hideKeyboard()
             }
 
             override fun onDrawerOpened(drawerView: View) {
             }
         })
+    }
+
+    @RequiresApi(Build.VERSION_CODES.P)
+    private fun setFilterPaddingForCutout() {
+        window.attributes.layoutInDisplayCutoutMode =
+            WindowManager.LayoutParams.LAYOUT_IN_DISPLAY_CUTOUT_MODE_SHORT_EDGES
+
+        binding.filterView.setOnApplyWindowInsetsListener { v, insets ->
+            val displayCutout = insets.displayCutout
+            binding.filterView.setPadding(0, displayCutout?.safeInsetTop ?: 0, 0, 0)
+            insets.consumeDisplayCutout()
+        }
     }
 
     override fun onBackPressed() {

@@ -93,4 +93,5 @@
     <string name="add">add</string>
     <string name="error_source_exists">This feed already exists.</string>
     <string name="error_empty_source_url">Please enter a feed url</string>
+    <string name="remove">Remove</string>
 </resources>

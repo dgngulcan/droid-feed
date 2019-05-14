@@ -34,7 +34,7 @@ class FeedViewModel @Inject constructor(
 ) : BaseViewModel() {
 
     private val feedType = MutableLiveData<FeedType>()
-    private var refreshJob = Job()
+    private lateinit var refreshJob : Job
 
     val postsLiveData: LiveData<PagedList<PostUIModel>> = switchMap(feedType) { type ->
         when (type) {

@@ -13,8 +13,9 @@ import com.droidfeed.ui.adapter.viewholder.SourceViewHolder
  */
 class SourceUIModel(
     private val source: Source,
-    private val onClick: (Source)->Unit,
-    private val onRemove: (Source)->Unit
+    private val onClick: (Source) -> Unit,
+    private val onRemoveClick: (Source) -> Unit,
+    private val onShareClick: (Source) -> Unit
 ) : BaseUIModel<SourceViewHolder> {
 
     override fun getViewHolder(parent: ViewGroup): SourceViewHolder {
@@ -28,7 +29,7 @@ class SourceUIModel(
     }
 
     override fun bindViewHolder(viewHolder: SourceViewHolder) {
-        viewHolder.bind(source, onClick,onRemove)
+        viewHolder.bind(source, onClick, onRemoveClick, onShareClick)
     }
 
     override fun getViewType(): Int = UIModelType.SOURCE.ordinal

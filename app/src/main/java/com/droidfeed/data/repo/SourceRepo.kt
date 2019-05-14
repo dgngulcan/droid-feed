@@ -1,6 +1,5 @@
 package com.droidfeed.data.repo
 
-import androidx.annotation.WorkerThread
 import com.droidfeed.data.DataStatus
 import com.droidfeed.data.db.SourceDao
 import com.droidfeed.data.model.Source
