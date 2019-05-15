@@ -6,6 +6,8 @@ import com.droidfeed.data.DataStatus
 import com.droidfeed.data.repo.SourceRepo
 import com.droidfeed.ui.module.onboard.OnBoardViewModel
 import com.droidfeed.util.event.EventObserver
+import io.mockk.*
+import io.mockk.impl.annotations.MockK
 import kotlinx.coroutines.runBlocking
 import org.junit.Assert
 import org.junit.Before
@@ -13,22 +15,18 @@ import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.junit.runners.JUnit4
-import org.mockito.ArgumentMatchers
-import org.mockito.Mockito.*
 
 @Suppress("TestFunctionName")
 @RunWith(JUnit4::class)
 class OnBoardViewModelTest {
 
-    @Rule
-    @JvmField
-    var instantTaskExecutorRule = InstantTaskExecutorRule()
-
-    private val sourceRepo = mock(SourceRepo::class.java)
+    @Rule @JvmField var instantTaskExecutorRule = InstantTaskExecutorRule()
+    @MockK lateinit var sourceRepo: SourceRepo
     private lateinit var viewModel: OnBoardViewModel
 
     @Before
-    fun before() {
+    fun setup() {
+        MockKAnnotations.init(this, relaxed = true, relaxUnitFun = true)
         viewModel = OnBoardViewModel(sourceRepo)
     }
 
@@ -42,56 +40,53 @@ class OnBoardViewModelTest {
 
     @Test
     fun WHEN_initiated_THEN_pull_sources() {
-        runBlocking {
-            verify(sourceRepo, only()).pull()
-            viewModel = OnBoardViewModel(sourceRepo)
-        }
+        coVerify(exactly = 1) { sourceRepo.pull() }
+
+        viewModel = OnBoardViewModel(sourceRepo)
     }
 
     @Test
     fun WHEN_agreed_terms_THEN_enable_continue_button() {
-        val observer = mock<Observer<Boolean>>()
+        val observer = mockk<Observer<Boolean>>(relaxed = true)
         viewModel.isContinueButtonEnabled.observeForever(observer)
 
         viewModel.onAgreementChecked(true)
 
-        verify(observer).onChanged(true)
+        verify(exactly = 1) { observer.onChanged(true) }
     }
 
     @Test
     fun WHEN_disagreed_terms_THEN_disable_continue_button() {
-        val observer = mock<Observer<Boolean>>()
+        val observer = mockk<Observer<Boolean>>(relaxed = true)
         viewModel.onAgreementChecked(true)
 
         viewModel.isContinueButtonEnabled.observeForever(observer)
 
         viewModel.onAgreementChecked(false)
-        verify(observer).onChanged(false)
+        verify(exactly = 1) { observer.onChanged(false) }
     }
 
     @Test
     fun WHEN_continue_button_is_clicked_THEN_disable_continue_button() {
-        val observer = mock<Observer<Boolean>>()
+        val observer = mockk<Observer<Boolean>>(relaxed = true)
         viewModel.onAgreementChecked(true)
         viewModel.isContinueButtonEnabled.observeForever(observer)
 
         viewModel.onContinueClicked()
 
-        verify(observer).onChanged(false)
+        verify(exactly = 1) { observer.onChanged(false) }
     }
 
     @Test
     fun WHEN_continue_button_is_clicked_THEN_open_main_activity() {
-        runBlocking {
-            `when`(sourceRepo.pull()).thenReturn(DataStatus.Successful())
-        }
-        val observer = mock<EventObserver<Any>>()
+        coEvery { runBlocking { sourceRepo.pull() } } returns DataStatus.Successful(emptyList())
+        viewModel = OnBoardViewModel(sourceRepo)
+        val observer = mockk<EventObserver<Unit>>(relaxed = true)
         viewModel.openMainActivity.observeForever(observer)
 
         viewModel.onAgreementChecked(true)
-
         viewModel.onContinueClicked()
 
-        verify(observer, only()).onChanged(ArgumentMatchers.any())
+        verify(exactly = 1) { observer.onChanged(any()) }
     }
 }
