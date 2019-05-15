@@ -5,8 +5,8 @@ import com.droidfeed.data.model.Channel
 import com.droidfeed.data.model.Content
 import com.droidfeed.data.model.Post
 import com.droidfeed.data.model.Source
-import com.droidfeed.util.extention.asTimestamp
-import com.droidfeed.util.extention.skipTag
+import com.droidfeed.util.extension.asTimestamp
+import com.droidfeed.util.extension.skipTag
 import com.droidfeed.util.logThrowable
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Element
@@ -18,6 +18,7 @@ import javax.inject.Singleton
 
 @Singleton
 class RssParser @Inject constructor() : XmlParser() {
+
 
     override fun parsePosts(parser: XmlPullParser, source: Source): List<Post> {
         val posts = mutableListOf<Post>()
@@ -39,6 +40,31 @@ class RssParser @Inject constructor() : XmlParser() {
         }
 
         return posts
+    }
+
+
+    override fun getChannelTitle(parser: XmlPullParser): String? {
+        parser.require(XmlPullParser.START_TAG, null, "rss")
+
+        var title: String? = null
+        var channelParser: XmlPullParser? = null
+
+        parseTags(parser,
+            "channel" to { cParser ->
+                channelParser = cParser
+            }
+        ) { channelParser == null }
+
+        channelParser?.let { cParser ->
+            parseTags(
+                cParser,
+                "title" to { tParser ->
+                    title = tParser.nextText()
+                }
+            ) { title == null }
+        }
+
+        return title
     }
 
     private fun parseChannel(parser: XmlPullParser, source: Source): List<Post> {
@@ -150,4 +176,5 @@ class RssParser @Inject constructor() : XmlParser() {
             else -> ""
         }
     }
+
 }

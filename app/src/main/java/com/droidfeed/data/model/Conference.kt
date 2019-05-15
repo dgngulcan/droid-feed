@@ -18,5 +18,4 @@ data class Conference(
 
     override fun isSame(item: Any) = item == this
 
-    override fun hasSameContentWith(item: Any) = item == this
 }

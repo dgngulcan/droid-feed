@@ -7,9 +7,10 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.core.view.isVisible
 import androidx.databinding.BindingAdapter
+import androidx.vectordrawable.graphics.drawable.AnimatedVectorDrawableCompat
 import com.droidfeed.R
-import com.droidfeed.util.extention.fadeIn
-import com.droidfeed.util.extention.fadeOut
+import com.droidfeed.util.extension.fadeIn
+import com.droidfeed.util.extension.fadeOut
 import com.droidfeed.util.glide.GlideApp
 import com.google.android.material.textfield.TextInputLayout
 import java.util.*
@@ -21,6 +22,18 @@ fun avdImageResource(
 ) {
     imageView.setImageResource(avdImageResource)
 }
+
+
+@BindingAdapter("app:avdImageResource2")
+fun avdImageResource2(
+    imageView: ImageView,
+    avdImageResource: Int
+) {
+    val avd = AnimatedVectorDrawableCompat.create(imageView.context, avdImageResource)
+    imageView.setImageDrawable(avd)
+    avd?.start()
+}
+
 
 @BindingAdapter("app:isVisible")
 fun isVisible(
@@ -52,7 +65,7 @@ fun isEnabled(
         if (isEnabled) {
             view.fadeIn()
         } else {
-            view.fadeOut(0.5f)
+            view.fadeOut(0.3f)
         }
     }
 }

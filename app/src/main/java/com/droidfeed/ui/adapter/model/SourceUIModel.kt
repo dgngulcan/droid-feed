@@ -6,7 +6,6 @@ import com.droidfeed.data.model.Source
 import com.droidfeed.databinding.ListItemSourceBinding
 import com.droidfeed.ui.adapter.BaseUIModel
 import com.droidfeed.ui.adapter.UIModelType
-import com.droidfeed.ui.adapter.UIModelClickListener
 import com.droidfeed.ui.adapter.viewholder.SourceViewHolder
 
 /**
@@ -14,7 +13,9 @@ import com.droidfeed.ui.adapter.viewholder.SourceViewHolder
  */
 class SourceUIModel(
     private val source: Source,
-    private val clickListener: UIModelClickListener<Source>
+    private val onClick: (Source) -> Unit,
+    private val onRemoveClick: (Source) -> Unit,
+    private val onShareClick: (Source) -> Unit
 ) : BaseUIModel<SourceViewHolder> {
 
     override fun getViewHolder(parent: ViewGroup): SourceViewHolder {
@@ -28,7 +29,7 @@ class SourceUIModel(
     }
 
     override fun bindViewHolder(viewHolder: SourceViewHolder) {
-        viewHolder.bind(source, clickListener)
+        viewHolder.bind(source, onClick, onRemoveClick, onShareClick)
     }
 
     override fun getViewType(): Int = UIModelType.SOURCE.ordinal

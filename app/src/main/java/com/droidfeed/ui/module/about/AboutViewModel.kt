@@ -27,7 +27,7 @@ class AboutViewModel @Inject constructor() : BaseViewModel() {
 
     fun shareApp() {
         startIntent.postValue(Event(shareIntent))
-        analytics.logShare("app")
+        analytics.logShareApp()
     }
 
     fun openPrivacyPolicy() {

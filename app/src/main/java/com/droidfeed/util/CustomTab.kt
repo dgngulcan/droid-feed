@@ -14,7 +14,7 @@ import androidx.core.content.ContextCompat
 import androidx.core.graphics.drawable.toBitmap
 import com.droidfeed.R
 import com.droidfeed.ui.module.webview.WebViewActivity
-import com.droidfeed.util.extention.isPackageAvailable
+import com.droidfeed.util.extension.isPackageAvailable
 import com.google.android.material.snackbar.Snackbar
 import javax.inject.Inject
 

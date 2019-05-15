@@ -7,11 +7,17 @@ import com.droidfeed.R
 import com.google.android.material.snackbar.Snackbar
 import javax.inject.Inject
 
-class AppRateHelper @Inject constructor(private val sharedPrefs: SharedPreferences) {
+class AppRateHelper @Inject constructor(
+    private val sharedPrefs: SharedPreferences,
+    private val analyticsUtil: AnalyticsUtil
+) {
 
     fun showRateSnackbar(view: View, onAction: () -> Unit) {
-        Snackbar.make(view, R.string.like_to_review_df, Snackbar.LENGTH_LONG)
+        analyticsUtil.logAppRatePrompt()
+
+        Snackbar.make(view, R.string.like_to_review_df, 5000)
             .setAction(R.string.yes) { onAction() }
+            .setAnimationMode(Snackbar.ANIMATION_MODE_SLIDE)
             .setActionTextColor(
                 ContextCompat.getColor(
                     view.context,

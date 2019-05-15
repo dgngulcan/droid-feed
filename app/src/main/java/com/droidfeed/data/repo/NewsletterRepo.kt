@@ -5,7 +5,7 @@ import com.droidfeed.data.api.mailchimp.ErrorAdapter
 import com.droidfeed.data.api.mailchimp.model.MailchimpError
 import com.droidfeed.data.api.mailchimp.model.Subscriber
 import com.droidfeed.data.api.mailchimp.service.NewsletterService
-import com.droidfeed.util.extention.suspendingEnqueue
+import com.droidfeed.util.extension.suspendingEnqueue
 import com.google.firebase.remoteconfig.FirebaseRemoteConfig
 import com.squareup.moshi.Moshi
 import retrofit2.HttpException

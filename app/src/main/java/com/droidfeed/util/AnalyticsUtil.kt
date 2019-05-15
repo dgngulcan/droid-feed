@@ -13,19 +13,26 @@ class AnalyticsUtil @Inject constructor(private val analytics: FirebaseAnalytics
     fun logBookmark(isBookmarked: Boolean) {
         analytics.logEvent(
             "bookmark",
-            bundleOf(Pair("bookmarked", isBookmarked))
+            bundleOf(Pair("bookmarked", isBookmarked.toString()))
         )
     }
 
-    fun logShare(content: String) {
+    private fun logShare(content: String) {
         analytics.logEvent(
             FirebaseAnalytics.Event.SHARE,
             bundleOf(Pair("content", content))
         )
     }
 
-    fun logPostShare() {
-        logShare("post")
+    fun logPostShare() = logShare("post")
+    fun logShareApp() = logShare("app")
+    fun logSourceShare() = logShare("source")
+
+    fun logSourceActivation(isActivated: Boolean) {
+        analytics.logEvent(
+            "source",
+            bundleOf(Pair("activated", isActivated.toString()))
+        )
     }
 
     fun logPostClick() {
@@ -35,12 +42,46 @@ class AnalyticsUtil @Inject constructor(private val analytics: FirebaseAnalytics
         )
     }
 
+    fun logConferenceClick() {
+        analytics.logEvent(
+            FirebaseAnalytics.Event.VIEW_ITEM,
+            bundleOf(Pair("conference", "conference"))
+        )
+    }
+
+    fun logCFPClick() {
+        analytics.logEvent(
+            FirebaseAnalytics.Event.VIEW_ITEM,
+            bundleOf(Pair("conference", "CFP"))
+        )
+    }
+
+    fun logAddSourceButtonClick() {
+        analytics.logEvent("click_source_add", null)
+    }
+
+    fun logRemoveSourceButtonClick() {
+        analytics.logEvent("click_source_remove", null)
+    }
+
+    fun logSourceRemoveUndo() {
+        analytics.logEvent("click_source_remove_undo", null)
+    }
+
+    fun logSaveSourceButtonClick() {
+        analytics.logEvent("click_save_source", null)
+    }
+
     fun logScreenView(activity: Activity, screenTag: String) {
         analytics.setCurrentScreen(activity, screenTag, null)
     }
 
     fun logAppRateClick() {
         analytics.logEvent("open_play_store", null)
+    }
+
+    fun logAppRateFromPromtClick() {
+        analytics.logEvent("app_rate_prompt_rate", null)
     }
 
     fun logAppRatePrompt() {
@@ -53,4 +94,21 @@ class AnalyticsUtil @Inject constructor(private val analytics: FirebaseAnalytics
             bundleOf(Pair("newsletter", ""))
         )
     }
+
+    fun logSourceAddSuccess() {
+        analytics.logEvent("click_add_source_success", null)
+    }
+
+    fun logSourceAddFail() {
+        analytics.logEvent("click_add_source_fail", null)
+    }
+
+    fun logSourceAlreadyExists() {
+        analytics.logEvent("click_add_source_exists", null)
+    }
+
+    fun logSourceAddFailInvalidUrl() {
+        analytics.logEvent("click_add_source_fail_invalid_url", null)
+    }
+
 }

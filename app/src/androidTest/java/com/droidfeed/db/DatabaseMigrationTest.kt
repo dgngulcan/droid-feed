@@ -64,17 +64,18 @@ class DatabaseMigrationTest {
     }
 
     @Test
-    fun migration_from_1_to_4_should_contain_correct_data() {
+    fun migration_from_1_to_5_should_contain_correct_data() {
         createAndPopulateDBVersion1()
 
         val migrations = arrayOf(
             MIGRATION_1_2,
             MIGRATION_1_4,
             MIGRATION_2_3,
-            MIGRATION_3_4
+            MIGRATION_3_4,
+            MIGRATION_4_5
         )
 
-        val posts = getMigrationValidatedRoomDatabase(migrations)
+        val posts = getMigrationValidatedRoomDatabase(5, migrations)
             .postDao()
             .getAllAsLiveData()
             .blockingObserve() ?: emptyList()
@@ -85,15 +86,17 @@ class DatabaseMigrationTest {
     }
 
     @Test
-    fun migration_from_2_to_4_should_contain_correct_data() {
+    fun migration_from_2_to_5_should_contain_correct_data() {
         createAndPopulateDBVersion2()
 
         val migrations = arrayOf(
             MIGRATION_1_4,
+            MIGRATION_1_5,
             MIGRATION_2_3,
+            MIGRATION_2_5,
             MIGRATION_3_4
         )
-        val migratedDb = getMigrationValidatedRoomDatabase(migrations)
+        val migratedDb = getMigrationValidatedRoomDatabase(5, migrations)
 
         mSqliteTestDbHelper.writableDatabase.use { database ->
             database.execSQL(
@@ -130,10 +133,11 @@ class DatabaseMigrationTest {
 
         val migrations = arrayOf(
             MIGRATION_1_4,
-            MIGRATION_3_4
+            MIGRATION_3_4,
+            MIGRATION_4_5
         )
 
-        val posts = getMigrationValidatedRoomDatabase(migrations)
+        val posts = getMigrationValidatedRoomDatabase(4, migrations)
             .postDao()
             .getAllAsLiveData().blockingObserve() ?: emptyList()
 
@@ -141,6 +145,26 @@ class DatabaseMigrationTest {
         assertEquals("https://channel.link.test", posts[0].channel.link)
         assertEquals(1, posts[0].bookmarked)
     }
+
+    @Test
+    fun migration_from_4_to_5_should_contain_correct_data() {
+        createAndPopulateDBVersion4()
+
+        val migrations = arrayOf(
+            MIGRATION_3_5,
+            MIGRATION_4_5
+        )
+
+        val sources = getMigrationValidatedRoomDatabase(5, migrations)
+            .sourceDao()
+            .getSources().blockingObserve() ?: emptyList()
+
+        assertEquals(2, sources.size)
+        assertEquals(0, sources[0].id)
+        assertEquals(false, sources[0].isUserSource)
+
+    }
+
 
     private fun createAndPopulateDBVersion1() {
         mMigrationTestHelper.createDatabase(dbName, 1).use { database ->
@@ -154,8 +178,8 @@ class DatabaseMigrationTest {
     private fun createAndPopulateDBVersion2() {
         mMigrationTestHelper.createDatabase(dbName, 2).use { database ->
             database.apply {
-                execSQL("INSERT INTO `source` (url, name, is_active) VALUES ('https://some.url','source name', '0') ;")
-                execSQL("INSERT INTO `source` (url, name, is_active) VALUES ('https://some.url2','source name2', '1') ;")
+                execSQL("INSERT INTO `source` (url, name, is_active) VALUES ('https://some.url', 'source name', '0') ;")
+                execSQL("INSERT INTO `source` (url, name, is_active) VALUES ('https://some.url2', 'source name2', '1') ;")
                 execSQL("INSERT INTO `rss`  (bookmarked,content, content_image, channel_image_url,channel_title, content_raw, author, title, pub_date_timestamp, pub_date, contentImage, link,  channel_link) VALUES ('1','', '', '', '', '', 'author', 'ptitle', 'pub_date_timestamp', 'pub date', 'image', 'https://post.link.test', 'https://some.url2');")
             }
         }
@@ -164,13 +188,26 @@ class DatabaseMigrationTest {
     private fun createAndPopulateDBVersion3() {
         mMigrationTestHelper.createDatabase(dbName, 3).use { database ->
             database.apply {
-                execSQL("INSERT INTO `source` (id, url, name, is_active) VALUES ('0','https://some.url','source name', '0') ;")
+                execSQL("INSERT INTO `source` (id, url, name, is_active) VALUES ('0', 'https://some.url', 'source name', '0') ;")
                 execSQL("INSERT INTO `rss`  (bookmarked,content, content_image, channel_image_url,channel_title, content_raw, author, title, pub_date_timestamp, pub_date, content_image, link,  channel_link) VALUES ('1','', '', '', '', '', 'author', 'ptitle', 'pub_date_timestamp', 'pub date', 'image', 'https://post.link.test', 'https://channel.link.test');")
             }
         }
     }
 
-    private fun getMigrationValidatedRoomDatabase(migrations: Array<Migration>): AppDatabase {
+    private fun createAndPopulateDBVersion4() {
+        mMigrationTestHelper.createDatabase(dbName, 3).use { database ->
+            database.apply {
+                execSQL("INSERT INTO `source` (id, url, name, is_active) VALUES ('0', 'https://some.url', 'source name', '0') ;")
+                execSQL("INSERT INTO `source` (id, url, name, is_active) VALUES ('1', 'https://some.url2', 'source name2', '1') ;")
+
+            }
+        }
+    }
+
+    private fun getMigrationValidatedRoomDatabase(
+        version: Int,
+        migrations: Array<Migration>
+    ): AppDatabase {
         return Room.databaseBuilder(
             context,
             AppDatabase::class.java,
@@ -182,10 +219,10 @@ class DatabaseMigrationTest {
             build()
         }.also { database ->
             mMigrationTestHelper.closeWhenFinished(database)
-
+//
             mMigrationTestHelper.runMigrationsAndValidate(
                 dbName,
-                3,
+                version,
                 true,
                 *migrations
             )

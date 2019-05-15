@@ -5,6 +5,7 @@ import androidx.collection.SparseArrayCompat
 import androidx.paging.PagedList
 import androidx.paging.PagedListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.droidfeed.ui.adapter.diff.BaseUIModelDiffCallback
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch

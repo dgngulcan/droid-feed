@@ -19,7 +19,7 @@ import com.droidfeed.util.appOpenCount
 import com.droidfeed.util.appRatePrompt
 import com.droidfeed.util.appRatePromptIndex
 import com.droidfeed.util.event.Event
-import com.droidfeed.util.extention.asLiveData
+import com.droidfeed.util.extension.asLiveData
 import com.droidfeed.util.shareCount
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -34,7 +34,7 @@ class FeedViewModel @Inject constructor(
 ) : BaseViewModel() {
 
     private val feedType = MutableLiveData<FeedType>()
-    private var refreshJob = Job()
+    private lateinit var refreshJob : Job
 
     val postsLiveData: LiveData<PagedList<PostUIModel>> = switchMap(feedType) { type ->
         when (type) {
@@ -95,7 +95,7 @@ class FeedViewModel @Inject constructor(
     val openPlayStorePage = MutableLiveData<Event<Unit>>()
 
     init {
-        refreshJob = refresh() /* todo: causes unnecessary fetching when rebound with the fragment*/
+        refreshJob = refresh()
     }
 
     private val pagedListConfig = PagedList.Config.Builder()
@@ -155,9 +155,9 @@ class FeedViewModel @Inject constructor(
             post.bookmarked = 0
 
             if (feedType.value == FeedType.BOOKMARKS) {
-                showUndoBookmarkSnack.postValue(Event({
+                showUndoBookmarkSnack.postValue(Event {
                     togglePostBookmark(post)
-                }))
+                })
             }
         } else {
             post.bookmarked = 1
@@ -183,10 +183,10 @@ class FeedViewModel @Inject constructor(
                 if (canPromptAppRate(bookmarkCount)) {
                     analytics.logAppRatePrompt()
 
-                    showAppRateSnack.postValue(Event({
+                    showAppRateSnack.postValue(Event {
                         openPlayStorePage.postValue(Event(Unit))
-                        analytics.logAppRateClick()
-                    }))
+                        analytics.logAppRateFromPromtClick()
+                    })
                 }
             }
         }

@@ -50,34 +50,33 @@ class UIModelAdapter constructor(
                 notifyDataSetChanged()
             } else {
                 launch {
-                    val oldItems = async { ArrayList(uiModels) }
-
                     val diffResult = async {
-                        DiffUtil.calculateDiff(
-                            UIModelDiffCallback(
-                                oldItems.await(),
-                                uiModels as List<BaseUIModelAlias>
-                            )
+                        val diffCallback = UIModelDiffCallback(
+                            ArrayList(uiModels),
+                            newModels
                         )
-                    }
-
-                    diffResult.await().let { result ->
-                        withContext(Dispatchers.Main) {
-                            dispatchUpdates(result)
-                        }
 
                         uiModels.clear()
                         uiModels.addAll(newModels)
-                        updateViewTypes(uiModels)
+
+//                        withContext(Dispatchers.Main){notifyDataSetChanged()}
+                        DiffUtil.calculateDiff(diffCallback, true)
                     }
+
+                    withContext(Dispatchers.Main) {
+                        val dif = diffResult.await()
+                        dispatchUpdates(dif)
+                    }
+
+                    updateViewTypes(uiModels)
                 }
             }
         }
     }
 
-    private fun dispatchUpdates(it: DiffUtil.DiffResult) {
+    private fun dispatchUpdates(diffResult: DiffUtil.DiffResult) {
         val recyclerViewState = layoutManager?.onSaveInstanceState()
-        it.dispatchUpdatesTo(this)
+        diffResult.dispatchUpdatesTo(this)
         layoutManager?.onRestoreInstanceState(recyclerViewState)
     }
 
@@ -85,5 +84,9 @@ class UIModelAdapter constructor(
         uiModels.forEach { baseUiModel ->
             viewTypes.put(baseUiModel.getViewType(), baseUiModel)
         }
+    }
+
+    fun map(block: (List<BaseUIModelAlias>) -> Unit) {
+        block(uiModels)
     }
 }

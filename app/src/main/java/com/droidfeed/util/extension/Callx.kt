@@ -1,6 +1,6 @@
 @file:Suppress("UNCHECKED_CAST")
 
-package com.droidfeed.util.extention
+package com.droidfeed.util.extension
 
 import com.droidfeed.util.logThrowable
 import retrofit2.Call

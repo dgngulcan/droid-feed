@@ -2,7 +2,7 @@ package com.droidfeed.data.repo
 
 import com.droidfeed.data.DataStatus
 import com.droidfeed.data.model.Conference
-import com.droidfeed.util.extention.isOnline
+import com.droidfeed.util.extension.isOnline
 import com.google.firebase.Timestamp
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query

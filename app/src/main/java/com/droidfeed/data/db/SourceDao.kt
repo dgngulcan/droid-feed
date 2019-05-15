@@ -14,12 +14,21 @@ interface SourceDao {
     @Query("SELECT * FROM $SOURCE_TABLE WHERE is_active = 1")
     fun getActiveSources(): List<Source>
 
+    @Query("SELECT * FROM $SOURCE_TABLE WHERE url = :sourceUrl LIMIT 1")
+    fun isUrlExists(sourceUrl: String): List<Source>
+
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     fun insertSources(source: List<Source>)
+
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    fun insertSource(source: Source)
 
     @Update(onConflict = OnConflictStrategy.REPLACE)
     fun updateSource(source: Source)
 
-    @Query("SELECT COUNT(*) FROM ${AppDatabase.SOURCE_TABLE} WHERE is_active = 1")
+    @Query("SELECT COUNT(*) FROM $SOURCE_TABLE WHERE is_active = 1")
     fun getActiveSourceCount(): Int
+
+    @Delete
+    fun remove(source: Source)
 }

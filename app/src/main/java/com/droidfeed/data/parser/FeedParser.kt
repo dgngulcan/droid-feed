@@ -5,8 +5,8 @@ import com.droidfeed.data.model.Channel
 import com.droidfeed.data.model.Content
 import com.droidfeed.data.model.Post
 import com.droidfeed.data.model.Source
-import com.droidfeed.util.extention.asTimestamp
-import com.droidfeed.util.extention.skipTag
+import com.droidfeed.util.extension.asTimestamp
+import com.droidfeed.util.extension.skipTag
 import com.droidfeed.util.logThrowable
 import org.xmlpull.v1.XmlPullParser
 import javax.inject.Inject
@@ -35,6 +35,21 @@ class FeedParser @Inject constructor() : XmlParser() {
         }
 
         return posts
+    }
+
+    override fun getChannelTitle(parser: XmlPullParser): String? {
+        parser.require(XmlPullParser.START_TAG, null, "feed")
+
+        var title: String? = null
+
+        parseTags(
+            parser,
+            "title" to { tParser ->
+                title = tParser.nextText()
+            }
+        ) { title == null }
+
+        return title
     }
 
     private fun parsePost(parser: XmlPullParser, source: Source): Post {

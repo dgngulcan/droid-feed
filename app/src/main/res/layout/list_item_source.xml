@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
@@ -9,33 +10,55 @@
             type="com.droidfeed.data.model.Source" />
 
         <variable
-            name="clickListener"
-            type="com.droidfeed.ui.adapter.UIModelClickListener" />
+            name="itemClickListener"
+            type="android.view.View.OnClickListener" />
+
+        <variable
+            name="removeClickListener"
+            type="android.view.View.OnClickListener" />
 
     </data>
 
-    <FrameLayout
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:animateLayoutChanges="true"
+        android:background="?attr/selectableItemBackground"
         android:clickable="true"
         android:focusable="true"
-        android:background="?attr/selectableItemBackground"
-        android:onClick="@{()->clickListener.onClick(source)}"
-        android:theme="@style/Base.ThemeOverlay.AppCompat.Dark">
+        android:gravity="center_vertical"
+        android:onClick="@{(v)->itemClickListener.onClick(v)}"
+        android:orientation="horizontal"
+        android:theme="@style/Base.ThemeOverlay.AppCompat.Dark"
+        tools:background="@color/yellow">
 
         <TextView
             android:id="@+id/textView3"
             style="@style/DF.Button.Text"
             android:layout_width="match_parent"
             android:layout_height="@dimen/spacing_xxlarge"
+            android:layout_weight="1"
             android:clickable="false"
             android:enabled="@{source.isEnabled()}"
             android:gravity="center_vertical"
+            android:maxLines="1"
             android:paddingStart="@dimen/spacing_medium"
             android:paddingEnd="@dimen/spacing_medium"
             android:text="@{source.name}"
             tools:text="Title of an awesome publisher" />
 
-    </FrameLayout>
+        <ImageView
+            style="@style/BorderlessImageButton"
+            android:paddingEnd="@dimen/spacing_medium"
+            android:paddingStart="@dimen/spacing_medium"
+            android:layout_weight="0.1"
+            android:onClick="@{(v)->removeClickListener.onClick(v)}"
+            android:scaleType="center"
+            android:src="@drawable/ic_more_vert_black_24dp"
+            android:visibility="gone"
+            app:isVisible="@{source.isUserSource}"
+            tools:visibility="visible" />
+
+    </LinearLayout>
 
 </layout>

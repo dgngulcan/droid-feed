@@ -5,11 +5,16 @@ import android.animation.LayoutTransition
 import android.animation.ObjectAnimator
 import android.animation.ValueAnimator
 import android.content.Intent
+import android.graphics.Color
+import android.os.Build
 import android.os.Bundle
 import android.view.View
+import android.view.WindowManager
+import androidx.annotation.RequiresApi
 import androidx.core.view.GravityCompat
 import androidx.core.view.isVisible
 import androidx.databinding.DataBindingUtil
+import androidx.drawerlayout.widget.DrawerLayout
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.DefaultItemAnimator
@@ -23,24 +28,21 @@ import com.droidfeed.ui.module.onboard.OnBoardActivity
 import com.droidfeed.util.AnimUtils
 import com.droidfeed.util.ColorPalette
 import com.droidfeed.util.event.EventObserver
-import com.droidfeed.util.extention.hideKeyboard
+import com.droidfeed.util.extension.hideKeyboard
+import com.google.android.material.snackbar.Snackbar
+import kotlinx.android.synthetic.main.activity_main.*
 import javax.inject.Inject
+
 
 @Suppress("UNCHECKED_CAST")
 class MainActivity : BaseActivity() {
 
-    @Inject
-    lateinit var navController: MainNavController
-
-    @Inject
-    lateinit var animUtils: AnimUtils
-
-    @Inject
-    lateinit var colorPalette: ColorPalette
+    @Inject lateinit var navController: MainNavController
+    @Inject lateinit var animUtils: AnimUtils
+    @Inject lateinit var colorPalette: ColorPalette
 
     private lateinit var mainViewModel: MainViewModel
     private lateinit var binding: ActivityMainBinding
-
     private var currentMenuColor = 0
     private var previousScreenColor = 0
     private var previousMenuButton: View? = null
@@ -49,19 +51,11 @@ class MainActivity : BaseActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         setTheme(R.style.AppTheme)
-        setupTransparentStatusBar()
         super.onCreate(savedInstanceState)
 
         mainViewModel = ViewModelProviders
             .of(this, viewModelFactory)
             .get(MainViewModel::class.java)
-
-        subscribeUserTerms()
-        subscribeNavigation()
-        subscribeScrollTopEvent()
-        subscribeSources()
-        subscribeMenuVisibility()
-        subscribeFilterVisibility()
 
         binding = DataBindingUtil.setContentView<ActivityMainBinding>(
             this,
@@ -69,13 +63,53 @@ class MainActivity : BaseActivity() {
         ).apply {
             viewModel = mainViewModel
             lifecycleOwner = this@MainActivity
+            appbar.containerView.layoutTransition.enableTransitionType(LayoutTransition.CHANGING)
         }
 
-        binding.appbar.containerView.layoutTransition.apply {
-            enableTransitionType(LayoutTransition.CHANGING)
-        }
+        subscribeUserTerms()
+        subscribeNavigation()
+        subscribeScrollTopEvent()
+        subscribeSources()
+        subscribeMenuVisibility()
+        subscribeFilterVisibility()
+        subscribeCloseKeyboard()
+        subscribeSourceShareEvent()
+        subscribeSourceRemoveUndoSnack()
 
         initFilterDrawer()
+    }
+
+    private fun subscribeSourceShareEvent() {
+        mainViewModel.shareSourceEvent.observe(this, EventObserver { content ->
+            Intent().apply {
+                action = Intent.ACTION_SEND
+                type = "text/plain"
+                putExtra(Intent.EXTRA_TEXT, content)
+                addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP)
+            }.also(this::startActivity)
+        })
+    }
+
+    private fun subscribeSourceRemoveUndoSnack() {
+        mainViewModel.showUndoSourceRemoveSnack.observe(this, EventObserver { onUndo ->
+            Snackbar.make(
+                binding.root,
+                R.string.info_source_removed,
+                Snackbar.LENGTH_LONG
+            ).apply {
+                setActionTextColor(Color.YELLOW)
+                animationMode = Snackbar.ANIMATION_MODE_SLIDE
+                setAction(R.string.undo) { onUndo() }
+            }.run {
+                show()
+            }
+        })
+    }
+
+    private fun subscribeCloseKeyboard() {
+        mainViewModel.closeKeyboardEvent.observe(this, EventObserver {
+            edtFeedUrl.hideKeyboard()
+        })
     }
 
     private fun subscribeSources() {
@@ -278,6 +312,38 @@ class MainActivity : BaseActivity() {
             adapter = uiModelAdapter
             overScrollMode = View.OVER_SCROLL_NEVER
             layoutManager = linearLayoutManager
+        }
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+            setFilterPaddingForCutout()
+        }
+
+        binding.drawerLayout.addDrawerListener(object : DrawerLayout.DrawerListener {
+            override fun onDrawerStateChanged(newState: Int) {
+            }
+
+            override fun onDrawerSlide(drawerView: View, slideOffset: Float) {
+            }
+
+            override fun onDrawerClosed(drawerView: View) {
+                mainViewModel.onFilterDrawerClosed()
+                drawerView.hideKeyboard()
+            }
+
+            override fun onDrawerOpened(drawerView: View) {
+            }
+        })
+    }
+
+    @RequiresApi(Build.VERSION_CODES.P)
+    private fun setFilterPaddingForCutout() {
+        window.attributes.layoutInDisplayCutoutMode =
+            WindowManager.LayoutParams.LAYOUT_IN_DISPLAY_CUTOUT_MODE_SHORT_EDGES
+
+        binding.filterView.setOnApplyWindowInsetsListener { v, insets ->
+            val displayCutout = insets.displayCutout
+            binding.filterView.setPadding(0, displayCutout?.safeInsetTop ?: 0, 0, 0)
+            insets.consumeDisplayCutout()
         }
     }
 

@@ -1,6 +1,8 @@
-package com.droidfeed.ui.adapter
+package com.droidfeed.ui.adapter.diff
 
 import androidx.recyclerview.widget.DiffUtil
+import com.droidfeed.ui.adapter.BaseUIModelAlias
+
 
 class BaseUIModelDiffCallback : DiffUtil.ItemCallback<BaseUIModelAlias>() {
 
@@ -14,9 +16,9 @@ class BaseUIModelDiffCallback : DiffUtil.ItemCallback<BaseUIModelAlias>() {
     }
 
     override fun areContentsTheSame(
-        oldConcert: BaseUIModelAlias,
-        newConcert: BaseUIModelAlias
-    ) = oldConcert == newConcert
+        oldContent: BaseUIModelAlias,
+        newContent: BaseUIModelAlias
+    ) = oldContent.getData() == newContent.getData()
 
     override fun getChangePayload(
         oldItem: BaseUIModelAlias,

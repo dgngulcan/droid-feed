@@ -10,7 +10,6 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.paging.PagedList
 import androidx.recyclerview.widget.DefaultItemAnimator
-import com.droidfeed.R
 import com.droidfeed.databinding.FragmentFeedBinding
 import com.droidfeed.rateAppIntent
 import com.droidfeed.ui.adapter.BaseUIModelAlias
@@ -23,10 +22,12 @@ import com.droidfeed.ui.module.main.MainViewModel
 import com.droidfeed.util.AppRateHelper
 import com.droidfeed.util.CustomTab
 import com.droidfeed.util.event.EventObserver
-import com.droidfeed.util.extention.isOnline
+import com.droidfeed.util.extension.isOnline
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.fragment_feed.*
 import javax.inject.Inject
+
+
 
 class FeedFragment : BaseFragment("feed"), Scrollable {
 
@@ -86,6 +87,12 @@ class FeedFragment : BaseFragment("feed"), Scrollable {
         return binding.root
     }
 
+    private fun subscribePosts() {
+        feedViewModel.postsLiveData.observe(viewLifecycleOwner, Observer { pagedList ->
+            paginatedAdapter.submitList(pagedList as PagedList<BaseUIModelAlias>)
+        })
+    }
+
     private fun subscribePlayStoreEvent() {
         feedViewModel.openPlayStorePage.observe(viewLifecycleOwner, EventObserver {
             startActivity(rateAppIntent)
@@ -131,18 +138,12 @@ class FeedFragment : BaseFragment("feed"), Scrollable {
                     binding.swipeRefreshPosts.isRefreshing = false
                     Snackbar.make(
                         binding.root,
-                        R.string.info_no_internet,
+                        com.droidfeed.R.string.info_no_internet,
                         Snackbar.LENGTH_LONG
                     ).show()
                 }
             }
         }
-    }
-
-    private fun subscribePosts() {
-        feedViewModel.postsLiveData.observe(viewLifecycleOwner, Observer { pagedList ->
-            paginatedAdapter.submitList(pagedList as PagedList<BaseUIModelAlias>)
-        })
     }
 
     private fun subscribePostOpenEvent() {
@@ -161,11 +162,12 @@ class FeedFragment : BaseFragment("feed"), Scrollable {
         feedViewModel.showUndoBookmarkSnack.observe(viewLifecycleOwner, EventObserver { onUndo ->
             Snackbar.make(
                 binding.root,
-                R.string.info_bookmark_removed,
+                com.droidfeed.R.string.info_bookmark_removed,
                 Snackbar.LENGTH_LONG
             ).apply {
                 setActionTextColor(Color.YELLOW)
-                setAction(R.string.undo) { onUndo() }
+                animationMode = Snackbar.ANIMATION_MODE_SLIDE
+                setAction(com.droidfeed.R.string.undo) { onUndo() }
             }.run {
                 show()
             }
@@ -193,4 +195,6 @@ class FeedFragment : BaseFragment("feed"), Scrollable {
     companion object {
         private const val REQUEST_CODE_SHARE = 4122
     }
+
+
 }

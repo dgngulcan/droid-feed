@@ -1,7 +1,5 @@
 package com.droidfeed.ui.module.newsletter
 
-import android.util.Log
-import android.util.Patterns
 import androidx.annotation.StringRes
 import androidx.lifecycle.MutableLiveData
 import com.droidfeed.BuildConfig
@@ -15,6 +13,7 @@ import com.droidfeed.data.repo.NewsletterRepo
 import com.droidfeed.ui.common.BaseViewModel
 import com.droidfeed.util.AnalyticsUtil
 import com.droidfeed.util.event.Event
+import com.droidfeed.util.extension.isValidEmail
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.net.UnknownHostException
@@ -45,18 +44,20 @@ class NewsletterViewModel @Inject constructor(
     fun signUp(email: String) = launch(Dispatchers.IO) {
         isSignButtonVisible.postValue(false)
         isProgressVisible.postValue(true)
-        errorText.postValue(R.string.empty_string)
 
         val isValid = when {
             email.isBlank() -> {
                 errorText.postValue(R.string.error_empty_email)
                 false
             }
-            !Patterns.EMAIL_ADDRESS.matcher(email).matches() -> {
+            !email.isValidEmail() -> {
                 errorText.postValue(R.string.error_email_format)
                 false
             }
-            else -> true
+            else -> {
+                errorText.postValue(R.string.empty_string)
+                true
+            }
         }
 
         if (isValid) {
@@ -75,8 +76,6 @@ class NewsletterViewModel @Inject constructor(
     }
 
     private fun handleSignUpResponse(dataStatus: DataStatus<MailchimpError>) {
-        Log.e("JAMIRYO", "5---- $dataStatus")
-
         when (dataStatus) {
             is DataStatus.Successful -> {
                 isEmailInputVisible.postValue(false)

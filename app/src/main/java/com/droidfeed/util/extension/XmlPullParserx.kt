@@ -1,4 +1,4 @@
-package com.droidfeed.util.extention
+package com.droidfeed.util.extension
 
 import com.droidfeed.util.logThrowable
 import org.xmlpull.v1.XmlPullParser

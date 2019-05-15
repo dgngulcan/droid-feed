@@ -30,7 +30,7 @@ class OnBoardViewModel @Inject constructor(
 
     private var isSourceListPulled = false
     private var isPendingNavigation = false
-    private var pullSourceJob = Job()
+    private var pullSourceJob: Job
 
     init {
         pullSourceJob = pullSources() /* news sources are pulled on first open */
@@ -59,9 +59,7 @@ class OnBoardViewModel @Inject constructor(
     }
 
     private fun pullSources() = launch(Dispatchers.IO) {
-        val result = sourceRepo.pull()
-
-        when (result) {
+        when (val result = sourceRepo.pull()) {
             is DataStatus.Successful -> {
                 sourceRepo.insert(result.data ?: emptyList())
                 isSourceListPulled = true

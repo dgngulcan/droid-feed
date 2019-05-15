@@ -1,4 +1,4 @@
-package com.droidfeed.util.extention
+package com.droidfeed.util.extension
 
 import android.content.Context
 import android.view.View

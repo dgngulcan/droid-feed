@@ -1,10 +1,11 @@
-package com.droidfeed.util.extention
+package com.droidfeed.util.extension
 
 import android.text.Spannable
 import android.text.SpannableString
 import android.text.Spanned
 import android.text.style.ClickableSpan
 import android.text.style.ForegroundColorSpan
+import android.util.Patterns
 import android.view.View
 import androidx.annotation.ColorInt
 import com.droidfeed.util.logThrowable
@@ -71,3 +72,6 @@ fun String.asTimestamp(
         0L
     }
 }
+
+fun String.isValidEmail(): Boolean = !isNullOrBlank() &&
+        Patterns.EMAIL_ADDRESS.matcher(this).matches()
