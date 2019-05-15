@@ -51,12 +51,20 @@ class MainActivity : BaseActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         setTheme(R.style.AppTheme)
-        setupTransparentStatusBar()
         super.onCreate(savedInstanceState)
 
         mainViewModel = ViewModelProviders
             .of(this, viewModelFactory)
             .get(MainViewModel::class.java)
+
+        binding = DataBindingUtil.setContentView<ActivityMainBinding>(
+            this,
+            R.layout.activity_main
+        ).apply {
+            viewModel = mainViewModel
+            lifecycleOwner = this@MainActivity
+            appbar.containerView.layoutTransition.enableTransitionType(LayoutTransition.CHANGING)
+        }
 
         subscribeUserTerms()
         subscribeNavigation()
@@ -67,15 +75,6 @@ class MainActivity : BaseActivity() {
         subscribeCloseKeyboard()
         subscribeSourceShareEvent()
         subscribeSourceRemoveUndoSnack()
-
-        binding = DataBindingUtil.setContentView<ActivityMainBinding>(
-            this,
-            R.layout.activity_main
-        ).apply {
-            viewModel = mainViewModel
-            lifecycleOwner = this@MainActivity
-            appbar.containerView.layoutTransition.enableTransitionType(LayoutTransition.CHANGING)
-        }
 
         initFilterDrawer()
     }

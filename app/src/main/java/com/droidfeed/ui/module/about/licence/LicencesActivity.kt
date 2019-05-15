@@ -34,8 +34,6 @@ class LicencesActivity : BaseActivity() {
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        setupTransparentStatusBar()
-
         window.apply {
             val pinkColor = ContextCompat.getColor(
                 this@LicencesActivity,
