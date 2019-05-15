@@ -5,8 +5,8 @@ apply plugin: 'kotlin-kapt'
 apply plugin: 'io.fabric'
 
 ext.app = [
-        'version'            : '2.1.5',
-        'version_code'       : 22,
+        'version'            : '2.2.0',
+        'version_code'       : 24,
         'compile_sdk_version': 28,
         'min_sdk_version'    : 21,
         'target_sdk_version' : 28
@@ -46,6 +46,7 @@ android {
         release {
             shrinkResources true
             minifyEnabled true
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
 
