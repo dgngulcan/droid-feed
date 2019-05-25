@@ -21,7 +21,7 @@ fun Lifecycle.createJob(cancelEvent: Lifecycle.Event = ON_DESTROY): Job {
     return Job().also { job ->
         if (currentState == Lifecycle.State.DESTROYED) job.cancel()
         else addObserver(object : GenericLifecycleObserver {
-            override fun onStateChanged(source: LifecycleOwner?, event: Lifecycle.Event) {
+            override fun onStateChanged(source: LifecycleOwner, event: Lifecycle.Event) {
                 if (event == cancelEvent) {
                     removeObserver(this)
                     job.cancel()
