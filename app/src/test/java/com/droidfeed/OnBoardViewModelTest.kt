@@ -40,7 +40,7 @@ class OnBoardViewModelTest {
 
     @Test
     fun WHEN_initiated_THEN_pull_sources() {
-        coVerify(exactly = 1) { sourceRepo.pull() }
+        verify(exactly = 1) { runBlocking { sourceRepo.pull() } }
 
         viewModel = OnBoardViewModel(sourceRepo)
     }
