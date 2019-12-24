@@ -219,6 +219,7 @@ class MainViewModel @Inject constructor(
 
     }
 
+    @Suppress("UNUSED_PARAMETER")
     fun onSourceInputTextChanged(text: CharSequence, start: Int, before: Int, count: Int) {
         if (text.isNotEmpty()) {
             sourceErrText.postValue(R.string.empty_string)

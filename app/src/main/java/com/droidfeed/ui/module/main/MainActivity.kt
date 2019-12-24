@@ -128,6 +128,7 @@ class MainActivity : BaseActivity() {
         })
     }
 
+    @Suppress("WHEN_ENUM_CAN_BE_NULL_IN_JAVA")
     private fun subscribeNavigation() {
         mainViewModel.onNavigation.observe(this, Observer { destination ->
             if (navController.activeDestination != destination) {
@@ -335,7 +336,7 @@ class MainActivity : BaseActivity() {
         window.attributes.layoutInDisplayCutoutMode =
             WindowManager.LayoutParams.LAYOUT_IN_DISPLAY_CUTOUT_MODE_SHORT_EDGES
 
-        binding.filterView.setOnApplyWindowInsetsListener { v, insets ->
+        binding.filterView.setOnApplyWindowInsetsListener { _, insets ->
             val displayCutout = insets.displayCutout
             binding.filterView.setPadding(0, displayCutout?.safeInsetTop ?: 0, 0, 0)
             insets.consumeDisplayCutout()

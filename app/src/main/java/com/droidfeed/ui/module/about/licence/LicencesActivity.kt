@@ -76,6 +76,7 @@ class LicencesActivity : BaseActivity() {
         })
     }
 
+    @Suppress("UNCHECKED_CAST")
     private fun subscribeLicenceUIModels() {
         licencesViewModel.licenceUIModels.observe(this, Observer { uiModels ->
             licenceAdapter.addUIModels(uiModels as List<BaseUIModelAlias>)

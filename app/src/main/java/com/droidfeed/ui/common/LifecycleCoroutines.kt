@@ -1,8 +1,8 @@
 package com.droidfeed.ui.common
 
-import androidx.lifecycle.GenericLifecycleObserver
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.Lifecycle.Event.ON_DESTROY
+import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.LifecycleOwner
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -20,7 +20,7 @@ fun Lifecycle.createJob(cancelEvent: Lifecycle.Event = ON_DESTROY): Job {
     }
     return Job().also { job ->
         if (currentState == Lifecycle.State.DESTROYED) job.cancel()
-        else addObserver(object : GenericLifecycleObserver {
+        else addObserver(object : LifecycleEventObserver {
             override fun onStateChanged(source: LifecycleOwner, event: Lifecycle.Event) {
                 if (event == cancelEvent) {
                     removeObserver(this)

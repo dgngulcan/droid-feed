@@ -87,6 +87,7 @@ class FeedFragment : BaseFragment("feed"), Scrollable {
         return binding.root
     }
 
+    @Suppress("UNCHECKED_CAST")
     private fun subscribePosts() {
         feedViewModel.postsLiveData.observe(viewLifecycleOwner, Observer { pagedList ->
             paginatedAdapter.submitList(pagedList as PagedList<BaseUIModelAlias>)

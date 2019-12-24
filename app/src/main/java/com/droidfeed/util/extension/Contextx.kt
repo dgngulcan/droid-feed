@@ -9,6 +9,7 @@ import android.net.ConnectivityManager
  *
  * @return true if the device is online
  */
+@Suppress("DEPRECATION")
 fun Context.isOnline(): Boolean {
     val cm = this.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
     val activeNetwork = cm.activeNetworkInfo

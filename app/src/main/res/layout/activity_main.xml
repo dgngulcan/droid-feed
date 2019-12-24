@@ -90,8 +90,7 @@
                         app:errorText="@{viewModel.sourceErrText}"
                         app:errorTextColor="@android:color/white"
                         app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/txtPreviousIssues">
+                        app:layout_constraintStart_toStartOf="parent">
 
                         <ProgressBar
                             android:id="@+id/progressBar"
