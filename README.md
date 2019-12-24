@@ -27,7 +27,7 @@ Contribution
 ------------
 Contributions are most welcome to DroidFeed. You can contribute in various ways such as [reporting issues](https://github.com/dgngulcan/droid-feed/issues), [suggesting features](https://github.com/dgngulcan/droid-feed/issues), adding documentation and providing bug fixes.
 
-New developments should be branched and merged into the `develop` branch. Feel free to send your pull requests to the `develop` branch.
+This project uses [GitHub flow](https://guides.github.com/introduction/flow/) as workflow.
 
 License
 -------
