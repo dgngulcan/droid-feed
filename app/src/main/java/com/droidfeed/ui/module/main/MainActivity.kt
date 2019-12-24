@@ -216,7 +216,7 @@ class MainActivity : BaseActivity() {
                 }
 
                 binding.appbar.btnMenu.run {
-                    speed = if (isSelected) 1f else -1f
+                    speed = if (isVisible) 1f else -1f
                     resumeAnimation()
                 }
 
