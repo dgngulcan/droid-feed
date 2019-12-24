@@ -6,28 +6,24 @@ import android.os.Bundle
 import android.view.View
 import android.view.WindowManager
 import androidx.appcompat.app.AppCompatActivity
-import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.droidfeed.util.isMarshmallow
 import dagger.android.AndroidInjection
+import dagger.android.AndroidInjector
 import dagger.android.DispatchingAndroidInjector
-import dagger.android.support.HasSupportFragmentInjector
+import dagger.android.HasAndroidInjector
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import javax.inject.Inject
 import kotlin.coroutines.CoroutineContext
 
+
 @SuppressLint("Registered")
-abstract class BaseActivity : AppCompatActivity(),
-    HasSupportFragmentInjector,
-    CoroutineScope {
+abstract class BaseActivity : AppCompatActivity(), HasAndroidInjector, CoroutineScope {
 
-    @Inject
-    lateinit var viewModelFactory: ViewModelProvider.Factory
-
-    @Inject
-    lateinit var fragmentInjector: DispatchingAndroidInjector<Fragment>
+    @Inject lateinit var viewModelFactory: ViewModelProvider.Factory
+    @Inject lateinit var androidInjector: DispatchingAndroidInjector<Any>
 
     private lateinit var job: Job
 
@@ -81,5 +77,7 @@ abstract class BaseActivity : AppCompatActivity(),
         }
     }
 
-    override fun supportFragmentInjector(): DispatchingAndroidInjector<Fragment> = fragmentInjector
+    override fun androidInjector(): AndroidInjector<Any?>? {
+        return androidInjector
+    }
 }

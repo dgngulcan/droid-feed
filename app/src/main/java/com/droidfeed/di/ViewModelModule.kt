@@ -11,7 +11,6 @@ import com.droidfeed.ui.module.conferences.ConferencesViewModel
 import com.droidfeed.ui.module.contribute.ContributeViewModel
 import com.droidfeed.ui.module.feed.FeedViewModel
 import com.droidfeed.ui.module.main.MainViewModel
-import com.droidfeed.ui.module.newsletter.NewsletterViewModel
 import com.droidfeed.ui.module.onboard.OnBoardViewModel
 import dagger.Binds
 import dagger.Module
@@ -29,11 +28,6 @@ abstract class ViewModelModule {
     @IntoMap
     @ViewModelKey(FeedViewModel::class)
     abstract fun bindFeedViewModel(viewModel: FeedViewModel): ViewModel
-
-    @Binds
-    @IntoMap
-    @ViewModelKey(NewsletterViewModel::class)
-    abstract fun bindNewsLetterViewModel(viewModel: NewsletterViewModel): ViewModel
 
     @Binds
     @IntoMap

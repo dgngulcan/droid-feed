@@ -3,18 +3,11 @@ package com.droidfeed.di.api
 import com.droidfeed.BuildConfig
 import dagger.Module
 import dagger.Provides
-import javax.inject.Singleton
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
+import javax.inject.Singleton
 
-/**
- * Provider module for APIs.
- */
-@Module(
-    includes = [
-        (MailchimpApiModule::class)
-    ]
-)
+@Module
 class ApiModule {
 
     @Provides

@@ -46,9 +46,7 @@ class PostRepo @Inject constructor(
 
         val asyncFetches = sources.map { source ->
             coroutineScope.async(Dispatchers.IO) {
-                val result = fetchAndParsePosts(source)
-
-                when (result) {
+                when (val result = fetchAndParsePosts(source)) {
                     is DataStatus.Successful -> {
                         result.data?.let { allPosts.addAll(it) }
                         DataStatus.Successful()
@@ -73,13 +71,13 @@ class PostRepo @Inject constructor(
             val response = okHttpClient.newCall(request).execute()
 
             if (response.isSuccessful) {
-                val posts = response.body()?.string()?.let {
+                val posts = response.body?.string()?.let {
                     xmlParser.parse(it, source)
                 }
 
                 DataStatus.Successful(posts)
             } else {
-                DataStatus.HttpFailed(response.code())
+                DataStatus.HttpFailed(response.code)
             }
         } catch (e: IOException) {
             logThrowable(e)

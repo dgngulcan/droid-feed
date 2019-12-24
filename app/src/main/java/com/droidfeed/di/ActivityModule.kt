@@ -4,6 +4,7 @@ package com.droidfeed.di
 
 import com.droidfeed.di.main.MainFragmentModule
 import com.droidfeed.di.main.MainModule
+import com.droidfeed.di.main.MainScope
 import com.droidfeed.ui.module.about.licence.LicencesActivity
 import com.droidfeed.ui.module.main.MainActivity
 import com.droidfeed.ui.module.onboard.OnBoardActivity

@@ -18,7 +18,7 @@ class BaseUIModelDiffCallback : DiffUtil.ItemCallback<BaseUIModelAlias>() {
     override fun areContentsTheSame(
         oldContent: BaseUIModelAlias,
         newContent: BaseUIModelAlias
-    ) = oldContent.getData() == newContent.getData()
+    ) = oldContent.getData().isSame(newContent.getData())
 
     override fun getChangePayload(
         oldItem: BaseUIModelAlias,

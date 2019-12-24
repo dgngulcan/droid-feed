@@ -125,14 +125,6 @@ class MainViewModel @Inject constructor(
         isMenuVisible.postValue(false)
     }
 
-    fun onNewsletterNavSelected() {
-        toolbarTitle.postValue(R.string.nav_title_newsletter)
-        onNavigation.postValue(Destination.NEWSLETTER)
-        isFilterButtonVisible.postValue(false)
-        isBookmarksButtonVisible.postValue(false)
-        isMenuVisible.postValue(false)
-    }
-
     fun onContributeNavSelected() {
         toolbarTitle.postValue(R.string.nav_title_contribute)
         onNavigation.postValue(Destination.CONTRIBUTE)

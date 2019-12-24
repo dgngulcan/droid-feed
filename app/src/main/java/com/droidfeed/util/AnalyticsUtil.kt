@@ -88,13 +88,6 @@ class AnalyticsUtil @Inject constructor(private val analytics: FirebaseAnalytics
         analytics.logEvent("app_rate_prompt", null)
     }
 
-    fun logNewsletterSignUp() {
-        analytics.logEvent(
-            FirebaseAnalytics.Event.SIGN_UP,
-            bundleOf(Pair("newsletter", ""))
-        )
-    }
-
     fun logSourceAddSuccess() {
         analytics.logEvent("click_add_source_success", null)
     }

@@ -14,11 +14,8 @@ import kotlin.coroutines.CoroutineContext
 
 abstract class BaseFragment(private val viewTag: String) : Fragment(), CoroutineScope {
 
-    @Inject
-    lateinit var viewModelFactory: ViewModelProvider.Factory
-
-    @Inject
-    lateinit var analytics: AnalyticsUtil
+    @Inject lateinit var viewModelFactory: ViewModelProvider.Factory
+    @Inject lateinit var analytics: AnalyticsUtil
 
     private lateinit var job: Job
 

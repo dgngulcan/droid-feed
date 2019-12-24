@@ -1,6 +1,5 @@
 package com.droidfeed
 
-import android.app.Activity
 import android.app.Application
 import android.content.Intent
 import android.content.SharedPreferences
@@ -11,16 +10,13 @@ import com.droidfeed.util.logThrowable
 import com.google.firebase.remoteconfig.FirebaseRemoteConfig
 import dagger.android.AndroidInjector
 import dagger.android.DispatchingAndroidInjector
-import dagger.android.HasActivityInjector
+import dagger.android.HasAndroidInjector
 import javax.inject.Inject
 
-class App : Application(), HasActivityInjector {
+class App : Application(), HasAndroidInjector {
 
-    @Inject
-    lateinit var dispatchingAndroidInjector: DispatchingAndroidInjector<Activity>
-
-    @Inject
-    lateinit var sharedPrefs: SharedPreferences
+    @Inject lateinit var dispatchingAndroidInjector: DispatchingAndroidInjector<Any>
+    @Inject lateinit var sharedPrefs: SharedPreferences
 
     @Suppress("unused")
     @Inject
@@ -41,7 +37,7 @@ class App : Application(), HasActivityInjector {
             .inject(this)
     }
 
-    override fun activityInjector(): AndroidInjector<Activity> {
+    override fun androidInjector(): AndroidInjector<Any> {
         return dispatchingAndroidInjector
     }
 }

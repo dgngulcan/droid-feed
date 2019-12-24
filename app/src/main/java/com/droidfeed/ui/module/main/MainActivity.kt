@@ -139,11 +139,6 @@ class MainActivity : BaseActivity() {
                         onMenuItemSelected(colorPalette.transparent)
                         lightStatusBarTheme()
                     }
-                    Destination.NEWSLETTER -> {
-                        onMenuItemSelected(colorPalette.blue)
-                        darkStatusBarTheme()
-                        highlightSelectedMenuItem(binding.appbar.menu.btnNavNewsletter)
-                    }
                     Destination.CONTRIBUTE -> {
                         highlightSelectedMenuItem(binding.appbar.menu.btnNavContribute)
                         onMenuItemSelected(colorPalette.gray)

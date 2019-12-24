@@ -79,7 +79,7 @@ class OnBoardViewModelTest {
 
     @Test
     fun WHEN_continue_button_is_clicked_THEN_open_main_activity() {
-        coEvery { runBlocking { sourceRepo.pull() } } returns DataStatus.Successful(emptyList())
+        every { runBlocking { sourceRepo.pull() } } returns DataStatus.Successful(emptyList())
         viewModel = OnBoardViewModel(sourceRepo)
         val observer = mockk<EventObserver<Unit>>(relaxed = true)
         viewModel.openMainActivity.observeForever(observer)

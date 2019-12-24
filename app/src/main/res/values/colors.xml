@@ -23,4 +23,6 @@
     <color name="blue">#2D7FDF</color>
     <color name="redError">#FFA9A9</color>
 
+    <color name="launcherBackgroundColor">#FFFFFF</color>
+
 </resources>

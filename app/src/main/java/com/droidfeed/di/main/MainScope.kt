@@ -1,4 +1,4 @@
-package com.droidfeed.di
+package com.droidfeed.di.main
 
 import com.droidfeed.ui.module.main.MainActivity
 import javax.inject.Scope

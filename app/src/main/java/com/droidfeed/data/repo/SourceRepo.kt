@@ -57,7 +57,7 @@ class SourceRepo @Inject constructor(
             val response = okHttpClient.newCall(request).execute()
 
             if (response.isSuccessful) {
-                val channelTitle = response.body()?.string()?.let { feedString ->
+                val channelTitle = response.body?.string()?.let { feedString ->
                     xmlParser.getChannelTitle(feedString)
                 }
 
@@ -75,7 +75,7 @@ class SourceRepo @Inject constructor(
                     DataStatus.Successful(channelTitle)
                 }
             } else {
-                DataStatus.HttpFailed(response.code())
+                DataStatus.HttpFailed(response.code)
             }
         } catch (e: IOException) {
             logThrowable(e)
