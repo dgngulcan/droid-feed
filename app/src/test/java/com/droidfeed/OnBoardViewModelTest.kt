@@ -9,10 +9,7 @@ import com.droidfeed.util.event.EventObserver
 import io.mockk.*
 import io.mockk.impl.annotations.MockK
 import kotlinx.coroutines.runBlocking
-import org.junit.Assert
-import org.junit.Before
-import org.junit.Rule
-import org.junit.Test
+import org.junit.*
 import org.junit.runner.RunWith
 import org.junit.runners.JUnit4
 
@@ -27,11 +24,16 @@ class OnBoardViewModelTest {
     @Before
     fun setup() {
         MockKAnnotations.init(this, relaxed = true, relaxUnitFun = true)
-        viewModel = OnBoardViewModel(sourceRepo)
+    }
+
+    @After
+    fun cleanUp(){
+        clearAllMocks()
     }
 
     @Test
     fun match_default_view_state() {
+        viewModel = OnBoardViewModel(sourceRepo)
         Assert.assertFalse(viewModel.isProgressVisible.value!!)
         Assert.assertFalse(viewModel.isContinueButtonEnabled.value!!)
         Assert.assertTrue(viewModel.isAgreementCBEnabled.value!!)
@@ -40,14 +42,15 @@ class OnBoardViewModelTest {
 
     @Test
     fun WHEN_initiated_THEN_pull_sources() {
-        verify(exactly = 1) { runBlocking { sourceRepo.pull() } }
-
         viewModel = OnBoardViewModel(sourceRepo)
+
+        verify(exactly = 1) { runBlocking { sourceRepo.pull() } }
     }
 
     @Test
     fun WHEN_agreed_terms_THEN_enable_continue_button() {
         val observer = mockk<Observer<Boolean>>(relaxed = true)
+        viewModel = OnBoardViewModel(sourceRepo)
         viewModel.isContinueButtonEnabled.observeForever(observer)
 
         viewModel.onAgreementChecked(true)
@@ -58,6 +61,7 @@ class OnBoardViewModelTest {
     @Test
     fun WHEN_disagreed_terms_THEN_disable_continue_button() {
         val observer = mockk<Observer<Boolean>>(relaxed = true)
+        viewModel = OnBoardViewModel(sourceRepo)
         viewModel.onAgreementChecked(true)
 
         viewModel.isContinueButtonEnabled.observeForever(observer)
@@ -69,6 +73,7 @@ class OnBoardViewModelTest {
     @Test
     fun WHEN_continue_button_is_clicked_THEN_disable_continue_button() {
         val observer = mockk<Observer<Boolean>>(relaxed = true)
+        viewModel = OnBoardViewModel(sourceRepo)
         viewModel.onAgreementChecked(true)
         viewModel.isContinueButtonEnabled.observeForever(observer)
 
