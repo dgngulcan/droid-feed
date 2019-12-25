@@ -1,4 +1,4 @@
-package com.droidfeed.ui.module.about.licence.data
+package com.droidfeed.data.repo
 
 import com.droidfeed.data.model.Licence
 import javax.inject.Inject

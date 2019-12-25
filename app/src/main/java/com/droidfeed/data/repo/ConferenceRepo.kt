@@ -9,9 +9,11 @@ import com.google.firebase.firestore.Query
 import java.net.UnknownHostException
 import java.util.*
 import javax.inject.Inject
+import javax.inject.Singleton
 import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine
 
+@Singleton
 class ConferenceRepo @Inject constructor(
     private val firestore: FirebaseFirestore
 ) {

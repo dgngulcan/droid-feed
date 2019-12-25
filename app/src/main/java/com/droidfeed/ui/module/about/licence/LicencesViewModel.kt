@@ -4,7 +4,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.droidfeed.ui.adapter.model.LicenceUIModel
 import com.droidfeed.ui.common.BaseViewModel
-import com.droidfeed.ui.module.about.licence.data.LicenceRepository
+import com.droidfeed.data.repo.LicenceRepository
 import com.droidfeed.util.event.Event
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
