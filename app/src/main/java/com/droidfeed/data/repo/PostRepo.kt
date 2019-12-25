@@ -41,7 +41,7 @@ class PostRepo @Inject constructor(
     suspend fun refresh(
         coroutineScope: CoroutineScope,
         sources: List<Source>
-    ): List<DataStatus<Nothing>> = runBlocking {
+    ): List<DataStatus<Nothing>> {
         val allPosts = mutableListOf<Post>()
 
         val asyncFetches = sources.map { source ->
@@ -59,7 +59,7 @@ class PostRepo @Inject constructor(
         val results = asyncFetches.awaitAll()
         addPosts(allPosts)
 
-        results
+        return results
     }
 
     private fun fetchAndParsePosts(source: Source): DataStatus<List<Post>> {
