@@ -8,6 +8,7 @@ import androidx.annotation.StringRes
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Transformations.map
+import androidx.lifecycle.viewModelScope
 import com.droidfeed.R
 import com.droidfeed.data.DataStatus
 import com.droidfeed.data.model.Source
@@ -78,7 +79,7 @@ class MainViewModel @Inject constructor(
     }
 
     private fun updateSources(sourceRepo: SourceRepo) {
-        launch(Dispatchers.IO) {
+        viewModelScope.launch(Dispatchers.IO) {
             val result = sourceRepo.pull()
             if (result is DataStatus.Successful) {
                 sourceRepo.insert(result.data ?: emptyList())
@@ -87,7 +88,7 @@ class MainViewModel @Inject constructor(
     }
 
     private fun onSourceRemoveClicked(source: Source) {
-        launch(Dispatchers.IO) {
+        viewModelScope.launch(Dispatchers.IO) {
             sourceRepo.remove(source)
             isSourceAddButtonEnabled.postValue(true)
             analytics.logRemoveSourceButtonClick()
@@ -100,14 +101,14 @@ class MainViewModel @Inject constructor(
     }
 
     private fun addSource(source: Source) {
-        launch(Dispatchers.IO) { sourceRepo.insert(source) }
+        viewModelScope.launch(Dispatchers.IO) { sourceRepo.insert(source) }
     }
 
     private fun onSourceClicked(source: Source) {
         source.isActive = !source.isActive
         analytics.logSourceActivation(source.isActive)
 
-        launch(Dispatchers.IO) {
+        viewModelScope.launch(Dispatchers.IO) {
             /* update source when activated */
             if (source.isActive) {
                 postRepo.refresh(this, listOf(source))
@@ -167,7 +168,7 @@ class MainViewModel @Inject constructor(
     }
 
     fun onSaveSourceClicked(url: String) {
-        launch(Dispatchers.IO) {
+        viewModelScope.launch(Dispatchers.IO) {
             val trimmedUrl = url.trimIndent()
             if (Patterns.WEB_URL.matcher(trimmedUrl.toLowerCase()).matches()) {
                 sourceErrText.postValue(R.string.empty_string)

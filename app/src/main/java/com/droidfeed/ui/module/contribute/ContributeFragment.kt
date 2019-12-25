@@ -4,7 +4,8 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.lifecycle.ViewModelProviders
+import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import com.droidfeed.databinding.FragmentContributeBinding
 import com.droidfeed.ui.common.BaseFragment
 import com.droidfeed.util.AnimUtils.Companion.MEDIUM_ANIM_DURATION
@@ -18,18 +19,10 @@ import javax.inject.Inject
 class ContributeFragment : BaseFragment("contribute") {
 
     private lateinit var binding: FragmentContributeBinding
-    private lateinit var contributeViewModel: ContributeViewModel
+    private val contributeViewModel: ContributeViewModel by viewModels { viewModelFactory }
 
     @Inject
     lateinit var customTab: CustomTab
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        contributeViewModel = ViewModelProviders.of(
-            this,
-            viewModelFactory
-        ).get(ContributeViewModel::class.java)
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -66,7 +59,7 @@ class ContributeFragment : BaseFragment("contribute") {
             }
         }
 
-        launch(Dispatchers.Main) {
+        lifecycleScope.launch(Dispatchers.Main) {
             binding.animView.frame = 0
             delay(MEDIUM_ANIM_DURATION)
             binding.animView.resumeAnimation()

@@ -6,7 +6,8 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.lifecycle.ViewModelProviders
+import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import com.airbnb.lottie.LottieAnimationView
 import com.droidfeed.BuildConfig
 import com.droidfeed.R
@@ -25,19 +26,11 @@ import javax.inject.Inject
 
 class AboutFragment : BaseFragment("about") {
 
+    @Inject lateinit var customTab: CustomTab
+
     private lateinit var binding: FragmentAboutBinding
-    private lateinit var aboutViewModel: AboutViewModel
+    private val aboutViewModel: AboutViewModel by viewModels { viewModelFactory }
 
-    @Inject
-    lateinit var customTab: CustomTab
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-        aboutViewModel = ViewModelProviders
-            .of(this, viewModelFactory)
-            .get(AboutViewModel::class.java)
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -92,7 +85,7 @@ class AboutFragment : BaseFragment("about") {
             }
         }
 
-        launch(Dispatchers.Main) {
+        lifecycleScope.launch(Dispatchers.Main) {
             binding.animView.frame = 0
             delay(MEDIUM_ANIM_DURATION)
             binding.animView.resumeAnimation()

@@ -1,6 +1,7 @@
 package com.droidfeed.ui.module.conferences
 
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.viewModelScope
 import com.droidfeed.data.DataStatus
 import com.droidfeed.data.model.Conference
 import com.droidfeed.data.repo.ConferenceRepo
@@ -23,12 +24,10 @@ class ConferencesViewModel @Inject constructor(
         refresh()
     }
 
-    private fun refresh() = launch(Dispatchers.IO) {
+    private fun refresh() = viewModelScope.launch(Dispatchers.IO) {
         isProgressVisible.postValue(conferences.value?.isEmpty() == true)
 
-        val dataStatus = conferenceRepo.getUpcoming()
-
-        when (dataStatus) {
+        when (val dataStatus = conferenceRepo.getUpcoming()) {
             is DataStatus.Successful -> {
                 val uiModels = dataStatus.data?.map { conference ->
                     createConferenceUIModel(conference)

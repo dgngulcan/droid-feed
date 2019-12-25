@@ -7,6 +7,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Transformations
 import androidx.lifecycle.Transformations.switchMap
+import androidx.lifecycle.viewModelScope
 import androidx.paging.PagedList
 import com.droidfeed.R
 import com.droidfeed.data.model.Post
@@ -34,7 +35,7 @@ class FeedViewModel @Inject constructor(
 ) : BaseViewModel() {
 
     private val feedType = MutableLiveData<FeedType>()
-    private lateinit var refreshJob : Job
+    private lateinit var refreshJob: Job
 
     val postsLiveData: LiveData<PagedList<PostUIModel>> = switchMap(feedType) { type ->
         when (type) {
@@ -136,7 +137,7 @@ class FeedViewModel @Inject constructor(
         }
     }
 
-    fun refresh() = launch(Dispatchers.IO) {
+    fun refresh() = viewModelScope.launch(Dispatchers.IO) {
         if (postsLiveData.value?.isEmpty() == true) {
             isProgressVisible.postValue(true)
         }
@@ -166,7 +167,7 @@ class FeedViewModel @Inject constructor(
 
         analytics.logBookmark(post.bookmarked == 1)
 
-        launch(Dispatchers.IO) {
+        viewModelScope.launch(Dispatchers.IO) {
             postRepo.updatePost(post)
         }
     }
@@ -177,7 +178,7 @@ class FeedViewModel @Inject constructor(
 
     private fun showAppRateIfCriteriaMatches() {
         if (sharedPrefs.appRatePrompt) {
-            launch(Dispatchers.IO) {
+            viewModelScope.launch(Dispatchers.IO) {
                 val bookmarkCount = postRepo.getBookmarkedCount()
 
                 if (canPromptAppRate(bookmarkCount)) {

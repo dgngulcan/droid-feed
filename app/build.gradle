@@ -73,6 +73,10 @@ android {
         targetCompatibility JavaVersion.VERSION_1_8
     }
 
+    kotlinOptions {
+        jvmTarget = "1.8"
+    }
+
     lintOptions {
         ignoreWarnings true
     }
@@ -91,6 +95,8 @@ dependencies {
     implementation deps.androidx.fragment
     implementation deps.androidx.browser
     implementation deps.androidx.lifecycle
+    implementation deps.androidx.lifecycle_ktx
+    implementation deps.androidx.viewmodel_ktx
     kapt deps.androidx.lifecycle_compiler
     implementation deps.androidx.paging
     implementation deps.androidx.constraint_layout

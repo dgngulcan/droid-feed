@@ -4,8 +4,8 @@ import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
 import android.text.method.LinkMovementMethod
+import androidx.activity.viewModels
 import androidx.databinding.DataBindingUtil
-import androidx.lifecycle.ViewModelProviders
 import com.droidfeed.R
 import com.droidfeed.databinding.ActivityOnboardBinding
 import com.droidfeed.ui.common.BaseActivity
@@ -19,21 +19,15 @@ import javax.inject.Inject
 
 class OnBoardActivity : BaseActivity() {
 
+    @Inject lateinit var sharedPrefs: SharedPreferences
+
     private val customTab = CustomTab(this)
-
-    @Inject
-    lateinit var sharedPrefs: SharedPreferences
-
-    private lateinit var viewModel: OnBoardViewModel
+    private val viewModel: OnBoardViewModel by viewModels { viewModelFactory }
     private lateinit var binding: ActivityOnboardBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         setupFullScreenWindow()
         super.onCreate(savedInstanceState)
-
-        viewModel = ViewModelProviders
-            .of(this, viewModelFactory)
-            .get(OnBoardViewModel::class.java)
 
         binding = DataBindingUtil.setContentView<ActivityOnboardBinding>(
             this,

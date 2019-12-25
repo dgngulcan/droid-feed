@@ -4,8 +4,10 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProviders
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.droidfeed.databinding.FragmentConferencesBinding
 import com.droidfeed.ui.adapter.BaseUIModelAlias
@@ -20,31 +22,18 @@ import javax.inject.Inject
 
 class ConferencesFragment : BaseFragment("conferences") {
 
-    private lateinit var conferencesViewModel: ConferencesViewModel
-    private lateinit var mainViewModel: MainViewModel
+    @Inject lateinit var customTab: CustomTab
+
+    private val conferencesViewModel: ConferencesViewModel by viewModels { viewModelFactory }
+    private val mainViewModel: MainViewModel by activityViewModels { viewModelFactory }
     private lateinit var binding: FragmentConferencesBinding
 
     private val linearLayoutManager = LinearLayoutManager(context)
     private val uiModelAdapter: UIModelAdapter by lazy {
         UIModelAdapter(
-            this,
+            lifecycleScope,
             linearLayoutManager
         )
-    }
-
-    @Inject
-    lateinit var customTab: CustomTab
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-        conferencesViewModel = ViewModelProviders
-            .of(this, viewModelFactory)
-            .get(ConferencesViewModel::class.java)
-
-        mainViewModel = ViewModelProviders
-            .of(activity!!)
-            .get(MainViewModel::class.java)
     }
 
     override fun onCreateView(
@@ -87,7 +76,7 @@ class ConferencesFragment : BaseFragment("conferences") {
         binding.newsRecyclerView.apply {
             layoutManager = WrapContentLinearLayoutManager(requireContext())
 
-            addOnScrollListener(CollapseScrollListener(this@ConferencesFragment) {
+            addOnScrollListener(CollapseScrollListener(lifecycleScope) {
                 mainViewModel.onCollapseMenu()
             })
 

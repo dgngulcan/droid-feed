@@ -6,8 +6,10 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProviders
+import androidx.lifecycle.lifecycleScope
 import androidx.paging.PagedList
 import androidx.recyclerview.widget.DefaultItemAnimator
 import com.droidfeed.databinding.FragmentFeedBinding
@@ -28,32 +30,15 @@ import kotlinx.android.synthetic.main.fragment_feed.*
 import javax.inject.Inject
 
 
-
 class FeedFragment : BaseFragment("feed"), Scrollable {
 
-    private lateinit var feedViewModel: FeedViewModel
-    private lateinit var mainViewModel: MainViewModel
+    @Inject lateinit var customTab: CustomTab
+    @Inject lateinit var appRateHelper: AppRateHelper
+
+    private val feedViewModel: FeedViewModel by viewModels { viewModelFactory }
+    private val mainViewModel: MainViewModel by activityViewModels { viewModelFactory }
+    private val paginatedAdapter by lazy { UIModelPaginatedAdapter(lifecycleScope) }
     private lateinit var binding: FragmentFeedBinding
-
-    private val paginatedAdapter by lazy { UIModelPaginatedAdapter(this) }
-
-    @Inject
-    lateinit var customTab: CustomTab
-
-    @Inject
-    lateinit var appRateHelper: AppRateHelper
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-        feedViewModel = ViewModelProviders
-            .of(this, viewModelFactory)
-            .get(FeedViewModel::class.java)
-
-        mainViewModel = ViewModelProviders
-            .of(activity!!, viewModelFactory)
-            .get(MainViewModel::class.java)
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -104,7 +89,7 @@ class FeedFragment : BaseFragment("feed"), Scrollable {
         binding.newsRecyclerView.apply {
             layoutManager = WrapContentLinearLayoutManager(requireContext())
 
-            addOnScrollListener(CollapseScrollListener(this@FeedFragment) {
+            addOnScrollListener(CollapseScrollListener(lifecycleScope) {
                 mainViewModel.onCollapseMenu()
             })
 
