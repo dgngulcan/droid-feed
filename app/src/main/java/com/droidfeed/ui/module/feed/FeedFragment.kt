@@ -13,7 +13,6 @@ import androidx.lifecycle.lifecycleScope
 import androidx.paging.PagedList
 import androidx.recyclerview.widget.DefaultItemAnimator
 import com.droidfeed.databinding.FragmentFeedBinding
-import com.droidfeed.rateAppIntent
 import com.droidfeed.ui.adapter.BaseUIModelAlias
 import com.droidfeed.ui.adapter.UIModelPaginatedAdapter
 import com.droidfeed.ui.common.BaseFragment
@@ -23,6 +22,7 @@ import com.droidfeed.ui.common.WrapContentLinearLayoutManager
 import com.droidfeed.ui.module.main.MainViewModel
 import com.droidfeed.util.AppRateHelper
 import com.droidfeed.util.CustomTab
+import com.droidfeed.util.IntentProvider
 import com.droidfeed.util.event.EventObserver
 import com.droidfeed.util.extension.isOnline
 import com.google.android.material.snackbar.Snackbar
@@ -34,6 +34,7 @@ class FeedFragment : BaseFragment("feed"), Scrollable {
 
     @Inject lateinit var customTab: CustomTab
     @Inject lateinit var appRateHelper: AppRateHelper
+    @Inject lateinit var intentProvider: IntentProvider
 
     private val feedViewModel: FeedViewModel by viewModels { viewModelFactory }
     private val mainViewModel: MainViewModel by activityViewModels { viewModelFactory }
@@ -81,7 +82,7 @@ class FeedFragment : BaseFragment("feed"), Scrollable {
 
     private fun subscribePlayStoreEvent() {
         feedViewModel.openPlayStorePage.observe(viewLifecycleOwner, EventObserver {
-            startActivity(rateAppIntent)
+            startActivity(intentProvider.rateAppIntent)
         })
     }
 
