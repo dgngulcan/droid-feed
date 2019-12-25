@@ -2,10 +2,11 @@ package com.droidfeed.ui.module.about.licence
 
 import android.os.Bundle
 import android.view.View
+import androidx.activity.viewModels
 import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProviders
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.droidfeed.R
 import com.droidfeed.databinding.ActivityLicenceBinding
@@ -20,18 +21,14 @@ class LicencesActivity : BaseActivity() {
     private val linearLayoutManager = LinearLayoutManager(this)
     private val licenceAdapter: UIModelAdapter by lazy {
         UIModelAdapter(
-            this,
+            lifecycleScope,
             linearLayoutManager
         )
     }
 
-    private lateinit var licencesViewModel: LicencesViewModel
+    private val licencesViewModel: LicencesViewModel by viewModels { viewModelFactory }
 
-    private val customTab: CustomTab by lazy {
-        CustomTab(
-            this
-        )
-    }
+    private val customTab: CustomTab by lazy { CustomTab(this) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         window.apply {
@@ -44,10 +41,6 @@ class LicencesActivity : BaseActivity() {
         }
 
         super.onCreate(savedInstanceState)
-
-        licencesViewModel = ViewModelProviders
-            .of(this, viewModelFactory)
-            .get(LicencesViewModel::class.java)
 
         DataBindingUtil.setContentView<ActivityLicenceBinding>(
             this,

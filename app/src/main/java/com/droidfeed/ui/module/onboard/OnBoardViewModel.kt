@@ -2,6 +2,7 @@ package com.droidfeed.ui.module.onboard
 
 import androidx.annotation.DrawableRes
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.viewModelScope
 import com.droidfeed.BuildConfig
 import com.droidfeed.R
 import com.droidfeed.data.DataStatus
@@ -58,7 +59,7 @@ class OnBoardViewModel @Inject constructor(
         isPendingNavigation = !isSourceListPulled
     }
 
-    private fun pullSources() = launch(Dispatchers.IO) {
+    private fun pullSources() = viewModelScope.launch(Dispatchers.IO) {
         when (val result = sourceRepo.pull()) {
             is DataStatus.Successful -> {
                 sourceRepo.insert(result.data ?: emptyList())

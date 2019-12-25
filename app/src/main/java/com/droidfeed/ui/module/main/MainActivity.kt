@@ -10,13 +10,14 @@ import android.os.Build
 import android.os.Bundle
 import android.view.View
 import android.view.WindowManager
+import androidx.activity.viewModels
 import androidx.annotation.RequiresApi
 import androidx.core.view.GravityCompat
 import androidx.core.view.isVisible
 import androidx.databinding.DataBindingUtil
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProviders
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.droidfeed.R
@@ -41,21 +42,17 @@ class MainActivity : BaseActivity() {
     @Inject lateinit var animUtils: AnimUtils
     @Inject lateinit var colorPalette: ColorPalette
 
-    private lateinit var mainViewModel: MainViewModel
+    private val mainViewModel: MainViewModel by viewModels { viewModelFactory }
     private lateinit var binding: ActivityMainBinding
     private var currentMenuColor = 0
     private var previousScreenColor = 0
     private var previousMenuButton: View? = null
     private val linearLayoutManager = LinearLayoutManager(this)
-    private val uiModelAdapter = UIModelAdapter(this, linearLayoutManager)
+    private val uiModelAdapter = UIModelAdapter(lifecycleScope, linearLayoutManager)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         setTheme(R.style.AppTheme)
         super.onCreate(savedInstanceState)
-
-        mainViewModel = ViewModelProviders
-            .of(this, viewModelFactory)
-            .get(MainViewModel::class.java)
 
         binding = DataBindingUtil.setContentView<ActivityMainBinding>(
             this,

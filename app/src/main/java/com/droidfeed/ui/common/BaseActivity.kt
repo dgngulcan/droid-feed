@@ -12,34 +12,18 @@ import dagger.android.AndroidInjection
 import dagger.android.AndroidInjector
 import dagger.android.DispatchingAndroidInjector
 import dagger.android.HasAndroidInjector
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.Job
 import javax.inject.Inject
-import kotlin.coroutines.CoroutineContext
 
 
 @SuppressLint("Registered")
-abstract class BaseActivity : AppCompatActivity(), HasAndroidInjector, CoroutineScope {
+abstract class BaseActivity : AppCompatActivity(), HasAndroidInjector {
 
     @Inject lateinit var viewModelFactory: ViewModelProvider.Factory
     @Inject lateinit var androidInjector: DispatchingAndroidInjector<Any>
 
-    private lateinit var job: Job
-
-    override val coroutineContext: CoroutineContext
-        get() = Dispatchers.Main + job
-
     override fun onCreate(savedInstanceState: Bundle?) {
         AndroidInjection.inject(this)
         super.onCreate(savedInstanceState)
-
-        job = Job()
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        job.cancel()
     }
 
     /**
