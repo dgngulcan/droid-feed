@@ -81,8 +81,8 @@ class FeedFragment : BaseFragment("feed"), Scrollable {
     }
 
     private fun subscribePlayStoreEvent() {
-        feedViewModel.openPlayStorePage.observe(viewLifecycleOwner, EventObserver {
-            startActivity(intentProvider.rateAppIntent)
+        feedViewModel.intentToStart.observe(viewLifecycleOwner, EventObserver { intentType ->
+            startActivity(intentProvider.getIntent(intentType))
         })
     }
 

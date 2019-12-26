@@ -16,12 +16,9 @@ import com.droidfeed.data.repo.SourceRepo
 import com.droidfeed.ui.adapter.UIModelType
 import com.droidfeed.ui.adapter.model.PostUIModel
 import com.droidfeed.ui.common.BaseViewModel
-import com.droidfeed.util.appOpenCount
-import com.droidfeed.util.appRatePrompt
-import com.droidfeed.util.appRatePromptIndex
+import com.droidfeed.util.*
 import com.droidfeed.util.event.Event
 import com.droidfeed.util.extension.asLiveData
-import com.droidfeed.util.shareCount
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
@@ -93,7 +90,7 @@ class FeedViewModel @Inject constructor(
     val showUndoBookmarkSnack = MutableLiveData<Event<() -> Unit>>()
     val showAppRateSnack = MutableLiveData<Event<() -> Unit>>()
     val sharePost = MutableLiveData<Event<Post>>()
-    val openPlayStorePage = MutableLiveData<Event<Unit>>()
+    val intentToStart = MutableLiveData<Event<IntentProvider.TYPE>>()
 
     init {
         refreshJob = refresh()
@@ -185,7 +182,7 @@ class FeedViewModel @Inject constructor(
                     analytics.logAppRatePrompt()
 
                     showAppRateSnack.postValue(Event {
-                        openPlayStorePage.postValue(Event(Unit))
+                        intentToStart.postValue(Event(IntentProvider.TYPE.RATE_APP))
                         analytics.logAppRateFromPromtClick()
                     })
                 }

@@ -13,7 +13,7 @@ class IntentProvider @Inject constructor() {
     /**
      * Intent for sending an email for contact purposes.
      */
-    val contactIntent: Intent by lazy {
+    private val contactIntent: Intent by lazy {
         Intent(Intent.ACTION_SENDTO).apply {
             data = Uri.parse("mailto:hi@droidfeed.io")
             putExtra(Intent.EXTRA_EMAIL, "hi@droidfeed.io")
@@ -25,7 +25,7 @@ class IntentProvider @Inject constructor() {
     /**
      * Intent for sharing the application.
      */
-    val shareIntent: Intent by lazy {
+    private val shareIntent: Intent by lazy {
         Intent().apply {
             action = Intent.ACTION_SEND
             type = "text/plain"
@@ -42,7 +42,7 @@ class IntentProvider @Inject constructor() {
     /**
      * Intent for the applications Google play store page.
      */
-    val rateAppIntent: Intent by lazy {
+    private val rateAppIntent: Intent by lazy {
         try {
             Intent(
                 Intent.ACTION_VIEW,
@@ -57,5 +57,17 @@ class IntentProvider @Inject constructor() {
                 )
             )
         }
+    }
+
+    fun getIntent(type: TYPE) = when (type) {
+        TYPE.SHARE_APP -> shareIntent
+        TYPE.RATE_APP -> rateAppIntent
+        TYPE.CONTACT_EMAIL -> contactIntent
+    }
+
+    enum class TYPE {
+        SHARE_APP,
+        RATE_APP,
+        CONTACT_EMAIL
     }
 }

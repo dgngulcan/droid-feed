@@ -1,7 +1,8 @@
-package com.droidfeed
+package com.droidfeed.viewmodel
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.lifecycle.Observer
+import com.droidfeed.R
 import com.droidfeed.data.DataStatus
 import com.droidfeed.data.repo.SourceRepo
 import com.droidfeed.ui.module.onboard.OnBoardViewModel
@@ -19,7 +20,8 @@ class OnBoardViewModelTest {
 
     @Rule @JvmField var instantTaskExecutorRule = InstantTaskExecutorRule()
     @MockK lateinit var sourceRepo: SourceRepo
-    private lateinit var viewModel: OnBoardViewModel
+
+    private lateinit var sut: OnBoardViewModel
 
     @Before
     fun setup() {
@@ -27,22 +29,22 @@ class OnBoardViewModelTest {
     }
 
     @After
-    fun cleanUp(){
+    fun cleanUp() {
         clearAllMocks()
     }
 
     @Test
     fun match_default_view_state() {
-        viewModel = OnBoardViewModel(sourceRepo)
-        Assert.assertFalse(viewModel.isProgressVisible.value!!)
-        Assert.assertFalse(viewModel.isContinueButtonEnabled.value!!)
-        Assert.assertTrue(viewModel.isAgreementCBEnabled.value!!)
-        Assert.assertEquals(R.drawable.onboard_bg, viewModel.backgroundImageId)
+        sut = OnBoardViewModel(sourceRepo)
+        Assert.assertFalse(sut.isProgressVisible.value!!)
+        Assert.assertFalse(sut.isContinueButtonEnabled.value!!)
+        Assert.assertTrue(sut.isAgreementCBEnabled.value!!)
+        Assert.assertEquals(R.drawable.onboard_bg, sut.backgroundImageId)
     }
 
     @Test
     fun WHEN_initiated_THEN_pull_sources() {
-        viewModel = OnBoardViewModel(sourceRepo)
+        sut = OnBoardViewModel(sourceRepo)
 
         verify(exactly = 1) { runBlocking { sourceRepo.pull() } }
     }
@@ -50,10 +52,10 @@ class OnBoardViewModelTest {
     @Test
     fun WHEN_agreed_terms_THEN_enable_continue_button() {
         val observer = mockk<Observer<Boolean>>(relaxed = true)
-        viewModel = OnBoardViewModel(sourceRepo)
-        viewModel.isContinueButtonEnabled.observeForever(observer)
+        sut = OnBoardViewModel(sourceRepo)
+        sut.isContinueButtonEnabled.observeForever(observer)
 
-        viewModel.onAgreementChecked(true)
+        sut.onAgreementChecked(true)
 
         verify(exactly = 1) { observer.onChanged(true) }
     }
@@ -61,23 +63,23 @@ class OnBoardViewModelTest {
     @Test
     fun WHEN_disagreed_terms_THEN_disable_continue_button() {
         val observer = mockk<Observer<Boolean>>(relaxed = true)
-        viewModel = OnBoardViewModel(sourceRepo)
-        viewModel.onAgreementChecked(true)
+        sut = OnBoardViewModel(sourceRepo)
+        sut.onAgreementChecked(true)
 
-        viewModel.isContinueButtonEnabled.observeForever(observer)
+        sut.isContinueButtonEnabled.observeForever(observer)
 
-        viewModel.onAgreementChecked(false)
+        sut.onAgreementChecked(false)
         verify(exactly = 1) { observer.onChanged(false) }
     }
 
     @Test
     fun WHEN_continue_button_is_clicked_THEN_disable_continue_button() {
         val observer = mockk<Observer<Boolean>>(relaxed = true)
-        viewModel = OnBoardViewModel(sourceRepo)
-        viewModel.onAgreementChecked(true)
-        viewModel.isContinueButtonEnabled.observeForever(observer)
+        sut = OnBoardViewModel(sourceRepo)
+        sut.onAgreementChecked(true)
+        sut.isContinueButtonEnabled.observeForever(observer)
 
-        viewModel.onContinueClicked()
+        sut.onContinueClicked()
 
         verify(exactly = 1) { observer.onChanged(false) }
     }
@@ -85,12 +87,12 @@ class OnBoardViewModelTest {
     @Test
     fun WHEN_continue_button_is_clicked_THEN_open_main_activity() {
         every { runBlocking { sourceRepo.pull() } } returns DataStatus.Successful(emptyList())
-        viewModel = OnBoardViewModel(sourceRepo)
+        sut = OnBoardViewModel(sourceRepo)
         val observer = mockk<EventObserver<Unit>>(relaxed = true)
-        viewModel.openMainActivity.observeForever(observer)
+        sut.openMainActivity.observeForever(observer)
 
-        viewModel.onAgreementChecked(true)
-        viewModel.onContinueClicked()
+        sut.onAgreementChecked(true)
+        sut.onContinueClicked()
 
         verify(exactly = 1) { observer.onChanged(any()) }
     }
