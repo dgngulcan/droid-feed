@@ -25,7 +25,6 @@ class AnalyticsUtil @Inject constructor(private val analytics: FirebaseAnalytics
     }
 
     fun logPostShare() = logShare("post")
-    fun logShareApp() = logShare("app")
     fun logSourceShare() = logShare("source")
 
     fun logSourceActivation(isActivated: Boolean) {
@@ -74,10 +73,6 @@ class AnalyticsUtil @Inject constructor(private val analytics: FirebaseAnalytics
 
     fun logScreenView(activity: Activity, screenTag: String) {
         analytics.setCurrentScreen(activity, screenTag, null)
-    }
-
-    fun logAppRateClick() {
-        analytics.logEvent("open_play_store", null)
     }
 
     fun logAppRateFromPromtClick() {
