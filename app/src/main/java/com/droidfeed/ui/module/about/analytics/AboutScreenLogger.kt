@@ -1,6 +1,7 @@
 package com.droidfeed.ui.module.about.analytics
 
 import androidx.core.os.bundleOf
+import com.droidfeed.ui.common.Analytics
 import com.google.firebase.analytics.FirebaseAnalytics
 import javax.inject.Inject
 
@@ -26,6 +27,6 @@ class AboutScreenLogger @Inject constructor(private val analytics: FirebaseAnaly
         analytics.logEvent("licences_click", getBundle())
     }
 
-    private fun getBundle() = bundleOf(Pair("screen", "about"))
+    private fun getBundle() = bundleOf(Pair(Analytics.SCREEN_ATTR, "about"))
 
 }

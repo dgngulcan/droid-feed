@@ -41,20 +41,6 @@ class AnalyticsUtil @Inject constructor(private val analytics: FirebaseAnalytics
         )
     }
 
-    fun logConferenceClick() {
-        analytics.logEvent(
-            FirebaseAnalytics.Event.VIEW_ITEM,
-            bundleOf(Pair("conference", "conference"))
-        )
-    }
-
-    fun logCFPClick() {
-        analytics.logEvent(
-            FirebaseAnalytics.Event.VIEW_ITEM,
-            bundleOf(Pair("conference", "CFP"))
-        )
-    }
-
     fun logAddSourceButtonClick() {
         analytics.logEvent("click_source_add", null)
     }
