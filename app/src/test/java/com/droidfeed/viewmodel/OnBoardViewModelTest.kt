@@ -25,7 +25,7 @@ class OnBoardViewModelTest {
 
     @Before
     fun setup() {
-        MockKAnnotations.init(this, relaxed = true, relaxUnitFun = true)
+        MockKAnnotations.init(this, relaxed = true)
     }
 
     @After
@@ -34,7 +34,7 @@ class OnBoardViewModelTest {
     }
 
     @Test
-    fun match_default_view_state() {
+    fun defaultState_shouldMatch() {
         sut = OnBoardViewModel(sourceRepo)
         Assert.assertFalse(sut.isProgressVisible.value!!)
         Assert.assertFalse(sut.isContinueButtonEnabled.value!!)
@@ -43,14 +43,14 @@ class OnBoardViewModelTest {
     }
 
     @Test
-    fun WHEN_initiated_THEN_pull_sources() {
+    fun whenInstantiated_shouldPullSources() {
         sut = OnBoardViewModel(sourceRepo)
 
         verify(exactly = 1) { runBlocking { sourceRepo.pull() } }
     }
 
     @Test
-    fun WHEN_agreed_terms_THEN_enable_continue_button() {
+    fun whenAgreedTerms_shouldEnableContinueButton() {
         val observer = mockk<Observer<Boolean>>(relaxed = true)
         sut = OnBoardViewModel(sourceRepo)
         sut.isContinueButtonEnabled.observeForever(observer)
@@ -61,7 +61,7 @@ class OnBoardViewModelTest {
     }
 
     @Test
-    fun WHEN_disagreed_terms_THEN_disable_continue_button() {
+    fun whenDisagreedTerms_shouldDisableContinueButton() {
         val observer = mockk<Observer<Boolean>>(relaxed = true)
         sut = OnBoardViewModel(sourceRepo)
         sut.onAgreementChecked(true)
@@ -73,7 +73,7 @@ class OnBoardViewModelTest {
     }
 
     @Test
-    fun WHEN_continue_button_is_clicked_THEN_disable_continue_button() {
+    fun when_continueButtonClicked_shouldDisableContinueButton() {
         val observer = mockk<Observer<Boolean>>(relaxed = true)
         sut = OnBoardViewModel(sourceRepo)
         sut.onAgreementChecked(true)
@@ -85,7 +85,7 @@ class OnBoardViewModelTest {
     }
 
     @Test
-    fun WHEN_continue_button_is_clicked_THEN_open_main_activity() {
+    fun whenContinueButtonIsClicked_shouldFireOpenMainActivityEvent() {
         every { runBlocking { sourceRepo.pull() } } returns DataStatus.Successful(emptyList())
         sut = OnBoardViewModel(sourceRepo)
         val observer = mockk<EventObserver<Unit>>(relaxed = true)
