@@ -1,7 +1,8 @@
-package com.droidfeed.util
+package com.droidfeed.data.repo
 
 import android.content.SharedPreferences
 import androidx.core.content.edit
+
 
 /**
  * Total count of share events. The count is used for requesting rate-app dialog flow.

@@ -10,13 +10,6 @@ import javax.inject.Inject
  */
 class AnalyticsUtil @Inject constructor(private val analytics: FirebaseAnalytics) {
 
-    fun logBookmark(isBookmarked: Boolean) {
-        analytics.logEvent(
-            "bookmark",
-            bundleOf(Pair("bookmarked", isBookmarked.toString()))
-        )
-    }
-
     private fun logShare(content: String) {
         analytics.logEvent(
             FirebaseAnalytics.Event.SHARE,
@@ -24,20 +17,12 @@ class AnalyticsUtil @Inject constructor(private val analytics: FirebaseAnalytics
         )
     }
 
-    fun logPostShare() = logShare("post")
     fun logSourceShare() = logShare("source")
 
     fun logSourceActivation(isActivated: Boolean) {
         analytics.logEvent(
             "source",
             bundleOf(Pair("activated", isActivated.toString()))
-        )
-    }
-
-    fun logPostClick() {
-        analytics.logEvent(
-            FirebaseAnalytics.Event.VIEW_ITEM,
-            bundleOf(Pair("post", "post"))
         )
     }
 
@@ -59,10 +44,6 @@ class AnalyticsUtil @Inject constructor(private val analytics: FirebaseAnalytics
 
     fun logScreenView(activity: Activity, screenTag: String) {
         analytics.setCurrentScreen(activity, screenTag, null)
-    }
-
-    fun logAppRateFromPromtClick() {
-        analytics.logEvent("app_rate_prompt_rate", null)
     }
 
     fun logAppRatePrompt() {
