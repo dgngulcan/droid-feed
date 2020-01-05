@@ -109,23 +109,22 @@ class FeedViewModel @Inject constructor(
         return posts.map { PostUIModel(it, postClickCallback) }
     }
 
-    private val postClickCallback =
-        object : PostClickListener {
-            override fun onItemClick(post: Post) {
-                openPostDetail.postValue(Event(post))
-                logger.logPostClick()
-            }
-
-            override fun onShareClick(post: Post) {
-                sharePost.postValue(Event(post))
-                sharedPrefs.incrementItemShareCount()
-                logger.logPostShare()
-            }
-
-            override fun onBookmarkClick(post: Post) {
-                togglePostBookmark(post)
-            }
+    private val postClickCallback = object : PostClickListener {
+        override fun onItemClick(post: Post) {
+            openPostDetail.postValue(Event(post))
+            logger.logPostClick()
         }
+
+        override fun onShareClick(post: Post) {
+            sharePost.postValue(Event(post))
+            sharedPrefs.incrementItemShareCount()
+            logger.logPostShare()
+        }
+
+        override fun onBookmarkClick(post: Post) {
+            togglePostBookmark(post)
+        }
+    }
 
     fun setFeedType(feedType: FeedType) {
         if (this.feedType.value != feedType) {
