@@ -1,20 +1,22 @@
 package com.droidfeed.ui.module.conferences
 
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.droidfeed.data.DataStatus
 import com.droidfeed.data.model.Conference
 import com.droidfeed.data.repo.ConferenceRepo
 import com.droidfeed.ui.adapter.model.ConferenceUIModel
-import com.droidfeed.ui.common.BaseViewModel
+import com.droidfeed.ui.module.conferences.analytics.ConferencesScreenLogger
 import com.droidfeed.util.event.Event
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 class ConferencesViewModel @Inject constructor(
-    private val conferenceRepo: ConferenceRepo
-) : BaseViewModel() {
+    private val conferenceRepo: ConferenceRepo,
+    private val logger: ConferencesScreenLogger
+) : ViewModel() {
 
     val conferences = MutableLiveData<List<ConferenceUIModel>>()
     val isProgressVisible = MutableLiveData<Boolean>().apply { value = true }
@@ -44,11 +46,11 @@ class ConferencesViewModel @Inject constructor(
             conference,
             onItemClick = { conf ->
                 openUrl.postValue(Event(conf.url))
-                analytics.logConferenceClick()
+                logger.logConferenceClick()
             },
             onCFPClick = { conf ->
                 openUrl.postValue(Event(conf.cfpUrl))
-                analytics.logCFPClick()
+                logger.logCFPClick()
             })
     }
 }

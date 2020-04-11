@@ -16,6 +16,7 @@ import com.droidfeed.ui.common.BaseFragment
 import com.droidfeed.ui.module.about.licence.LicencesActivity
 import com.droidfeed.util.AnimUtils.Companion.MEDIUM_ANIM_DURATION
 import com.droidfeed.util.CustomTab
+import com.droidfeed.util.IntentProvider
 import com.droidfeed.util.event.EventObserver
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
@@ -27,6 +28,7 @@ import javax.inject.Inject
 class AboutFragment : BaseFragment("about") {
 
     @Inject lateinit var customTab: CustomTab
+    @Inject lateinit var intentProvider: IntentProvider
 
     private lateinit var binding: FragmentAboutBinding
     private val aboutViewModel: AboutViewModel by viewModels { viewModelFactory }
@@ -72,8 +74,8 @@ class AboutFragment : BaseFragment("about") {
     }
 
     private fun subscribeStartIntentEvent() {
-        aboutViewModel.startIntent.observe(viewLifecycleOwner, EventObserver { intent ->
-            startActivity(intent)
+        aboutViewModel.startIntent.observe(viewLifecycleOwner, EventObserver { intentType ->
+            startActivity(intentProvider.getIntent(intentType))
         })
     }
 

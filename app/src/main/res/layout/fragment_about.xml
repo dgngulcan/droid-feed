@@ -52,7 +52,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginEnd="@dimen/spacing_medium"
-            android:onClick="@{()->viewModel.openPlayStore()}"
+            android:onClick="@{()->viewModel.rateApp()}"
             android:text="@string/rate_app"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="@+id/textView9"

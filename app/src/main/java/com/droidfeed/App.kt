@@ -1,9 +1,8 @@
 package com.droidfeed
 
 import android.app.Application
-import android.content.SharedPreferences
+import com.droidfeed.data.repo.SharedPrefsRepo
 import com.droidfeed.di.DaggerAppComponent
-import com.droidfeed.util.appOpenCount
 import com.google.firebase.remoteconfig.FirebaseRemoteConfig
 import dagger.android.AndroidInjector
 import dagger.android.DispatchingAndroidInjector
@@ -13,7 +12,7 @@ import javax.inject.Inject
 class App : Application(), HasAndroidInjector {
 
     @Inject lateinit var dispatchingAndroidInjector: DispatchingAndroidInjector<Any>
-    @Inject lateinit var sharedPrefs: SharedPreferences
+    @Inject lateinit var sharedPrefs: SharedPrefsRepo
 
     @Suppress("unused")
     @Inject lateinit var remoteConfig: FirebaseRemoteConfig
@@ -22,7 +21,7 @@ class App : Application(), HasAndroidInjector {
         super.onCreate()
         initDagger()
 
-        sharedPrefs.appOpenCount += 1
+        sharedPrefs.incrementAppOpenCount()
     }
 
     private fun initDagger() {

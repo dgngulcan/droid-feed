@@ -1,14 +1,14 @@
 package com.droidfeed.util
 
-import android.content.SharedPreferences
 import android.view.View
 import androidx.core.content.ContextCompat
 import com.droidfeed.R
+import com.droidfeed.data.repo.SharedPrefsRepo
 import com.google.android.material.snackbar.Snackbar
 import javax.inject.Inject
 
 class AppRateHelper @Inject constructor(
-    private val sharedPrefs: SharedPreferences,
+    private val sharedPrefs: SharedPrefsRepo,
     private val analyticsUtil: AnalyticsUtil
 ) {
 
@@ -34,11 +34,11 @@ class AppRateHelper @Inject constructor(
     }
 
     private fun postponeAppRating() {
-        sharedPrefs.appRatePromptIgnoreCount += 1
-        sharedPrefs.appRatePromptIndex += APP_RATE_PROMPT_INDEX * 3
+        sharedPrefs.incrementAppRatePromptIgnoreCount()
+        sharedPrefs.incrementAppRatePromptIndex()
 
-        if (sharedPrefs.appRatePromptIgnoreCount == 3) {
-            sharedPrefs.appRatePrompt = false
+        if (sharedPrefs.appRatePromptCount == 3) {
+            sharedPrefs.setAppRatePrompt(false)
         }
     }
 }

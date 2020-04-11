@@ -1,6 +1,5 @@
 package com.droidfeed.ui.module.main
 
-import android.content.SharedPreferences
 import android.util.Patterns
 import android.webkit.URLUtil
 import androidx.annotation.DrawableRes
@@ -13,11 +12,11 @@ import com.droidfeed.R
 import com.droidfeed.data.DataStatus
 import com.droidfeed.data.model.Source
 import com.droidfeed.data.repo.PostRepo
+import com.droidfeed.data.repo.SharedPrefsRepo
 import com.droidfeed.data.repo.SourceRepo
 import com.droidfeed.ui.adapter.model.SourceUIModel
 import com.droidfeed.ui.common.BaseViewModel
 import com.droidfeed.util.event.Event
-import com.droidfeed.util.hasAcceptedTerms
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -25,7 +24,7 @@ import javax.inject.Inject
 class MainViewModel @Inject constructor(
     private val sourceRepo: SourceRepo,
     private val postRepo: PostRepo,
-    sharedPrefs: SharedPreferences
+    sharedPrefs: SharedPrefsRepo
 ) : BaseViewModel() {
 
     val toolbarTitle = MutableLiveData<@StringRes Int>().apply { value = R.string.app_name }

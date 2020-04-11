@@ -1,27 +1,21 @@
 package com.droidfeed.ui.module.feed
 
-import android.content.SharedPreferences
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.Transformations
+import androidx.lifecycle.*
 import androidx.lifecycle.Transformations.switchMap
-import androidx.lifecycle.viewModelScope
 import androidx.paging.PagedList
 import com.droidfeed.R
 import com.droidfeed.data.model.Post
 import com.droidfeed.data.repo.PostRepo
+import com.droidfeed.data.repo.SharedPrefsRepo
 import com.droidfeed.data.repo.SourceRepo
 import com.droidfeed.ui.adapter.UIModelType
 import com.droidfeed.ui.adapter.model.PostUIModel
-import com.droidfeed.ui.common.BaseViewModel
-import com.droidfeed.util.appOpenCount
-import com.droidfeed.util.appRatePrompt
-import com.droidfeed.util.appRatePromptIndex
+import com.droidfeed.ui.module.feed.analytics.FeedScreenLogger
+import com.droidfeed.util.IntentProvider
 import com.droidfeed.util.event.Event
 import com.droidfeed.util.extension.asLiveData
-import com.droidfeed.util.shareCount
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
@@ -31,8 +25,10 @@ import javax.inject.Inject
 class FeedViewModel @Inject constructor(
     private val sourceRepo: SourceRepo,
     private val postRepo: PostRepo,
-    private val sharedPrefs: SharedPreferences
-) : BaseViewModel() {
+    private val sharedPrefs: SharedPrefsRepo,
+    private val logger: FeedScreenLogger,
+    private val appRateInteractor: AppRateInteractor
+) : ViewModel() {
 
     private val feedType = MutableLiveData<FeedType>()
     private lateinit var refreshJob: Job
@@ -93,7 +89,7 @@ class FeedViewModel @Inject constructor(
     val showUndoBookmarkSnack = MutableLiveData<Event<() -> Unit>>()
     val showAppRateSnack = MutableLiveData<Event<() -> Unit>>()
     val sharePost = MutableLiveData<Event<Post>>()
-    val openPlayStorePage = MutableLiveData<Event<Unit>>()
+    val intentToStart = MutableLiveData<Event<IntentProvider.TYPE>>()
 
     init {
         refreshJob = refresh()
@@ -113,23 +109,22 @@ class FeedViewModel @Inject constructor(
         return posts.map { PostUIModel(it, postClickCallback) }
     }
 
-    private val postClickCallback =
-        object : PostClickListener {
-            override fun onItemClick(post: Post) {
-                openPostDetail.postValue(Event(post))
-                analytics.logPostClick()
-            }
-
-            override fun onShareClick(post: Post) {
-                sharePost.postValue(Event(post))
-                sharedPrefs.shareCount += 1
-                analytics.logPostShare()
-            }
-
-            override fun onBookmarkClick(post: Post) {
-                togglePostBookmark(post)
-            }
+    private val postClickCallback = object : PostClickListener {
+        override fun onItemClick(post: Post) {
+            openPostDetail.postValue(Event(post))
+            logger.logPostClick()
         }
+
+        override fun onShareClick(post: Post) {
+            sharePost.postValue(Event(post))
+            sharedPrefs.incrementItemShareCount()
+            logger.logPostShare()
+        }
+
+        override fun onBookmarkClick(post: Post) {
+            togglePostBookmark(post)
+        }
+    }
 
     fun setFeedType(feedType: FeedType) {
         if (this.feedType.value != feedType) {
@@ -162,10 +157,10 @@ class FeedViewModel @Inject constructor(
             }
         } else {
             post.bookmarked = 1
-            showAppRateIfCriteriaMatches()
+            tryShowingAppRateSnackbar()
         }
 
-        analytics.logBookmark(post.bookmarked == 1)
+        logger.logBookmark(post.bookmarked == 1)
 
         viewModelScope.launch(Dispatchers.IO) {
             postRepo.updatePost(post)
@@ -173,30 +168,26 @@ class FeedViewModel @Inject constructor(
     }
 
     fun onReturnedFromPost() {
-        showAppRateIfCriteriaMatches()
+        tryShowingAppRateSnackbar()
     }
 
-    private fun showAppRateIfCriteriaMatches() {
-        if (sharedPrefs.appRatePrompt) {
+    private fun tryShowingAppRateSnackbar() {
+        if (appRateInteractor.canShowAppRate()) {
             viewModelScope.launch(Dispatchers.IO) {
                 val bookmarkCount = postRepo.getBookmarkedCount()
 
-                if (canPromptAppRate(bookmarkCount)) {
-                    analytics.logAppRatePrompt()
+                if (appRateInteractor.isFitForAppRatePrompt(bookmarkCount)) {
+                    logger.logAppRatePrompt()
 
                     showAppRateSnack.postValue(Event {
-                        openPlayStorePage.postValue(Event(Unit))
-                        analytics.logAppRateFromPromtClick()
+                        intentToStart.postValue(Event(IntentProvider.TYPE.RATE_APP))
+                        logger.logAppRateFromPromtClick()
                     })
                 }
             }
         }
     }
 
-    private fun canPromptAppRate(bookmarkCount: Int) =
-        sharedPrefs.appOpenCount > sharedPrefs.appRatePromptIndex &&
-                (bookmarkCount > sharedPrefs.appRatePromptIndex ||
-                        sharedPrefs.shareCount > sharedPrefs.appRatePromptIndex)
 
     companion object {
         private const val ITEM_PER_PAGE = 20

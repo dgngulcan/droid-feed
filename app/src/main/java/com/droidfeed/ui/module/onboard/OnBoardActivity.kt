@@ -1,25 +1,24 @@
 package com.droidfeed.ui.module.onboard
 
 import android.content.Intent
-import android.content.SharedPreferences
 import android.os.Bundle
 import android.text.method.LinkMovementMethod
 import androidx.activity.viewModels
 import androidx.databinding.DataBindingUtil
 import com.droidfeed.R
+import com.droidfeed.data.repo.SharedPrefsRepo
 import com.droidfeed.databinding.ActivityOnboardBinding
 import com.droidfeed.ui.common.BaseActivity
 import com.droidfeed.ui.module.main.MainActivity
 import com.droidfeed.util.CustomTab
 import com.droidfeed.util.event.EventObserver
 import com.droidfeed.util.extension.getClickableSpan
-import com.droidfeed.util.hasAcceptedTerms
 import com.google.android.material.snackbar.Snackbar
 import javax.inject.Inject
 
 class OnBoardActivity : BaseActivity() {
 
-    @Inject lateinit var sharedPrefs: SharedPreferences
+    @Inject lateinit var sharedPrefs: SharedPrefsRepo
 
     private val customTab = CustomTab(this)
     private val viewModel: OnBoardViewModel by viewModels { viewModelFactory }
@@ -69,7 +68,7 @@ class OnBoardActivity : BaseActivity() {
     }
 
     private fun continueToMainActivity() {
-        sharedPrefs.hasAcceptedTerms = true
+        sharedPrefs.setHasAcceptedTerms(true)
 
         Intent(
             this,
