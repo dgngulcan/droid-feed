@@ -7,10 +7,10 @@ apply plugin: 'io.fabric'
 ext.app = [
         'version'            : '2.2.0',
         'version_code'       : 24,
-        'compile_sdk_version': 28,
+        'compile_sdk_version': 29,
         'min_sdk_version'    : 21,
-        'target_sdk_version' : 28,
-        'build_tools_version': '28.0.3'
+        'target_sdk_version' : 29,
+        'build_tools_version': '29.0.2'
 ]
 
 android {
@@ -27,10 +27,8 @@ android {
 
         buildConfigField 'String', "DROIDFEED_GITHUB_URL", "\"https://github.com/dgngulcan/droid-feed\""
         buildConfigField 'String', "DROIDFEED_PRIVACY_POLICY", "\"https://app.termly.io/document/privacy-policy/ab750f11-7f6d-499d-aafb-57697bd8aba0\""
-        buildConfigField 'String', "DROIDFEED_PREVIOUS_ISSUES", "\"https://us12.campaign-archive.com/home/?u=f04785b3cff4f9a551bab8831&id=b45d2a62b0\""
 
         multiDexEnabled true
-
         vectorDrawables.useSupportLibrary true
 
         javaCompileOptions {
@@ -56,8 +54,8 @@ android {
         unitTests.returnDefaultValues = true
     }
 
-    dataBinding {
-        enabled = true
+    buildFeatures{
+        dataBinding = true
     }
 
     dexOptions {
@@ -115,11 +113,10 @@ dependencies {
     implementation deps.okhttp.logging_interceptor
     implementation deps.crashlytics
     implementation deps.lottie
-    implementation deps.firebase.core
+    implementation deps.firebase.analytics
     implementation deps.firebase.config
     implementation deps.firebase.firestore
     implementation deps.jsoup
-    implementation deps.gson // quick fix for version conflict between room and firestore
     testImplementation deps.mockk
     testImplementation deps.junit
     testImplementation deps.kotlin.coroutines_test
@@ -133,7 +130,8 @@ dependencies {
     androidTestImplementation deps.testx.monitor
     androidTestImplementation deps.testx.ext
     androidTestImplementation deps.room.testing
-    detektPlugins deps.detekt_formatting
+
+    implementation 'com.google.guava:listenablefuture:9999.0-empty-to-avoid-conflict-with-guava'
 }
 
 apply plugin: 'com.google.gms.google-services'
