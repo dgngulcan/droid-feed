@@ -1,118 +1,81 @@
 ext.versions = [
-        kotlin                : '1.3.72',
-        kotlin_coroutines     : '1.3.5',
-        core_ktx              : '1.2.0',
-        collections_ktx       : '1.1.0',
-        lifecycle             : '2.2.0',
-        fragment_ktx          : '1.2.4',
-        room                  : '2.2.5',
-        navigation            : '2.2.2',
-        paging                : '2.1.2',
-        browser               : '1.2.0',
-        retrofit              : '2.8.1',
-        fabric_gradle         : '1.29.0',
-        dagger                : "2.27",
-        lottie                : '3.4.0',
-        glide                 : '4.11.0',
-        crashlytics           : '2.10.0',
-        detekt                : '1.3.0',
-        firebase_analytics    : '17.3.0',
-        firebase_auth         : '19.0.3',
-        firebase_config       : '19.1.3',
-        firebase_firestore    : '21.4.2',
-        okHttp                : '4.5.0',
-        jSoup                 : '1.13.1',
-        play_services         : '4.3.3',
-        material              : '1.2.0-alpha06',
-        constraint_layout     : '2.0.0-beta4',
-        mockk                 : '1.9.3.kotlin12',
-        android_core_testing  : '1.1.1',
-        test_runner           : '1.1.0',
-        junit                 : '4.12',
-        androidx_test_core    : '1.2.0-beta01',
-        androidx_espresso_core: '3.1.0',
-        androidx_test_rules   : '1.2.0-beta01',
-        androidx_test_ext     : '1.0.0',
-        androidx_test_monitor : '1.2.0-beta01'
+        kotlin           : '1.3.72',
+        kotlin_coroutines: '1.3.5',
+        play_services    : '4.3.3',
 ]
 
 ext.deps = [:]
 
 deps.kotlin = [
         stdlib         : "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$versions.kotlin",
-        coroutines     : "org.jetbrains.kotlinx:kotlinx-coroutines-android:$versions.kotlin_coroutines",
-        coroutines_test: "org.jetbrains.kotlinx:kotlinx-coroutines-test:$versions.kotlin_coroutines"
+        coroutines     : "org.jetbrains.kotlinx:kotlinx-coroutines-android:1.3.5",
+        coroutines_test: "org.jetbrains.kotlinx:kotlinx-coroutines-test:1.3.5"
 ]
 
 deps.androidx = [
-        browser           : "androidx.browser:browser:$versions.browser",
-        collection        : "androidx.collection:collection-ktx:$versions.collections_ktx",
-        constraint_layout : "androidx.constraintlayout:constraintlayout:$versions.constraint_layout",
-        core_ktx          : "androidx.core:core-ktx:$versions.core_ktx",
-        fragment          : "androidx.fragment:fragment-ktx:$versions.fragment_ktx",
-        lifecycle         : "androidx.lifecycle:lifecycle-extensions:$versions.lifecycle",
-        lifecycle_ktx     : "androidx.lifecycle:lifecycle-runtime-ktx:$versions.lifecycle",
-        lifecycle_compiler: "androidx.lifecycle:lifecycle-compiler:$versions.lifecycle",
-        paging            : "androidx.paging:paging-runtime:$versions.paging",
-        viewmodel_ktx     : "androidx.lifecycle:lifecycle-viewmodel-ktx:$versions.lifecycle"
+        browser             : "androidx.browser:browser:1.2.0",
+        collection          : "androidx.collection:collection-ktx:1.1.0",
+        core_ktx            : "androidx.core:core-ktx:1.2.0",
+        fragment            : "androidx.fragment:fragment-ktx:1.2.4",
+        lifecycle           : "androidx.lifecycle:lifecycle-extensions:2.2.0",
+        lifecycle_ktx       : "androidx.lifecycle:lifecycle-runtime-ktx:2.2.0",
+        viewmodel_ktx       : "androidx.lifecycle:lifecycle-viewmodel-ktx:2.2.0",
+        lifecycle_compiler  : "androidx.lifecycle:lifecycle-compiler:2.2.0",
+        paging              : "androidx.paging:paging-runtime:2.1.2",
+        swipe_refresh_layout: "androidx.swiperefreshlayout:swiperefreshlayout:1.0.0",
+        constraint_layout   : "androidx.constraintlayout:constraintlayout:2.0.0-beta4",
+        test_core           : "androidx.test:core:1.2.0-beta01",
+        test_rules          : "androidx.test:rules:1.2.0-beta01",
+        test_runner         : "androidx.test:runner:1.1.0",
+        test_espresso       : "androidx.test.espresso:espresso-core:3.1.0",
+        test_monitor        : "androidx.test:monitor:1.2.0-beta01",
+        test_ext            : "androidx.test.ext:junit:1.0.0",
+        room_runtime        : "androidx.room:room-runtime:2.2.5",
+        room_compiler       : "androidx.room:room-compiler:2.2.5",
+        room_testing        : "androidx.room:room-testing:2.2.5"
 ]
 
-deps.testx = [
-        core    : "androidx.test:core:$versions.androidx_test_core",
-        rules   : "androidx.test:rules:$versions.androidx_test_rules",
-        runner  : "androidx.test:runner:$versions.test_runner",
-        espresso: "androidx.test.espresso:espresso-core:$versions.androidx_espresso_core",
-        monitor : "androidx.test:monitor:$versions.androidx_test_monitor",
-        ext     : "androidx.test.ext:junit:$versions.androidx_test_ext"
-]
 
 deps.glide = [
-        core    : "com.github.bumptech.glide:glide:$versions.glide",
-        compiler: "com.github.bumptech.glide:compiler:$versions.glide"
+        core    : "com.github.bumptech.glide:glide:4.11.0",
+        compiler: "com.github.bumptech.glide:compiler:4.11.0"
 ]
 
 deps.dagger = [
-        core           : "com.google.dagger:dagger:$versions.dagger",
-        android        : "com.google.dagger:dagger-android:$versions.dagger",
-        android_support: "com.google.dagger:dagger-android-support:$versions.dagger",
-        compiler       : "com.google.dagger:dagger-compiler:$versions.dagger",
-        processor      : "com.google.dagger:dagger-android-processor:$versions.dagger"
+        core           : "com.google.dagger:dagger:2.27",
+        android        : "com.google.dagger:dagger-android:2.27",
+        android_support: "com.google.dagger:dagger-android-support:2.27",
+        compiler       : "com.google.dagger:dagger-compiler:2.27",
+        processor      : "com.google.dagger:dagger-android-processor:2.27"
 ]
 
-deps.room = [
-        runtime : "androidx.room:room-runtime:$versions.room",
-        compiler: "androidx.room:room-compiler:$versions.room",
-        testing : "androidx.room:room-testing:$versions.room"
-]
-
-deps.navigation = [
-        fragment: "android.arch.navigation:navigation-fragment-ktx:$versions.navigation",
-        ui      : "android.arch.navigation:navigation-ui-ktx:$versions.navigation"
+deps.arch = [
+        fragment: "android.arch.navigation:navigation-fragment-ktx:2.2.2",
+        ui      : "android.arch.navigation:navigation-ui-ktx:2.2.2",
+        testing : "android.arch.core:core-testing:1.1.1"
 ]
 
 deps.firebase = [
-        analytics: "com.google.firebase:firebase-analytics:$versions.firebase_analytics",
-        auth     : "com.google.firebase:firebase-auth:$versions.firebase_auth",
-        config   : "com.google.firebase:firebase-config-ktx:$versions.firebase_config",
-        firestore: "com.google.firebase:firebase-firestore-ktx:$versions.firebase_firestore"
+        analytics: "com.google.firebase:firebase-analytics:17.3.0",
+        auth     : "com.google.firebase:firebase-auth:19.0.3",
+        config   : "com.google.firebase:firebase-config-ktx:19.1.3",
+        firestore: "com.google.firebase:firebase-firestore-ktx:21.4.2"
 ]
 
 deps.retrofit = [
-        core           : "com.squareup.retrofit2:retrofit:$versions.retrofit",
-        moshi_converter: "com.squareup.retrofit2:converter-moshi:$versions.retrofit"
+        core           : "com.squareup.retrofit2:retrofit:2.8.1",
+        moshi_converter: "com.squareup.retrofit2:converter-moshi:2.8.1"
 ]
 
 deps.okhttp = [
-        core               : "com.squareup.okhttp3:okhttp:$versions.okHttp",
-        logging_interceptor: "com.squareup.okhttp3:logging-interceptor:$versions.okHttp"
+        core               : "com.squareup.okhttp3:okhttp:4.5.0",
+        logging_interceptor: "com.squareup.okhttp3:logging-interceptor:4.5.0"
 ]
 
-deps.mockk = "io.mockk:mockk:$versions.mockk"
-deps.crashlytics = "com.crashlytics.sdk.android:crashlytics:$versions.crashlytics"
-deps.constraint_layout = "androidx.constraintlayout:constraintlayout:$versions.constraint_layout"
-deps.material_design = "com.google.android.material:material:$versions.material"
-deps.moshi = "com.squareup.moshi:moshi-kotlin:$versions.moshi"
-deps.junit = "junit:junit:$versions.junit"
-deps.arch_testing = "android.arch.core:core-testing:$versions.android_core_testing"
-deps.lottie = "com.airbnb.android:lottie:$versions.lottie"
-deps.jsoup = "org.jsoup:jsoup:$versions.jSoup"
+deps.material_design = "com.google.android.material:material:1.2.0-alpha06"
+deps.lottie = "com.airbnb.android:lottie:3.4.0"
+deps.junit = "junit:junit:4.12"
+deps.mockk = "io.mockk:mockk:1.9.3.kotlin12"
+deps.crashlytics = "com.google.firebase:firebase-crashlytics:17.0.0"
+deps.moshi = "com.squareup.moshi:moshi-kotlin:1.9.2"
+deps.jsoup = "org.jsoup:jsoup:1.13.1"

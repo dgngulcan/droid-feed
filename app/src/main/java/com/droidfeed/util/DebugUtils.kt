@@ -1,8 +1,8 @@
 package com.droidfeed.util
 
 import android.util.Log
-import com.crashlytics.android.Crashlytics
 import com.droidfeed.BuildConfig
+import com.google.firebase.crashlytics.FirebaseCrashlytics
 
 private const val TAG = "DroidFeed"
 
@@ -11,11 +11,11 @@ private const val TAG = "DroidFeed"
  *
  * @param throwable
  */
-fun logThrowable(throwable: Throwable?) {
+fun logThrowable(throwable: Throwable) {
     if (BuildConfig.DEBUG) {
-        throwable?.printStackTrace()
+        throwable.printStackTrace()
     } else {
-        Crashlytics.logException(throwable)
+        FirebaseCrashlytics.getInstance().recordException(throwable)
     }
 }
 

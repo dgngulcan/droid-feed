@@ -2,7 +2,7 @@ apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-kapt'
-apply plugin: 'io.fabric'
+apply plugin: 'com.google.firebase.crashlytics'
 
 ext.app = [
         'version'            : '2.2.0',
@@ -54,9 +54,7 @@ android {
         unitTests.returnDefaultValues = true
     }
 
-    buildFeatures{
-        dataBinding = true
-    }
+    android.dataBinding.enabled = true
 
     dexOptions {
         javaMaxHeapSize "4g"
@@ -98,8 +96,9 @@ dependencies {
     kapt deps.androidx.lifecycle_compiler
     implementation deps.androidx.paging
     implementation deps.androidx.constraint_layout
-    implementation deps.room.runtime
-    kapt deps.room.compiler
+    implementation deps.androidx.swipe_refresh_layout
+    implementation deps.androidx.room_runtime
+    kapt deps.androidx.room_compiler
     implementation deps.dagger.core
     implementation deps.dagger.android
     implementation deps.dagger.android_support
@@ -120,16 +119,16 @@ dependencies {
     testImplementation deps.mockk
     testImplementation deps.junit
     testImplementation deps.kotlin.coroutines_test
-    testImplementation deps.testx.core
-    testImplementation deps.arch_testing
-    androidTestImplementation deps.arch_testing
-    androidTestImplementation deps.testx.core
-    androidTestImplementation deps.testx.runner
-    androidTestImplementation deps.testx.espresso
-    androidTestImplementation deps.testx.rules
-    androidTestImplementation deps.testx.monitor
-    androidTestImplementation deps.testx.ext
-    androidTestImplementation deps.room.testing
+    testImplementation deps.androidx.test_core
+    testImplementation deps.arch.testing
+    androidTestImplementation deps.arch.testing
+    androidTestImplementation deps.androidx.test_core
+    androidTestImplementation deps.androidx.test_runner
+    androidTestImplementation deps.androidx.test_espresso
+    androidTestImplementation deps.androidx.test_rules
+    androidTestImplementation deps.androidx.test_monitor
+    androidTestImplementation deps.androidx.test_ext
+    androidTestImplementation deps.androidx.room_testing
 
     implementation 'com.google.guava:listenablefuture:9999.0-empty-to-avoid-conflict-with-guava'
 }
