@@ -12,10 +12,13 @@ jobs:
         api-level: [21, 23, 29]
         target: [default, google_apis]
     steps:
-      - name: checkout
+      - name: Checkout
         uses: actions/checkout@v2
 
-      - name: run tests
+      - name: Check available devices
+        run: avdmanager list
+
+      - name: Tests
         uses: reactivecircus/android-emulator-runner@v2.8.0
         with:
           api-level: ${{ matrix.api-level }}
