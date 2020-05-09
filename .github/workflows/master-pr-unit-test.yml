@@ -1,4 +1,4 @@
-name: Master PR Unit Testing Workflow
+name: Unit tests
 
 on:
   pull_request:
