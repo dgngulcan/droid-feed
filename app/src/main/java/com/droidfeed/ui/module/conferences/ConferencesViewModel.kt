@@ -18,8 +18,8 @@ class ConferencesViewModel @Inject constructor(
     private val logger: ConferencesScreenLogger
 ) : ViewModel() {
 
-    val conferences = MutableLiveData<List<ConferenceUIModel>>()
-    val isProgressVisible = MutableLiveData<Boolean>().apply { value = true }
+    val conferences = MutableLiveData<List<ConferenceUIModel>>(emptyList())
+    val isProgressVisible = MutableLiveData(true)
     val openUrl = MutableLiveData<Event<String>>()
 
     init {
@@ -31,9 +31,8 @@ class ConferencesViewModel @Inject constructor(
 
         when (val dataStatus = conferenceRepo.getUpcoming()) {
             is DataStatus.Successful -> {
-                val uiModels = dataStatus.data?.map { conference ->
-                    createConferenceUIModel(conference)
-                }
+                val uiModels = dataStatus.data
+                    ?.map { conference -> createConferenceUIModel(conference) }
                 conferences.postValue(uiModels)
             }
             is DataStatus.Failed -> {

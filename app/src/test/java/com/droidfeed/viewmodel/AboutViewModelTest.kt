@@ -9,7 +9,9 @@ import com.droidfeed.util.getOrAwaitValue
 import io.mockk.MockKAnnotations
 import io.mockk.impl.annotations.MockK
 import io.mockk.mockk
+import io.mockk.unmockkAll
 import io.mockk.verify
+import org.junit.After
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -30,6 +32,11 @@ class AboutViewModelTest {
         MockKAnnotations.init(this, relaxed = true)
 
         sut = AboutViewModel(logger)
+    }
+
+    @After
+    fun cleanUp() {
+        unmockkAll()
     }
 
     @Test
