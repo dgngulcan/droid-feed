@@ -7,16 +7,15 @@ on:
 jobs:
   test:
     runs-on: macos-latest
+
     strategy:
       matrix:
-        api-level: [21, 23, 29]
-        target: [default, google_apis]
+        api-level: [21, 29]
+        target: [google_apis]
+
     steps:
       - name: Checkout
         uses: actions/checkout@v2
-
-      - name: Check available devices
-        run: avdmanager list
 
       - name: Tests
         uses: reactivecircus/android-emulator-runner@v2.8.0
@@ -24,5 +23,5 @@ jobs:
           api-level: ${{ matrix.api-level }}
           target: ${{ matrix.target }}
           arch: x86_64
-          profile: Pixel 3
+          profile: Google Pixel 3a
           script: ./gradlew connectedCheck
