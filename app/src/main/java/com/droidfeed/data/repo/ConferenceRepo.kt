@@ -43,14 +43,15 @@ class ConferenceRepo @Inject constructor(
                     )
                 }
 
-                if (conferences.isEmpty() &&
-                    !FirebaseFirestore.getInstance().app.applicationContext.isOnline()
-                ) {
+                val isOffline = !FirebaseFirestore.getInstance().app.applicationContext.isOnline()
+
+                if (conferences.isEmpty() && isOffline) {
                     continuation.resume(DataStatus.Failed(UnknownHostException()))
                 } else {
                     continuation.resume(DataStatus.Successful(conferences))
                 }
-            }.addOnFailureListener { exception ->
+            }
+            .addOnFailureListener { exception ->
                 continuation.resume(DataStatus.Failed(exception))
             }
     }

@@ -7,8 +7,10 @@ import com.droidfeed.ui.module.conferences.analytics.ConferencesScreenLogger
 import com.droidfeed.util.getOrAwaitValue
 import io.mockk.MockKAnnotations
 import io.mockk.impl.annotations.MockK
+import io.mockk.unmockkAll
 import io.mockk.verify
 import kotlinx.coroutines.runBlocking
+import org.junit.After
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -30,18 +32,18 @@ class ConferencesViewModelTest {
         MockKAnnotations.init(this, relaxed = true)
     }
 
-    @Test
-    fun onStart_shouldFireProgressEvent() {
-        sut = ConferencesViewModel(repo, logger)
-
-        assert(sut.isProgressVisible.getOrAwaitValue())
+    @After
+    fun cleanUp() {
+        unmockkAll()
     }
 
     @Test
-    fun onStart_shouldFetchConferences() {
+    fun whenInstantiated_shouldFetchConferences() {
         sut = ConferencesViewModel(repo, logger)
 
         verify(exactly = 1) { runBlocking { repo.getUpcoming() } }
+        assert(sut.isProgressVisible.getOrAwaitValue())
+
     }
 
 }

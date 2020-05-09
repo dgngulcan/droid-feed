@@ -11,10 +11,10 @@ import javax.inject.Singleton
 
 @Module(
     includes = [
-        (DatabaseModule::class),
-        (ApiModule::class),
-        (FirebaseModule::class),
-        (ViewModelModule::class)
+        DatabaseModule::class,
+        ApiModule::class,
+        FirebaseModule::class,
+        ViewModelModule::class
     ]
 )
 class AppModule {
