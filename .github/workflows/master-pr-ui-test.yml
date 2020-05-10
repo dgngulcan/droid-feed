@@ -26,5 +26,5 @@ jobs:
           api-level: ${{ matrix.api-level }}
           target: ${{ matrix.target }}
           arch: x86_64
-          profile: Google Pixel 3a
+          profile: Pixel
           script: ./gradlew connectedCheck
