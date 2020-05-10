@@ -1,0 +1,30 @@
+name: UI tests
+
+on:
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  ui-test:
+    runs-on: macos-latest
+
+    strategy:
+      matrix:
+        api-level: [21, 29]
+        target: [google_apis]
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: check avd list
+        run: $ANDROID_HOME/tools/bin/avdmanager list
+
+      - name: Tests
+        uses: reactivecircus/android-emulator-runner@v2.8.0
+        with:
+          api-level: ${{ matrix.api-level }}
+          target: ${{ matrix.target }}
+          arch: x86_64
+          profile: pixel
+          script: ./gradlew connectedCheck
