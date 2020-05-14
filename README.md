@@ -32,7 +32,7 @@ This project uses [GitHub flow](https://guides.github.com/introduction/flow/) as
 License
 -------
 
-    Copyright 2019 Dogan Gulcan
+    Copyright 2020 Dogan Gulcan
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
