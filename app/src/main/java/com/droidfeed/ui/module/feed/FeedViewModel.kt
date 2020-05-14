@@ -42,7 +42,7 @@ class FeedViewModel @Inject constructor(
     val sharePost = MutableLiveData<Event<Post>>()
     val intentToStart = MutableLiveData<Event<IntentProvider.TYPE>>()
 
-    private val feedType: LiveData<FeedType> =
+    val feedType: LiveData<FeedType> =
         Transformations.map(mainViewModel.isBookmarksShown) { isShown ->
             if (isShown) FeedType.BOOKMARKS else FeedType.POSTS
         }

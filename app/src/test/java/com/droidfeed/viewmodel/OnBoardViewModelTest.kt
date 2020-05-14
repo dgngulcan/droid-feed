@@ -4,6 +4,7 @@ import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.lifecycle.Observer
 import com.droidfeed.R
 import com.droidfeed.data.DataStatus
+import com.droidfeed.data.repo.SharedPrefsRepo
 import com.droidfeed.data.repo.SourceRepo
 import com.droidfeed.ui.module.onboard.OnBoardViewModel
 import com.droidfeed.util.event.EventObserver
@@ -20,6 +21,7 @@ class OnBoardViewModelTest {
 
     @Rule @JvmField var instantTaskExecutorRule = InstantTaskExecutorRule()
     @MockK lateinit var sourceRepo: SourceRepo
+    @MockK lateinit var sharedPrefs: SharedPrefsRepo
 
     private lateinit var sut: OnBoardViewModel
 
@@ -35,7 +37,7 @@ class OnBoardViewModelTest {
 
     @Test
     fun defaultState_shouldMatch() {
-        sut = OnBoardViewModel(sourceRepo)
+        sut = OnBoardViewModel(sourceRepo, sharedPrefs)
         Assert.assertFalse(sut.isProgressVisible.value!!)
         Assert.assertFalse(sut.isContinueButtonEnabled.value!!)
         Assert.assertTrue(sut.isAgreementCBEnabled.value!!)
@@ -44,7 +46,7 @@ class OnBoardViewModelTest {
 
     @Test
     fun whenInstantiated_shouldPullSources() {
-        sut = OnBoardViewModel(sourceRepo)
+        sut = OnBoardViewModel(sourceRepo, sharedPrefs)
 
         verify(exactly = 1) { runBlocking { sourceRepo.pull() } }
     }
@@ -52,7 +54,7 @@ class OnBoardViewModelTest {
     @Test
     fun whenAgreedTerms_shouldEnableContinueButton() {
         val observer = mockk<Observer<Boolean>>(relaxed = true)
-        sut = OnBoardViewModel(sourceRepo)
+        sut = OnBoardViewModel(sourceRepo, sharedPrefs)
         sut.isContinueButtonEnabled.observeForever(observer)
 
         sut.onAgreementChecked(true)
@@ -63,7 +65,7 @@ class OnBoardViewModelTest {
     @Test
     fun whenDisagreedTerms_shouldDisableContinueButton() {
         val observer = mockk<Observer<Boolean>>(relaxed = true)
-        sut = OnBoardViewModel(sourceRepo)
+        sut = OnBoardViewModel(sourceRepo, sharedPrefs)
         sut.onAgreementChecked(true)
 
         sut.isContinueButtonEnabled.observeForever(observer)
@@ -75,7 +77,7 @@ class OnBoardViewModelTest {
     @Test
     fun when_continueButtonClicked_shouldDisableContinueButton() {
         val observer = mockk<Observer<Boolean>>(relaxed = true)
-        sut = OnBoardViewModel(sourceRepo)
+        sut = OnBoardViewModel(sourceRepo, sharedPrefs)
         sut.onAgreementChecked(true)
         sut.isContinueButtonEnabled.observeForever(observer)
 
@@ -87,7 +89,7 @@ class OnBoardViewModelTest {
     @Test
     fun whenContinueButtonIsClicked_shouldFireOpenMainActivityEvent() {
         every { runBlocking { sourceRepo.pull() } } returns DataStatus.Successful(emptyList())
-        sut = OnBoardViewModel(sourceRepo)
+        sut = OnBoardViewModel(sourceRepo, sharedPrefs)
         val observer = mockk<EventObserver<Unit>>(relaxed = true)
         sut.openMainActivity.observeForever(observer)
 

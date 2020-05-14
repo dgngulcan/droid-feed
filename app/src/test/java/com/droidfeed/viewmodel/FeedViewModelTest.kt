@@ -1,13 +1,13 @@
 package com.droidfeed.viewmodel
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
 import com.droidfeed.data.model.Post
 import com.droidfeed.data.repo.PostRepo
 import com.droidfeed.data.repo.SharedPrefsRepo
 import com.droidfeed.data.repo.SourceRepo
 import com.droidfeed.ui.module.feed.AppRateInteractor
-import com.droidfeed.ui.module.feed.FeedType
 import com.droidfeed.ui.module.feed.FeedViewModel
 import com.droidfeed.ui.module.feed.analytics.FeedScreenLogger
 import com.droidfeed.ui.module.main.MainViewModel
@@ -39,6 +39,7 @@ class FeedViewModelTest {
     @Before
     fun setup() {
         MockKAnnotations.init(this, relaxed = true, relaxUnitFun = true)
+        every { mainViewModel.isBookmarksShown } returns MutableLiveData(true)
 
         sut = FeedViewModel(
             sourceRepo = sourceRepo,
@@ -62,12 +63,13 @@ class FeedViewModelTest {
     }
 
     @Test
-    fun whenBookmarked_shouldShowUndoSnack() {
+    fun givenBookmarksFeed_whenBookmarked_shouldShowUndoSnack() {
         val post = mockk<Post>(relaxed = true) {
             every { isBookmarked() } returns true
         }
-
+        sut.feedType.observeForever { }
         val observer = mockk<Observer<in Event<() -> Unit>>>(relaxed = true)
+
         sut.showUndoBookmarkSnack.observeForever(observer)
 
         sut.togglePostBookmark(post)
