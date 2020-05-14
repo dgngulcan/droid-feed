@@ -18,6 +18,7 @@ deps.androidx = [
         fragment            : "androidx.fragment:fragment-ktx:1.2.4",
         lifecycle           : "androidx.lifecycle:lifecycle-extensions:2.2.0",
         lifecycle_ktx       : "androidx.lifecycle:lifecycle-runtime-ktx:2.2.0",
+        livedata_ktx        : "androidx.lifecycle:lifecycle-livedata-ktx:2.2.0",
         viewmodel_ktx       : "androidx.lifecycle:lifecycle-viewmodel-ktx:2.2.0",
         lifecycle_compiler  : "androidx.lifecycle:lifecycle-compiler:2.2.0",
         paging              : "androidx.paging:paging-runtime:2.1.2",

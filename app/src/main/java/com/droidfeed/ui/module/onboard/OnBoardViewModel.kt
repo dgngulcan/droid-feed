@@ -6,6 +6,7 @@ import androidx.lifecycle.viewModelScope
 import com.droidfeed.BuildConfig
 import com.droidfeed.R
 import com.droidfeed.data.DataStatus
+import com.droidfeed.data.repo.SharedPrefsRepo
 import com.droidfeed.data.repo.SourceRepo
 import com.droidfeed.ui.common.BaseViewModel
 import com.droidfeed.util.event.Event
@@ -16,15 +17,15 @@ import java.net.UnknownHostException
 import javax.inject.Inject
 
 class OnBoardViewModel @Inject constructor(
-    private val sourceRepo: SourceRepo
+    private val sourceRepo: SourceRepo,
+    private val sharedPrefs: SharedPrefsRepo
 ) : BaseViewModel() {
 
     val backgroundImageId = R.drawable.onboard_bg
 
-    val isProgressVisible = MutableLiveData<Boolean>().apply { value = false }
-    val isContinueButtonEnabled = MutableLiveData<Boolean>().apply { value = false }
-    val isAgreementCBEnabled = MutableLiveData<Boolean>().apply { value = true }
-
+    val isProgressVisible = MutableLiveData(false)
+    val isContinueButtonEnabled = MutableLiveData(false)
+    val isAgreementCBEnabled = MutableLiveData(true)
     val openUrl = MutableLiveData<Event<String>>()
     val openMainActivity = MutableLiveData<Event<Unit>>()
     val showSnackBar = MutableLiveData<Event<@DrawableRes Int>>()
@@ -39,6 +40,7 @@ class OnBoardViewModel @Inject constructor(
 
     fun onAgreementChecked(isChecked: Boolean) {
         isContinueButtonEnabled.postValue(isChecked)
+        sharedPrefs.hasAcceptedTerms = isChecked
     }
 
     fun onTermsOfUseClicked() {

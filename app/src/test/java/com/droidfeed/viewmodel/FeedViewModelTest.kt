@@ -10,13 +10,12 @@ import com.droidfeed.ui.module.feed.AppRateInteractor
 import com.droidfeed.ui.module.feed.FeedType
 import com.droidfeed.ui.module.feed.FeedViewModel
 import com.droidfeed.ui.module.feed.analytics.FeedScreenLogger
+import com.droidfeed.ui.module.main.MainViewModel
 import com.droidfeed.util.event.Event
-import io.mockk.MockKAnnotations
-import io.mockk.every
+import io.mockk.*
 import io.mockk.impl.annotations.MockK
-import io.mockk.mockk
-import io.mockk.verify
 import kotlinx.coroutines.runBlocking
+import org.junit.After
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -33,6 +32,7 @@ class FeedViewModelTest {
     @MockK lateinit var sharedPrefsRepo: SharedPrefsRepo
     @MockK lateinit var feedScreenLogger: FeedScreenLogger
     @MockK lateinit var appRateInteractor: AppRateInteractor
+    @MockK lateinit var mainViewModel: MainViewModel
 
     lateinit var sut: FeedViewModel
 
@@ -41,12 +41,18 @@ class FeedViewModelTest {
         MockKAnnotations.init(this, relaxed = true, relaxUnitFun = true)
 
         sut = FeedViewModel(
-            sourceRepo,
-            postRepo,
-            sharedPrefsRepo,
-            feedScreenLogger,
-            appRateInteractor
+            sourceRepo = sourceRepo,
+            postRepo = postRepo,
+            sharedPrefs = sharedPrefsRepo,
+            logger = feedScreenLogger,
+            appRateInteractor = appRateInteractor,
+            mainViewModel = mainViewModel
         )
+    }
+
+    @After
+    fun cleanUp() {
+        unmockkAll()
     }
 
     @Test
@@ -60,8 +66,6 @@ class FeedViewModelTest {
         val post = mockk<Post>(relaxed = true) {
             every { isBookmarked() } returns true
         }
-
-        sut.setFeedType(FeedType.BOOKMARKS)
 
         val observer = mockk<Observer<in Event<() -> Unit>>>(relaxed = true)
         sut.showUndoBookmarkSnack.observeForever(observer)

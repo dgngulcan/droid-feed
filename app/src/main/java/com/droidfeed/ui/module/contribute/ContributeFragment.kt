@@ -10,7 +10,7 @@ import com.droidfeed.databinding.FragmentContributeBinding
 import com.droidfeed.ui.common.BaseFragment
 import com.droidfeed.util.AnimUtils.Companion.MEDIUM_ANIM_DURATION
 import com.droidfeed.util.CustomTab
-import com.droidfeed.util.event.EventObserver
+import com.droidfeed.util.extension.observeEvent
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -18,11 +18,10 @@ import javax.inject.Inject
 
 class ContributeFragment : BaseFragment("contribute") {
 
+    @Inject lateinit var customTab: CustomTab
+
     private lateinit var binding: FragmentContributeBinding
     private val contributeViewModel: ContributeViewModel by viewModels { viewModelFactory }
-
-    @Inject
-    lateinit var customTab: CustomTab
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -46,9 +45,7 @@ class ContributeFragment : BaseFragment("contribute") {
     }
 
     private fun subscribeOpenRepositoryEvent() {
-        contributeViewModel.openRepositoryEvent.observe(viewLifecycleOwner, EventObserver { url ->
-            customTab.showTab(url)
-        })
+        contributeViewModel.openRepositoryEvent.observeEvent(viewLifecycleOwner, customTab::showTab)
     }
 
     private fun initAnimations() {

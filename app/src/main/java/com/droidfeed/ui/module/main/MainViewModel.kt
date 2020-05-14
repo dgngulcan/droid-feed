@@ -2,8 +2,6 @@ package com.droidfeed.ui.module.main
 
 import android.util.Patterns
 import android.webkit.URLUtil
-import androidx.annotation.DrawableRes
-import androidx.annotation.StringRes
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Transformations.map
@@ -19,36 +17,34 @@ import com.droidfeed.ui.common.BaseViewModel
 import com.droidfeed.util.event.Event
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import java.util.*
 import javax.inject.Inject
+import javax.inject.Singleton
 
+@Singleton
 class MainViewModel @Inject constructor(
     private val sourceRepo: SourceRepo,
     private val postRepo: PostRepo,
     sharedPrefs: SharedPrefsRepo
 ) : BaseViewModel() {
 
-    val toolbarTitle = MutableLiveData<@StringRes Int>().apply { value = R.string.app_name }
-    val onNavigation = MutableLiveData<Destination>().apply { value = Destination.FEED }
+    val toolbarTitle = MutableLiveData(R.string.app_name)
+    val onNavigation = MutableLiveData(Destination.FEED)
     val scrollTop = MutableLiveData<Event<Unit>>()
-
-    val isUserTermsAccepted = MutableLiveData<Boolean>().apply {
-        value = sharedPrefs.hasAcceptedTerms
-    }
-    val sourceAddIcon = MutableLiveData<@DrawableRes Int>().apply {
-        value = R.drawable.avd_close_to_add
-    }
-    val isMenuVisible = MutableLiveData<Boolean>().apply { value = false }
-    val isSourceInputVisible = MutableLiveData<Boolean>().apply { value = false }
-    val isSourceFilterVisible = MutableLiveData<Event<Boolean>>().apply { value = Event(false) }
-    val closeKeyboardEvent = MutableLiveData<Event<Boolean>>().apply { value = Event(false) }
-    val sourceErrText = MutableLiveData<@StringRes Int>().apply { value = R.string.empty_string }
-    val sourceInputText = MutableLiveData<@StringRes Int>().apply { value = R.string.empty_string }
-    val isSourceProgressVisible = MutableLiveData<Boolean>().apply { value = false }
-    val isSourceAddButtonEnabled = MutableLiveData<Boolean>().apply { value = true }
-    val isFilterButtonVisible = MutableLiveData<Boolean>().apply { value = true }
-    val isBookmarksShown = MutableLiveData<Boolean>().apply { value = false }
-    val isBookmarksButtonVisible = MutableLiveData<Boolean>().apply { value = true }
-    val isBookmarksButtonSelected = MutableLiveData<Boolean>().apply { value = false }
+    val isUserTermsAccepted = MutableLiveData(sharedPrefs.hasAcceptedTerms)
+    val sourceAddIcon = MutableLiveData(R.drawable.avd_close_to_add)
+    val isMenuVisible = MutableLiveData(false)
+    val isSourceInputVisible = MutableLiveData(false)
+    val isSourceFilterVisible = MutableLiveData(Event(false))
+    val closeKeyboardEvent = MutableLiveData(Event(false))
+    val sourceErrText = MutableLiveData(R.string.empty_string)
+    val sourceInputText = MutableLiveData(R.string.empty_string)
+    val isSourceProgressVisible = MutableLiveData(false)
+    val isSourceAddButtonEnabled = MutableLiveData(true)
+    val isFilterButtonVisible = MutableLiveData(true)
+    val isBookmarksShown = MutableLiveData(false)
+    val isBookmarksButtonVisible = MutableLiveData(true)
+    val isBookmarksButtonSelected = MutableLiveData(false)
     val showUndoSourceRemoveSnack = MutableLiveData<Event<() -> Unit>>()
     val shareSourceEvent = MutableLiveData<Event<String>>()
 
@@ -67,21 +63,19 @@ class MainViewModel @Inject constructor(
         }
     }
 
-    private fun onSourceShareClicked(source: Source) {
-        val content = "${source.name}\n ${source.url}"
-        shareSourceEvent.postValue(Event(content))
-        analytics.logSourceShare()
-    }
-
     init {
         updateSources(sourceRepo)
     }
 
+    private fun onSourceShareClicked(source: Source) {
+        shareSourceEvent.postValue(Event("${source.name}\n ${source.url}"))
+        analytics.logSourceShare()
+    }
+
     private fun updateSources(sourceRepo: SourceRepo) {
         viewModelScope.launch(Dispatchers.IO) {
-            val result = sourceRepo.pull()
-            if (result is DataStatus.Successful) {
-                sourceRepo.insert(result.data ?: emptyList())
+            when (val result = sourceRepo.pull()) {
+                is DataStatus.Successful -> sourceRepo.insert(result.data ?: emptyList())
             }
         }
     }
@@ -157,66 +151,61 @@ class MainViewModel @Inject constructor(
         val shouldOpenInputField = !(isSourceInputVisible.value!!)
         isSourceInputVisible.postValue(shouldOpenInputField)
 
-        if (shouldOpenInputField) {
-            R.drawable.avd_add_to_close
-        } else {
-            R.drawable.avd_close_to_add
+        when {
+            shouldOpenInputField -> R.drawable.avd_add_to_close
+            else -> R.drawable.avd_close_to_add
         }.also(sourceAddIcon::postValue)
 
         analytics.logAddSourceButtonClick()
     }
 
-    fun onSaveSourceClicked(url: String) {
-        viewModelScope.launch(Dispatchers.IO) {
-            val trimmedUrl = url.trimIndent()
-            if (Patterns.WEB_URL.matcher(trimmedUrl.toLowerCase()).matches()) {
-                sourceErrText.postValue(R.string.empty_string)
+    fun onSaveSourceClicked(url: String) = viewModelScope.launch(Dispatchers.IO) {
+        val trimmedUrl = url.trimIndent()
+        if (Patterns.WEB_URL.matcher(trimmedUrl.toLowerCase(Locale.US)).matches()) {
+            sourceErrText.postValue(R.string.empty_string)
 
-                val cleanUrl = URLUtil.guessUrl(trimmedUrl)
+            val cleanUrl = URLUtil.guessUrl(trimmedUrl)
+            val alreadyExists = sourceRepo.isSourceExisting(cleanUrl)
 
-                val alreadyExists = sourceRepo.isSourceExisting(cleanUrl)
-
-                if (alreadyExists) {
-                    sourceErrText.postValue(R.string.error_source_exists)
-                    analytics.logSourceAlreadyExists()
-                } else {
-                    isSourceProgressVisible.postValue(true)
-                    isSourceAddButtonEnabled.postValue(false)
-                    closeKeyboardEvent.postValue(Event(true))
-
-                    when (sourceRepo.addFromUrl(cleanUrl)) {
-                        is DataStatus.Successful -> {
-                            isSourceProgressVisible.postValue(false)
-                            isSourceAddButtonEnabled.postValue(true)
-                            isSourceInputVisible.postValue(false)
-                            sourceAddIcon.postValue(R.drawable.avd_close_to_add)
-                            sourceInputText.postValue(R.string.empty_string)
-                            analytics.logSourceAddSuccess()
-                        }
-                        is DataStatus.Failed -> {
-                            sourceErrText.postValue(R.string.error_add_source)
-                            isSourceProgressVisible.postValue(false)
-                            isSourceAddButtonEnabled.postValue(true)
-                            analytics.logSourceAddFail()
-                        }
-                        is DataStatus.HttpFailed -> {
-                            sourceErrText.postValue(R.string.error_internet_or_url)
-                            isSourceProgressVisible.postValue(false)
-                            isSourceAddButtonEnabled.postValue(true)
-                        }
-                    }
-
-                }
-            } else if (url.isEmpty()) {
-                sourceErrText.postValue(R.string.error_empty_source_url)
+            if (alreadyExists) {
+                sourceErrText.postValue(R.string.error_source_exists)
+                analytics.logSourceAlreadyExists()
             } else {
-                sourceErrText.postValue(R.string.error_invalid_url)
-                analytics.logSourceAddFailInvalidUrl()
+                isSourceProgressVisible.postValue(true)
+                isSourceAddButtonEnabled.postValue(false)
+                closeKeyboardEvent.postValue(Event(true))
+                addSource(cleanUrl)
             }
-
-            analytics.logSaveSourceButtonClick()
+        } else if (url.isEmpty()) {
+            sourceErrText.postValue(R.string.error_empty_source_url)
+        } else {
+            sourceErrText.postValue(R.string.error_invalid_url)
+            analytics.logSourceAddFailInvalidUrl()
         }
 
+        analytics.logSaveSourceButtonClick()
+    }
+
+    private fun addSource(url: String) {
+        when (sourceRepo.addFromUrl(url)) {
+            is DataStatus.Successful -> {
+                isSourceInputVisible.postValue(false)
+                sourceAddIcon.postValue(R.drawable.avd_close_to_add)
+                sourceInputText.postValue(R.string.empty_string)
+                analytics.logSourceAddSuccess()
+            }
+            is DataStatus.Failed -> {
+                sourceErrText.postValue(R.string.error_add_source)
+                analytics.logSourceAddFail()
+            }
+            is DataStatus.HttpFailed -> {
+                sourceErrText.postValue(R.string.error_internet_or_url)
+
+            }
+        }
+
+        isSourceProgressVisible.postValue(false)
+        isSourceAddButtonEnabled.postValue(true)
     }
 
     @Suppress("UNUSED_PARAMETER")

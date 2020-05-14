@@ -6,25 +6,24 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.droidfeed.ui.adapter.diff.UIModelDiffCallback
 import kotlinx.coroutines.*
+import javax.inject.Inject
 
 /**
  * Generic [RecyclerView.Adapter] for [BaseUIModel]s.
  */
 @Suppress("UNCHECKED_CAST")
-class UIModelAdapter constructor(
-    coroutineScope: CoroutineScope,
-    private val layoutManager: RecyclerView.LayoutManager? = null
-) : RecyclerView.Adapter<RecyclerView.ViewHolder>(),
-    CoroutineScope by coroutineScope {
+class UIModelAdapter @Inject constructor() : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
+    var layoutManager: RecyclerView.LayoutManager? = null
     private val uiModels = mutableListOf<BaseUIModelAlias>()
     private val viewTypes = SparseArrayCompat<BaseUIModelAlias>()
 
     override fun onCreateViewHolder(
         parent: ViewGroup,
         viewType: Int
-    ): RecyclerView.ViewHolder =
-        viewTypes.get(viewType)?.getViewHolder(parent) as RecyclerView.ViewHolder
+    ): RecyclerView.ViewHolder {
+        return viewTypes.get(viewType)?.getViewHolder(parent) as RecyclerView.ViewHolder
+    }
 
     override fun onBindViewHolder(
         holder: RecyclerView.ViewHolder,
@@ -49,7 +48,7 @@ class UIModelAdapter constructor(
                 updateViewTypes(newModels)
                 notifyDataSetChanged()
             } else {
-                launch {
+                GlobalScope.launch {
                     val diffResult = async {
                         val diffCallback = UIModelDiffCallback(
                             ArrayList(uiModels),
@@ -59,13 +58,11 @@ class UIModelAdapter constructor(
                         uiModels.clear()
                         uiModels.addAll(newModels)
 
-//                        withContext(Dispatchers.Main){notifyDataSetChanged()}
                         DiffUtil.calculateDiff(diffCallback, true)
                     }
 
                     withContext(Dispatchers.Main) {
-                        val dif = diffResult.await()
-                        dispatchUpdates(dif)
+                        dispatchUpdates(diffResult.await())
                     }
 
                     updateViewTypes(uiModels)
@@ -86,7 +83,4 @@ class UIModelAdapter constructor(
         }
     }
 
-    fun map(block: (List<BaseUIModelAlias>) -> Unit) {
-        block(uiModels)
-    }
 }

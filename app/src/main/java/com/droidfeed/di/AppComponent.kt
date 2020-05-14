@@ -3,10 +3,10 @@
 package com.droidfeed.di
 
 import com.droidfeed.App
+import com.droidfeed.di.activity.ActivityModule
 import dagger.BindsInstance
 import dagger.Component
 import dagger.android.AndroidInjectionModule
-import dagger.android.support.AndroidSupportInjectionModule
 import javax.inject.Singleton
 
 @Singleton

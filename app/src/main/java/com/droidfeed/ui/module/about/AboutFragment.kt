@@ -17,7 +17,7 @@ import com.droidfeed.ui.module.about.licence.LicencesActivity
 import com.droidfeed.util.AnimUtils.Companion.MEDIUM_ANIM_DURATION
 import com.droidfeed.util.CustomTab
 import com.droidfeed.util.IntentProvider
-import com.droidfeed.util.event.EventObserver
+import com.droidfeed.util.extension.observeEvent
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -32,7 +32,6 @@ class AboutFragment : BaseFragment("about") {
 
     private lateinit var binding: FragmentAboutBinding
     private val aboutViewModel: AboutViewModel by viewModels { viewModelFactory }
-
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -59,24 +58,22 @@ class AboutFragment : BaseFragment("about") {
     }
 
     private fun subscribeOpenLicenceEvent() {
-        aboutViewModel.openLicences.observe(viewLifecycleOwner, EventObserver {
+        aboutViewModel.openLicences.observeEvent(viewLifecycleOwner) {
             Intent(context, LicencesActivity::class.java)
-                .also { intent ->
-                    startActivity(intent)
-                }
-        })
+                .also(::startActivity)
+        }
     }
 
     private fun subscribeOpenUrlEvent() {
-        aboutViewModel.openUrl.observe(viewLifecycleOwner, EventObserver { url ->
+        aboutViewModel.openUrl.observeEvent(viewLifecycleOwner) { url ->
             customTab.showTab(url)
-        })
+        }
     }
 
     private fun subscribeStartIntentEvent() {
-        aboutViewModel.startIntent.observe(viewLifecycleOwner, EventObserver { intentType ->
+        aboutViewModel.startIntent.observeEvent(viewLifecycleOwner) { intentType ->
             startActivity(intentProvider.getIntent(intentType))
-        })
+        }
     }
 
     private fun initAnimations() {

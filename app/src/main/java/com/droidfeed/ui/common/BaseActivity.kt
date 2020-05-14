@@ -1,6 +1,7 @@
 package com.droidfeed.ui.common
 
 import android.annotation.SuppressLint
+import android.app.Activity
 import android.graphics.Color
 import android.os.Bundle
 import android.view.View
@@ -26,20 +27,6 @@ abstract class BaseActivity : AppCompatActivity(), HasAndroidInjector {
         super.onCreate(savedInstanceState)
     }
 
-    /**
-     * Makes code bar transparent.
-     */
-    protected fun setupTransparentStatusBar() {
-        if (isMarshmallow()) {
-            window.run {
-                clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS)
-                addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
-                statusBarColor = Color.TRANSPARENT
-                decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
-            }
-        }
-    }
-
     protected fun setupFullScreenWindow() {
         if (isMarshmallow()) {
             window.setFlags(
@@ -61,7 +48,7 @@ abstract class BaseActivity : AppCompatActivity(), HasAndroidInjector {
         }
     }
 
-    override fun androidInjector(): AndroidInjector<Any?>? {
+    override fun androidInjector(): AndroidInjector<Any> {
         return androidInjector
     }
 }

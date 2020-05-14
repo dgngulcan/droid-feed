@@ -19,7 +19,6 @@ import javax.inject.Singleton
 @Singleton
 class RssParser @Inject constructor() : XmlParser() {
 
-
     override fun parsePosts(parser: XmlPullParser, source: Source): List<Post> {
         val posts = mutableListOf<Post>()
 

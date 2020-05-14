@@ -16,7 +16,7 @@ abstract class BaseFragment(private val viewTag: String) : Fragment() {
         AndroidSupportInjection.inject(this)
         super.onAttach(context)
 
-        activity?.let { analytics.logScreenView(it, viewTag) }
+        requireActivity().let { analytics.logScreenView(it, viewTag) }
     }
 
 }

@@ -54,8 +54,7 @@ data class Post(
     @Ignore
     var layoutType: UIModelType = UIModelType.POST_SMALL
 
-) : Diffable,
-    Comparable<Post> {
+) : Diffable, Comparable<Post> {
 
     @Transient
     @ColumnInfo(name = "bookmarked")

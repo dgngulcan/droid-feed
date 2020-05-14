@@ -6,6 +6,7 @@ import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.webkit.URLUtil
+import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.browser.customtabs.CustomTabsClient
 import androidx.browser.customtabs.CustomTabsIntent
@@ -16,12 +17,15 @@ import com.droidfeed.R
 import com.droidfeed.ui.module.webview.WebViewActivity
 import com.droidfeed.util.extension.isPackageAvailable
 import com.google.android.material.snackbar.Snackbar
+import dagger.Binds
 import javax.inject.Inject
 
 /**
  * Custom Chrome Tabs helper.
  */
-class CustomTab @Inject constructor(val activity: Activity) {
+class CustomTab @Inject constructor(
+    private val activity: AppCompatActivity
+) {
 
     private var tabClient: CustomTabsClient? = null
     private val tabIntent: CustomTabsIntent by lazy {
