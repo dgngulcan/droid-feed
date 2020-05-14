@@ -11,16 +11,15 @@ import com.droidfeed.databinding.ActivityOnboardBinding
 import com.droidfeed.ui.common.BaseActivity
 import com.droidfeed.ui.module.main.MainActivity
 import com.droidfeed.util.CustomTab
-import com.droidfeed.util.event.EventObserver
 import com.droidfeed.util.extension.getClickableSpan
+import com.droidfeed.util.extension.observeEvent
 import com.google.android.material.snackbar.Snackbar
 import javax.inject.Inject
 
 class OnBoardActivity : BaseActivity() {
 
-    @Inject lateinit var sharedPrefs: SharedPrefsRepo
+    @Inject lateinit var customTab: CustomTab
 
-    private val customTab = CustomTab(this)
     private val viewModel: OnBoardViewModel by viewModels { viewModelFactory }
     private lateinit var binding: ActivityOnboardBinding
 
@@ -34,7 +33,6 @@ class OnBoardActivity : BaseActivity() {
         ).apply {
             lifecycleOwner = this@OnBoardActivity
             cbAgreement.movementMethod = LinkMovementMethod.getInstance()
-
             onBoardViewModel = viewModel
             termsOfServiceSpan = getTermsOfUseSpan()
         }
@@ -43,19 +41,16 @@ class OnBoardActivity : BaseActivity() {
     }
 
     private fun subscribeNavigationEvents() {
-        viewModel.openUrl.observe(this, EventObserver { url ->
-            customTab.showTab(url)
-        })
-
-        viewModel.showSnackBar.observe(this, EventObserver { stringId ->
+        viewModel.openUrl.observeEvent(this) { url -> customTab.showTab(url) }
+        viewModel.showSnackBar.observeEvent(this) { stringId ->
             Snackbar.make(
                 binding.root,
                 stringId,
                 Snackbar.LENGTH_LONG
             ).setAnchorView(binding.cbAgreement).show()
-        })
+        }
 
-        viewModel.openMainActivity.observe(this, EventObserver { continueToMainActivity() })
+        viewModel.openMainActivity.observeEvent(this) { continueToMainActivity() }
     }
 
     private fun getTermsOfUseSpan() = getString(
@@ -68,16 +63,12 @@ class OnBoardActivity : BaseActivity() {
     }
 
     private fun continueToMainActivity() {
-        sharedPrefs.setHasAcceptedTerms(true)
-
         Intent(
             this,
             MainActivity::class.java
         ).apply {
             addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
             addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)
-        }.run {
-            startActivity(this)
-        }
+        }.also(::startActivity)
     }
 }

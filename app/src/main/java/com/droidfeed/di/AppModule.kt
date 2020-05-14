@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.SharedPreferences
 import com.droidfeed.App
 import com.droidfeed.di.api.ApiModule
+import com.droidfeed.util.ColorPalette
 import com.google.firebase.firestore.FirebaseFirestore
 import dagger.Module
 import dagger.Provides
@@ -25,6 +26,9 @@ class AppModule {
         app.getSharedPreferences("df_sharedpreferences", Context.MODE_PRIVATE)
 
     @Provides
-    @Singleton
     fun provideFirestore() = FirebaseFirestore.getInstance()
+
+    @Provides
+    @Singleton
+    fun provideColorPalette(context: App) = ColorPalette(context)
 }

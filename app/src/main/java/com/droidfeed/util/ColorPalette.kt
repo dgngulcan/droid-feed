@@ -4,9 +4,10 @@ import android.content.Context
 import androidx.core.content.ContextCompat
 import com.droidfeed.R
 import javax.inject.Inject
+import javax.inject.Singleton
 
+@Singleton
 class ColorPalette @Inject constructor(context: Context) {
-
     val transparent by lazy { ContextCompat.getColor(context, R.color.transparent) }
     val accent by lazy { ContextCompat.getColor(context, R.color.colorAccent) }
     val white by lazy { ContextCompat.getColor(context, android.R.color.white) }

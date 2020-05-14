@@ -15,9 +15,8 @@ import androidx.annotation.RequiresApi
 import androidx.core.view.GravityCompat
 import androidx.core.view.isVisible
 import androidx.databinding.DataBindingUtil
-import androidx.drawerlayout.widget.DrawerLayout
 import androidx.lifecycle.Observer
-import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.observe
 import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.droidfeed.R
@@ -28,8 +27,9 @@ import com.droidfeed.ui.common.BaseActivity
 import com.droidfeed.ui.module.onboard.OnBoardActivity
 import com.droidfeed.util.AnimUtils
 import com.droidfeed.util.ColorPalette
-import com.droidfeed.util.event.EventObserver
+import com.droidfeed.util.extension.addOnDrawerClosedListener
 import com.droidfeed.util.extension.hideKeyboard
+import com.droidfeed.util.extension.observeEvent
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.activity_main.*
 import javax.inject.Inject
@@ -41,6 +41,7 @@ class MainActivity : BaseActivity() {
     @Inject lateinit var navController: MainNavController
     @Inject lateinit var animUtils: AnimUtils
     @Inject lateinit var colorPalette: ColorPalette
+    @Inject lateinit var uiModelAdapter: UIModelAdapter
 
     private val mainViewModel: MainViewModel by viewModels { viewModelFactory }
     private lateinit var binding: ActivityMainBinding
@@ -48,7 +49,6 @@ class MainActivity : BaseActivity() {
     private var previousScreenColor = 0
     private var previousMenuButton: View? = null
     private val linearLayoutManager = LinearLayoutManager(this)
-    private val uiModelAdapter = UIModelAdapter(lifecycleScope, linearLayoutManager)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         setTheme(R.style.AppTheme)
@@ -77,18 +77,18 @@ class MainActivity : BaseActivity() {
     }
 
     private fun subscribeSourceShareEvent() {
-        mainViewModel.shareSourceEvent.observe(this, EventObserver { content ->
+        mainViewModel.shareSourceEvent.observeEvent(this) { content ->
             Intent().apply {
                 action = Intent.ACTION_SEND
                 type = "text/plain"
                 putExtra(Intent.EXTRA_TEXT, content)
                 addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP)
             }.also(this::startActivity)
-        })
+        }
     }
 
     private fun subscribeSourceRemoveUndoSnack() {
-        mainViewModel.showUndoSourceRemoveSnack.observe(this, EventObserver { onUndo ->
+        mainViewModel.showUndoSourceRemoveSnack.observeEvent(this) { onUndo ->
             Snackbar.make(
                 binding.root,
                 R.string.info_source_removed,
@@ -97,78 +97,80 @@ class MainActivity : BaseActivity() {
                 setActionTextColor(Color.YELLOW)
                 animationMode = Snackbar.ANIMATION_MODE_SLIDE
                 setAction(R.string.undo) { onUndo() }
-            }.run {
-                show()
+            }.also {
+                it.show()
             }
-        })
+        }
     }
 
     private fun subscribeCloseKeyboard() {
-        mainViewModel.closeKeyboardEvent.observe(this, EventObserver {
+        mainViewModel.closeKeyboardEvent.observe(this) {
             edtFeedUrl.hideKeyboard()
-        })
+        }
     }
 
     private fun subscribeSources() {
-        mainViewModel.sourceUIModelData.observe(this, Observer { sourceUIModels ->
+        mainViewModel.sourceUIModelData.observe(this) { sourceUIModels ->
             uiModelAdapter.addUIModels(sourceUIModels as List<BaseUIModelAlias>)
-        })
+        }
     }
 
     private fun subscribeFilterVisibility() {
-        mainViewModel.isSourceFilterVisible.observe(this, EventObserver { isVisible ->
-            if (isVisible) {
-                binding.drawerLayout.openDrawer(GravityCompat.END)
-            } else {
-                binding.drawerLayout.closeDrawer(GravityCompat.END)
+        mainViewModel.isSourceFilterVisible.observeEvent(this) { isVisible ->
+            when {
+                isVisible -> binding.drawerLayout.openDrawer(GravityCompat.END)
+                else -> binding.drawerLayout.closeDrawer(GravityCompat.END)
             }
-        })
+        }
     }
 
     @Suppress("WHEN_ENUM_CAN_BE_NULL_IN_JAVA")
     private fun subscribeNavigation() {
-        mainViewModel.onNavigation.observe(this, Observer { destination ->
+        mainViewModel.onNavigation.observe(this) { destination ->
             if (navController.activeDestination != destination) {
                 navController.open(destination)
-
-                when (destination) {
-                    Destination.FEED -> {
-                        highlightSelectedMenuItem(binding.appbar.menu.btnNavHome)
-                        onMenuItemSelected(colorPalette.transparent)
-                        lightStatusBarTheme()
-                    }
-                    Destination.CONTRIBUTE -> {
-                        highlightSelectedMenuItem(binding.appbar.menu.btnNavContribute)
-                        onMenuItemSelected(colorPalette.gray)
-                        darkStatusBarTheme()
-                    }
-                    Destination.ABOUT -> {
-                        highlightSelectedMenuItem(binding.appbar.menu.btnNavAbout)
-                        onMenuItemSelected(colorPalette.pink)
-                        darkStatusBarTheme()
-                    }
-                    Destination.CONFERENCES -> {
-                        highlightSelectedMenuItem(binding.appbar.menu.btnNavConferences)
-                        onMenuItemSelected(colorPalette.transparent)
-                        lightStatusBarTheme()
-                    }
-                }
+                updateUiForDestination(destination)
             }
-        })
+        }
+    }
+
+    private fun updateUiForDestination(destination: Destination?) {
+        when (destination) {
+            Destination.FEED -> {
+                highlightSelectedMenuItem(binding.appbar.menu.btnNavHome)
+                onMenuItemSelected(colorPalette.transparent)
+                lightStatusBarTheme()
+            }
+            Destination.CONTRIBUTE -> {
+                highlightSelectedMenuItem(binding.appbar.menu.btnNavContribute)
+                onMenuItemSelected(colorPalette.gray)
+                darkStatusBarTheme()
+            }
+            Destination.ABOUT -> {
+                highlightSelectedMenuItem(binding.appbar.menu.btnNavAbout)
+                onMenuItemSelected(colorPalette.pink)
+                darkStatusBarTheme()
+            }
+            Destination.CONFERENCES -> {
+                highlightSelectedMenuItem(binding.appbar.menu.btnNavConferences)
+                onMenuItemSelected(colorPalette.transparent)
+                lightStatusBarTheme()
+            }
+        }
     }
 
     private fun subscribeUserTerms() {
-        mainViewModel.isUserTermsAccepted.observe(this, Observer { isUserTermsAccepted ->
+        mainViewModel.isUserTermsAccepted.observe(this) { isUserTermsAccepted ->
             if (!isUserTermsAccepted) {
                 startOnBoardActivity()
             }
-        })
+        }
     }
 
     private fun subscribeScrollTopEvent() {
-        mainViewModel.scrollTop.observe(this, EventObserver {
+        mainViewModel.scrollTop.observeEvent(this) {
             navController.scrollToTop()
-        })
+        }
     }
 
     private fun startOnBoardActivity() {
@@ -178,8 +180,8 @@ class MainActivity : BaseActivity() {
         ).apply {
             addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
             addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)
-        }.run {
-            startActivity(this)
+        }.also {
+            startActivity(it)
             overridePendingTransition(0, 0)
         }
     }
@@ -311,21 +313,10 @@ class MainActivity : BaseActivity() {
             setFilterPaddingForCutout()
         }
 
-        binding.drawerLayout.addDrawerListener(object : DrawerLayout.DrawerListener {
-            override fun onDrawerStateChanged(newState: Int) {
-            }
-
-            override fun onDrawerSlide(drawerView: View, slideOffset: Float) {
-            }
-
-            override fun onDrawerClosed(drawerView: View) {
-                mainViewModel.onFilterDrawerClosed()
-                drawerView.hideKeyboard()
-            }
-
-            override fun onDrawerOpened(drawerView: View) {
-            }
-        })
+        binding.drawerLayout.addOnDrawerClosedListener { drawerView ->
+            mainViewModel.onFilterDrawerClosed()
+            drawerView.hideKeyboard()
+        }
     }
 
     @RequiresApi(Build.VERSION_CODES.P)

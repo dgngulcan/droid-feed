@@ -1,9 +1,6 @@
 package com.droidfeed.ui.module.feed
 
-import androidx.annotation.DrawableRes
-import androidx.annotation.StringRes
 import androidx.lifecycle.*
-import androidx.lifecycle.Transformations.switchMap
 import androidx.paging.PagedList
 import com.droidfeed.R
 import com.droidfeed.data.model.Post
@@ -13,6 +10,7 @@ import com.droidfeed.data.repo.SourceRepo
 import com.droidfeed.ui.adapter.UIModelType
 import com.droidfeed.ui.adapter.model.PostUIModel
 import com.droidfeed.ui.module.feed.analytics.FeedScreenLogger
+import com.droidfeed.ui.module.main.MainViewModel
 import com.droidfeed.util.IntentProvider
 import com.droidfeed.util.event.Event
 import com.droidfeed.util.extension.asLiveData
@@ -27,41 +25,58 @@ class FeedViewModel @Inject constructor(
     private val postRepo: PostRepo,
     private val sharedPrefs: SharedPrefsRepo,
     private val logger: FeedScreenLogger,
-    private val appRateInteractor: AppRateInteractor
+    private val appRateInteractor: AppRateInteractor,
+    mainViewModel: MainViewModel
 ) : ViewModel() {
 
-    private val feedType = MutableLiveData<FeedType>()
     private lateinit var refreshJob: Job
 
-    val postsLiveData: LiveData<PagedList<PostUIModel>> = switchMap(feedType) { type ->
-        when (type) {
-            FeedType.POSTS -> {
-                postRepo.getAll()
-                    .asLiveData(pagedListConfig) { posts ->
-                        createPostUIModel(posts)
-                    }
-            }
-            FeedType.BOOKMARKS -> {
-                postRepo.getBookmarked()
-                    .asLiveData(pagedListConfig) { posts ->
-                        createPostUIModel(posts)
-                    }
+    val emptyStateDrawable = MutableLiveData(R.drawable.ic_df_logo)
+    val emptyTitle = MutableLiveData(R.string.empty_string)
+    val emptySubtitle = MutableLiveData(R.string.empty_string)
+    val isProgressVisible = MutableLiveData(false)
+    val isRefreshing = MutableLiveData(false)
+    val openPostDetail = MutableLiveData<Event<Post>>()
+    val showUndoBookmarkSnack = MutableLiveData<Event<() -> Unit>>()
+    val showAppRateSnack = MutableLiveData<Event<() -> Unit>>()
+    val sharePost = MutableLiveData<Event<Post>>()
+    val intentToStart = MutableLiveData<Event<IntentProvider.TYPE>>()
+
+    val feedType: LiveData<FeedType> =
+        Transformations.map(mainViewModel.isBookmarksShown) { isShown ->
+            if (isShown) FeedType.BOOKMARKS else FeedType.POSTS
+        }
+
+    val postsLiveData: LiveData<PagedList<PostUIModel>> =
+        Transformations.switchMap(feedType) { type ->
+            when (type) {
+                FeedType.POSTS -> {
+                    postRepo.getAll()
+                        .asLiveData(pagedListConfig) { posts ->
+                            createPostUIModel(posts)
+                        }
+                }
+                FeedType.BOOKMARKS -> {
+                    postRepo.getBookmarked()
+                        .asLiveData(pagedListConfig) { posts ->
+                            createPostUIModel(posts)
+                        }
+                }
             }
         }
-    }
 
     val isEmptyStateVisible: LiveData<Boolean> = Transformations.map(postsLiveData) { list ->
         if (list.isEmpty() && !refreshJob.isActive) {
             when (feedType.value) {
                 FeedType.BOOKMARKS -> {
                     emptyStateDrawable.postValue(R.drawable.ic_empty_state_bookmark)
-                    emptyTitleText.postValue(R.string.empty_bookmark_title)
-                    emptySubtitleText.postValue(R.string.empty_string)
+                    emptyTitle.postValue(R.string.empty_bookmark_title)
+                    emptySubtitle.postValue(R.string.empty_string)
                 }
                 FeedType.POSTS -> {
                     emptyStateDrawable.postValue(R.drawable.ic_empty_state_bookshelf)
-                    emptyTitleText.postValue(R.string.empty_source_title)
-                    emptySubtitleText.postValue(R.string.empty_source_content)
+                    emptyTitle.postValue(R.string.empty_source_title)
+                    emptySubtitle.postValue(R.string.empty_source_content)
                 }
             }
             true
@@ -69,27 +84,6 @@ class FeedViewModel @Inject constructor(
             false
         }
     }
-
-    val emptyStateDrawable = MutableLiveData<@DrawableRes Int>()
-        .apply {
-            value = R.drawable.ic_df_logo
-        }
-    val emptyTitleText = MutableLiveData<@StringRes Int>()
-        .apply {
-            value = R.string.empty_string
-        }
-    val emptySubtitleText = MutableLiveData<@StringRes Int>()
-        .apply {
-            value = R.string.empty_string
-        }
-
-    val isProgressVisible = MutableLiveData<Boolean>().apply { value = false }
-    val isRefreshing = MutableLiveData<Boolean>().apply { value = false }
-    val openPostDetail = MutableLiveData<Event<Post>>()
-    val showUndoBookmarkSnack = MutableLiveData<Event<() -> Unit>>()
-    val showAppRateSnack = MutableLiveData<Event<() -> Unit>>()
-    val sharePost = MutableLiveData<Event<Post>>()
-    val intentToStart = MutableLiveData<Event<IntentProvider.TYPE>>()
 
     init {
         refreshJob = refresh()
@@ -102,9 +96,7 @@ class FeedViewModel @Inject constructor(
 
     private fun createPostUIModel(posts: List<Post>): List<PostUIModel> {
         /* mark first item of every page as large */
-        if (posts.isNotEmpty()) {
-            posts[0].layoutType = UIModelType.POST_LARGE
-        }
+        posts.takeIf { it.isNotEmpty() }?.first()?.layoutType = UIModelType.POST_LARGE
 
         return posts.map { PostUIModel(it, postClickCallback) }
     }
@@ -123,12 +115,6 @@ class FeedViewModel @Inject constructor(
 
         override fun onBookmarkClick(post: Post) {
             togglePostBookmark(post)
-        }
-    }
-
-    fun setFeedType(feedType: FeedType) {
-        if (this.feedType.value != feedType) {
-            this.feedType.value = feedType
         }
     }
 
@@ -172,11 +158,9 @@ class FeedViewModel @Inject constructor(
     }
 
     private fun tryShowingAppRateSnackbar() {
-        if (appRateInteractor.canShowAppRate()) {
-            viewModelScope.launch(Dispatchers.IO) {
-                val bookmarkCount = postRepo.getBookmarkedCount()
-
-                if (appRateInteractor.isFitForAppRatePrompt(bookmarkCount)) {
+        viewModelScope.launch(Dispatchers.IO) {
+            if (appRateInteractor.isFitForAppRatePrompt(postRepo.getBookmarkedCount())) {
+                viewModelScope.launch(Dispatchers.IO) {
                     logger.logAppRatePrompt()
 
                     showAppRateSnack.postValue(Event {
@@ -187,7 +171,6 @@ class FeedViewModel @Inject constructor(
             }
         }
     }
-
 
     companion object {
         private const val ITEM_PER_PAGE = 20

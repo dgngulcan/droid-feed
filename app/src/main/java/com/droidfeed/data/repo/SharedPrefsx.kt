@@ -62,12 +62,12 @@ internal var SharedPreferences.appRatePromptIgnoreCount: Int
 /**
  * Indicates if app rate prompt should be made or not.
  */
-internal var SharedPreferences.appRatePrompt: Boolean
+internal var SharedPreferences.canPromptRateApp: Boolean
     set(value) {
-        edit { putBoolean("app_rate_prompt", value) }
+        edit { putBoolean("can_prompt_rate_app", value) }
     }
     get() {
-        return getBoolean("app_rate_prompt", true)
+        return getBoolean("can_prompt_rate_app", true)
     }
 
 internal const val APP_RATE_PROMPT_INDEX = 3

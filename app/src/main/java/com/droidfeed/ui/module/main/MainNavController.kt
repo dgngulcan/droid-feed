@@ -2,7 +2,6 @@ package com.droidfeed.ui.module.main
 
 import androidx.fragment.app.Fragment
 import com.droidfeed.R
-import com.droidfeed.di.main.MainScope
 import com.droidfeed.ui.common.Scrollable
 import com.droidfeed.ui.module.about.AboutFragment
 import com.droidfeed.ui.module.conferences.ConferencesFragment
@@ -10,7 +9,6 @@ import com.droidfeed.ui.module.contribute.ContributeFragment
 import com.droidfeed.ui.module.feed.FeedFragment
 import javax.inject.Inject
 
-@MainScope
 class MainNavController @Inject constructor(val activity: MainActivity) {
 
     private val fragmentManager = activity.supportFragmentManager

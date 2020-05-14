@@ -54,7 +54,7 @@ android {
         unitTests.returnDefaultValues = true
     }
 
-    android.dataBinding.enabled = true
+    dataBinding.enabled = true
 
     dexOptions {
         javaMaxHeapSize "4g"
@@ -92,6 +92,7 @@ dependencies {
     implementation deps.androidx.browser
     implementation deps.androidx.lifecycle
     implementation deps.androidx.lifecycle_ktx
+    implementation deps.androidx.livedata_ktx
     implementation deps.androidx.viewmodel_ktx
     kapt deps.androidx.lifecycle_compiler
     implementation deps.androidx.paging

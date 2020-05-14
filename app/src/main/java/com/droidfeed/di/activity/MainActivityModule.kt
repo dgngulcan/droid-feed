@@ -1,16 +1,19 @@
 @file:Suppress("unused")
 
-package com.droidfeed.di.main
+package com.droidfeed.di.activity
 
+import androidx.appcompat.app.AppCompatActivity
 import com.droidfeed.ui.module.about.AboutFragment
 import com.droidfeed.ui.module.conferences.ConferencesFragment
 import com.droidfeed.ui.module.contribute.ContributeFragment
 import com.droidfeed.ui.module.feed.FeedFragment
+import com.droidfeed.ui.module.main.MainActivity
+import dagger.Binds
 import dagger.Module
 import dagger.android.ContributesAndroidInjector
 
 @Module
-abstract class MainFragmentModule {
+abstract class MainActivityModule {
 
     @ContributesAndroidInjector
     abstract fun contributeNewsFragment(): FeedFragment
@@ -23,4 +26,8 @@ abstract class MainFragmentModule {
 
     @ContributesAndroidInjector
     abstract fun contributeConferencesFragment(): ConferencesFragment
+
+    @Binds
+    abstract fun bindActivity(activity: MainActivity): AppCompatActivity
+
 }

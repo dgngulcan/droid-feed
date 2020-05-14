@@ -8,14 +8,12 @@ class AppRateInteractor @Inject constructor(
     private val sharedPrefs: SharedPrefsRepo
 ) {
 
-    fun canShowAppRate() = sharedPrefs.appRatePrompt
-
     fun isFitForAppRatePrompt(bookmarkCount: Int): Boolean {
-        return sharedPrefs.appOpenCount > sharedPrefs.appRatePromptIndex &&
-                (bookmarkCount > sharedPrefs.appRatePromptIndex ||
-                        sharedPrefs.shareCount > sharedPrefs.appRatePromptIndex)
+        val openCountMatches = sharedPrefs.appOpenCount > sharedPrefs.appRatePromptIndex
+        val bookmarkCountMatches = bookmarkCount > sharedPrefs.appRatePromptIndex
+        val shareCountMatches = sharedPrefs.shareCount > sharedPrefs.appRatePromptIndex
 
+        return sharedPrefs.canPromptRateApp && openCountMatches && (bookmarkCountMatches || shareCountMatches)
     }
-
 
 }

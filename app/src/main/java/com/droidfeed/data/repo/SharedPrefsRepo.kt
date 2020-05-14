@@ -16,11 +16,7 @@ class SharedPrefsRepo @Inject constructor(private val sharedPrefs: SharedPrefere
     }
 
     fun setAppRatePrompt(appRatePrompt: Boolean) {
-        sharedPrefs.appRatePrompt = appRatePrompt
-    }
-
-    fun setHasAcceptedTerms(hasAccepted: Boolean) {
-        sharedPrefs.hasAcceptedTerms = hasAccepted
+        sharedPrefs.canPromptRateApp = appRatePrompt
     }
 
     fun incrementItemShareCount() {
@@ -31,12 +27,41 @@ class SharedPrefsRepo @Inject constructor(private val sharedPrefs: SharedPrefere
         sharedPrefs.appOpenCount += 1
     }
 
-    val appRatePrompt = sharedPrefs.appRatePrompt
-    val appRatePromptCount = sharedPrefs.appRatePromptIgnoreCount
-    val appOpenCount = sharedPrefs.appOpenCount
-    val shareCount = sharedPrefs.shareCount
-    val appRatePromptIndex = sharedPrefs.appRatePromptIndex
-    val hasAcceptedTerms = sharedPrefs.hasAcceptedTerms
+    var canPromptRateApp
+        set(value) {
+            sharedPrefs.canPromptRateApp = value
+        }
+        get() = sharedPrefs.canPromptRateApp
+
+    var appRatePromptCount
+        set(value) {
+            sharedPrefs.appRatePromptIgnoreCount = value
+        }
+        get() = sharedPrefs.appRatePromptIgnoreCount
+
+    var appOpenCount
+        set(value) {
+            sharedPrefs.appOpenCount = value
+        }
+        get() = sharedPrefs.appOpenCount
+
+    var shareCount
+        set(value) {
+            sharedPrefs.shareCount = value
+        }
+        get() = sharedPrefs.shareCount
+
+    var appRatePromptIndex
+        set(value) {
+            sharedPrefs.appRatePromptIndex = value
+        }
+        get() = sharedPrefs.appRatePromptIndex
+
+    var hasAcceptedTerms
+        set(value) {
+            sharedPrefs.hasAcceptedTerms = value
+        }
+        get() = sharedPrefs.hasAcceptedTerms
 
 
 }

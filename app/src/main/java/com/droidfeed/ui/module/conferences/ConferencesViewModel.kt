@@ -31,13 +31,12 @@ class ConferencesViewModel @Inject constructor(
 
         when (val dataStatus = conferenceRepo.getUpcoming()) {
             is DataStatus.Successful -> {
-                val uiModels = dataStatus.data
+                dataStatus.data
                     ?.map { conference -> createConferenceUIModel(conference) }
-                conferences.postValue(uiModels)
-            }
-            is DataStatus.Failed -> {
+                    .also { conferences.postValue(it) }
             }
         }
+        isProgressVisible.postValue(false)
     }
 
     private fun createConferenceUIModel(conference: Conference): ConferenceUIModel {
