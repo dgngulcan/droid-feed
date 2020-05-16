@@ -13,7 +13,7 @@ import com.droidfeed.BuildConfig
 import com.droidfeed.R
 import com.droidfeed.databinding.FragmentAboutBinding
 import com.droidfeed.ui.common.BaseFragment
-import com.droidfeed.ui.module.about.licence.LicencesActivity
+import com.droidfeed.ui.module.about.license.LicensesActivity
 import com.droidfeed.util.AnimUtils.Companion.MEDIUM_ANIM_DURATION
 import com.droidfeed.util.CustomTab
 import com.droidfeed.util.IntentProvider
@@ -50,16 +50,16 @@ class AboutFragment : BaseFragment("about") {
 
         subscribeStartIntentEvent()
         subscribeOpenUrlEvent()
-        subscribeOpenLicenceEvent()
+        subscribeOpenLicenseEvent()
 
         initAnimations()
 
         return binding.root
     }
 
-    private fun subscribeOpenLicenceEvent() {
-        aboutViewModel.openLicences.observeEvent(viewLifecycleOwner) {
-            Intent(context, LicencesActivity::class.java)
+    private fun subscribeOpenLicenseEvent() {
+        aboutViewModel.openLicenses.observeEvent(viewLifecycleOwner) {
+            Intent(context, LicensesActivity::class.java)
                 .also(::startActivity)
         }
     }

@@ -61,11 +61,11 @@ class AboutViewModelTest {
     }
 
     @Test
-    fun whenOpenLicencesClicked_thenFireOpenLicencesEvent() {
+    fun whenOpenLicensesClicked_thenFireOpenLicensesEvent() {
         val observer = mockk<EventObserver<Unit>>(relaxed = true)
-        sut.openLicences.observeForever(observer)
+        sut.openLicenses.observeForever(observer)
 
-        sut.openLicences()
+        sut.openLicenses()
 
         verify(exactly = 1) { observer.onChanged(any()) }
     }

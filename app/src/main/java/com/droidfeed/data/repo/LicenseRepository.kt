@@ -1,17 +1,17 @@
 package com.droidfeed.data.repo
 
-import com.droidfeed.data.model.Licence
+import com.droidfeed.data.model.License
 import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-class LicenceRepository @Inject constructor() {
+class LicenseRepository @Inject constructor() {
 
-    fun getLicences(): List<Licence> {
-        return mutableListOf<Licence>()
+    fun getLicenses(): List<License> {
+        return mutableListOf<License>()
             .apply {
                 add(
-                    Licence(
+                    License(
                         "Anyi Sun",
                         "DroidFeed application design, illustrations and animations are created by Anyi Sun",
                         "https://anyisun.com",
@@ -19,7 +19,7 @@ class LicenceRepository @Inject constructor() {
                     )
                 )
                 add(
-                    Licence(
+                    License(
                         "Dagger",
                         "A fast dependency injector for Android and Java.",
                         "https://github.com/google/dagger/",
@@ -27,7 +27,7 @@ class LicenceRepository @Inject constructor() {
                     )
                 )
                 add(
-                    Licence(
+                    License(
                         "Glide",
                         "Glide is a fast and efficient open source media management and " +
                                 "contentImage loading framework for Android that wraps media decoding, " +
@@ -38,7 +38,7 @@ class LicenceRepository @Inject constructor() {
                     )
                 )
                 add(
-                    Licence(
+                    License(
                         "Lottie",
                         "Java library for working with real-world HTML",
                         "https://github.com/airbnb/lottie-android",
@@ -46,7 +46,7 @@ class LicenceRepository @Inject constructor() {
                     )
                 )
                 add(
-                    Licence(
+                    License(
                         "OkHttp",
                         "An HTTP & HTTP/2 client for Android and Java applications",
                         "https://github.com/square/okhttp/",
@@ -54,7 +54,7 @@ class LicenceRepository @Inject constructor() {
                     )
                 )
                 add(
-                    Licence(
+                    License(
                         "Jsoup",
                         "Java library for working with real-world HTML",
                         "https://github.com/jhy/jsoup",
@@ -63,7 +63,7 @@ class LicenceRepository @Inject constructor() {
                     )
                 )
                 add(
-                    Licence(
+                    License(
                         "Retrofit",
                         "Type-safe HTTP client for Android and Java by Square, Inc.",
                         "https://github.com/square/retrofit",
@@ -71,7 +71,7 @@ class LicenceRepository @Inject constructor() {
                     )
                 )
                 add(
-                    Licence(
+                    License(
                         "Henrique Rossatto",
                         "Hamburger Menu Icon",
                         "https://www.lottiefiles.com/henriqrossatto",
@@ -79,24 +79,15 @@ class LicenceRepository @Inject constructor() {
                     )
                 )
                 add(
-                    Licence(
-                        "Mockito",
-                        "Most popular Mocking framework for unit tests written in Java",
-                        "https://site.mockito.org/",
-                        "https://raw.githubusercontent.com/mockito/mockito/release/2.x/LICENSE"
+                    License(
+                        "MockK",
+                        "Mocking library for Kotlin",
+                        "https://mockk.io/",
+                        "https://github.com/mockk/mockk/blob/master/LICENSE"
                     )
                 )
-                add(
-                    Licence(
-                        "Detekt",
-                        "Static code analysis for Kotlin",
-                        "https://github.com/arturbosch/detekt",
-                        "https://raw.githubusercontent.com/arturbosch/detekt/master/LICENSE"
-                    )
-                )
-            }.sortedBy { licence ->
-                licence.name
-            }
+
+            }.sortedBy { it.name }
     }
 
 }

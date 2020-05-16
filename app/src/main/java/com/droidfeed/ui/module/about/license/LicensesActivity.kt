@@ -1,4 +1,4 @@
-package com.droidfeed.ui.module.about.licence
+package com.droidfeed.ui.module.about.license
 
 import android.os.Bundle
 import android.view.View
@@ -8,7 +8,7 @@ import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.observe
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.droidfeed.R
-import com.droidfeed.databinding.ActivityLicenceBinding
+import com.droidfeed.databinding.ActivityLicenseBinding
 import com.droidfeed.ui.adapter.BaseUIModelAlias
 import com.droidfeed.ui.adapter.UIModelAdapter
 import com.droidfeed.ui.common.BaseActivity
@@ -16,17 +16,17 @@ import com.droidfeed.util.CustomTab
 import com.droidfeed.util.extension.observeEvent
 import javax.inject.Inject
 
-class LicencesActivity : BaseActivity() {
+class LicensesActivity : BaseActivity() {
 
     @Inject lateinit var customTab: CustomTab
-    @Inject lateinit var licenceAdapter: UIModelAdapter
+    @Inject lateinit var licenseAdapter: UIModelAdapter
 
-    private val licencesViewModel: LicencesViewModel by viewModels { viewModelFactory }
+    private val licensesViewModel: LicensesViewModel by viewModels { viewModelFactory }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         window.apply {
             val pinkColor = ContextCompat.getColor(
-                this@LicencesActivity,
+                this@LicensesActivity,
                 R.color.pink
             )
             statusBarColor = pinkColor
@@ -35,48 +35,48 @@ class LicencesActivity : BaseActivity() {
 
         super.onCreate(savedInstanceState)
 
-        DataBindingUtil.setContentView<ActivityLicenceBinding>(
+        DataBindingUtil.setContentView<ActivityLicenseBinding>(
             this,
-            R.layout.activity_licence
+            R.layout.activity_license
         ).apply {
-            toolbarTitle = getString(R.string.licences)
+            toolbarTitle = getString(R.string.licenses)
             toolbarHomeNavClickListener = View.OnClickListener {
-                licencesViewModel.onBackNavigation()
+                licensesViewModel.onBackNavigation()
             }
             initRecyclerView(this)
         }
 
         subscribeOpenUrl()
-        subscribeLicenceUIModels()
+        subscribeLicenseUIModels()
         subscribeOnBackNavigation()
     }
 
-    private fun initRecyclerView(binding: ActivityLicenceBinding) {
+    private fun initRecyclerView(binding: ActivityLicenseBinding) {
         binding.recyclerView.apply {
-            val linearLayoutManager = LinearLayoutManager(this@LicencesActivity)
-            licenceAdapter.layoutManager = linearLayoutManager
+            val linearLayoutManager = LinearLayoutManager(this@LicensesActivity)
+            licenseAdapter.layoutManager = linearLayoutManager
             layoutManager = linearLayoutManager
             overScrollMode = View.OVER_SCROLL_NEVER
-            adapter = licenceAdapter
+            adapter = licenseAdapter
         }
 
     }
 
     private fun subscribeOpenUrl() {
-        licencesViewModel.openUrl.observeEvent(this) { url ->
+        licensesViewModel.openUrl.observeEvent(this) { url ->
             customTab.showTab(url)
         }
     }
 
     @Suppress("UNCHECKED_CAST")
-    private fun subscribeLicenceUIModels() {
-        licencesViewModel.licenceUIModels.observe(this) { uiModels ->
-            licenceAdapter.addUIModels(uiModels as List<BaseUIModelAlias>)
+    private fun subscribeLicenseUIModels() {
+        licensesViewModel.licenseUIModels.observe(this) { uiModels ->
+            licenseAdapter.addUIModels(uiModels as List<BaseUIModelAlias>)
         }
     }
 
     private fun subscribeOnBackNavigation() {
-        licencesViewModel.onBackNavigation.observe(this) {
+        licensesViewModel.onBackNavigation.observe(this) {
             onBackPressed()
         }
     }

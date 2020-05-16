@@ -41,7 +41,7 @@
     <string name="share_app">Share this App</string>
     <string name="rate_app">Rate the App</string>
     <string name="contact_us">Contact Us</string>
-    <string name="licences">Licences</string>
+    <string name="licenses">Licenses</string>
     <string name="publisher_time">%1$s &#8226; %2$s</string>
     <string name="send_with">Send with</string>
     <string name="yes">Yes</string>
@@ -69,7 +69,7 @@
     <string name="content_article_image">image of the article</string>
     <string name="content_app_logo">DroidFeed logo</string>
     <string name="info_subs_confirmed">Thanks! Please check your inbox for a confirmation.</string>
-    <string name="licence">Licence</string>
+    <string name="license">License</string>
     <string name="content_desc_back_button">Back navigation button</string>
     <string name="empty_string" />
     <string name="cfp_deadline">CFP until %1$s</string>

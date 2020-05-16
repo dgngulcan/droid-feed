@@ -23,7 +23,7 @@ class AboutScreenLogger @Inject constructor(private val analytics: FirebaseAnaly
         analytics.logEvent("contact_email_click", getBundle())
     }
 
-    fun logLicencesClick() {
+    fun logLicensesClick() {
         analytics.logEvent("licences_click", getBundle())
     }
 

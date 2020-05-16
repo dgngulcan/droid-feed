@@ -2,11 +2,11 @@ package com.droidfeed.data.model
 
 import com.droidfeed.ui.adapter.diff.Diffable
 
-data class Licence(
+data class License(
     val name: String,
     val description: String,
     val url: String,
-    val licenceUrl: String = ""
+    val licenseUrl: String = ""
 ) : Diffable {
 
     override fun isSame(item: Any) = equals(item)

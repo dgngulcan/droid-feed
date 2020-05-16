@@ -41,7 +41,7 @@
             android:name=".ui.module.onboard.OnBoardActivity"
             android:theme="@style/AppTheme.DarkWindowBackground" />
 
-        <activity android:name=".ui.module.about.licence.LicencesActivity" />
+        <activity android:name=".ui.module.about.license.LicensesActivity" />
 
         <activity
             android:name=".ui.module.webview.WebViewActivity"

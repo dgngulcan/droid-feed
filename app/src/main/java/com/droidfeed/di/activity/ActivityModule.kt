@@ -2,7 +2,7 @@
 
 package com.droidfeed.di.activity
 
-import com.droidfeed.ui.module.about.licence.LicencesActivity
+import com.droidfeed.ui.module.about.license.LicensesActivity
 import com.droidfeed.ui.module.main.MainActivity
 import com.droidfeed.ui.module.onboard.OnBoardActivity
 import com.droidfeed.ui.module.webview.WebViewActivity
@@ -16,8 +16,8 @@ abstract class ActivityModule {
     @ContributesAndroidInjector(modules = [MainActivityModule::class])
     abstract fun contributeMainActivity(): MainActivity
 
-    @ContributesAndroidInjector(modules = [LicenceActivityModule::class])
-    abstract fun contributeLicencesActivity(): LicencesActivity
+    @ContributesAndroidInjector(modules = [LicenseActivityModule::class])
+    abstract fun contributeLicensesActivity(): LicensesActivity
 
     @ContributesAndroidInjector(modules = [OnBoardActivityModule::class])
     abstract fun contributeOnBoardActivity(): OnBoardActivity

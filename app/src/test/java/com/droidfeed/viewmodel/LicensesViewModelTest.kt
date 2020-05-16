@@ -2,8 +2,8 @@ package com.droidfeed.viewmodel
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.lifecycle.Observer
-import com.droidfeed.data.repo.LicenceRepository
-import com.droidfeed.ui.module.about.licence.LicencesViewModel
+import com.droidfeed.data.repo.LicenseRepository
+import com.droidfeed.ui.module.about.license.LicensesViewModel
 import com.droidfeed.util.event.Event
 import io.mockk.MockKAnnotations
 import io.mockk.impl.annotations.MockK
@@ -17,12 +17,12 @@ import org.junit.runners.JUnit4
 
 
 @RunWith(JUnit4::class)
-class LicencesViewModelTest {
+class LicensesViewModelTest {
 
     @Rule @JvmField var instantTaskExecutorRule = InstantTaskExecutorRule()
-    @MockK lateinit var licenceRepository: LicenceRepository
+    @MockK lateinit var licenseRepository: LicenseRepository
 
-    lateinit var sut: LicencesViewModel
+    lateinit var sut: LicensesViewModel
 
     @Before
     fun setup() {
@@ -30,15 +30,15 @@ class LicencesViewModelTest {
     }
 
     @Test
-    fun whenInstantiated_shouldRetrieveLicences() {
-        sut = LicencesViewModel(licenceRepository)
+    fun whenInstantiated_shouldRetrieveLicenses() {
+        sut = LicensesViewModel(licenseRepository)
 
-        verify(exactly = 1) { licenceRepository.getLicences() }
+        verify(exactly = 1) { licenseRepository.getLicenses() }
     }
 
     @Test
     fun whenBackNavClicked_shouldFireBackNavEvent() {
-        sut = LicencesViewModel(licenceRepository)
+        sut = LicensesViewModel(licenseRepository)
         val observer = mockk<Observer<Event<Unit>>>(relaxed = true)
         sut.onBackNavigation.observeForever(observer)
 

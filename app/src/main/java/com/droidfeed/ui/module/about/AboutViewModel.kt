@@ -12,7 +12,7 @@ class AboutViewModel @Inject constructor(private val logger: AboutScreenLogger) 
 
     val startIntent = MutableLiveData<Event<IntentProvider.TYPE>>()
     val openUrl = MutableLiveData<Event<String>>()
-    val openLicences = MutableLiveData<Event<Unit>>()
+    val openLicenses = MutableLiveData<Event<Unit>>()
 
     fun rateApp() {
         startIntent.postValue(Event(IntentProvider.TYPE.RATE_APP))
@@ -34,8 +34,8 @@ class AboutViewModel @Inject constructor(private val logger: AboutScreenLogger) 
         logger.logPrivacyPolicyClick()
     }
 
-    fun openLicences() {
-        openLicences.postValue(Event(Unit))
-        logger.logLicencesClick()
+    fun openLicenses() {
+        openLicenses.postValue(Event(Unit))
+        logger.logLicensesClick()
     }
 }
