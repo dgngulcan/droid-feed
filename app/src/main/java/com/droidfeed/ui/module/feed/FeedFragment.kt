@@ -30,7 +30,7 @@ import kotlinx.android.synthetic.main.fragment_feed.*
 import javax.inject.Inject
 
 
-class FeedFragment : BaseFragment("feed"), Scrollable {
+class FeedFragment : BaseFragment(), Scrollable {
 
     @Inject lateinit var customTab: CustomTab
     @Inject lateinit var appRateHelper: AppRateHelper

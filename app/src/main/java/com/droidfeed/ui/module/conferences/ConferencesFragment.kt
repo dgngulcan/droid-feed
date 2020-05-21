@@ -19,7 +19,7 @@ import com.droidfeed.util.CustomTab
 import com.droidfeed.util.extension.observeEvent
 import javax.inject.Inject
 
-class ConferencesFragment : BaseFragment("conferences") {
+class ConferencesFragment : BaseFragment() {
 
     @Inject lateinit var customTab: CustomTab
     @Inject lateinit var uiModelAdapter: UIModelAdapter

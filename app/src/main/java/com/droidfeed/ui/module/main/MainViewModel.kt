@@ -15,6 +15,7 @@ import com.droidfeed.data.repo.SourceRepo
 import com.droidfeed.ui.adapter.model.SourceUIModel
 import com.droidfeed.ui.common.BaseViewModel
 import com.droidfeed.util.event.Event
+import com.droidfeed.util.extension.postEvent
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.util.*
@@ -68,8 +69,7 @@ class MainViewModel @Inject constructor(
     }
 
     private fun onSourceShareClicked(source: Source) {
-        shareSourceEvent.postValue(Event("${source.name}\n ${source.url}"))
-        analytics.logSourceShare()
+        shareSourceEvent.postEvent("${source.name}\n ${source.url}")
     }
 
     private fun updateSources(sourceRepo: SourceRepo) {
@@ -84,12 +84,7 @@ class MainViewModel @Inject constructor(
         viewModelScope.launch(Dispatchers.IO) {
             sourceRepo.remove(source)
             isSourceAddButtonEnabled.postValue(true)
-            analytics.logRemoveSourceButtonClick()
-
-            showUndoSourceRemoveSnack.postValue(Event {
-                addSource(source)
-                analytics.logSourceRemoveUndo()
-            })
+            showUndoSourceRemoveSnack.postEvent { addSource(source) }
         }
     }
 
@@ -99,7 +94,6 @@ class MainViewModel @Inject constructor(
 
     private fun onSourceClicked(source: Source) {
         source.isActive = !source.isActive
-        analytics.logSourceActivation(source.isActive)
 
         viewModelScope.launch(Dispatchers.IO) {
             /* update source when activated */
@@ -144,7 +138,7 @@ class MainViewModel @Inject constructor(
     }
 
     fun onSourceFilterClicked() {
-        isSourceFilterVisible.postValue(Event(true))
+        isSourceFilterVisible.postEvent(true)
     }
 
     fun onAddSourceClicked() {
@@ -155,8 +149,6 @@ class MainViewModel @Inject constructor(
             shouldOpenInputField -> R.drawable.avd_add_to_close
             else -> R.drawable.avd_close_to_add
         }.also(sourceAddIcon::postValue)
-
-        analytics.logAddSourceButtonClick()
     }
 
     fun onSaveSourceClicked(url: String) = viewModelScope.launch(Dispatchers.IO) {
@@ -169,21 +161,17 @@ class MainViewModel @Inject constructor(
 
             if (alreadyExists) {
                 sourceErrText.postValue(R.string.error_source_exists)
-                analytics.logSourceAlreadyExists()
             } else {
                 isSourceProgressVisible.postValue(true)
                 isSourceAddButtonEnabled.postValue(false)
-                closeKeyboardEvent.postValue(Event(true))
+                closeKeyboardEvent.postEvent(true)
                 addSource(cleanUrl)
             }
         } else if (url.isEmpty()) {
             sourceErrText.postValue(R.string.error_empty_source_url)
         } else {
             sourceErrText.postValue(R.string.error_invalid_url)
-            analytics.logSourceAddFailInvalidUrl()
         }
-
-        analytics.logSaveSourceButtonClick()
     }
 
     private fun addSource(url: String) {
@@ -192,11 +180,9 @@ class MainViewModel @Inject constructor(
                 isSourceInputVisible.postValue(false)
                 sourceAddIcon.postValue(R.drawable.avd_close_to_add)
                 sourceInputText.postValue(R.string.empty_string)
-                analytics.logSourceAddSuccess()
             }
             is DataStatus.Failed -> {
                 sourceErrText.postValue(R.string.error_add_source)
-                analytics.logSourceAddFail()
             }
             is DataStatus.HttpFailed -> {
                 sourceErrText.postValue(R.string.error_internet_or_url)
@@ -228,7 +214,7 @@ class MainViewModel @Inject constructor(
     }
 
     fun onToolbarTitleClicked() {
-        scrollTop.postValue(Event(Unit))
+        scrollTop.postEvent(Unit)
     }
 
     fun onCollapseMenu() {
@@ -241,7 +227,7 @@ class MainViewModel @Inject constructor(
     ) {
         when {
             isMenuVisible.value == true -> isMenuVisible.postValue(false)
-            isFilterDrawerOpen -> isSourceFilterVisible.postValue(Event(false))
+            isFilterDrawerOpen -> isSourceFilterVisible.postEvent(false)
             else -> navigateBack()
         }
     }

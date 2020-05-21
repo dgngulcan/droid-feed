@@ -7,15 +7,14 @@ import com.droidfeed.data.DataStatus
 import com.droidfeed.data.model.Conference
 import com.droidfeed.data.repo.ConferenceRepo
 import com.droidfeed.ui.adapter.model.ConferenceUIModel
-import com.droidfeed.ui.module.conferences.analytics.ConferencesScreenLogger
 import com.droidfeed.util.event.Event
+import com.droidfeed.util.extension.postEvent
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 class ConferencesViewModel @Inject constructor(
-    private val conferenceRepo: ConferenceRepo,
-    private val logger: ConferencesScreenLogger
+    private val conferenceRepo: ConferenceRepo
 ) : ViewModel() {
 
     val conferences = MutableLiveData<List<ConferenceUIModel>>(emptyList())
@@ -32,8 +31,8 @@ class ConferencesViewModel @Inject constructor(
         when (val dataStatus = conferenceRepo.getUpcoming()) {
             is DataStatus.Successful -> {
                 dataStatus.data
-                    ?.map { conference -> createConferenceUIModel(conference) }
-                    .also { conferences.postValue(it) }
+                    ?.map(::createConferenceUIModel)
+                    .also(conferences::postValue)
             }
         }
         isProgressVisible.postValue(false)
@@ -42,13 +41,8 @@ class ConferencesViewModel @Inject constructor(
     private fun createConferenceUIModel(conference: Conference): ConferenceUIModel {
         return ConferenceUIModel(
             conference,
-            onItemClick = { conf ->
-                openUrl.postValue(Event(conf.url))
-                logger.logConferenceClick()
-            },
-            onCFPClick = { conf ->
-                openUrl.postValue(Event(conf.cfpUrl))
-                logger.logCFPClick()
-            })
+            onItemClick = { conf -> openUrl.postEvent(conf.url) },
+            onCFPClick = { conf -> openUrl.postEvent(conf.cfpUrl) }
+        )
     }
 }

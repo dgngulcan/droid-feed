@@ -16,7 +16,7 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-class ContributeFragment : BaseFragment("contribute") {
+class ContributeFragment : BaseFragment() {
 
     @Inject lateinit var customTab: CustomTab
 

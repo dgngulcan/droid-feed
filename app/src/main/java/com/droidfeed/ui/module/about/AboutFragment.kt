@@ -25,7 +25,7 @@ import javax.inject.Inject
 
 @SuppressLint("ValidFragment")
 
-class AboutFragment : BaseFragment("about") {
+class AboutFragment : BaseFragment() {
 
     @Inject lateinit var customTab: CustomTab
     @Inject lateinit var intentProvider: IntentProvider

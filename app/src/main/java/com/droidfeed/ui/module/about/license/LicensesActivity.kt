@@ -63,9 +63,7 @@ class LicensesActivity : BaseActivity() {
     }
 
     private fun subscribeOpenUrl() {
-        licensesViewModel.openUrl.observeEvent(this) { url ->
-            customTab.showTab(url)
-        }
+        licensesViewModel.openUrl.observeEvent(this, customTab::showTab)
     }
 
     @Suppress("UNCHECKED_CAST")

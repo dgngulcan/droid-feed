@@ -3,7 +3,6 @@ package com.droidfeed.di
 import android.content.Context
 import android.content.SharedPreferences
 import com.droidfeed.App
-import com.droidfeed.di.api.ApiModule
 import com.droidfeed.util.ColorPalette
 import com.google.firebase.firestore.FirebaseFirestore
 import dagger.Module

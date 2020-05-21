@@ -1,4 +1,4 @@
-package com.droidfeed.di.api
+package com.droidfeed.di
 
 import com.droidfeed.BuildConfig
 import dagger.Module

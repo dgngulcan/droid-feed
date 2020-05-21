@@ -8,13 +8,10 @@ import com.google.android.material.snackbar.Snackbar
 import javax.inject.Inject
 
 class AppRateHelper @Inject constructor(
-    private val sharedPrefs: SharedPrefsRepo,
-    private val analyticsUtil: AnalyticsUtil
+    private val sharedPrefs: SharedPrefsRepo
 ) {
 
     fun showRateSnackbar(view: View, onAction: () -> Unit) {
-        analyticsUtil.logAppRatePrompt()
-
         Snackbar.make(view, R.string.like_to_review_df, 5000)
             .setAction(R.string.yes) { onAction() }
             .setAnimationMode(Snackbar.ANIMATION_MODE_SLIDE)

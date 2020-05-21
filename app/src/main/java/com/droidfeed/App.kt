@@ -3,6 +3,7 @@ package com.droidfeed
 import android.app.Application
 import com.droidfeed.data.repo.SharedPrefsRepo
 import com.droidfeed.di.DaggerAppComponent
+import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.firebase.remoteconfig.FirebaseRemoteConfig
 import dagger.android.AndroidInjector
 import dagger.android.DispatchingAndroidInjector
@@ -19,6 +20,7 @@ class App : Application(), HasAndroidInjector {
 
     override fun onCreate() {
         super.onCreate()
+        FirebaseAnalytics.getInstance(this).setAnalyticsCollectionEnabled(false)
         initDagger()
 
         sharedPrefs.incrementAppOpenCount()

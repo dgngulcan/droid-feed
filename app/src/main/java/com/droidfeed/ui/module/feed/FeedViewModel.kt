@@ -9,11 +9,11 @@ import com.droidfeed.data.repo.SharedPrefsRepo
 import com.droidfeed.data.repo.SourceRepo
 import com.droidfeed.ui.adapter.UIModelType
 import com.droidfeed.ui.adapter.model.PostUIModel
-import com.droidfeed.ui.module.feed.analytics.FeedScreenLogger
 import com.droidfeed.ui.module.main.MainViewModel
 import com.droidfeed.util.IntentProvider
 import com.droidfeed.util.event.Event
 import com.droidfeed.util.extension.asLiveData
+import com.droidfeed.util.extension.postEvent
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
@@ -24,7 +24,6 @@ class FeedViewModel @Inject constructor(
     private val sourceRepo: SourceRepo,
     private val postRepo: PostRepo,
     private val sharedPrefs: SharedPrefsRepo,
-    private val logger: FeedScreenLogger,
     private val appRateInteractor: AppRateInteractor,
     mainViewModel: MainViewModel
 ) : ViewModel() {
@@ -104,13 +103,11 @@ class FeedViewModel @Inject constructor(
     private val postClickCallback = object : PostClickListener {
         override fun onItemClick(post: Post) {
             openPostDetail.postValue(Event(post))
-            logger.logPostClick()
         }
 
         override fun onShareClick(post: Post) {
             sharePost.postValue(Event(post))
             sharedPrefs.incrementItemShareCount()
-            logger.logPostShare()
         }
 
         override fun onBookmarkClick(post: Post) {
@@ -146,8 +143,6 @@ class FeedViewModel @Inject constructor(
             tryShowingAppRateSnackbar()
         }
 
-        logger.logBookmark(post.bookmarked == 1)
-
         viewModelScope.launch(Dispatchers.IO) {
             postRepo.updatePost(post)
         }
@@ -161,12 +156,9 @@ class FeedViewModel @Inject constructor(
         viewModelScope.launch(Dispatchers.IO) {
             if (appRateInteractor.isFitForAppRatePrompt(postRepo.getBookmarkedCount())) {
                 viewModelScope.launch(Dispatchers.IO) {
-                    logger.logAppRatePrompt()
-
-                    showAppRateSnack.postValue(Event {
-                        intentToStart.postValue(Event(IntentProvider.TYPE.RATE_APP))
-                        logger.logAppRateFromPromtClick()
-                    })
+                    showAppRateSnack.postEvent {
+                        intentToStart.postEvent(IntentProvider.TYPE.RATE_APP)
+                    }
                 }
             }
         }

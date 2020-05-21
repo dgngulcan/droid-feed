@@ -6,6 +6,7 @@ import com.droidfeed.ui.adapter.model.LicenseUIModel
 import com.droidfeed.ui.common.BaseViewModel
 import com.droidfeed.data.repo.LicenseRepository
 import com.droidfeed.util.event.Event
+import com.droidfeed.util.extension.postEvent
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -25,7 +26,7 @@ class LicensesViewModel @Inject constructor(
     private fun fillLicenseUIModels() = viewModelScope.launch(Dispatchers.IO) {
         val uiModels = licenseRepository.getLicenses().map { license ->
             LicenseUIModel(license) { url ->
-                openUrl.postValue(Event(url))
+                openUrl.postEvent(url)
             }
         }
 
@@ -33,7 +34,7 @@ class LicensesViewModel @Inject constructor(
     }
 
     fun onBackNavigation() {
-        onBackNavigation.postValue(Event(Unit))
+        onBackNavigation.postEvent(Unit)
     }
 
 }

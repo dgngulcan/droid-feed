@@ -10,6 +10,7 @@ import com.droidfeed.data.repo.SharedPrefsRepo
 import com.droidfeed.data.repo.SourceRepo
 import com.droidfeed.ui.common.BaseViewModel
 import com.droidfeed.util.event.Event
+import com.droidfeed.util.extension.postEvent
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
@@ -79,12 +80,10 @@ class OnBoardViewModel @Inject constructor(
                     postLoadingState(false)
 
                     when (result.throwable) {
-                        is UnknownHostException -> {
-                            showSnackBar.postValue(Event(R.string.info_no_internet))
-                        }
+                        is UnknownHostException -> showSnackBar.postEvent(R.string.info_no_internet)
                         else -> {
                             if (isPendingNavigation) {
-                                showSnackBar.postValue(Event(R.string.error_cannot_obtain_sources))
+                                showSnackBar.postEvent(R.string.error_cannot_obtain_sources)
                             }
                         }
                     }

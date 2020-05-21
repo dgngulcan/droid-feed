@@ -83,7 +83,7 @@ class MainActivity : BaseActivity() {
                 type = "text/plain"
                 putExtra(Intent.EXTRA_TEXT, content)
                 addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP)
-            }.also(this::startActivity)
+            }.also(::startActivity)
         }
     }
 
