@@ -17,11 +17,6 @@ class MainNavController @Inject constructor(val activity: MainActivity) {
     var activeDestination: Destination? = null
         private set
 
-    private val feedFragment: FeedFragment by lazy { FeedFragment() }
-    private val aboutFragment: AboutFragment by lazy { AboutFragment() }
-    private val contributeFragment: ContributeFragment by lazy { ContributeFragment() }
-    private val conferencesFragment: ConferencesFragment by lazy { ConferencesFragment() }
-
     private fun changeFragment(fragment: Fragment) {
         fragmentManager.beginTransaction()
             .setCustomAnimations(
@@ -45,10 +40,10 @@ class MainNavController @Inject constructor(val activity: MainActivity) {
             activeDestination = destination
 
             when (destination) {
-                Destination.FEED -> changeFragment(feedFragment)
-                Destination.ABOUT -> changeFragment(aboutFragment)
-                Destination.CONTRIBUTE -> changeFragment(contributeFragment)
-                Destination.CONFERENCES -> changeFragment(conferencesFragment)
+                Destination.FEED -> changeFragment(FeedFragment())
+                Destination.ABOUT -> changeFragment(AboutFragment())
+                Destination.CONTRIBUTE -> changeFragment(ContributeFragment())
+                Destination.CONFERENCES -> changeFragment(ConferencesFragment())
             }
         }
     }
