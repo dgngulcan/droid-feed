@@ -20,6 +20,7 @@ import androidx.lifecycle.observe
 import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.droidfeed.R
+import com.droidfeed.data.repo.SharedPrefsRepo
 import com.droidfeed.databinding.ActivityMainBinding
 import com.droidfeed.ui.adapter.BaseUIModelAlias
 import com.droidfeed.ui.adapter.UIModelAdapter
@@ -38,10 +39,11 @@ import javax.inject.Inject
 @Suppress("UNCHECKED_CAST")
 class MainActivity : BaseActivity() {
 
-    @Inject lateinit var navController: MainNavController
     @Inject lateinit var animUtils: AnimUtils
     @Inject lateinit var colorPalette: ColorPalette
+    @Inject lateinit var sharedPrefs: SharedPrefsRepo
     @Inject lateinit var uiModelAdapter: UIModelAdapter
+    @Inject lateinit var navController: MainNavController
 
     private val mainViewModel: MainViewModel by viewModels { viewModelFactory }
     private lateinit var binding: ActivityMainBinding
@@ -49,6 +51,7 @@ class MainActivity : BaseActivity() {
     private var previousScreenColor = 0
     private var previousMenuButton: View? = null
     private val linearLayoutManager = LinearLayoutManager(this)
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         setTheme(R.style.AppTheme)
@@ -63,7 +66,10 @@ class MainActivity : BaseActivity() {
             appbar.containerView.layoutTransition.enableTransitionType(LayoutTransition.CHANGING)
         }
 
-        subscribeUserTerms()
+        if (!sharedPrefs.hasAcceptedTerms) {
+            startOnBoardActivity()
+        }
+
         subscribeNavigation()
         subscribeScrollTopEvent()
         subscribeSources()
@@ -155,14 +161,6 @@ class MainActivity : BaseActivity() {
                 highlightSelectedMenuItem(binding.appbar.menu.btnNavConferences)
                 onMenuItemSelected(colorPalette.transparent)
                 lightStatusBarTheme()
-            }
-        }
-    }
-
-    private fun subscribeUserTerms() {
-        mainViewModel.isUserTermsAccepted.observe(this) { isUserTermsAccepted ->
-            if (!isUserTermsAccepted) {
-                startOnBoardActivity()
             }
         }
     }

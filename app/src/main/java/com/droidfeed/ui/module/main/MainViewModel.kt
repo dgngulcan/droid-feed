@@ -25,14 +25,12 @@ import javax.inject.Singleton
 @Singleton
 class MainViewModel @Inject constructor(
     private val sourceRepo: SourceRepo,
-    private val postRepo: PostRepo,
-    sharedPrefs: SharedPrefsRepo
+    private val postRepo: PostRepo
 ) : BaseViewModel() {
 
     val toolbarTitle = MutableLiveData(R.string.app_name)
     val onNavigation = MutableLiveData(Destination.FEED)
     val scrollTop = MutableLiveData<Event<Unit>>()
-    val isUserTermsAccepted = MutableLiveData(sharedPrefs.hasAcceptedTerms)
     val sourceAddIcon = MutableLiveData(R.drawable.avd_close_to_add)
     val isMenuVisible = MutableLiveData(false)
     val isSourceInputVisible = MutableLiveData(false)

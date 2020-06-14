@@ -20,7 +20,6 @@ class App : Application(), HasAndroidInjector {
 
     override fun onCreate() {
         super.onCreate()
-        FirebaseAnalytics.getInstance(this).setAnalyticsCollectionEnabled(false)
         initDagger()
 
         sharedPrefs.incrementAppOpenCount()

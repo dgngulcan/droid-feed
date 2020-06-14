@@ -5,8 +5,8 @@ apply plugin: 'kotlin-kapt'
 apply plugin: 'com.google.firebase.crashlytics'
 
 ext.app = [
-        'version'            : '2.2.0',
-        'version_code'       : 24,
+        'version'            : '2.3.0',
+        'version_code'       : 26,
         'compile_sdk_version': 29,
         'min_sdk_version'    : 21,
         'target_sdk_version' : 29,
