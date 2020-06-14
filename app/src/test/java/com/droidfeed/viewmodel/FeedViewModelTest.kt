@@ -50,6 +50,8 @@ class FeedViewModelTest {
 
     @Test
     fun whenInstantiated_shouldRefreshWithActiveSources() {
+        sut.isDisplayingBookmarkedItems(false)
+
         verify(exactly = 1) { sourceRepo.getActives() }
         verify(exactly = 1) { runBlocking { postRepo.refresh(any(), any()) } }
     }
