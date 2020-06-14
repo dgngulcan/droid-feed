@@ -17,8 +17,10 @@ import com.droidfeed.ui.common.WrapContentLinearLayoutManager
 import com.droidfeed.ui.module.main.MainViewModel
 import com.droidfeed.util.CustomTab
 import com.droidfeed.util.extension.observeEvent
+import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
+@AndroidEntryPoint
 class ConferencesFragment : BaseFragment() {
 
     @Inject lateinit var customTab: CustomTab
@@ -26,8 +28,8 @@ class ConferencesFragment : BaseFragment() {
 
     private lateinit var binding: FragmentConferencesBinding
 
-    private val mainViewModel: MainViewModel by activityViewModels { viewModelFactory }
-    private val conferencesViewModel: ConferencesViewModel by viewModels { viewModelFactory }
+    private val mainViewModel: MainViewModel by activityViewModels()
+    private val conferencesViewModel: ConferencesViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater,

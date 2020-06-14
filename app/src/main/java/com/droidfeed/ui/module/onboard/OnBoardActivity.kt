@@ -14,13 +14,15 @@ import com.droidfeed.util.CustomTab
 import com.droidfeed.util.extension.getClickableSpan
 import com.droidfeed.util.extension.observeEvent
 import com.google.android.material.snackbar.Snackbar
+import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
+@AndroidEntryPoint
 class OnBoardActivity : BaseActivity() {
 
     @Inject lateinit var customTab: CustomTab
 
-    private val viewModel: OnBoardViewModel by viewModels { viewModelFactory }
+    private val viewModel: OnBoardViewModel by viewModels()
     private lateinit var binding: ActivityOnboardBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {

@@ -1,5 +1,7 @@
 package com.droidfeed.ui.module.main
 
+import android.content.Context
+import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import com.droidfeed.R
 import com.droidfeed.ui.common.Scrollable
@@ -7,11 +9,12 @@ import com.droidfeed.ui.module.about.AboutFragment
 import com.droidfeed.ui.module.conferences.ConferencesFragment
 import com.droidfeed.ui.module.contribute.ContributeFragment
 import com.droidfeed.ui.module.feed.FeedFragment
+import dagger.hilt.android.qualifiers.ActivityContext
 import javax.inject.Inject
 
-class MainNavController @Inject constructor(val activity: MainActivity) {
+class MainNavController @Inject constructor(@ActivityContext val context: Context) {
 
-    private val fragmentManager = activity.supportFragmentManager
+    private val fragmentManager = (context as AppCompatActivity).supportFragmentManager
     private val containerId = R.id.fragmentContainer
 
     var activeDestination: Destination? = null

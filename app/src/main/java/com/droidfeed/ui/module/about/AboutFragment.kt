@@ -18,20 +18,21 @@ import com.droidfeed.util.AnimUtils.Companion.MEDIUM_ANIM_DURATION
 import com.droidfeed.util.CustomTab
 import com.droidfeed.util.IntentProvider
 import com.droidfeed.util.extension.observeEvent
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @SuppressLint("ValidFragment")
-
+@AndroidEntryPoint
 class AboutFragment : BaseFragment() {
 
     @Inject lateinit var customTab: CustomTab
     @Inject lateinit var intentProvider: IntentProvider
 
     private lateinit var binding: FragmentAboutBinding
-    private val aboutViewModel: AboutViewModel by viewModels { viewModelFactory }
+    private val aboutViewModel: AboutViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater,

@@ -42,11 +42,15 @@ deps.glide = [
 ]
 
 deps.dagger = [
-        core           : "com.google.dagger:dagger:2.27",
-        android        : "com.google.dagger:dagger-android:2.27",
-        android_support: "com.google.dagger:dagger-android-support:2.27",
-        compiler       : "com.google.dagger:dagger-compiler:2.27",
-        processor      : "com.google.dagger:dagger-android-processor:2.27"
+        core              : "com.google.dagger:dagger:2.27",
+        android           : "com.google.dagger:dagger-android:2.27",
+        android_support   : "com.google.dagger:dagger-android-support:2.27",
+        compiler          : "com.google.dagger:dagger-compiler:2.27",
+        processor         : "com.google.dagger:dagger-android-processor:2.27",
+        hilt              : "com.google.dagger:hilt-android:2.28-alpha",
+        hilt_viewmodel    : "androidx.hilt:hilt-lifecycle-viewmodel:1.0.0-alpha01",
+        hilt_androidx_kapt: "androidx.hilt:hilt-compiler:1.0.0-alpha01",
+        hilt_kapt         : "com.google.dagger:hilt-android-compiler:2.28-alpha"
 ]
 
 deps.arch = [

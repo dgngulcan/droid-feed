@@ -8,17 +8,22 @@ import com.google.firebase.remoteconfig.FirebaseRemoteConfig
 import com.google.firebase.remoteconfig.FirebaseRemoteConfigSettings
 import dagger.Module
 import dagger.Provides
+import dagger.hilt.InstallIn
+import dagger.hilt.android.components.ApplicationComponent
+import dagger.hilt.android.qualifiers.ApplicationContext
 import javax.inject.Singleton
 
 /**
  * Provider module for Firebase APIs.
  */
 @Module
+@InstallIn(ApplicationComponent::class)
 class FirebaseModule {
 
     @Provides
     @Singleton
-    fun provideFirebaseAnalytics(app: App): FirebaseAnalytics = FirebaseAnalytics.getInstance(app)
+    fun provideFirebaseAnalytics(@ApplicationContext app: App): FirebaseAnalytics =
+        FirebaseAnalytics.getInstance(app)
 
     @Provides
     @Singleton

@@ -14,14 +14,16 @@ import com.droidfeed.ui.adapter.UIModelAdapter
 import com.droidfeed.ui.common.BaseActivity
 import com.droidfeed.util.CustomTab
 import com.droidfeed.util.extension.observeEvent
+import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
+@AndroidEntryPoint
 class LicensesActivity : BaseActivity() {
 
     @Inject lateinit var customTab: CustomTab
     @Inject lateinit var licenseAdapter: UIModelAdapter
 
-    private val licensesViewModel: LicensesViewModel by viewModels { viewModelFactory }
+    private val licensesViewModel: LicensesViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         window.apply {

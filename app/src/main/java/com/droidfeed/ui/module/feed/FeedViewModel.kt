@@ -1,5 +1,6 @@
 package com.droidfeed.ui.module.feed
 
+import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.*
 import androidx.paging.PagedList
 import com.droidfeed.R
@@ -9,7 +10,6 @@ import com.droidfeed.data.repo.SharedPrefsRepo
 import com.droidfeed.data.repo.SourceRepo
 import com.droidfeed.ui.adapter.UIModelType
 import com.droidfeed.ui.adapter.model.PostUIModel
-import com.droidfeed.ui.module.main.MainViewModel
 import com.droidfeed.util.IntentProvider
 import com.droidfeed.util.event.Event
 import com.droidfeed.util.extension.asLiveData
@@ -17,19 +17,17 @@ import com.droidfeed.util.extension.postEvent
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
-import javax.inject.Inject
 
 @Suppress("UNCHECKED_CAST", "WHEN_ENUM_CAN_BE_NULL_IN_JAVA")
-class FeedViewModel @Inject constructor(
+class FeedViewModel @ViewModelInject constructor(
     private val sourceRepo: SourceRepo,
     private val postRepo: PostRepo,
     private val sharedPrefs: SharedPrefsRepo,
-    private val appRateInteractor: AppRateInteractor,
-    mainViewModel: MainViewModel
+    private val appRateInteractor: AppRateInteractor
 ) : ViewModel() {
 
     private lateinit var refreshJob: Job
-
+    private val isDisplayingBookmarks = MutableLiveData<Boolean>()
     val emptyStateDrawable = MutableLiveData(R.drawable.ic_df_logo)
     val emptyTitle = MutableLiveData(R.string.empty_string)
     val emptySubtitle = MutableLiveData(R.string.empty_string)
@@ -40,26 +38,20 @@ class FeedViewModel @Inject constructor(
     val showAppRateSnack = MutableLiveData<Event<() -> Unit>>()
     val sharePost = MutableLiveData<Event<Post>>()
     val intentToStart = MutableLiveData<Event<IntentProvider.TYPE>>()
-
-    val feedType: LiveData<FeedType> =
-        Transformations.map(mainViewModel.isBookmarksShown) { isShown ->
-            if (isShown) FeedType.BOOKMARKS else FeedType.POSTS
-        }
+    val feedType: LiveData<FeedType> = Transformations.map(isDisplayingBookmarks) { isShown ->
+        if (isShown) FeedType.BOOKMARKS else FeedType.POSTS
+    }
 
     val postsLiveData: LiveData<PagedList<PostUIModel>> =
         Transformations.switchMap(feedType) { type ->
             when (type) {
                 FeedType.POSTS -> {
                     postRepo.getAll()
-                        .asLiveData(pagedListConfig) { posts ->
-                            createPostUIModel(posts)
-                        }
+                        .asLiveData(pagedListConfig) { posts -> createPostUIModel(posts) }
                 }
                 FeedType.BOOKMARKS -> {
                     postRepo.getBookmarked()
-                        .asLiveData(pagedListConfig) { posts ->
-                            createPostUIModel(posts)
-                        }
+                        .asLiveData(pagedListConfig) { posts -> createPostUIModel(posts) }
                 }
             }
         }
@@ -150,6 +142,10 @@ class FeedViewModel @Inject constructor(
 
     fun onReturnedFromPost() {
         tryShowingAppRateSnackbar()
+    }
+
+    fun isDisplayingBookmarkedItems(isDisplaying: Boolean) {
+        isDisplayingBookmarks.postValue(isDisplaying)
     }
 
     private fun tryShowingAppRateSnackbar() {

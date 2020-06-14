@@ -11,17 +11,19 @@ import com.droidfeed.ui.common.BaseFragment
 import com.droidfeed.util.AnimUtils.Companion.MEDIUM_ANIM_DURATION
 import com.droidfeed.util.CustomTab
 import com.droidfeed.util.extension.observeEvent
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
+@AndroidEntryPoint
 class ContributeFragment : BaseFragment() {
 
     @Inject lateinit var customTab: CustomTab
 
     private lateinit var binding: FragmentContributeBinding
-    private val contributeViewModel: ContributeViewModel by viewModels { viewModelFactory }
+    private val contributeViewModel: ContributeViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater,

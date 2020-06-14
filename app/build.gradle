@@ -1,4 +1,5 @@
 apply plugin: 'com.android.application'
+apply plugin: 'dagger.hilt.android.plugin'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-kapt'
@@ -33,7 +34,7 @@ android {
 
         javaCompileOptions {
             annotationProcessorOptions {
-                arguments = ["room.schemaLocation": "$projectDir/schemas".toString()]
+                arguments += ["room.schemaLocation": "$projectDir/schemas".toString()]
             }
         }
     }
@@ -82,6 +83,10 @@ androidExtensions {
     experimental = true
 }
 
+kapt {
+    correctErrorTypes true
+}
+
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
     implementation deps.kotlin.stdlib
@@ -100,11 +105,10 @@ dependencies {
     implementation deps.androidx.swipe_refresh_layout
     implementation deps.androidx.room_runtime
     kapt deps.androidx.room_compiler
-    implementation deps.dagger.core
-    implementation deps.dagger.android
-    implementation deps.dagger.android_support
-    kapt deps.dagger.compiler
-    kapt deps.dagger.processor
+    implementation deps.dagger.hilt
+    implementation deps.dagger.hilt_viewmodel
+    kapt deps.dagger.hilt_androidx_kapt
+    kapt deps.dagger.hilt_kapt
     implementation deps.glide.core
     kapt deps.glide.compiler
     implementation deps.retrofit.core

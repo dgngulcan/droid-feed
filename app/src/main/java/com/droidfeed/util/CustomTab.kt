@@ -6,7 +6,6 @@ import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.webkit.URLUtil
-import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.browser.customtabs.CustomTabsClient
 import androidx.browser.customtabs.CustomTabsIntent
@@ -17,14 +16,14 @@ import com.droidfeed.R
 import com.droidfeed.ui.module.webview.WebViewActivity
 import com.droidfeed.util.extension.isPackageAvailable
 import com.google.android.material.snackbar.Snackbar
-import dagger.Binds
+import dagger.hilt.android.qualifiers.ActivityContext
 import javax.inject.Inject
 
 /**
  * Custom Chrome Tabs helper.
  */
 class CustomTab @Inject constructor(
-    private val activity: AppCompatActivity
+    @ActivityContext private val context: Context
 ) {
 
     private var tabClient: CustomTabsClient? = null
@@ -33,7 +32,7 @@ class CustomTab @Inject constructor(
             .apply {
                 AppCompatResources
                     .getDrawable(
-                        activity,
+                        context,
                         R.drawable.ic_arrow_back_black_24dp
                     )
                     ?.toBitmap()
@@ -41,19 +40,19 @@ class CustomTab @Inject constructor(
 
                 setToolbarColor(
                     ContextCompat.getColor(
-                        activity,
+                        context,
                         android.R.color.white
                     )
                 )
 
                 setStartAnimations(
-                    activity,
+                    context,
                     android.R.anim.fade_in,
                     android.R.anim.fade_out
                 )
 
                 setExitAnimations(
-                    activity,
+                    context,
                     android.R.anim.fade_in,
                     android.R.anim.fade_out
                 )
@@ -75,7 +74,7 @@ class CustomTab @Inject constructor(
     fun showTab(url: String) {
         if (URLUtil.isValidUrl(url)) {
             when {
-                isChromeCustomTabsSupported(activity) -> bindCustomTabsService(
+                isChromeCustomTabsSupported(context) -> bindCustomTabsService(
                     url,
                     CHROME_STABLE_PACKAGE
                 )
@@ -85,7 +84,7 @@ class CustomTab @Inject constructor(
             }
         } else {
             Snackbar.make(
-                activity.window.decorView,
+                (context as Activity).window.decorView,
                 R.string.error_invalid_url,
                 Snackbar.LENGTH_LONG
             ).show()
@@ -98,13 +97,13 @@ class CustomTab @Inject constructor(
             addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP)
         }
 
-        val canHandleIntent = activity.isPackageAvailable(intent.`package` ?: "")
+        val canHandleIntent = context.isPackageAvailable(intent.`package` ?: "")
 
         when {
-            canHandleIntent -> activity.startActivity(intent)
-            else -> Intent(activity, WebViewActivity::class.java)
+            canHandleIntent -> context.startActivity(intent)
+            else -> Intent(context, WebViewActivity::class.java)
                 .putExtra(WebViewActivity.EXTRA_URL, url)
-                .also { activity.startActivity(it) }
+                .also { context.startActivity(it) }
         }
     }
 
@@ -123,12 +122,12 @@ class CustomTab @Inject constructor(
             }
         }
 
-        CustomTabsClient.bindCustomTabsService(activity, chromePackage, connection)
+        CustomTabsClient.bindCustomTabsService(context, chromePackage, connection)
     }
 
     private fun launchCustomTab(url: String) {
         tabClient?.warmup(0L)
-        tabIntent.launchUrl(activity, Uri.parse(url))
+        tabIntent.launchUrl(context, Uri.parse(url))
     }
 
     private fun isChromeCustomTabsSupported(context: Context): Boolean {

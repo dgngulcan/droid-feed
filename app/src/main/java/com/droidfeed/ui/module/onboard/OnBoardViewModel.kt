@@ -1,6 +1,7 @@
 package com.droidfeed.ui.module.onboard
 
 import androidx.annotation.DrawableRes
+import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.droidfeed.BuildConfig
@@ -17,7 +18,7 @@ import kotlinx.coroutines.launch
 import java.net.UnknownHostException
 import javax.inject.Inject
 
-class OnBoardViewModel @Inject constructor(
+class OnBoardViewModel @ViewModelInject constructor(
     private val sourceRepo: SourceRepo,
     private val sharedPrefs: SharedPrefsRepo
 ) : BaseViewModel() {

@@ -1,18 +1,22 @@
 package com.droidfeed.di
 
+import android.content.Context
 import androidx.room.Room
-import com.droidfeed.App
 import com.droidfeed.data.db.*
 import dagger.Module
 import dagger.Provides
+import dagger.hilt.InstallIn
+import dagger.hilt.android.components.ApplicationComponent
+import dagger.hilt.android.qualifiers.ApplicationContext
 import javax.inject.Singleton
 
 @Module
+@InstallIn(ApplicationComponent::class)
 class DatabaseModule {
 
     @Provides
     @Singleton
-    fun providesAppDatabase(app: App) = Room.databaseBuilder(
+    fun providesAppDatabase(@ApplicationContext app: Context) = Room.databaseBuilder(
         app,
         AppDatabase::class.java,
         AppDatabase.APP_DATABASE_NAME

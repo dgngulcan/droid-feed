@@ -7,21 +7,18 @@ import com.droidfeed.util.ColorPalette
 import com.google.firebase.firestore.FirebaseFirestore
 import dagger.Module
 import dagger.Provides
+import dagger.hilt.InstallIn
+import dagger.hilt.android.components.ApplicationComponent
+import dagger.hilt.android.qualifiers.ApplicationContext
 import javax.inject.Singleton
 
-@Module(
-    includes = [
-        DatabaseModule::class,
-        ApiModule::class,
-        FirebaseModule::class,
-        ViewModelModule::class
-    ]
-)
+@Module
+@InstallIn(ApplicationComponent::class)
 class AppModule {
 
     @Provides
     @Singleton
-    fun provideSharedPrefs(app: App): SharedPreferences =
+    fun provideSharedPrefs(@ApplicationContext app: Context): SharedPreferences =
         app.getSharedPreferences("df_sharedpreferences", Context.MODE_PRIVATE)
 
     @Provides
@@ -29,5 +26,5 @@ class AppModule {
 
     @Provides
     @Singleton
-    fun provideColorPalette(context: App) = ColorPalette(context)
+    fun provideColorPalette(@ApplicationContext context: Context) = ColorPalette(context)
 }

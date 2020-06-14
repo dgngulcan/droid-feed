@@ -1,5 +1,6 @@
 package com.droidfeed.ui.module.about.license
 
+import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.droidfeed.ui.adapter.model.LicenseUIModel
@@ -11,7 +12,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-class LicensesViewModel @Inject constructor(
+class LicensesViewModel @ViewModelInject constructor(
     private val licenseRepository: LicenseRepository
 ) : BaseViewModel() {
 

@@ -26,10 +26,12 @@ import com.droidfeed.util.IntentProvider
 import com.droidfeed.util.extension.isOnline
 import com.droidfeed.util.extension.observeEvent
 import com.google.android.material.snackbar.Snackbar
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.fragment_feed.*
 import javax.inject.Inject
 
 
+@AndroidEntryPoint
 class FeedFragment : BaseFragment(), Scrollable {
 
     @Inject lateinit var customTab: CustomTab
@@ -37,8 +39,8 @@ class FeedFragment : BaseFragment(), Scrollable {
     @Inject lateinit var intentProvider: IntentProvider
     @Inject lateinit var paginatedAdapter: UIModelPaginatedAdapter
 
-    private val feedViewModel: FeedViewModel by viewModels { viewModelFactory }
-    private val mainViewModel: MainViewModel by activityViewModels { viewModelFactory }
+    private val feedViewModel: FeedViewModel by viewModels()
+    private val mainViewModel: MainViewModel by activityViewModels()
     private lateinit var binding: FragmentFeedBinding
 
     override fun onCreateView(
@@ -63,11 +65,18 @@ class FeedFragment : BaseFragment(), Scrollable {
         subscribePostShareEvent()
         subscribePlayStoreEvent()
         subscribeUnBookmarkEvent()
+        subscribeFeedType()
 
         initFeed()
         initSwipeRefresh()
 
         return binding.root
+    }
+
+    private fun subscribeFeedType() {
+        mainViewModel.isDisplayingBookmarkedItems.observe(viewLifecycleOwner) { isDisplaying ->
+            feedViewModel.isDisplayingBookmarkedItems(isDisplaying)
+        }
     }
 
     @Suppress("UNCHECKED_CAST")

@@ -2,6 +2,7 @@ package com.droidfeed.ui.module.main
 
 import android.util.Patterns
 import android.webkit.URLUtil
+import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Transformations.map
@@ -10,7 +11,6 @@ import com.droidfeed.R
 import com.droidfeed.data.DataStatus
 import com.droidfeed.data.model.Source
 import com.droidfeed.data.repo.PostRepo
-import com.droidfeed.data.repo.SharedPrefsRepo
 import com.droidfeed.data.repo.SourceRepo
 import com.droidfeed.ui.adapter.model.SourceUIModel
 import com.droidfeed.ui.common.BaseViewModel
@@ -19,11 +19,8 @@ import com.droidfeed.util.extension.postEvent
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.util.*
-import javax.inject.Inject
-import javax.inject.Singleton
 
-@Singleton
-class MainViewModel @Inject constructor(
+class MainViewModel @ViewModelInject constructor(
     private val sourceRepo: SourceRepo,
     private val postRepo: PostRepo
 ) : BaseViewModel() {
@@ -41,7 +38,7 @@ class MainViewModel @Inject constructor(
     val isSourceProgressVisible = MutableLiveData(false)
     val isSourceAddButtonEnabled = MutableLiveData(true)
     val isFilterButtonVisible = MutableLiveData(true)
-    val isBookmarksShown = MutableLiveData(false)
+    val isDisplayingBookmarkedItems = MutableLiveData(false)
     val isBookmarksButtonVisible = MutableLiveData(true)
     val isBookmarksButtonSelected = MutableLiveData(false)
     val showUndoSourceRemoveSnack = MutableLiveData<Event<() -> Unit>>()
@@ -206,7 +203,7 @@ class MainViewModel @Inject constructor(
 
     fun onBookmarksEvent() {
         val isCurrentlySelected = (isBookmarksButtonSelected.value ?: false)
-        isBookmarksShown.postValue(!isCurrentlySelected)
+        isDisplayingBookmarkedItems.postValue(!isCurrentlySelected)
         isBookmarksButtonSelected.postValue(!isCurrentlySelected)
         isFilterButtonVisible.postValue(isCurrentlySelected)
     }

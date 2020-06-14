@@ -3,7 +3,6 @@ package com.droidfeed.viewmodel
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import com.droidfeed.data.repo.ConferenceRepo
 import com.droidfeed.ui.module.conferences.ConferencesViewModel
-import com.droidfeed.ui.module.conferences.analytics.ConferencesScreenLogger
 import com.droidfeed.util.getOrAwaitValue
 import io.mockk.MockKAnnotations
 import io.mockk.impl.annotations.MockK
@@ -22,7 +21,6 @@ class ConferencesViewModelTest {
 
     @get:Rule var instantTaskExecutorRule = InstantTaskExecutorRule()
 
-    @MockK lateinit var logger: ConferencesScreenLogger
     @MockK lateinit var repo: ConferenceRepo
 
     lateinit var sut: ConferencesViewModel
@@ -39,7 +37,7 @@ class ConferencesViewModelTest {
 
     @Test
     fun whenInstantiated_shouldFetchConferences() {
-        sut = ConferencesViewModel(repo, logger)
+        sut = ConferencesViewModel(repo)
 
         verify(exactly = 1) { runBlocking { repo.getUpcoming() } }
         assert(sut.isProgressVisible.getOrAwaitValue())

@@ -1,5 +1,6 @@
 package com.droidfeed.ui.module.conferences
 
+import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -13,7 +14,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-class ConferencesViewModel @Inject constructor(
+class ConferencesViewModel @ViewModelInject constructor(
     private val conferenceRepo: ConferenceRepo
 ) : ViewModel() {
 

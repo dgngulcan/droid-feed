@@ -32,11 +32,12 @@ import com.droidfeed.util.extension.addOnDrawerClosedListener
 import com.droidfeed.util.extension.hideKeyboard
 import com.droidfeed.util.extension.observeEvent
 import com.google.android.material.snackbar.Snackbar
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.activity_main.*
 import javax.inject.Inject
 
-
 @Suppress("UNCHECKED_CAST")
+@AndroidEntryPoint
 class MainActivity : BaseActivity() {
 
     @Inject lateinit var animUtils: AnimUtils
@@ -45,13 +46,12 @@ class MainActivity : BaseActivity() {
     @Inject lateinit var uiModelAdapter: UIModelAdapter
     @Inject lateinit var navController: MainNavController
 
-    private val mainViewModel: MainViewModel by viewModels { viewModelFactory }
+    private val mainViewModel: MainViewModel by viewModels()
     private lateinit var binding: ActivityMainBinding
     private var currentMenuColor = 0
     private var previousScreenColor = 0
     private var previousMenuButton: View? = null
     private val linearLayoutManager = LinearLayoutManager(this)
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         setTheme(R.style.AppTheme)

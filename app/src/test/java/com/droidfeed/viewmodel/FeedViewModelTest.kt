@@ -1,7 +1,6 @@
 package com.droidfeed.viewmodel
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
 import com.droidfeed.data.model.Post
 import com.droidfeed.data.repo.PostRepo
@@ -9,8 +8,6 @@ import com.droidfeed.data.repo.SharedPrefsRepo
 import com.droidfeed.data.repo.SourceRepo
 import com.droidfeed.ui.module.feed.AppRateInteractor
 import com.droidfeed.ui.module.feed.FeedViewModel
-import com.droidfeed.ui.module.feed.analytics.FeedScreenLogger
-import com.droidfeed.ui.module.main.MainViewModel
 import com.droidfeed.util.event.Event
 import io.mockk.*
 import io.mockk.impl.annotations.MockK
@@ -30,24 +27,19 @@ class FeedViewModelTest {
     @MockK lateinit var sourceRepo: SourceRepo
     @MockK lateinit var postRepo: PostRepo
     @MockK lateinit var sharedPrefsRepo: SharedPrefsRepo
-    @MockK lateinit var feedScreenLogger: FeedScreenLogger
     @MockK lateinit var appRateInteractor: AppRateInteractor
-    @MockK lateinit var mainViewModel: MainViewModel
 
     lateinit var sut: FeedViewModel
 
     @Before
     fun setup() {
         MockKAnnotations.init(this, relaxed = true, relaxUnitFun = true)
-        every { mainViewModel.isBookmarksShown } returns MutableLiveData(true)
 
         sut = FeedViewModel(
             sourceRepo = sourceRepo,
             postRepo = postRepo,
             sharedPrefs = sharedPrefsRepo,
-            logger = feedScreenLogger,
-            appRateInteractor = appRateInteractor,
-            mainViewModel = mainViewModel
+            appRateInteractor = appRateInteractor
         )
     }
 
@@ -67,6 +59,7 @@ class FeedViewModelTest {
         val post = mockk<Post>(relaxed = true) {
             every { isBookmarked() } returns true
         }
+        sut.isDisplayingBookmarkedItems(true)
         sut.feedType.observeForever { }
         val observer = mockk<Observer<in Event<() -> Unit>>>(relaxed = true)
 
@@ -75,6 +68,5 @@ class FeedViewModelTest {
         sut.togglePostBookmark(post)
         verify(exactly = 1) { observer.onChanged(any()) }
     }
-
 
 }

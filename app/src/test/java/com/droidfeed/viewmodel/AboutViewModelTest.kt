@@ -2,12 +2,10 @@ package com.droidfeed.viewmodel
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import com.droidfeed.ui.module.about.AboutViewModel
-import com.droidfeed.ui.module.about.analytics.AboutScreenLogger
 import com.droidfeed.util.IntentProvider
 import com.droidfeed.util.event.EventObserver
 import com.droidfeed.util.getOrAwaitValue
 import io.mockk.MockKAnnotations
-import io.mockk.impl.annotations.MockK
 import io.mockk.mockk
 import io.mockk.unmockkAll
 import io.mockk.verify
@@ -23,15 +21,13 @@ class AboutViewModelTest {
 
     @get:Rule var instantTaskExecutorRule = InstantTaskExecutorRule()
 
-    @MockK lateinit var logger: AboutScreenLogger
-
     lateinit var sut: AboutViewModel
 
     @Before
     fun setup() {
         MockKAnnotations.init(this, relaxed = true)
 
-        sut = AboutViewModel(logger)
+        sut = AboutViewModel()
     }
 
     @After
