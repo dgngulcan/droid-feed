@@ -55,6 +55,14 @@ class FeedViewModelTest {
     }
 
     @Test
+    fun whenRefreshed_shouldFetchNewItems(){
+        sut.refresh()
+
+        verify(exactly = 2) { sourceRepo.getActives() }
+        verify(exactly = 2) { runBlocking { postRepo.refresh(any(), any()) } }
+    }
+
+    @Test
     fun givenBookmarksFeed_whenBookmarked_shouldShowUndoSnack() {
         val post = mockk<Post>(relaxed = true) {
             every { isBookmarked() } returns true
