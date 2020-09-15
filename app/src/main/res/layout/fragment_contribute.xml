@@ -10,10 +10,11 @@
             type="com.droidfeed.ui.module.contribute.ContributeViewModel" />
     </data>
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <androidx.constraintlayout.motion.widget.MotionLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/gray">
+        android:background="@color/gray"
+        app:layoutDescription="@xml/fragment_contribute_scene">
 
         <TextView
             android:id="@+id/textView2"
@@ -72,6 +73,6 @@
             app:lottie_rawRes="@raw/plant_anim"
             tools:src="@drawable/ic_cat" />
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.constraintlayout.motion.widget.MotionLayout>
 
 </layout>
