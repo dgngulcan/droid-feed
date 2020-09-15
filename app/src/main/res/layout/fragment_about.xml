@@ -15,11 +15,12 @@
 
     </data>
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <androidx.constraintlayout.motion.widget.MotionLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/pink"
-        android:fitsSystemWindows="true">
+        android:fitsSystemWindows="true"
+        app:layoutDescription="@xml/fragment_about_scene">
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/textView8"
@@ -110,5 +111,5 @@
             app:lottie_rawRes="@raw/notebook_anim"
             tools:src="@drawable/ic_cat" />
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.constraintlayout.motion.widget.MotionLayout>
 </layout>
